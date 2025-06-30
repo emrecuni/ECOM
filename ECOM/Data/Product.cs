@@ -8,9 +8,9 @@ namespace ECOM.Data
         [Key]
         [Column("Id")]
         public int ProductId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int BrandId { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int SupCategoryId { get; set; }
         public int SubCategoryId { get; set; }
         public decimal Price { get; set; }

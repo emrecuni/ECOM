@@ -1,0 +1,171 @@
+﻿.top {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.search-bar input {
+    width: 250px;
+}
+
+.categories-container {
+    background-color: azure;
+    width: 100%; /* Tam genişlik */
+    padding: 10px 20px; /* Üst ve alt boşluk ekleyebilirsiniz */
+    box-sizing: border-box; /* Padding ve margin hesaplamaları içine dahil edilir */
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.categories-list-container {
+    width: 100%; /* Alt listeyi tüm genişlikte yaymak için */
+}
+
+.categories-container h4 {
+    margin-bottom: 10px; /* Başlık ile liste arasındaki boşluk */
+}
+
+.categories-container ul {
+    padding: 0;
+    margin: 0;
+}
+
+.categories-container li {
+    list-style: none;
+    display: inline-block;
+}
+
+.categories-container a {
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.list-unstyled {
+    display: flex; /* Yatayda sıralama */
+    justify-content: space-between; /* Elemanlar arasındaki boşluğu eşitler */
+    width: 100%; /* Listeyi tam genişlikte yayar */
+    padding: 0; /* Varsayılan padding'i sıfırlayalım */
+}
+
+    .list-unstyled li {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0; /* Yüksekliği artırmak için padding kullanabilirsiniz */
+        font-size: 18px; /* Yazı boyutunu da artırabilirsiniz */
+    }
+
+.me-4 {
+    margin-right: 16px; /* Liste öğeleri arasındaki boşluğu artırabilirsiniz */
+    background-color: bisque;
+    width: 190px;
+    border-radius: 5px;
+}
+
+.list-unstyled a {
+    text-decoration: none; /* Linklerin altını çizmesini kaldırır */
+    color: black; /* Bağlantı rengini ayarlayabilirsiniz */
+}
+
+    .list-unstyled a :hover {
+        background-color: cyan;
+        color: red; /* Hover efekti (isteğe bağlı) */
+        font-size: medium;
+    }
+
+.category {
+    background-color: blue;
+    color: red;
+}
+
+.logo {
+    margin-right: 20px; /* İsteğe bağlı, logo ile aradaki boşluğu artırmak için */
+}
+
+.search-bar {
+    flex-grow: 1; /* Arama çubuğunun daha geniş olmasını sağlar */
+    margin-right: 20px; /* Diğer div ile arasındaki boşluğu ayarlamak için */
+    display: flex;
+    align-items: center; /* Arama çubuğunun ortalanmasını sağlar */
+}
+
+.account {
+    background-color: white;
+    border: 3px solid;
+    border-color: #AAAAAA;
+}
+
+.cart {
+    background-color: #AAAAAA;
+}
+
+.account, .cart {
+    font-weight: 500;
+    padding: 8px 12px;
+    margin-right: 16px; /* Liste öğeleri arasındaki boşluğu artırabilirsiniz */
+    width: 120px;
+    height: 50px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    margin-left: 20px; /* Hesap kısmı ile önceki eleman arasına boşluk ekler */
+}
+
+    .account i, .cart i {
+        font-size: 1.5rem;
+    }
+
+.menu-container {
+    position: relative; /* Menüye konum vermek için */
+    display: inline-block; /* Menü öğesini satır içinde tutuyoruz */
+}
+
+/* Menü öğesinin üzerine gelindiğinde açılacak menü */
+.dropdown-menu {
+    display: none; /* Başlangıçta gizli */
+    position: absolute; /* Menü konumlandırması */
+    top: 100%; /* Menü öğesinin hemen altına yerleştiriyoruz */
+    left: 0;
+    background-color: #f8f9fa; /* Arka plan rengi */
+    border: 1px solid #ddd; /* Kenarlık */
+    padding: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Gölgelendirme efekti */
+    z-index: 1;
+    border-radius: 5px;
+}
+
+/* A etiketi */
+.menu-container a {
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Menü açılınca hover efekti */
+.menu-container:hover .dropdown-menu {
+    display: block; /* Hover ile menüyü gösteriyoruz */
+}
+
+/* Menü öğelerinin stilini ayarlıyoruz */
+.dropdown-menu a {
+    display: block;
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+    /* Menü öğesine hover efekti */
+    .dropdown-menu a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+.container {
+    border-radius: 15px;
+}

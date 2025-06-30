@@ -1,0 +1,173 @@
+﻿.row {
+    flex-wrap: nowrap;
+}
+
+.image {
+    border: 1px solid #aaaaaa;
+    border-radius: 10px;
+}
+
+.brand {
+    color: red;
+    font-weight: 900;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.name {
+    font-size: 20px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.score {
+    flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+
+.star-rating {
+    font-size: 20px;
+    align-items: stretch;
+}
+
+.star {
+    color: #ccc;
+    /* Boş yıldızlar gri renkte */
+}
+
+    .star[data-filled="true"] {
+        color: gold;
+        /* Dolu yıldızlar altın renginde */
+    }
+
+    .star:hover {
+        cursor: pointer;
+        color: #ffdf00;
+        /* Hover sırasında altın rengi */
+    }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-image {
+    width: 50%;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+    .product-image img {
+        width: 100%;
+    }
+
+.product-info {
+    flex: 1;
+    margin-left: 20px;
+}
+
+    .product-info h1 {
+        font-size: 28px;
+        color: #333;
+    }
+
+.product-price {
+    font-size: 30px;
+    color: #f00;
+    margin-top: 20px;
+}
+
+.description {
+    margin-top: 30px;
+    border-radius: 15px;
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.description-content {
+    margin-left: 10px;
+}
+
+.review-section {
+    margin-top: 40px;
+    border-radius: 15px;
+    background-color: #f8f9fa;
+}
+
+.leave-review {
+    border-radius: 15px;
+    background-color: #f8f9fa;
+}
+
+.write-comment {
+    margin-left: 15px;
+    padding: 1px 0;
+}
+
+.comment {
+    border-radius: 10px;
+}
+
+.send-comment {
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.review {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.rating {
+    color: #ff9900;
+}
+
+    .rating a {
+        text-decoration: none;
+    }
+
+.forms {
+    display: flex;
+    gap: 10px;
+}
+
+.addCart {
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.buy {
+    padding: 10px 20px;
+    background-color: #008000;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button {
+    border-radius: 5px;
+}

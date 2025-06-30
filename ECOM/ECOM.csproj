@@ -10,4 +10,8 @@
     <PackageReference Include="bootstrap" Version="5.3.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>

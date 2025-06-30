@@ -10,6 +10,6 @@ namespace ECOM.Data
         public int CategoryId { get; set; }
         public string? Name { get; set; }
         public bool Type { get; set; }
-        public DateTime MyProperty { get; set; }
+        public DateTime AdditionTime { get; set; }
     }
 }

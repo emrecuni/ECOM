@@ -1,0 +1,57 @@
+﻿* Parolamı unuttum ekranında geçerli bir mail girene kadar buton disable olacak. hepsiburada "@gmail.co" girene kadar disable yapıyor (bknz:0001)
+X Ürün sağ üstüne favori ikonu konulacak X
+X _Header login sayfasında çıkmayacak X
+* Ürünü sepete eklerken veya direkt satın alırken fiyat'ın ondalığına dikkat et
+X Header sepette çıkmayacak X
+* Bootstrap kütüphanelerini lokalden çek
+* Product sayfasında satın al ve sepete ekle butonlarını çerçevelet
+* Account için solda navbar ekle
+* Şifre koyarken kurallara uygun olup olmadığını kontrol et
+* Parola değiştirme sayfasına placeholder koy // account
+* Account sayfasında ekranın sağındaki boşluğu yok et
+* Bir siparişin içinde birden fazla ürün varsa
+* Veri tabanında order tablosuna product id yerin cart id ver birden fazla ürün olan siparişleri tek tek getirir bu şekilde
+* Sipariş ile aramayı direkt text üzerinde yap
+* Sipariş bulunmadığında ekrana mesaj bastır
+* Hesap sayfası açılınca deafult kullanıcı bilgileri açık gelsin
+* Nav'da seçilen eleman belirtilsin
+* Kategorilerde text'in hover'ında farklı renk geliyor
+* Yorum eklerken seçilen yıldız rengi sabit kalsın
+* Header'da hesabım'a hover ekle
+* Header'da sepetim'e hover ekle
+* Kategorilerin hover'ında text'in hover'ını kaldır
+X Hesabım üzerinden direkt siparişlere gidince css yüklenmiyor gibi X
+X Hesabım üzerinden beğendiklerim'e gitmiyor X
+X Hesabım üzerinden kuponlarım'a gitmiyor X
+* Siparişlerim'de statüsler kayıyor
+? Account index'te soldaki menüden seçim yapıldığında url bozuluyor /index/order#coupon gibi ?
+X Footer ayarla X
+X Footer sepetimde sayfanın altını kapatıyor X
+* Hesabımda header'ın konumunu düzelt ekranın ortasına geliyor üstteki div yukarıda bittiği için
+* Sepetteki beğendiklerimi tek olarak yaz her koşulda gelsin
+
+<link rel="stylesheet" href="~/css/product.css">
+
+<div class="row">
+    <div class="product-image col-5">
+        <img src="~/img/reusch.jpg" alt="" width="500px" class="image">
+    </div>
+    <div class="properties col-4">
+        <div class="name">
+            <span class="brand">Reusch</span> Attrakt Kaleci Eldiveni
+        </div>
+        <div class="score">
+            <div class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold">4,6</div>
+            <div class="star-rating">
+                <span class="star" data-filled="true">&#9733;</span>
+                <span class="star" data-filled="true">&#9733;</span>
+                <span class="star" data-filled="true">&#9733;</span>
+                <span class="star" data-filled="true">&#9733;</span>
+                <span class="star" data-filled="false">&#9733;</span>
+            </div>
+        </div>
+        <div class="comment">
+
+        </div>
+    </div>
+</div>

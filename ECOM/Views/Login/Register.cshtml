@@ -1,0 +1,41 @@
+﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/login.css">
+
+<div class="container">
+    <div class="register-container">
+        <h3>Kayıt Olun</h3>
+
+        <form action="Register" method="post">
+            <!-- Ad -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Adınız: </label>
+                <input type="text" class="form-control" id="name" name="name"
+                       placeholder="Adınızı Girin" required>
+            </div>
+
+            <!-- Soyad -->
+            <div class="mb-3">
+                <label for="surname" class="form-label">Soyadınız: </label>
+                <input type="text" class="form-control" id="surname" name="surname"
+                       placeholder="Soyadınızı Girin" required>
+            </div>
+
+            <!-- E-Mail -->
+            <div class="mb-3">
+                <label for="email" class="form-label">E-Mail Adresiniz: </label>
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="E-Mail Adresinizi Girin" required>
+            </div>
+
+            <!-- Parola -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Parolanız: </label>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Parolanızı Girin" required>
+            </div>
+
+            <!-- Giriş Yap Butonu -->
+            <button type="submit" class="btn btn-custom">Giriş Yap</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿.footer {
+    background-color: rosybrown;
+    display: flex;
+    position: relative;
+}
+
+.header {
+    color: orange;
+}
+
+.institutional {
+    margin-left: 100px;
+}
+
+    .institutional a {
+        color: black;
+    }
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: orange;
+    }
+
+.social {
+}
+
+.communication {
+    margin-right: 100px;
+}

@@ -27,7 +27,8 @@ X Hesabım üzerinden kuponlarım'a gitmiyor X
 ? Account index'te soldaki menüden seçim yapıldığında url bozuluyor /index/order#coupon gibi ?
 X Footer ayarla X
 X Footer sepetimde sayfanın altını kapatıyor X
-
+* Hesabımda header'ın konumunu düzelt ekranın ortasına geliyor üstteki div yukarıda bittiği için
+* Sepetteki beğendiklerimi tek olarak yaz her koşulda gelsin
 
 <link rel="stylesheet" href="~/css/product.css">
 

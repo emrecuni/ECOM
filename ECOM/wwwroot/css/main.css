@@ -1,0 +1,80 @@
+﻿.top {
+    display: flex;
+    align-items: center; /* Dikey ortalama */
+    justify-content: space-between; /* Aralarındaki boşluğu eşitleme */
+}
+
+.product {
+    text-decoration: none;
+}
+
+.product-name {
+    font-size: 15px;
+    color: gray;
+}
+
+.star-rating {
+    font-size: 14px;
+}
+
+.star {
+    color: #ccc; /* Boş yıldızlar gri renkte */
+}
+
+    .star[data-filled="true"] {
+        color: gold; /* Dolu yıldızlar altın renginde */
+    }
+
+    .star:hover {
+        cursor: pointer;
+        color: #ffdf00; /* Hover sırasında altın rengi */
+    }
+
+.price {
+    color: black;
+}
+
+.favorite {
+    display: flex;
+    justify-content: center;
+    width: 35px; /* Dairenin genişliği */
+    height: 35px; /* Dairenin yüksekliği */
+    border: 1px solid #000; /* Çerçeve kalınlığı ve rengi */
+    border-radius: 50%; /* Daire şekli için %50 yuvarlama */
+    align-items: center; /* İçeriği ortalamak için */
+    text-align: center;
+}
+
+.product-card {
+    position: relative;
+    margin-right: 15px;
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8); /* Normal durumda */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease; /* Yumuşak geçiş ekledim */
+}
+
+    .favorite-btn:hover {
+        background: rgba(200, 200, 200, 0.8); /* Hover durumunda butonun tamamının arka plan rengi değişiyor */
+    }
+
+    .favorite-btn i {
+        color: lightgray;
+        font-size: 1.2rem;
+    }
+
+.container {
+    border-radius: 15px;
+}
+
+.footer {
+    position: relative;
+}

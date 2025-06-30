@@ -1,0 +1,42 @@
+﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/login.css">
+
+<div class="container">
+    <div class="login-container">
+        <div>
+            <h3>Hesabınıza Giriş Yapın</h3>
+
+            <form asp-action="Login" method="post">
+                <!-- Kullanıcı Adı -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">Kullanıcı Adı:</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Kullanıcı Adınızı Girin" required>
+                </div>
+
+                <!-- Parola -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">Parola:</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Parolanızı Girin" required>
+                </div>
+
+                <!-- Giriş Yap Butonu -->
+                <button type="submit" class="btn btn-custom">Giriş Yap</button>
+
+                <!-- Şifre unuttum Linki -->
+                <div class="text-center mt-3">
+                    <a asp-action="ForgotPassword">Şifrenizi mi Unuttunuz?</a>
+                </div>
+            </form>
+
+            <div class="footer-links">
+                <p>Henüz üye değil misiniz? <a asp-controller="Login" asp-action="Register">Kayıt Olun</a></p>
+            </div>
+            @ViewBag.Info
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/popperjs/dist/umd/popper.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>

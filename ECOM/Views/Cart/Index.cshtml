@@ -1,0 +1,62 @@
+﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+@*<link rel="stylesheet" href="http://localhost:5045//lib/font-awesome/css/all.min.css">*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="~/css/cart-header.css">
+<link rel="stylesheet" href="~/css/cart.css">
+
+
+<div class="container mt-4">
+    <div class="top d-flex align-items-center justify-content-between shadow-sm">
+        @await Html.PartialAsync("Cart-Header") <!--header-->
+    </div>
+    <div class="empty-cart">
+        <!--Sepet boşsa çıkacak mesaj-->
+        <div class="message">
+            <img src="~/img/cart.gif" width="150" alt="cart" />
+            <h4>Sepetin şu an boş</h4>
+            <p>
+                Sepetini e-com’un fırsatlarla dolu dünyasından doldurmak için <br />aşağıdaki ürünleri incelemeye başlayabilirsin.
+            </p>
+        </div>
+        <hr />
+        <!--beğendiklerim-->
+        <div class="suggestion">
+            <h4 class="suggestion-header">Beğendiklerim</h4>
+            @await Html.PartialAsync("Suggestion")
+        </div>
+    </div>
+
+    <div class="nonemtpy-cart">
+
+        <div class="cart-sub-header">
+            <hr />
+            <span class="cart-text">Sepetim</span>
+            <span class="product-count">(2 Ürün)</span>
+        </div>
+    </div>
+    <!--kuponlar-->
+    <div class="coupons d-flex justify-content-between align-items-center">
+        <a asp-controller="Account" asp-action="Index" asp-route-id="coupon" class="coupon">
+            <i class="fas fa-gift"></i>
+            Kuponlarım
+        </a>
+
+        <a href="#" class="add-coupon">
+            Kupon Kodu Ekle
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+    <!--sepetim-->
+    <div class="my-cart">
+        <div class="orders">
+            @await Html.PartialAsync("Order")
+            @await Html.PartialAsync("Order")
+        </div>
+    </div>
+    <!--beğendiklerim-->
+    <div class="suggestion">
+        <h4 class="suggestion-header">Beğendiklerim</h4>
+        @await Html.PartialAsync("Suggestion")
+    </div>
+
+</div>

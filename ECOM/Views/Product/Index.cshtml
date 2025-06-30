@@ -1,0 +1,104 @@
+﻿<link rel="stylesheet" href="~/css/product.css">
+
+<div>
+    <p>Ürün Kategorisi: Elektronik > Bilgisayar</p><br>
+    <!-- Ürün Başlık ve Resim Bölümü -->
+    <div class="product-header">
+        <div class="product-image">
+            <img src="~/img/msi 100m.jpg" alt="Osram Ampul">
+        </div>
+        <div class="product-info">
+            <h1>MSI 100M Gaming Kasa</h1>
+            <div class="badge badge-success badge-pill bg-success">MSI Resmi Satıcı</div>
+            <div class="product-price">₺79.90</div>
+            <div class="forms">
+                <form action="AddCart" method="post">
+                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
+                    <input type="number" hidden name="price" value=79.9>
+                    <button class="addCart"><b>Sepete Ekle</b></button>
+                </form>
+                <form action="Buy" method="post">
+                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
+                    <input type="hidden" name="price" value=79.9>
+                    <button class="buy"><b>Satın Al</b></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ürün Açıklaması Bölümü -->
+    <div class="description">
+        <div class="description-content">
+            <h2>Ürün Açıklaması</h2>
+            <p>
+                Osram 9W LED Ampul, enerji verimliliği sağlayan ve uzaktan kumanda ile kontrol edilebilen modern bir
+                aydınlatma çözümüdür. Sarı-beyaz ışık seçenekleriyle evinizin her alanına uyum sağlar. Uzun ömürlü LED
+                teknolojisi ile ekonomik bir kullanım sunar.
+            </p>
+        </div>
+    </div>
+
+    <!-- Yorumlar ve Değerlendirmeler Bölümü -->
+    <div class="review-section">
+        <h3 class="review">Yorumlar (45 Yorum)</h3>
+
+        <div class="review">
+            <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <p><strong>Ahmet K.</strong> - 5 yıldız</p>
+            <p>Gerçekten çok memnunum. Ampul çok parlak ve uzaktan kumanda ile kontrol etmek çok pratik.</p>
+        </div>
+
+        <div class="review">
+            <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <p><strong>Ayşe Y.</strong> - 4 yıldız</p>
+            <p>İyi bir ürün ancak kumanda biraz daha dayanıklı olabilir.</p>
+        </div>
+        <br />
+    </div>
+    <br />
+    <!-- Yorum Yapma Bölümü -->
+    <div class="leave-review">
+        <div class="write-comment">
+            <h3 class="mt-3">Yorum Yapın</h3>
+            <form asp-controller="Product" asp-action="SendComment" method="post">
+                <label for="rating">Puanınızı Seçin:</label><br>
+                <span class="rating">
+                    <a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
+                    <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>
+                </span><br><br>
+                <input class="comment" type="text" hidden id="rate" name="rate">
+                <textarea class="comment" id="review-text" name="comment" rows="5" cols="60"
+                          placeholder="Yorumunuzu buraya yazın..."></textarea><br><br>
+                <button class="send-comment" type="submit">
+                    Yorum Gönder
+                </button>
+            </form>
+        </div>
+    </div>
+    Comment: @ViewBag.Comment <br>
+    Rate: @ViewBag.Rate <br>
+    CommentInfo: @ViewBag.CommentInfo <br>
+</div>
+
+<script>
+    // Rating yıldızlarına tıklama işlevini ekleyelim
+    const ratingLinks = document.querySelectorAll('.rating');
+    const rateInput = document.getElementById('rate');
+
+    ratingLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Tıklanan linkin id'sine göre input değerini ayarlıyoruz
+            const ratingValue = this.id.replace('rate', '');
+            rateInput.value = ratingValue;
+
+            // Seçilen yıldızları görsel olarak değiştirebiliriz (altın renginde)
+            ratingLinks.forEach(link => link.style.color = ''); // Tüm yıldızları sıfırla
+            for (let i = 0; i < ratingValue; i++) {
+                ratingLinks[i].style.color = 'gold'; // Seçilen yıldızları altın renginde yap
+            }
+        });
+    });
+</script>

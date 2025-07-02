@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Addresses
     {
         [Key]
-        [Column("Id")]
         public int AddressId { get; set; }
         public int CustomerId { get; set; }
         public string? AddressName { get; set; }

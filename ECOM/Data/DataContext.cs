@@ -8,6 +8,31 @@ namespace ECOM.Data
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // kolon adları için mapping yapar
+            // [column("id")]'den daha profesyonel ve kompleks projeler için daha okunabilir
+            modelBuilder.Entity<Addresses>(entity =>
+            {
+                entity.ToTable("ADDRESSES");
+
+                entity.HasKey(a => a.Address);
+
+                entity.Property(a => a.AddressId).HasColumnName("ID");
+                entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(a => a.AddressName).HasColumnName("ADDRESS_NAME");
+                entity.Property(a => a.Address).HasColumnName("ADDRESS");
+                entity.Property(a => a.CityId).HasColumnName("CITY_ID");
+                entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID");
+                entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID");
+                entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID");
+                entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
+
+        }
+
         public DbSet<Addresses> Addresses => Set<Addresses>();
         public DbSet<Brand> Brands => Set<Brand>();
         public DbSet<Card> Cards => Set<Card>();

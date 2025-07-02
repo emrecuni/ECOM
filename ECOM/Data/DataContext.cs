@@ -17,7 +17,7 @@ namespace ECOM.Data
             {
                 entity.ToTable("ADDRESSES");
 
-                entity.HasKey(a => a.Address);
+                entity.HasKey(a => a.AddressId);
 
                 entity.Property(a => a.AddressId).HasColumnName("ID");
                 entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID");
@@ -30,7 +30,11 @@ namespace ECOM.Data
                 entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME");
             });
 
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.ToTable("BRANDS");
 
+            })
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

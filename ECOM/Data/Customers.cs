@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECOM.Data
 {
-    public class Customer
+    public class Customers
     {
         [Key]
-        [Column("Id")]
         public int CustomerId { get; set; }
         public string? Name { get; set; }
         public string? Surname { get; set; }
@@ -16,6 +15,9 @@ namespace ECOM.Data
         public bool Gender { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime AdditionTime { get; set; }
+
+        public ICollection<Addresses> ReceiverAddresses { get; set; } = []; // new List<Addresses>()
+        public ICollection<Addresses> Customer { get; set; } = [];
 
     }
 }

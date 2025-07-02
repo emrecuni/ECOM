@@ -16,8 +16,8 @@ namespace ECOM.Data
         public int ReceiverId { get; set; } // customer'da kayıtlı değilse kayıt et
         public DateTime AdditionTime { get; set; }
 
-        public Customer Receiver { get; set; } = null!;
-        public Customer Customer { get; set; } = null!;
+        public Customers Receiver { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;
         public City City { get; set; } = null!;
         public District District { get; set;} = null!;
         public Neighbourhood Neighbourhood { get; set; } = null!;        

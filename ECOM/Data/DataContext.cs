@@ -43,7 +43,7 @@ namespace ECOM.Data
         public DbSet<Cart> Carts => Set<Cart>();
         public DbSet<City> Cities => Set<City>();
         public DbSet<Comments> Comments => Set<Comments>();
-        public DbSet<Customer> Customers => Set<Customer>();
+        public DbSet<Customers> Customers => Set<Customers>();
         public DbSet<DCoupon> DCoupons => Set<DCoupon>();
         public DbSet<District> Districts => Set<District>();
         public DbSet<Favorites> Favorites => Set<Favorites>();

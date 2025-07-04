@@ -34,7 +34,12 @@ namespace ECOM.Data
             {
                 entity.ToTable("BRANDS");
 
-            })
+                entity.HasKey(b => b.BrandID);
+
+                entity.Property(b => b.BrandID).HasColumnName("ID");
+                entity.Property(b => b.Name).HasColumnName("NAME");
+                entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

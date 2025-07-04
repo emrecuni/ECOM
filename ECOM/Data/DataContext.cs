@@ -54,6 +54,22 @@ namespace ECOM.Data
                 entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
             });
 
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("CART");
+
+                entity.HasKey(c => c.CartId);
+
+                entity.Property(c => c.CartId).HasColumnName("ID");
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID");
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(c => c.SellerId).HasColumnName("SELLER_ID");
+                entity.Property(c => c.DCouponId).HasColumnName("DCOUPON_ID");
+                entity.Property(c => c.Piece).HasColumnName("PIECE");
+                entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE");
+                entity.Property(c => c.Enable).HasColumnName("ENABLE");
+            });
+
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

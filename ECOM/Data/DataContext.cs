@@ -70,6 +70,29 @@ namespace ECOM.Data
                 entity.Property(c => c.Enable).HasColumnName("ENABLE");
             });
 
+            modelBuilder.Entity<City>(entity =>
+            {
+                entity.ToTable("CITY");
+
+                entity.HasKey(c => c.CityId);
+
+                entity.Property(c => c.CityId).HasColumnName("ID");
+                entity.Property(c => c.Name).HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<Comments>(entity => 
+            {
+                entity.ToTable("COMMENTS");
+
+                entity.HasKey(c => c.CommentId);
+
+                entity.Property(c => c.CommentId).HasColumnName("ID");
+                entity.Property(c => c.ProductId).HasColumnName("ID");
+                entity.Property(c => c.CustomerId).HasColumnName("ID");
+                entity.Property(c => c.Comment).HasColumnName("ID");
+                entity.Property(c => c.ImagePath).HasColumnName("ID");
+
+            })
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

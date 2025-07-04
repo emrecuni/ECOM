@@ -13,5 +13,7 @@ namespace ECOM.Data
         public string? ExpirationDate { get; set; }
         public string? CVV { get; set; }
         public DateTime AdditionTime { get; set; }
+
+        public ICollection<Customers> Customer { get; set; } = [];
     }
 }

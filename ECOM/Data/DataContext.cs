@@ -40,6 +40,20 @@ namespace ECOM.Data
                 entity.Property(b => b.Name).HasColumnName("NAME");
                 entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME");
             });
+
+            modelBuilder.Entity<Card>(entity =>
+            {
+                entity.ToTable("CARDS");
+
+                entity.HasKey(c => c.CardId);
+
+                entity.Property(c => c.CardId).HasColumnName("ID");
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(c => c.CardNo).HasColumnName("CARD_NO");
+                entity.Property(c => c.CVV).HasColumnName("CVV");
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

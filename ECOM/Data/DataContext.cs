@@ -220,8 +220,27 @@ namespace ECOM.Data
 
             modelBuilder.Entity<SCoupon>(entity =>
             {
-                entity.ToTable("")
-            })
+                entity.ToTable("S_COUPONS");
+
+                entity.HasKey(c => c.SCouponId);
+
+                entity.Property(c => c.SCouponId).HasColumnName("ID");
+                entity.Property(c => c.Amount).HasColumnName("AMOUNT");
+                entity.Property(c => c.LowerLimit).HasColumnName("LOWER_LIMIT");
+                entity.Property(c => c.ValidityDate).HasColumnName("VALIDITY_DATE");
+            });
+
+            modelBuilder.Entity<Seller>(entity =>
+            {
+                entity.ToTable("SELLERS");
+
+                entity.HasKey(s => s.SellerId);
+
+                entity.Property(s => s.SellerId).HasColumnName("ID");
+                entity.Property(s => s.Name).HasColumnName("NAME");
+                entity.Property(s => s.Score).HasColumnName("SCORE");
+                entity.Property(s => s.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

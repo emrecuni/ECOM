@@ -28,6 +28,11 @@ namespace ECOM.Data
                 entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID");
                 entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID");
                 entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME");
+
+                entity.HasOne(a => a.Receiver)
+                .WithMany(c => c.ReceiverAddresses)
+                .HasForeignKey(a => a.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Brand>(entity =>

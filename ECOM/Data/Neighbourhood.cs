@@ -10,6 +10,6 @@ namespace ECOM.Data
         public int NeighbourhoodId { get; set; }
         public int CityId { get; set; }
         public int DistrictId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

@@ -80,18 +80,147 @@ namespace ECOM.Data
                 entity.Property(c => c.Name).HasColumnName("NAME");
             });
 
-            modelBuilder.Entity<Comments>(entity => 
+            modelBuilder.Entity<Comments>(entity =>
             {
                 entity.ToTable("COMMENTS");
 
                 entity.HasKey(c => c.CommentId);
 
                 entity.Property(c => c.CommentId).HasColumnName("ID");
-                entity.Property(c => c.ProductId).HasColumnName("ID");
-                entity.Property(c => c.CustomerId).HasColumnName("ID");
-                entity.Property(c => c.Comment).HasColumnName("ID");
-                entity.Property(c => c.ImagePath).HasColumnName("ID");
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID");
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(c => c.Comment).HasColumnName("COMMENT");
+                entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH");
+            });
 
+            modelBuilder.Entity<Customers>(entity =>
+            {
+                entity.ToTable("CUSTOMERS");
+
+                entity.HasKey(c => c.CustomerId);
+
+                entity.Property(c => c.CustomerId).HasColumnName("ID");
+                entity.Property(c => c.Name).HasColumnName("NAME");
+                entity.Property(c => c.Surname).HasColumnName("SURNAME");
+                entity.Property(c => c.Email).HasColumnName("EMAIL");
+                entity.Property(c => c.Phone).HasColumnName("PHONE");
+                entity.Property(c => c.Password).HasColumnName("PASSWORD");
+                entity.Property(c => c.Gender).HasColumnName("GENDER");
+                entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE");
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
+            modelBuilder.Entity<DCoupon>(entity =>
+            {
+                entity.ToTable("D_COUPONS");
+
+                entity.HasKey(c => c.DCouponId);
+
+                entity.Property(c => c.DCouponId).HasColumnName("ID");
+                entity.Property(c => c.SCouponId).HasColumnName("S_COUPON_ID");
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(c => c.Enable).HasColumnName("ENABLE");
+                entity.Property(c => c.DefinitionDate).HasColumnName("DEFINITION_DATE");
+            });
+
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.ToTable("DISTRICT");
+
+                entity.HasKey(d => d.DistrictId);
+
+                entity.Property(d => d.DistrictId).HasColumnName("ID");
+                entity.Property(d => d.CityId).HasColumnName("CITY_ID");
+                entity.Property(d => d.Name).HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<Favorites>(entity =>
+            {
+                entity.ToTable("FAVORITES");
+
+                entity.HasKey(f => f.FavoriteId);
+
+                entity.Property(f => f.FavoriteId).HasColumnName("ID");
+                entity.Property(f => f.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(f => f.ProductId).HasColumnName("PRODUCT_ID");
+                entity.Property(f => f.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("LOG");
+
+                entity.HasKey(l => l.LogId);
+
+                entity.Property(l => l.LogId).HasColumnName("ID");
+                entity.Property(l => l.TableName).HasColumnName("TABLE_NAME");
+                entity.Property(l => l.OldValue).HasColumnName("OLD_VALUE");
+                entity.Property(l => l.NewValue).HasColumnName("NEW_VALUE");
+                entity.Property(l => l.ProcessType).HasColumnName("PROCESS_TYPE");
+                entity.Property(l => l.ProcessTime).HasColumnName("PROCESS_TIME");
+            });
+
+            modelBuilder.Entity<Neighbourhood>(entity =>
+            {
+                entity.ToTable("NEIGHBOURHOODS");
+
+                entity.HasKey(n => n.NeighbourhoodId);
+
+                entity.Property(n => n.NeighbourhoodId).HasColumnName("ID");
+                entity.Property(n => n.CityId).HasColumnName("CITY_ID");
+                entity.Property(n => n.DistrictId).HasColumnName("DISTRICT_ID");
+                entity.Property(n => n.Name).HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<OrderHistory>(entity =>
+            {
+                entity.ToTable("ORDER_HISTORY");
+
+                entity.HasKey(o => o.OrderId);
+
+                entity.Property(o => o.OrderId).HasColumnName("ID");
+                entity.Property(o => o.ProductId).HasColumnName("PRODUCT_ID");
+                entity.Property(o => o.CustomerId).HasColumnName("CUSTOMER_ID");
+                entity.Property(o => o.CardId).HasColumnName("CARD_ID");
+                entity.Property(o => o.SellerId).HasColumnName("SELLER_ID");
+                entity.Property(o => o.Piece).HasColumnName("PIECE");
+                entity.Property(o => o.OrderDate).HasColumnName("ORDER_DATE");
+                entity.Property(o => o.DeliveryDate).HasColumnName("DELIVERY_DATE");
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.ToTable("PRODUCTS");
+
+                entity.HasKey(p => p.ProductId);
+
+                entity.Property(p => p.ProductId).HasColumnName("ID");
+                entity.Property(p => p.Name).HasColumnName("NAME");
+                entity.Property(p => p.BrandId).HasColumnName("BRAND_ID");
+                entity.Property(p => p.Description).HasColumnName("DESCRIPTION");
+                entity.Property(p => p.SupCategoryId).HasColumnName("SUP_CATEGORY_ID");
+                entity.Property(p => p.SubCategoryId).HasColumnName("SUB_CATEGORY_ID");
+                entity.Property(p => p.Price).HasColumnName("PRICE");
+                entity.Property(p => p.SellerId).HasColumnName("SELLER_ID");
+                entity.Property(p => p.Score).HasColumnName("SCORE");
+                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
+            modelBuilder.Entity<ProductCategories>(entity =>
+            {
+                entity.ToTable("PRODUCT_CATEGORIES");
+
+                entity.HasKey(p => p.CategoryId);
+
+                entity.Property(p => p.CategoryId).HasColumnName("ID");
+                entity.Property(p => p.Name).HasColumnName("NAME");
+                entity.Property(p => p.Type).HasColumnName("TYPE");
+                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME");
+            });
+
+            modelBuilder.Entity<SCoupon>(entity =>
+            {
+                entity.ToTable("")
             })
         }
 

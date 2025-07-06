@@ -7,7 +7,7 @@ namespace ECOM.Data
     {
         [Key]
         [Column("Id")]
-        public int CommentID { get; set; }
+        public int CommentId { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public string? Comment { get; set; }

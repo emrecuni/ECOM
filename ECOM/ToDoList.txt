@@ -29,6 +29,13 @@ X Footer ayarla X
 X Footer sepetimde sayfanın altını kapatıyor X
 * Hesabımda header'ın konumunu düzelt ekranın ortasına geliyor üstteki div yukarıda bittiği için
 * Sepetteki beğendiklerimi tek olarak yaz her koşulda gelsin
+* Receiver Customer'a kayıtlı değilse kaydet ama isCustomer gibi kolon ekle
+    * Daha sonrasında receiver kayıt olmak istediğinde girdiği bilgileri güncelle ve isCustomer'ı true yap
+* İlk açılışta main formuna git giriş yap'a header'dan yönlendir (giriş yaptıysa giriş yap butonu yerine hesabım olacak)
+* Zaten kayıtlı bir eposta ile kayıt olmaya çalıştığında uyarı ver
+* Zaten kayıtlı bir telefon ile kayıt olmaya çalıştığında uyarı ver
+* Adreste müşteri silinmeden adres silinebilsin mi?
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Addresses
     {
         [Key]
-        [Column("Id")]
         public int AddressId { get; set; }
         public int CustomerId { get; set; }
         public string? AddressName { get; set; }
@@ -16,5 +15,12 @@ namespace ECOM.Data
         public int NeighbourhoodId { get; set; }
         public int ReceiverId { get; set; } // customer'da kayıtlı değilse kayıt et
         public DateTime AdditionTime { get; set; }
+        
+        // navigation property
+        public Customers Receiver { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;
+        public City City { get; set; } = null!;
+        public District District { get; set;} = null!;
+        public Neighbourhood Neighbourhood { get; set; } = null!;        
     }
 }

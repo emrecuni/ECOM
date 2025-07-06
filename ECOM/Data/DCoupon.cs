@@ -12,5 +12,7 @@ namespace ECOM.Data
         public int CustomerId { get; set; }
         public bool Enable { get; set; }
         public DateTime DefinitionDate { get; set; }
+
+        public ICollection<Cart> Cart { get; set; } = [];
     }
 }

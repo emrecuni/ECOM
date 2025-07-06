@@ -11,5 +11,7 @@ namespace ECOM.Data
         public string? Name { get; set; }
         public float Score { get; set; }
         public DateTime AdditionTime { get; set; }
+
+        public ICollection<Cart> Cart { get; set; } = [];
     }
 }

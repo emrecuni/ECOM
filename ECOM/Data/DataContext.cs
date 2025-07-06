@@ -135,8 +135,8 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CityId);
 
-                entity.Property(c => c.CityId).HasColumnName("ID");
-                entity.Property(c => c.Name).HasColumnName("NAME");
+                entity.Property(c => c.CityId).HasColumnName("ID").IsRequired();
+                entity.Property(c => c.Name).HasColumnName("NAME").IsRequired(false);
             });
 
             modelBuilder.Entity<Comments>(entity =>
@@ -146,10 +146,23 @@ namespace ECOM.Data
                 entity.HasKey(c => c.CommentId);
 
                 entity.Property(c => c.CommentId).HasColumnName("ID");
-                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID");
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(c => c.Comment).HasColumnName("COMMENT");
-                entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH");
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
+                entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired();
+                entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
+
+                // product relation
+                entity.HasOne(c => c.Product)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c=> c.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                //customer relation
+                entity.HasOne(cm => cm.Customer)
+                .WithMany(c => c.Comments)
+                .HasForeignKey(cm => cm.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Customers>(entity =>

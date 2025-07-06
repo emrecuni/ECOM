@@ -19,7 +19,7 @@ namespace ECOM.Data
 
                 entity.HasKey(a => a.AddressId);
 
-                entity.Property(a => a.AddressId).HasColumnName("ID");
+                entity.Property(a => a.AddressId).HasColumnName("ID").ValueGeneratedOnAdd(); // ValueGeneratedOnAdd => auto-increment
                 entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID");
                 entity.Property(a => a.AddressName).HasColumnName("ADDRESS_NAME");
                 entity.Property(a => a.Address).HasColumnName("ADDRESS");
@@ -29,10 +29,35 @@ namespace ECOM.Data
                 entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID");
                 entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME");
 
+                //customer relation
+                entity.HasOne(a => a.Customer)
+                .WithMany(c => c.CustomerAdress)
+                .HasForeignKey(a => a.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                //receiver relation
                 entity.HasOne(a => a.Receiver)
-                .WithMany(c => c.ReceiverAddresses)
+                .WithMany(c => c.ReceiverAddress)
                 .HasForeignKey(a => a.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+                // city relation
+                entity.HasOne(a => a.City)
+                .WithMany(c => c.CityOfAddress)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                //district relation
+                entity.HasOne(a => a.District)
+                .WithMany(d => d.DistrictOfAddress)
+                .HasForeignKey(a => a.DistrictId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(a => a.Neighbourhood)
+                .WithMany(n => n.NeighbourhoodOfAddresss)
+                .HasForeignKey(a => a.NeighbourhoodId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             });
 
             modelBuilder.Entity<Brand>(entity =>

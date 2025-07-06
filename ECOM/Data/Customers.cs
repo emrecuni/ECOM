@@ -13,11 +13,12 @@ namespace ECOM.Data
         public string? Phone { get; set; }
         public string? Password { get; set; }
         public bool Gender { get; set; }
+        public bool IsCustomer { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime AdditionTime { get; set; }
 
-        public ICollection<Addresses> ReceiverAddresses { get; set; } = []; // new List<Addresses>()
-        public ICollection<Addresses> Customer { get; set; } = [];
+        public ICollection<Addresses> ReceiverAddress { get; set; } = []; // new List<Addresses>()
+        public ICollection<Addresses> CustomerAdress { get; set; } = [];
 
     }
 }

@@ -21,6 +21,6 @@ namespace ECOM.Data
         public ICollection<Addresses> CustomerAddresses { get; set; } = [];
         public ICollection<Card> Cards { get; set; } = [];
         public ICollection<Cart> Carts { get; set; } = [];
-
+        public ICollection<Favorites> Favorites { get; set; } = [];
     }
 }

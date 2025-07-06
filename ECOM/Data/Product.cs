@@ -19,5 +19,6 @@ namespace ECOM.Data
         public DateTime AdditionTime { get; set; }
 
         public ICollection<Cart> Carts { get; set; } = [];
+        public ICollection<Favorites> Favorites { get; set; } = [];
     }
 }

@@ -175,7 +175,7 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.DCouponId);
 
-                entity.Property(c => c.DCouponId).HasColumnName("ID");
+                entity.Property(c => c.DCouponId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(c => c.SCouponId).HasColumnName("S_COUPON_ID");
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
                 entity.Property(c => c.Enable).HasColumnName("ENABLE");
@@ -205,10 +205,22 @@ namespace ECOM.Data
 
                 entity.HasKey(f => f.FavoriteId);
 
-                entity.Property(f => f.FavoriteId).HasColumnName("ID");
-                entity.Property(f => f.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(f => f.ProductId).HasColumnName("PRODUCT_ID");
-                entity.Property(f => f.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(f => f.FavoriteId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(f => f.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(f => f.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
+                entity.Property(f => f.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+
+                // customer relation
+                entity.HasOne(f => f.Customer)
+                .WithMany(c => c.Favorites)
+                .HasForeignKey(f => f.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // product relation
+                entity.HasOne(f => f.Product)
+                .WithMany(p => p.Favorites)
+                .HasForeignKey(f => f.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Log>(entity =>

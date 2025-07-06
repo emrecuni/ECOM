@@ -12,6 +12,6 @@ namespace ECOM.Data
         public float Score { get; set; }
         public DateTime AdditionTime { get; set; }
 
-        public ICollection<Cart> Cart { get; set; } = [];
+        public ICollection<Cart> Carts { get; set; } = [];
     }
 }

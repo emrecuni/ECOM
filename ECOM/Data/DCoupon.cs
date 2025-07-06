@@ -13,6 +13,6 @@ namespace ECOM.Data
         public bool Enable { get; set; }
         public DateTime DefinitionDate { get; set; }
 
-        public ICollection<Cart> Cart { get; set; } = [];
+        public ICollection<Cart> Carts { get; set; } = [];
     }
 }

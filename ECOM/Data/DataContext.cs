@@ -31,25 +31,25 @@ namespace ECOM.Data
 
                 //customer relation
                 entity.HasOne(a => a.Customer)
-                .WithMany(c => c.CustomerAdress)
+                .WithMany(c => c.CustomerAddresses)
                 .HasForeignKey(a => a.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict); // restrict ilişkili veri silinmeden ana veri silinmez
 
                 //receiver relation
                 entity.HasOne(a => a.Receiver)
-                .WithMany(c => c.ReceiverAddress)
+                .WithMany(c => c.ReceiverAddresses)
                 .HasForeignKey(a => a.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 // city relation
                 entity.HasOne(a => a.City)
-                .WithMany(c => c.CityOfAddress)
+                .WithMany(c => c.CityOfAddresses)
                 .HasForeignKey(a => a.CityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 //district relation
                 entity.HasOne(a => a.District)
-                .WithMany(d => d.DistrictOfAddress)
+                .WithMany(d => d.DistrictOfAddresses)
                 .HasForeignKey(a => a.DistrictId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -84,7 +84,7 @@ namespace ECOM.Data
                 entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 entity.HasOne(cc => cc.Customer)
-                .WithMany(c => c.Card)
+                .WithMany(c => c.Cards)
                 .HasForeignKey(cc=> cc.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
@@ -106,25 +106,25 @@ namespace ECOM.Data
 
                 // product relation
                 entity.HasOne(c => c.Product)
-                .WithMany(p => p.Cart) 
+                .WithMany(p => p.Carts) 
                 .HasForeignKey(c => c.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 // customer relation
                 entity.HasOne(cc => cc.Customer)
-                .WithMany(c => c.Cart)
+                .WithMany(c => c.Carts)
                 .HasForeignKey(cc => cc.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 // seller relation
                 entity.HasOne(c => c.Seller)
-                .WithMany(s => s.Cart)
+                .WithMany(s => s.Carts)
                 .HasForeignKey(c => c.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 // coupon relation
                 entity.HasOne(c => c.Coupon)
-                .WithMany(dc => dc.Cart)
+                .WithMany(dc => dc.Carts)
                 .HasForeignKey(c=> c.DCouponId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
@@ -188,9 +188,15 @@ namespace ECOM.Data
 
                 entity.HasKey(d => d.DistrictId);
 
-                entity.Property(d => d.DistrictId).HasColumnName("ID");
-                entity.Property(d => d.CityId).HasColumnName("CITY_ID");
-                entity.Property(d => d.Name).HasColumnName("NAME");
+                entity.Property(d => d.DistrictId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(d => d.CityId).HasColumnName("CITY_ID").IsRequired();
+                entity.Property(d => d.Name).HasColumnName("NAME").IsRequired(false);
+
+                // city relation
+                entity.HasOne(d => d.City)
+                .WithMany(c => c.Districts)
+                .HasForeignKey(d => d.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Favorites>(entity =>

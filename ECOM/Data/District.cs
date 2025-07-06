@@ -10,6 +10,8 @@ namespace ECOM.Data
         public int CityId { get; set; }
         public string? Name { get; set; }
 
-        public ICollection<Addresses> DistrictOfAddress { get; set; } = [];
+        public City City { get; set; } = null!;
+
+        public ICollection<Addresses> DistrictOfAddresses { get; set; } = [];
     }
 }

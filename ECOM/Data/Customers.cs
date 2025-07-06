@@ -17,10 +17,10 @@ namespace ECOM.Data
         public DateTime BirthDate { get; set; }
         public DateTime AdditionTime { get; set; }
 
-        public ICollection<Addresses> ReceiverAddress { get; set; } = []; // new List<Addresses>()
-        public ICollection<Addresses> CustomerAdress { get; set; } = [];
-        public ICollection<Card> Card { get; set; } = [];
-        public ICollection<Cart> Cart { get; set; } = [];
+        public ICollection<Addresses> ReceiverAddresses { get; set; } = []; // new List<Addresses>()
+        public ICollection<Addresses> CustomerAddresses { get; set; } = [];
+        public ICollection<Card> Cards { get; set; } = [];
+        public ICollection<Cart> Carts { get; set; } = [];
 
     }
 }

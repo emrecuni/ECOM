@@ -12,6 +12,6 @@ namespace ECOM.Data
         public DateTime ValidityDate { get; set; }
 
         // reverse navigation property
-        public ICollection<DCoupon> DCoupons { get; set; } = [];
+        public ICollection<DCoupon> Coupons { get; set; } = [];
     }
 }

@@ -176,10 +176,22 @@ namespace ECOM.Data
                 entity.HasKey(c => c.DCouponId);
 
                 entity.Property(c => c.DCouponId).HasColumnName("ID").ValueGeneratedOnAdd();
-                entity.Property(c => c.SCouponId).HasColumnName("S_COUPON_ID");
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(c => c.Enable).HasColumnName("ENABLE");
-                entity.Property(c => c.DefinitionDate).HasColumnName("DEFINITION_DATE");
+                entity.Property(c => c.SCouponId).HasColumnName("S_COUPON_ID").IsRequired();
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired(false);
+                entity.Property(c => c.DefinitionDate).HasColumnName("DEFINITION_DATE").IsRequired(false);
+
+                // scoupon relation
+                entity.HasOne(dc => dc.Coupon)
+                .WithMany(sc => sc.Coupons)
+                .HasForeignKey(dc => dc.SCouponId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // customer relation
+                entity.HasOne(dc => dc.Customer)
+                .WithMany(c => c.Coupons)
+                .HasForeignKey(dc => dc.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<District>(entity =>

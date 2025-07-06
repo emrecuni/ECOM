@@ -77,7 +77,7 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CardId);
 
-                entity.Property(c => c.CardId).HasColumnName("ID");
+                entity.Property(c => c.CardId).HasColumnName("ID").ValueGeneratedOnAdd(); ;
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(c => c.CardNo).HasColumnName("CARD_NO").IsRequired();
                 entity.Property(c => c.CVV).HasColumnName("CVV").IsRequired();
@@ -95,7 +95,7 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CartId);
 
-                entity.Property(c => c.CartId).HasColumnName("ID");
+                entity.Property(c => c.CartId).HasColumnName("ID").ValueGeneratedOnAdd(); ;
                 entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(c => c.SellerId).HasColumnName("SELLER_ID").IsRequired();
@@ -135,7 +135,7 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CityId);
 
-                entity.Property(c => c.CityId).HasColumnName("ID").IsRequired();
+                entity.Property(c => c.CityId).HasColumnName("ID").ValueGeneratedOnAdd(); 
                 entity.Property(c => c.Name).HasColumnName("NAME").IsRequired(false);
             });
 
@@ -145,7 +145,7 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CommentId);
 
-                entity.Property(c => c.CommentId).HasColumnName("ID");
+                entity.Property(c => c.CommentId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
@@ -171,15 +171,15 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CustomerId);
 
-                entity.Property(c => c.CustomerId).HasColumnName("ID");
-                entity.Property(c => c.Name).HasColumnName("NAME");
-                entity.Property(c => c.Surname).HasColumnName("SURNAME");
-                entity.Property(c => c.Email).HasColumnName("EMAIL");
-                entity.Property(c => c.Phone).HasColumnName("PHONE");
-                entity.Property(c => c.Password).HasColumnName("PASSWORD");
-                entity.Property(c => c.Gender).HasColumnName("GENDER");
-                entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE");
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(c => c.CustomerId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(c => c.Name).HasColumnName("NAME").IsRequired();
+                entity.Property(c => c.Surname).HasColumnName("SURNAME").IsRequired();
+                entity.Property(c => c.Email).HasColumnName("EMAIL").IsRequired();
+                entity.Property(c => c.Phone).HasColumnName("PHONE").IsRequired();
+                entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired();
+                entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired(false);
+                entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
 
             modelBuilder.Entity<DCoupon>(entity =>

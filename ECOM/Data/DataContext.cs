@@ -85,7 +85,7 @@ namespace ECOM.Data
 
                 entity.HasOne(cc => cc.Customer)
                 .WithMany(c => c.Cards)
-                .HasForeignKey(cc=> cc.CustomerId)
+                .HasForeignKey(cc => cc.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -106,7 +106,7 @@ namespace ECOM.Data
 
                 // product relation
                 entity.HasOne(c => c.Product)
-                .WithMany(p => p.Carts) 
+                .WithMany(p => p.Carts)
                 .HasForeignKey(c => c.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -125,7 +125,7 @@ namespace ECOM.Data
                 // coupon relation
                 entity.HasOne(c => c.Coupon)
                 .WithMany(dc => dc.Carts)
-                .HasForeignKey(c=> c.DCouponId)
+                .HasForeignKey(c => c.DCouponId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -241,12 +241,12 @@ namespace ECOM.Data
 
                 entity.HasKey(l => l.LogId);
 
-                entity.Property(l => l.LogId).HasColumnName("ID");
-                entity.Property(l => l.TableName).HasColumnName("TABLE_NAME");
-                entity.Property(l => l.OldValue).HasColumnName("OLD_VALUE");
-                entity.Property(l => l.NewValue).HasColumnName("NEW_VALUE");
-                entity.Property(l => l.ProcessType).HasColumnName("PROCESS_TYPE");
-                entity.Property(l => l.ProcessTime).HasColumnName("PROCESS_TIME");
+                entity.Property(l => l.LogId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(l => l.TableName).HasColumnName("TABLE_NAME").IsRequired(false);
+                entity.Property(l => l.OldValue).HasColumnName("OLD_VALUE").IsRequired(false);
+                entity.Property(l => l.NewValue).HasColumnName("NEW_VALUE").IsRequired(false);
+                entity.Property(l => l.ProcessType).HasColumnName("PROCESS_TYPE").IsRequired(false);
+                entity.Property(l => l.ProcessTime).HasColumnName("PROCESS_TIME").IsRequired(false);
             });
 
             modelBuilder.Entity<Neighbourhood>(entity =>
@@ -255,10 +255,22 @@ namespace ECOM.Data
 
                 entity.HasKey(n => n.NeighbourhoodId);
 
-                entity.Property(n => n.NeighbourhoodId).HasColumnName("ID");
-                entity.Property(n => n.CityId).HasColumnName("CITY_ID");
-                entity.Property(n => n.DistrictId).HasColumnName("DISTRICT_ID");
-                entity.Property(n => n.Name).HasColumnName("NAME");
+                entity.Property(n => n.NeighbourhoodId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(n => n.CityId).HasColumnName("CITY_ID").IsRequired();
+                entity.Property(n => n.DistrictId).HasColumnName("DISTRICT_ID").IsRequired();
+                entity.Property(n => n.Name).HasColumnName("NAME").IsRequired(false);
+
+                // city relation 
+                entity.HasOne(n => n.City)
+                .WithMany(c => c.Neighbourhoods)
+                .HasForeignKey(n => n.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // district relation
+                entity.HasOne(n => n.District)
+                .WithMany(d => d.Neighbourhoods)
+                .HasForeignKey(n => n.DistrictId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<OrderHistory>(entity =>

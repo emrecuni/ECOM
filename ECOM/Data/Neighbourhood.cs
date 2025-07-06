@@ -11,6 +11,11 @@ namespace ECOM.Data
         public int DistrictId { get; set; }
         public string? Name { get; set; }
 
+        // navigation property
+        public City City { get; set; } = null!;
+        public District District { get; set; } = null!;
+
+        // reverse navigation property
         public ICollection<Addresses> NeighbourhoodOfAddresss { get; set; } = [];
     }
 }

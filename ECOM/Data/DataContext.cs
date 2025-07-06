@@ -96,13 +96,37 @@ namespace ECOM.Data
                 entity.HasKey(c => c.CartId);
 
                 entity.Property(c => c.CartId).HasColumnName("ID");
-                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID");
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(c => c.SellerId).HasColumnName("SELLER_ID");
-                entity.Property(c => c.DCouponId).HasColumnName("DCOUPON_ID");
-                entity.Property(c => c.Piece).HasColumnName("PIECE");
-                entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE");
-                entity.Property(c => c.Enable).HasColumnName("ENABLE");
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.SellerId).HasColumnName("SELLER_ID").IsRequired();
+                entity.Property(c => c.DCouponId).HasColumnName("DCOUPON_ID").IsRequired(false);
+                entity.Property(c => c.Piece).HasColumnName("PIECE").IsRequired(false);
+                entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
+                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired(false);
+
+                // product relation
+                entity.HasOne(c => c.Product)
+                .WithMany(p => p.Cart) 
+                .HasForeignKey(c => c.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // customer relation
+                entity.HasOne(cc => cc.Customer)
+                .WithMany(c => c.Cart)
+                .HasForeignKey(cc => cc.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // seller relation
+                entity.HasOne(c => c.Seller)
+                .WithMany(s => s.Cart)
+                .HasForeignKey(c => c.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // coupon relation
+                entity.HasOne(c => c.Coupon)
+                .WithMany(dc => dc.Cart)
+                .HasForeignKey(c=> c.DCouponId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<City>(entity =>

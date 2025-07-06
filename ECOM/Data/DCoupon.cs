@@ -13,6 +13,9 @@ namespace ECOM.Data
         public bool Enable { get; set; }
         public DateTime DefinitionDate { get; set; }
 
+        public SCoupon SCoupon { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;
+
         public ICollection<Cart> Cart { get; set; } = [];
     }
 }

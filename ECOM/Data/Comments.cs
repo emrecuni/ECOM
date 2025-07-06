@@ -15,6 +15,6 @@ namespace ECOM.Data
         public string? ImagePath { get; set; }
 
         public Product Product { get; set; } = null!;
-        public Customers Customer { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;       
     }
 }

@@ -34,6 +34,8 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * İlk açılışta main formuna git giriş yap'a header'dan yönlendir (giriş yaptıysa giriş yap butonu yerine hesabım olacak)
 * Zaten kayıtlı bir eposta ile kayıt olmaya çalıştığında uyarı ver
 * Zaten kayıtlı bir telefon ile kayıt olmaya çalıştığında uyarı ver
+* Adreste müşteri silinmeden adres silinebilsin mi?
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

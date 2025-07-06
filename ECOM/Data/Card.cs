@@ -14,6 +14,6 @@ namespace ECOM.Data
         public string? CVV { get; set; }
         public DateTime AdditionTime { get; set; }
 
-        public ICollection<Customers> Customer { get; set; } = [];
+        public Customers Customer { get; set; } = null!;
     }
 }

@@ -20,20 +20,20 @@ namespace ECOM.Data
                 entity.HasKey(a => a.AddressId);
 
                 entity.Property(a => a.AddressId).HasColumnName("ID").ValueGeneratedOnAdd(); // ValueGeneratedOnAdd => auto-increment
-                entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(a => a.AddressName).HasColumnName("ADDRESS_NAME");
-                entity.Property(a => a.Address).HasColumnName("ADDRESS");
-                entity.Property(a => a.CityId).HasColumnName("CITY_ID");
-                entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID");
-                entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID");
-                entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID");
-                entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired(false);
+                entity.Property(a => a.AddressName).HasColumnName("ADDRESS_NAME").IsRequired(false);
+                entity.Property(a => a.Address).HasColumnName("ADDRESS").IsRequired(false);
+                entity.Property(a => a.CityId).HasColumnName("CITY_ID").IsRequired(false);
+                entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID").IsRequired(false);
+                entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID").IsRequired(false);
+                entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID").IsRequired(false);
+                entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 //customer relation
                 entity.HasOne(a => a.Customer)
                 .WithMany(c => c.CustomerAdress)
                 .HasForeignKey(a => a.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); // restrict ilişkili veri silinmeden ana veri silinmez
 
                 //receiver relation
                 entity.HasOne(a => a.Receiver)
@@ -66,9 +66,9 @@ namespace ECOM.Data
 
                 entity.HasKey(b => b.BrandID);
 
-                entity.Property(b => b.BrandID).HasColumnName("ID");
-                entity.Property(b => b.Name).HasColumnName("NAME");
-                entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(b => b.BrandID).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(b => b.Name).HasColumnName("NAME").IsRequired();
+                entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
 
             modelBuilder.Entity<Card>(entity =>
@@ -78,10 +78,15 @@ namespace ECOM.Data
                 entity.HasKey(c => c.CardId);
 
                 entity.Property(c => c.CardId).HasColumnName("ID");
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(c => c.CardNo).HasColumnName("CARD_NO");
-                entity.Property(c => c.CVV).HasColumnName("CVV");
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.CardNo).HasColumnName("CARD_NO").IsRequired();
+                entity.Property(c => c.CVV).HasColumnName("CVV").IsRequired();
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+
+                entity.HasOne(cc => cc.Customer)
+                .WithMany(c => c.Card)
+                .HasForeignKey(cc=> cc.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Cart>(entity =>

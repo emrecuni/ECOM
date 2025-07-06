@@ -19,6 +19,7 @@ namespace ECOM.Data
 
         public ICollection<Addresses> ReceiverAddress { get; set; } = []; // new List<Addresses>()
         public ICollection<Addresses> CustomerAdress { get; set; } = [];
+        public ICollection<Card> Card { get; set; } = [];
 
     }
 }

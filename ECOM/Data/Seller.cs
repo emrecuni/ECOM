@@ -12,6 +12,8 @@ namespace ECOM.Data
         public float Score { get; set; }
         public DateTime AdditionTime { get; set; }
 
+        // reverse navigation property
         public ICollection<Cart> Carts { get; set; } = [];
+        public ICollection<OrderHistory> Orders { get; set; } = [];
     }
 }

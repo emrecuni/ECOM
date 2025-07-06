@@ -14,6 +14,10 @@ namespace ECOM.Data
         public string? CVV { get; set; }
         public DateTime AdditionTime { get; set; }
 
+        //navigation property
         public Customers Customer { get; set; } = null!;
+
+        // reverse navigation property
+        public ICollection<OrderHistory> Orders { get; set; } = [];
     }
 }

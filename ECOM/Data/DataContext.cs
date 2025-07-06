@@ -279,14 +279,38 @@ namespace ECOM.Data
 
                 entity.HasKey(o => o.OrderId);
 
-                entity.Property(o => o.OrderId).HasColumnName("ID");
-                entity.Property(o => o.ProductId).HasColumnName("PRODUCT_ID");
-                entity.Property(o => o.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(o => o.CardId).HasColumnName("CARD_ID");
-                entity.Property(o => o.SellerId).HasColumnName("SELLER_ID");
-                entity.Property(o => o.Piece).HasColumnName("PIECE");
-                entity.Property(o => o.OrderDate).HasColumnName("ORDER_DATE");
-                entity.Property(o => o.DeliveryDate).HasColumnName("DELIVERY_DATE");
+                entity.Property(o => o.OrderId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(o => o.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
+                entity.Property(o => o.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(o => o.CardId).HasColumnName("CARD_ID").IsRequired();
+                entity.Property(o => o.SellerId).HasColumnName("SELLER_ID").IsRequired();
+                entity.Property(o => o.Piece).HasColumnName("PIECE").IsRequired(false);
+                entity.Property(o => o.OrderDate).HasColumnName("ORDER_DATE").IsRequired(false);
+                entity.Property(o => o.DeliveryDate).HasColumnName("DELIVERY_DATE").IsRequired(false);
+
+                // product relation
+                entity.HasOne(o => o.Product)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // customer relation
+                entity.HasOne(o => o.Customer)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // card relation
+                entity.HasOne(o => o.Card)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.CardId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // seller relation
+                entity.HasOne(o => o.Seller)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Product>(entity =>

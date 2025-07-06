@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class OrderHistory
     {
         [Key]
-        [Column("Id")]
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
@@ -15,5 +14,11 @@ namespace ECOM.Data
         public int Piece { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime DeliveryDate { get; set; }
+
+        // navigation property 
+        public Product Product { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;
+        public Card Card { get; set; } = null!;
+        public Seller Seller { get; set; } = null!;
     }
 }

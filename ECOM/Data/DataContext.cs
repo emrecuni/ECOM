@@ -322,13 +322,13 @@ namespace ECOM.Data
                 entity.Property(p => p.ProductId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(p => p.Name).HasColumnName("NAME").IsRequired();
                 entity.Property(p => p.BrandId).HasColumnName("BRAND_ID").IsRequired();
-                entity.Property(p => p.Description).HasColumnName("DESCRIPTION").IsRequired();
+                entity.Property(p => p.Description).HasColumnName("DESCRIPTION").IsRequired(false);
                 entity.Property(p => p.SupCategoryId).HasColumnName("SUP_CATEGORY_ID").IsRequired();
                 entity.Property(p => p.SubCategoryId).HasColumnName("SUB_CATEGORY_ID").IsRequired();
-                entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired();
+                entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired(false);
                 entity.Property(p => p.SellerId).HasColumnName("SELLER_ID").IsRequired();
-                entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired();
-                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired();
+                entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired(false);
+                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 entity.HasOne(p => p.Brand)
                 .WithMany(b=> b.Products)
@@ -357,10 +357,10 @@ namespace ECOM.Data
 
                 entity.HasKey(p => p.CategoryId);
 
-                entity.Property(p => p.CategoryId).HasColumnName("ID");
-                entity.Property(p => p.Name).HasColumnName("NAME");
-                entity.Property(p => p.Type).HasColumnName("TYPE");
-                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(p => p.CategoryId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(p => p.Name).HasColumnName("NAME").IsRequired();
+                entity.Property(p => p.Type).HasColumnName("TYPE").IsRequired();
+                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
 
             modelBuilder.Entity<SCoupon>(entity =>
@@ -369,10 +369,10 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.SCouponId);
 
-                entity.Property(c => c.SCouponId).HasColumnName("ID");
-                entity.Property(c => c.Amount).HasColumnName("AMOUNT");
-                entity.Property(c => c.LowerLimit).HasColumnName("LOWER_LIMIT");
-                entity.Property(c => c.ValidityDate).HasColumnName("VALIDITY_DATE");
+                entity.Property(c => c.SCouponId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(c => c.Amount).HasColumnName("AMOUNT").IsRequired(false);
+                entity.Property(c => c.LowerLimit).HasColumnName("LOWER_LIMIT").IsRequired(false);
+                entity.Property(c => c.ValidityDate).HasColumnName("VALIDITY_DATE").IsRequired(false);
             });
 
             modelBuilder.Entity<Seller>(entity =>
@@ -381,10 +381,10 @@ namespace ECOM.Data
 
                 entity.HasKey(s => s.SellerId);
 
-                entity.Property(s => s.SellerId).HasColumnName("ID");
-                entity.Property(s => s.Name).HasColumnName("NAME");
-                entity.Property(s => s.Score).HasColumnName("SCORE");
-                entity.Property(s => s.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(s => s.SellerId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(s => s.Name).HasColumnName("NAME").IsRequired(false);
+                entity.Property(s => s.Score).HasColumnName("SCORE").IsRequired(false);
+                entity.Property(s => s.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
         }
 

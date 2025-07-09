@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Seller
     {
         [Key]
-        [Column("Id")]
         public int SellerId { get; set; }
         public string? Name { get; set; }
         public float Score { get; set; }

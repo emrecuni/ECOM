@@ -319,16 +319,36 @@ namespace ECOM.Data
 
                 entity.HasKey(p => p.ProductId);
 
-                entity.Property(p => p.ProductId).HasColumnName("ID");
-                entity.Property(p => p.Name).HasColumnName("NAME");
-                entity.Property(p => p.BrandId).HasColumnName("BRAND_ID");
-                entity.Property(p => p.Description).HasColumnName("DESCRIPTION");
-                entity.Property(p => p.SupCategoryId).HasColumnName("SUP_CATEGORY_ID");
-                entity.Property(p => p.SubCategoryId).HasColumnName("SUB_CATEGORY_ID");
-                entity.Property(p => p.Price).HasColumnName("PRICE");
-                entity.Property(p => p.SellerId).HasColumnName("SELLER_ID");
-                entity.Property(p => p.Score).HasColumnName("SCORE");
-                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(p => p.ProductId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(p => p.Name).HasColumnName("NAME").IsRequired();
+                entity.Property(p => p.BrandId).HasColumnName("BRAND_ID").IsRequired();
+                entity.Property(p => p.Description).HasColumnName("DESCRIPTION").IsRequired();
+                entity.Property(p => p.SupCategoryId).HasColumnName("SUP_CATEGORY_ID").IsRequired();
+                entity.Property(p => p.SubCategoryId).HasColumnName("SUB_CATEGORY_ID").IsRequired();
+                entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired();
+                entity.Property(p => p.SellerId).HasColumnName("SELLER_ID").IsRequired();
+                entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired();
+                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired();
+
+                entity.HasOne(p => p.Brand)
+                .WithMany(b=> b.Products)
+                .HasForeignKey(p =>p.BrandId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.SupCategory)
+                .WithMany(c => c.SupCategories)
+                .HasForeignKey(p => p.SupCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.SubCategory)
+                .WithMany(c => c.SubCategories)
+                .HasForeignKey(p => p.SubCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(p => p.Seller)
+                .WithMany(s => s.Products)
+                .HasForeignKey(p => p.SellerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<ProductCategories>(entity =>

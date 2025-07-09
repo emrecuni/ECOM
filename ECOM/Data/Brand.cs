@@ -9,5 +9,8 @@ namespace ECOM.Data
         public int BrandID { get; set; }
         public string? Name { get; set; }
         public DateTime AdditionTime { get; set; }
+
+        // reverse navigation property
+        public ICollection<Product> Products { get; set; } = [];
     }
 }

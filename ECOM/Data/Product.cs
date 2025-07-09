@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Product
     {
         [Key]
-        [Column("Id")]
         public int ProductId { get; set; }
         public string? Name { get; set; }
         public int BrandId { get; set; }
@@ -17,6 +16,12 @@ namespace ECOM.Data
         public int SellerId { get; set; }
         public float Score { get; set; }
         public DateTime AdditionTime { get; set; }
+
+        //navigation property
+        public Brand Brand { get; set; } = null!;
+        public ProductCategories SupCategory { get; set; } = null!;
+        public ProductCategories SubCategory { get; set; } = null!;
+        public Seller Seller { get; set; } = null!;
 
         // reverse navigation property
         public ICollection<Cart> Carts { get; set; } = [];

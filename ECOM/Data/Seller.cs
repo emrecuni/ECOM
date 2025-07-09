@@ -15,5 +15,6 @@ namespace ECOM.Data
         // reverse navigation property
         public ICollection<Cart> Carts { get; set; } = [];
         public ICollection<OrderHistory> Orders { get; set; } = [];
+        public ICollection<Product> Products { get; set; } = [];
     }
 }

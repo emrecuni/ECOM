@@ -177,6 +177,7 @@ namespace ECOM.Data
                 entity.Property(c => c.Phone).HasColumnName("PHONE").IsRequired(false);
                 entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired();
                 entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired();
+                entity.Property(c => c.IsCustomer).HasColumnName("ISCUSTOMER").IsRequired(false);
                 entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
                 entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });

@@ -11,9 +11,9 @@ namespace ECOM.Data
         public int CustomerId { get; set; }
         public int CardId { get; set; }
         public int SellerId { get; set; }
-        public int Piece { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public int? Piece { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
         // navigation property 
         public Product Product { get; set; } = null!;

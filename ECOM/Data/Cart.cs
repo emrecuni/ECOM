@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Cart
     {
         [Key]
-        [Column("Id")]
         public int CartId { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
@@ -16,6 +15,7 @@ namespace ECOM.Data
         public decimal TotalPrice { get; set; }
         public bool Enable { get; set; }
 
+        // navigation property
         public Product Product { get; set; } = null!;
         public Customers Customer { get; set; } = null!;
         public Seller Seller { get; set; } = null!;

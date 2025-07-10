@@ -27,5 +27,6 @@ namespace ECOM.Data
         public ICollection<Cart> Carts { get; set; } = [];
         public ICollection<Favorites> Favorites { get; set; } = [];
         public ICollection<OrderHistory> Orders { get; set; } = [];
+        public ICollection<Comments> Comments { get; set; } = [];
     }
 }

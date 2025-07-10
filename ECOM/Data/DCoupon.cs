@@ -9,8 +9,8 @@ namespace ECOM.Data
         public int DCouponId { get; set; }
         public int SCouponId { get; set; }
         public int CustomerId { get; set; }
-        public bool Enable { get; set; }
-        public DateTime DefinitionDate { get; set; }
+        public bool? Enable { get; set; }
+        public DateTime? DefinitionDate { get; set; }
 
         // navigation property
 

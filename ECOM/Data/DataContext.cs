@@ -20,13 +20,13 @@ namespace ECOM.Data
                 entity.HasKey(a => a.AddressId);
 
                 entity.Property(a => a.AddressId).HasColumnName("ID").ValueGeneratedOnAdd(); // ValueGeneratedOnAdd => auto-increment
-                entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired(false);
+                entity.Property(a => a.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(a => a.AddressName).HasColumnName("ADDRESS_NAME").IsRequired(false);
                 entity.Property(a => a.Address).HasColumnName("ADDRESS").IsRequired(false);
-                entity.Property(a => a.CityId).HasColumnName("CITY_ID").IsRequired(false);
-                entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID").IsRequired(false);
-                entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID").IsRequired(false);
-                entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID").IsRequired(false);
+                entity.Property(a => a.CityId).HasColumnName("CITY_ID").IsRequired();
+                entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID").IsRequired();
+                entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID").IsRequired();
+                entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID").IsRequired();
                 entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 //customer relation
@@ -135,8 +135,8 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CityId);
 
-                entity.Property(c => c.CityId).HasColumnName("ID");
-                entity.Property(c => c.Name).HasColumnName("NAME");
+                entity.Property(c => c.CityId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(c => c.Name).HasColumnName("NAME").IsRequired(false);
             });
 
             modelBuilder.Entity<Comments>(entity =>
@@ -145,11 +145,23 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CommentId);
 
-                entity.Property(c => c.CommentId).HasColumnName("ID");
-                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID");
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID");
-                entity.Property(c => c.Comment).HasColumnName("COMMENT");
-                entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH");
+                entity.Property(c => c.CommentId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
+                entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
+
+                // product relation
+                entity.HasOne(c => c.Product)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.CommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                // customer relation
+                entity.HasOne(cc => cc.Customer)
+                .WithMany(c => c.Comments)
+                .HasForeignKey(cc => cc.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Customers>(entity =>
@@ -158,15 +170,15 @@ namespace ECOM.Data
 
                 entity.HasKey(c => c.CustomerId);
 
-                entity.Property(c => c.CustomerId).HasColumnName("ID");
-                entity.Property(c => c.Name).HasColumnName("NAME");
-                entity.Property(c => c.Surname).HasColumnName("SURNAME");
-                entity.Property(c => c.Email).HasColumnName("EMAIL");
-                entity.Property(c => c.Phone).HasColumnName("PHONE");
-                entity.Property(c => c.Password).HasColumnName("PASSWORD");
-                entity.Property(c => c.Gender).HasColumnName("GENDER");
-                entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE");
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME");
+                entity.Property(c => c.CustomerId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(c => c.Name).HasColumnName("NAME").IsRequired();
+                entity.Property(c => c.Surname).HasColumnName("SURNAME").IsRequired();
+                entity.Property(c => c.Email).HasColumnName("EMAIL").IsRequired(false);
+                entity.Property(c => c.Phone).HasColumnName("PHONE").IsRequired(false);
+                entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired();
+                entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired();
+                entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
 
             modelBuilder.Entity<DCoupon>(entity =>

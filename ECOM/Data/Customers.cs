@@ -14,8 +14,8 @@ namespace ECOM.Data
         public string? Password { get; set; }
         public bool Gender { get; set; }
         public bool IsCustomer { get; set; }
-        public DateTime BirthDate { get; set; }
-        public DateTime AdditionTime { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime? AdditionTime { get; set; }
 
         // reverse navigation property
         public ICollection<Addresses> ReceiverAddresses { get; set; } = []; // new List<Addresses>()
@@ -25,5 +25,6 @@ namespace ECOM.Data
         public ICollection<DCoupon> Coupons { get; set; } = [];
         public ICollection<Favorites> Favorites { get; set; } = [];
         public ICollection<OrderHistory> Orders { get; set; } = [];
+        public ICollection<Comments> Comments { get; set; } = [];
     }
 }

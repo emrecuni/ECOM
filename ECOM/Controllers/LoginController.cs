@@ -1,20 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECOM.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
     public class LoginController : Controller
     {
+
+        private readonly DataContext _context;
+
+        public LoginController(DataContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             if (username != null && password != null)
             {
-                if (username == "admin" && password == "admin")
+
+                var customer = await _context.Customers.Where(c => c.Email == username && c.Password == password).ToListAsync();
+                if (customer is not null)
                     return RedirectToAction("Index", "Main");
 
             }

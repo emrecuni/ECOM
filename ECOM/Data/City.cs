@@ -9,6 +9,9 @@ namespace ECOM.Data
         public int CityId { get; set; }
         public string? Name { get; set; }
 
-        public ICollection<Addresses> CityOfAddress { get; set; } = [];
+        // reverse navigation property
+        public ICollection<District> Districts { get; set; } = [];
+        public ICollection<Addresses> CityOfAddresses { get; set; } = [];
+        public ICollection<Neighbourhood> Neighbourhoods { get; set; } = [];
     }
 }

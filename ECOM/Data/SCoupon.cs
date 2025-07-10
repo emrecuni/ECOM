@@ -7,10 +7,11 @@ namespace ECOM.Data
     {
         [Key]
         public int SCouponId { get; set; }
-        public decimal Amount { get; set; }
-        public decimal LowerLimit { get; set; }
-        public DateTime ValidityDate { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? LowerLimit { get; set; }
+        public DateTime? ValidityDate { get; set; }
 
+        // reverse navigation property
         public ICollection<DCoupon> Coupons { get; set; } = [];
     }
 }

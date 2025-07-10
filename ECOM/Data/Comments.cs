@@ -6,7 +6,6 @@ namespace ECOM.Data
     public class Comments
     {
         [Key]
-        [Column("Id")]
         public int CommentId { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
@@ -14,7 +13,8 @@ namespace ECOM.Data
         public int Score { get; set; }  
         public string? ImagePath { get; set; }
 
+        // navigation property
         public Product Product { get; set; } = null!;
-        public Customers Customer { get; set; } = null!;       
+        public Customers Customer { get; set; } = null!;
     }
 }

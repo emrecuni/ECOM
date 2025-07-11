@@ -36,6 +36,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Zaten kayıtlı bir telefon ile kayıt olmaya çalıştığında uyarı ver
 * Adreste müşteri silinmeden adres silinebilsin mi?
 * Kolon uzunluklarını sınırla
+* Telefon ile girişte otp göndermini dene 
 
 
 <link rel="stylesheet" href="~/css/product.css">

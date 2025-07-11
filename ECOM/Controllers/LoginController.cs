@@ -27,12 +27,20 @@ namespace ECOM.Controllers
             {
 
                 var customer = await _context.Customers.Where(c => c.Email == username && c.Password == password).ToListAsync();
-                if (customer is not null)
+                if (customer.Count > 0)
                     return RedirectToAction("Index", "Main");
-
+                else // kullanıcı adı parola hatalı mesajı bastır
+                {
+                    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                    return View("Index");
+                }
             }
-
-            return View("Index");
+            else
+            {
+                ViewBag.NullCheck = "Email ve Parola Alanları Boş Olamaz!";
+                return View("Index");
+            }
+                
         }
 
         public IActionResult Logout()

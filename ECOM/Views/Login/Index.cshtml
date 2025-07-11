@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/css/login.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <div class="container">
     <div class="login-container">
@@ -9,9 +10,9 @@
             <form asp-action="Login" method="post">
                 <!-- Kullanıcı Adı -->
                 <div class="mb-3">
-                    <label for="username" class="form-label">Kullanıcı Adı:</label>
-                    <input type="text" class="form-control" id="username" name="username"
-                           placeholder="Kullanıcı Adınızı Girin" required>
+                    <label for="email" class="form-label">E-Mail:</label>
+                    <input type="text" class="form-control" id="email" name="username"
+                           placeholder="E-Mail Adresinizi ve Telefon Numaranızı Girin" required>
                 </div>
 
                 <!-- Parola -->
@@ -23,6 +24,15 @@
 
                 <!-- Giriş Yap Butonu -->
                 <button type="submit" class="btn btn-custom">Giriş Yap</button>
+
+                <!--Hatalı Parola-->
+                <div class="bg-warning warning">
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                    @{
+                        if (ViewBag.WrongPassword is not null)
+                            @ViewBag.WrongPassword
+                    }
+                </div>
 
                 <!-- Şifre unuttum Linki -->
                 <div class="text-center mt-3">

@@ -77,3 +77,15 @@
         text-align: center;
         margin-bottom: 30px;
     }
+
+.warning{
+    text-align: center;
+    color: black;
+    border-radius: 15px;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.warning-icon{
+    font-size: 20px;
+}

@@ -31,6 +31,8 @@
                     @{
                         if (ViewBag.WrongPassword is not null)
                             @ViewBag.WrongPassword
+                        else if(ViewBag.NullCheck is not null)
+                            @ViewBag.NullCheck
                     }
                 </div>
 

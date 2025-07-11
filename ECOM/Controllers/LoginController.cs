@@ -25,7 +25,6 @@ namespace ECOM.Controllers
         {
             if (username != null && password != null)
             {
-
                 var customer = await _context.Customers.Where(c => c.Email == username && c.Password == password).ToListAsync();
                 if (customer.Count > 0)
                     return RedirectToAction("Index", "Main");
@@ -39,8 +38,7 @@ namespace ECOM.Controllers
             {
                 ViewBag.NullCheck = "Email ve Parola Alanları Boş Olamaz!";
                 return View("Index");
-            }
-                
+            }                
         }
 
         public IActionResult Logout()
@@ -52,7 +50,7 @@ namespace ECOM.Controllers
         public IActionResult ForgotPassword()
         {
             ViewBag.ForgotPassword = true;
-            return View();
+            return View("Forgot-Password");
         }
 
         [HttpPost]

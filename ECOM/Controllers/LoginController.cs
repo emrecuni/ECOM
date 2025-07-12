@@ -1,4 +1,5 @@
 ﻿using ECOM.Data;
+using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -9,10 +10,12 @@ namespace ECOM.Controllers
     {
 
         private readonly DataContext _context;
+        private readonly Smtp_Sender _sender;
 
-        public LoginController(DataContext context)
+        public LoginController(DataContext context, Smtp_Sender sender)
         {
             _context = context;
+            _sender = sender;
         }
 
         public IActionResult Index()
@@ -49,23 +52,34 @@ namespace ECOM.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            ViewBag.IsSuccess = false;
+            
             return View("Forgot-Password");
         }
 
         [HttpPost]
         public IActionResult ForgotPassword(string email) // parola sıfırlama isteği girilen mail adresine girilmelidir
         {
-            if (email is null)
+            try
             {
-                ViewBag.Info = "E-Mail Alanı Boş Olamaz!";
-                ViewBag.IsSuccess = false;
+                if (email is null)
+                {
+                    ViewBag.Info = "E-Mail Alanı Boş Olamaz!";
+                    ViewBag.IsSuccess = "w";
+                    return View("Forgot-Password");
+                }
+
+                _sender.SendMail(email);
+
+                ViewBag.IsSuccess = "s";
+                ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
                 return View("Forgot-Password");
             }
-
-
-            ViewBag.IsSuccess = true;
-            ViewBag.Info = "Parola sıfırlama isteği gönderildi.";
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"ForgotPassword Post Error => {ex}");
+            }
+            ViewBag.IsSuccess = "e";
+            ViewBag.Info = "Bir Hata Oluştu Daha Sonra Tekrar Deneyiniz...";
             return View("Forgot-Password");
         }
 

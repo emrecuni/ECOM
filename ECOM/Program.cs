@@ -1,4 +1,6 @@
 using ECOM.Data;
+using ECOM.Models;
+using ECOM.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
+builder.Services.AddScoped<Smtp_Sender>();
+builder.Services.AddScoped<EmailSettings>();
 
 var app = builder.Build();
 

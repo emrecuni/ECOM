@@ -7,12 +7,12 @@
         <div>
             <h3>Hesabınıza Giriş Yapın</h3>
 
-            <form asp-action="Login" method="post">
+            <form asp-action="Index" method="post">
                 <!-- Kullanıcı Adı -->
                 <div class="mb-3">
                     <label for="email" class="form-label">E-Mail:</label>
-                    <input type="text" class="form-control" id="email" name="username"
-                           placeholder="E-Mail Adresinizi ve Telefon Numaranızı Girin" required>
+                    <input type="text" class="form-control" id="email" name="email"
+                           placeholder="E-Mail Adresinizi veya Telefon Numaranızı Girin" required>
                 </div>
 
                 <!-- Parola -->
@@ -27,12 +27,18 @@
 
                 <!--Hatalı Parola-->
                 <div class="bg-warning warning">
-                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+
                     @{
                         if (ViewBag.WrongPassword is not null)
+                        {
+                            <i class="fas fa-exclamation-circle warning-icon"></i>
                             @ViewBag.WrongPassword
-                        else if(ViewBag.NullCheck is not null)
+                        }
+                        else if (ViewBag.NullCheck is not null)
+                        {
+                            <i class="fas fa-exclamation-circle warning-icon"></i>
                             @ViewBag.NullCheck
+                        }
                     }
                 </div>
 

@@ -21,18 +21,24 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Index(string email, string password)
         {
-            if (username != null && password != null)
+            if (email is not null && password is not null)
             {
-
-                var customer = await _context.Customers.Where(c => c.Email == username && c.Password == password).ToListAsync();
-                if (customer is not null)
+                var customer = await _context.Customers.Where(c => c.Email == email || c.Phone == email && c.Password == password).ToListAsync();
+                if (customer.Count > 0)
                     return RedirectToAction("Index", "Main");
-
+                else // kullanıcı adı parola hatalı mesajı bastır
+                {
+                    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                    return View();
+                }
             }
-
-            return View("Index");
+            else
+            {
+                ViewBag.NullCheck = "Email ve Parola Alanları Boş Olamaz!";
+                return View();
+            }
         }
 
         public IActionResult Logout()
@@ -43,15 +49,24 @@ namespace ECOM.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            ViewBag.ForgotPassword = true;
-            return View();
+            ViewBag.IsSuccess = false;
+            return View("Forgot-Password");
         }
 
         [HttpPost]
         public IActionResult ForgotPassword(string email) // parola sıfırlama isteği girilen mail adresine girilmelidir
         {
+            if (email is null)
+            {
+                ViewBag.Info = "E-Mail Alanı Boş Olamaz!";
+                ViewBag.IsSuccess = false;
+                return View("Forgot-Password");
+            }
+
+
+            ViewBag.IsSuccess = true;
             ViewBag.Info = "Parola sıfırlama isteği gönderildi.";
-            return View();
+            return View("Forgot-Password");
         }
 
         [HttpGet]

@@ -96,10 +96,48 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string name, string surname, string email, string password) // parametreleri modele dönüştür
+        public async Task<IActionResult> Register(RegisterViewModel model) // parametreleri modele dönüştür
         {
-            ViewBag.Info = "Yeni Kayıt Başarılı";
-            return View("Index");
+            if(!ModelState.IsValid) 
+                return View(model);
+
+            // kayıt olacak kullanıcın veri tabanında olup olmadığı kontrol edilir
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email || c.Phone == model.Phone);
+            if(customer is not null) // müşteri kayıtlıysa
+            {
+                ViewBag.Info = "E-Mail veya Telefon Zaten Kayıtlı";
+                ViewBag.IsSuccess = StatusTypes.Warning;
+                return View(model);
+            }
+
+            try
+            {
+                Customers newCustomer = new()
+                {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Email = model.Email,
+                    Password = model.Password,
+                    Phone = model.Phone,
+                    Gender = model.Gender,
+                    BirthDate = model.Birthdate,
+                    AdditionTime = DateTime.Now,
+                    IsCustomer = true
+                };
+                
+                
+                _context.Customers.Add(newCustomer);
+                await _context.SaveChangesAsync();
+                ViewBag.Info = "Yeni Kayıt Başarılı.";
+                ViewBag.IsSuccess = StatusTypes.Success;
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"Register New Record Error => {ex}");
+                ViewBag.Info = "Kayıt Sırasında Bir Hata Oluştu Tekrar Deneyiniz.";
+                ViewBag.IsSuccess = StatusTypes.Error;
+            }            
+            return View();
         }
     }
 }

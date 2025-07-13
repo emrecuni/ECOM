@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/css/login.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <div class="container">
     <div class="register-container">
@@ -64,5 +65,28 @@
             <!-- Kayıt Ol Butonu -->
             <button type="submit" class="btn btn-custom">Kayıt Ol</button>
         </form>
+        
+        <!-- işlem sonucuna göre css class'ı atanır'-->
+        @{ 
+            var cssClass = ViewBag.IsSuccess switch
+            {
+                StatusTypes.Success => "bg-success info",
+                StatusTypes.Warning => "bg-warning info",
+                StatusTypes.Error => "bg-danger info text-white",
+                _ => string.Empty
+            };
+
+            var iconClass = ViewBag.IsSuccess switch
+            {
+                StatusTypes.Success => "fas fa-check",
+                StatusTypes.Warning => "fas fa-exclamation-circle",
+                StatusTypes.Error => "fa-solid fa-x",
+                _ => string.Empty,
+            };
+        }
+        <div class="@cssClass">
+            <i class="@iconClass"></i>
+            @ViewBag.Info
+        </div>
     </div>
 </div>

@@ -37,6 +37,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Adreste müşteri silinmeden adres silinebilsin mi?
 * Kolon uzunluklarını sınırla
 * Mail bilgilerini appsettings'ten al
+* Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
 
 <link rel="stylesheet" href="~/css/product.css">
 

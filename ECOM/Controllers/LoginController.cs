@@ -47,7 +47,11 @@ namespace ECOM.Controllers
 
         public IActionResult Logout()
         {
-            return View();
+            /*
+                session'ları temizle
+             */
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

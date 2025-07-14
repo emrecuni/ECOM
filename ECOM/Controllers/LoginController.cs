@@ -1,8 +1,11 @@
 ﻿using ECOM.Data;
 using ECOM.Models;
 using ECOM.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ECOM.Controllers
@@ -29,9 +32,33 @@ namespace ECOM.Controllers
         {
             if (email is not null && password is not null)
             {
-                var customer = await _context.Customers.Where(c => c.Email == email || c.Phone == email && c.Password == password).ToListAsync();
-                if (customer.Count > 0)
+                var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email && c.Password == password);
+                if (customer is not null)
+                {
+
+                    var claims = new List<Claim>
+                    {
+                        new (ClaimTypes.Name, customer.Name!),
+                        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var autProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.UtcNow.AddDays(30)
+                    };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        autProperties);
+                    ViewData["Email"] = email;
+
+
                     return RedirectToAction("Index", "Main");
+                }
                 else // kullanıcı adı parola hatalı mesajı bastır
                 {
                     ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
@@ -102,12 +129,12 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model) // parametreleri modele dönüştür
         {
-            if(!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View(model);
 
             // kayıt olacak kullanıcın veri tabanında olup olmadığı kontrol edilir
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email || c.Phone == model.Phone);
-            if(customer is not null) // müşteri kayıtlıysa
+            if (customer is not null) // müşteri kayıtlıysa
             {
                 ViewBag.Info = "E-Mail veya Telefon Zaten Kayıtlı";
                 ViewBag.IsSuccess = StatusTypes.Warning;
@@ -128,8 +155,8 @@ namespace ECOM.Controllers
                     AdditionTime = DateTime.Now,
                     IsCustomer = true
                 };
-                
-                
+
+
                 _context.Customers.Add(newCustomer);
                 await _context.SaveChangesAsync();
                 ViewBag.Info = "Yeni Kayıt Başarılı.";
@@ -140,7 +167,7 @@ namespace ECOM.Controllers
                 NLogger.logger.Error($"Register New Record Error => {ex}");
                 ViewBag.Info = "Kayıt Sırasında Bir Hata Oluştu Tekrar Deneyiniz.";
                 ViewBag.IsSuccess = StatusTypes.Error;
-            }            
+            }
             return View();
         }
     }

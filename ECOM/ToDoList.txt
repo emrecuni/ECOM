@@ -45,6 +45,8 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Main'de ürün kartlarında price'ın padding bottom'ını statik ver
 * Main index içindeki notları yap
 * Persistant cookie'yi test et
+* Main'deki ProductsOfCategory(int id) id kontrolüne tekrar bak yeterli değil if (id == 0) // buradaki kontrolü geliştir return View("Index")
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

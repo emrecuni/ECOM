@@ -2,7 +2,12 @@
 <link rel="stylesheet" href="~/css/product.css">
 
 <div>
-    <p class="product-category">Ürün Kategorisi: <a class="product-category" href="#"><b>@Model.Product!.SupCategory.Name</b></a>  ><a class="product-category" href="#"><b>@Model.Product.SubCategory.Name</b></a></p><br>
+    <p class="product-category">
+        Ürün Kategorisi:
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SupCategoryId" class="product-category"><b>@Model.Product!.SupCategory.Name</b></a>  >
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SubCategoryId" class="product-category"><b>@Model.Product.SubCategory.Name</b></a>
+    </p>
+    <br>
     <!-- Ürün Başlık ve Resim Bölümü -->
     <div class="product-header">
         <div class="product-image">

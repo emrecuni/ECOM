@@ -37,7 +37,7 @@ namespace ECOM.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ProductsOfCategory(string category)
+        public async Task<IActionResult> ProductsByCategoryName(string category)
         {
             try
             {
@@ -54,8 +54,32 @@ namespace ECOM.Controllers
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"Index(category) Error => {ex}");
+                NLogger.logger.Error($"ProductsOfCategory(category) Error => {ex}");
                 return View();
+            }
+        }
+
+        public async Task<IActionResult> ProductsByCategoryId(int id)
+        {
+            try
+            {
+                if (id == 0) // buradaki kontrolü geliştir
+                    return View("Index");
+
+                var products = await _context.Products
+                    .Include(p => p.Brand)
+                    .Include(p => p.SupCategory)
+                    .Include(p => p.SubCategory)
+                    .Include(p => p.Seller)
+                    .Where(p => p.SupCategoryId == id || p.SubCategoryId == id)
+                    .ToListAsync();
+
+                return View("Index",products);
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"ProductsOfCategory(id) Error => {ex}");
+                return View("Index");
             }
         }
     }

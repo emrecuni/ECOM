@@ -1,12 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECOM.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index()
+        private readonly DataContext _context;
+
+        public ProductController(DataContext context)
         {
-            return View();
+             _context = context;
+        }
+
+        public async Task<IActionResult> Index(int id)
+        {
+            var product = await _context.Products
+                .Include(b => b.Brand)
+                .Include(c => c.SupCategory)
+                .Include(c => c.SubCategory)
+                .Include(s => s.Seller)
+                .FirstAsync(p => p.ProductId == id);
+            return View(product);
         }
 
         [HttpPost]

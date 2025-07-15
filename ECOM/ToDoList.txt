@@ -38,6 +38,10 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Kolon uzunluklarını sınırla
 * Mail bilgilerini appsettings'ten al
 * Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
+* Product tablosuna imagePath ekle
+* Product'a comments ilişkisi ekle
+* Main'de çekilen ürünlere sınırlama getir db'deki bütün ürünleri değil belirli bir kurala uyanları getir(en çok puan alanları gibi veya en çok satılan gibi)
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

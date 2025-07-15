@@ -1,25 +1,29 @@
-﻿<link rel="stylesheet" href="~/css/product.css">
+﻿@model  ECOM.Data.Product
+<link rel="stylesheet" href="~/css/product.css">
 
 <div>
-    <p>Ürün Kategorisi: Elektronik > Bilgisayar</p><br>
+    <p class="product-category">Ürün Kategorisi: <a class="product-category" href="#"><b>@Model.SupCategory.Name</b></a>  ><a class="product-category" href="#"><b>@Model.SubCategory.Name</b></a></p><br>
     <!-- Ürün Başlık ve Resim Bölümü -->
     <div class="product-header">
         <div class="product-image">
-            <img src="~/img/msi 100m.jpg" alt="Osram Ampul">
+            <img src="~/img/msi 100m.jpg" alt="msi">
         </div>
         <div class="product-info">
-            <h1>MSI 100M Gaming Kasa</h1>
-            <div class="badge badge-success badge-pill bg-success">MSI Resmi Satıcı</div>
-            <div class="product-price">₺79.90</div>
+            <h1>@Model.Name</h1>
+            <div class="badge badge-success badge-pill bg-success">@Model.Brand.Name</div>
+            <div class="badge badge-success badge-pill bg-primary">@Model.Seller.Name</div>
+            <div class="product-price">₺@Model.Price</div>
             <div class="forms">
                 <form action="AddCart" method="post">
-                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
-                    <input type="number" hidden name="price" value=79.9>
+                    <input type="hidden" name="productId" value=@Model.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Name>
+                    <input type="number" hidden name="price" value=@Model.Price>
                     <button class="addCart"><b>Sepete Ekle</b></button>
                 </form>
                 <form action="Buy" method="post">
-                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
-                    <input type="hidden" name="price" value=79.9>
+                    <input type="hidden" name="productId" value=@Model.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Name>
+                    <input type="hidden" name="price" value=@Model.Price>
                     <button class="buy"><b>Satın Al</b></button>
                 </form>
             </div>
@@ -31,9 +35,7 @@
         <div class="description-content">
             <h2>Ürün Açıklaması</h2>
             <p>
-                Osram 9W LED Ampul, enerji verimliliği sağlayan ve uzaktan kumanda ile kontrol edilebilen modern bir
-                aydınlatma çözümüdür. Sarı-beyaz ışık seçenekleriyle evinizin her alanına uyum sağlar. Uzun ömürlü LED
-                teknolojisi ile ekonomik bir kullanım sunar.
+                @Model.Description
             </p>
         </div>
     </div>

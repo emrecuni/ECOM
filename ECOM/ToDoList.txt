@@ -41,7 +41,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Product tablosuna imagePath ekle
 * Product'a comments ilişkisi ekle
 * Main'de çekilen ürünlere sınırlama getir db'deki bütün ürünleri değil belirli bir kurala uyanları getir(en çok puan alanları gibi veya en çok satılan gibi)
-
+* CommentId'yi auto-increment yap
 
 <link rel="stylesheet" href="~/css/product.css">
 

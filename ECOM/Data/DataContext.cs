@@ -146,8 +146,8 @@ namespace ECOM.Data
                 entity.HasKey(c => c.CommentId);
 
                 entity.Property(c => c.CommentId).HasColumnName("ID").ValueGeneratedOnAdd();
-                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired(true);
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired(true);
                 entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
                 entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);

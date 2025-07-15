@@ -11,17 +11,23 @@ namespace ECOM.Controllers
 
         public ProductController(DataContext context)
         {
-             _context = context;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int id)
         {
             var product = await _context.Products
-                .Include(b => b.Brand)
-                .Include(c => c.SupCategory)
-                .Include(c => c.SubCategory)
-                .Include(s => s.Seller)
+                .Include(p => p.Brand)
+                .Include(p => p.SupCategory)
+                .Include(p => p.SubCategory)
+                .Include(p => p.Seller)
                 .FirstAsync(p => p.ProductId == id);
+
+            var comments = await _context.Comments
+                .Include(c => c.Product)
+                .Include(c => c.Customer)
+                .ToListAsync();
+
             return View(product);
         }
 

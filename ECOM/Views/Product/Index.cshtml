@@ -1,29 +1,29 @@
-﻿@model  ECOM.Data.Product
+﻿@model  ECOM.Models.ProductDetailViewModel
 <link rel="stylesheet" href="~/css/product.css">
 
 <div>
-    <p class="product-category">Ürün Kategorisi: <a class="product-category" href="#"><b>@Model.SupCategory.Name</b></a>  ><a class="product-category" href="#"><b>@Model.SubCategory.Name</b></a></p><br>
+    <p class="product-category">Ürün Kategorisi: <a class="product-category" href="#"><b>@Model.Product!.SupCategory.Name</b></a>  ><a class="product-category" href="#"><b>@Model.Product.SubCategory.Name</b></a></p><br>
     <!-- Ürün Başlık ve Resim Bölümü -->
     <div class="product-header">
         <div class="product-image">
             <img src="~/img/msi 100m.jpg" alt="msi">
         </div>
         <div class="product-info">
-            <h1>@Model.Name</h1>
-            <div class="badge badge-success badge-pill bg-success">@Model.Brand.Name</div>
-            <div class="badge badge-success badge-pill bg-primary">@Model.Seller.Name</div>
-            <div class="product-price">₺@Model.Price</div>
+            <h1>@Model.Product.Name</h1>
+            <div class="badge badge-success badge-pill bg-success">@Model.Product.Brand.Name</div>
+            <div class="badge badge-success badge-pill bg-primary">@Model.Product.Seller.Name</div>
+            <div class="product-price">₺@Model.Product.Price</div>
             <div class="forms">
                 <form action="AddCart" method="post">
-                    <input type="hidden" name="productId" value=@Model.ProductId />
-                    <input type="hidden" name="productName" value=@Model.Name>
-                    <input type="number" hidden name="price" value=@Model.Price>
+                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Product.Name>
+                    <input type="number" hidden name="price" value=@Model.Product.Price>
                     <button class="addCart"><b>Sepete Ekle</b></button>
                 </form>
                 <form action="Buy" method="post">
-                    <input type="hidden" name="productId" value=@Model.ProductId />
-                    <input type="hidden" name="productName" value=@Model.Name>
-                    <input type="hidden" name="price" value=@Model.Price>
+                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Product.Name>
+                    <input type="hidden" name="price" value=@Model.Product.Price>
                     <button class="buy"><b>Satın Al</b></button>
                 </form>
             </div>
@@ -35,7 +35,7 @@
         <div class="description-content">
             <h2>Ürün Açıklaması</h2>
             <p>
-                @Model.Description
+                @Model.Product.Description
             </p>
         </div>
     </div>

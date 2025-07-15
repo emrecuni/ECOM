@@ -41,7 +41,7 @@ namespace ECOM.Controllers
         {
             try
             {
-                var productsOfCategory = await _context.Products
+                var products = await _context.Products
                     .Include(p => p.Brand)
                     .Include(p => p.SupCategory)
                     .Include(p => p.SubCategory)
@@ -49,12 +49,11 @@ namespace ECOM.Controllers
                     .Where(p => p.SupCategory.Name == category.ToUpper())
                     .ToListAsync();
 
-
-                return View("Index", productsOfCategory);
+                return View("Index", products);
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"ProductsOfCategory(category) Error => {ex}");
+                NLogger.logger.Error($"ProductsByCategoryName Error => {ex}");
                 return View();
             }
         }
@@ -78,7 +77,31 @@ namespace ECOM.Controllers
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"ProductsOfCategory(id) Error => {ex}");
+                NLogger.logger.Error($"ProductsByCategoryId Error => {ex}");
+                return View("Index");
+            }
+        }
+
+        public async Task<IActionResult> SearchProductByName(string search)
+        {
+            try
+            {
+                if(search is null)
+                    return View("Index");
+
+                var products = await _context.Products
+                    .Include(p => p.Brand)
+                    .Include(p => p.SupCategory)
+                    .Include(p => p.SubCategory)
+                    .Include(p => p.Seller)
+                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper()))
+                    .ToListAsync();
+
+                return View("Index", products);
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"SearchProductByName Error => {ex}");
                 return View("Index");
             }
         }

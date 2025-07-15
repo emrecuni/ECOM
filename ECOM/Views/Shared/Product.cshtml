@@ -6,7 +6,7 @@
             <i class="fas fa-heart"></i>
         </a>
         <a asp-controller="Product" asp-action="Index" asp-route-id="@Model.ProductId" class="product">
-            <img src="~/img/msi 100m.jpg" class="card-img-top" alt="Ürün 1">
+            <img src="~/@Model.ImagePath" class="card-img-top" alt="Ürün 1">
             <div class="card-body">
                 <div class="product-name">
                     <h5 class="card-title">@Model.Name</h5>

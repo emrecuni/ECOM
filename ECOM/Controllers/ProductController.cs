@@ -1,5 +1,6 @@
 ﻿using ECOM.Data;
 using ECOM.Models;
+using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -19,34 +20,36 @@ namespace ECOM.Controllers
         {
             try
             {
-
-            }
-            catch ( Exception ex)
-            {
-
-                throw;
-            }
-            var product = await _context.Products
+                var product = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.SupCategory)
                 .Include(p => p.SubCategory)
                 .Include(p => p.Seller)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
 
-            var comments = await _context.Comments
-                .Include(c => c.Product)
-                .Include(c => c.Customer)
-                .Where(p => p.ProductId == id)
-                .ToListAsync();
+                List<Comments> comments = new();
 
-            
-            ProductDetailViewModel viewModel = new()
+                if (product is not null) // ürün db'de varsa yorumları çekilir
+                    comments = await _context.Comments
+                       .Include(c => c.Product)
+                       .Include(c => c.Customer)
+                       .Where(p => p.ProductId == id)
+                       .ToListAsync();
+
+                ProductDetailViewModel viewModel = new()
+                {
+                    Product = product,
+                    Comments = comments
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
             {
-                Product = product,
-                Comments = comments
-            };
+                NLogger.logger.Error($"Product Index Error => {ex}");
+                return RedirectToAction("Index", "Main");
+            }
 
-            return View(viewModel);
         }
 
         [HttpPost]

@@ -94,7 +94,9 @@ namespace ECOM.Controllers
                     .Include(p => p.SupCategory)
                     .Include(p => p.SubCategory)
                     .Include(p => p.Seller)
-                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper()))
+                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper()) 
+                    || p.Seller.Name.ToUpper().Contains( search.ToUpper()) 
+                   )
                     .ToListAsync();
 
                 return View("Index", products);

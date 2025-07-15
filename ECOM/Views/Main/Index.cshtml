@@ -5,7 +5,7 @@
 <!-- Ürünler -->
 <div class="container mt-4">
     <h3>Ürünler</h3>
-    @ViewData["Email"]
+    @TempData["Email"]
     <div class="row">
         @await Html.PartialAsync("Product")
         @await Html.PartialAsync("Product")

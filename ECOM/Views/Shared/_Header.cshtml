@@ -32,7 +32,10 @@
                     <a asp-controller="Account" asp-action="Index" asp-route-id="order">Siparişlerim</a>
                     <a asp-controller="Account" asp-action="Index" asp-route-id="favorite">Beğendiklerim</a>
                     <a asp-controller="Account" asp-action="Index" asp-route-id="coupon">Kuponlarım</a>
-                    <a asp-controller="Login" asp-action="Logout">Çıkış Yap</a>
+                    <form id="logoutForm" asp-controller="Login" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                    </form>
+                    <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();">Çıkış Yap</a>
                 </div>
             </div>
             <a asp-controller="Cart" asp-action="Index" class="cart d-flex align-items-center text-dark">

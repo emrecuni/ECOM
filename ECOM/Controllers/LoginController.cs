@@ -54,7 +54,7 @@ namespace ECOM.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity),
                         autProperties);
-                    ViewData["Email"] = email;
+                    TempData["Email"] = email;
 
 
                     return RedirectToAction("Index", "Main");
@@ -72,13 +72,24 @@ namespace ECOM.Controllers
             }
         }
 
-        public IActionResult Logout()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            /*
-                session'ları temizle
-             */
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Index");
+                ViewBag.IsSuccess = StatusTypes.Success;
+                ViewBag.Info = "Başarıyla Çıkış Yapıldı.";            
+            }
+            catch (Exception ex)
+            {
+                ViewBag.IsSuccess = StatusTypes.Error;
+                ViewBag.Info = "Çıkış Yapılırken Bir Hata Oluştu.";
+                NLogger.logger.Error($"Logout Error => {ex}");
+            }
+            return View("Index");
         }
 
         [HttpGet]

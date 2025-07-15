@@ -10,6 +10,7 @@ namespace ECOM.Data
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public string? Comment { get; set; }
+        public int? Score { get; set; }
         public string? ImagePath { get; set; }
 
         // navigation property

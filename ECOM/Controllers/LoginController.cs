@@ -54,8 +54,6 @@ namespace ECOM.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity),
                         autProperties);
-                    TempData["Email"] = email;
-
 
                     return RedirectToAction("Index", "Main");
                 }

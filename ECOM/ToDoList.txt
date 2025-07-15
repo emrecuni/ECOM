@@ -42,6 +42,9 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Product'a comments ilişkisi ekle
 * Main'de çekilen ürünlere sınırlama getir db'deki bütün ürünleri değil belirli bir kurala uyanları getir(en çok puan alanları gibi veya en çok satılan gibi)
 * CommentId'yi auto-increment yap
+* Main'de ürün kartlarında price'ın padding bottom'ını statik ver
+* Main index içindeki notları yap
+* Persistant cookie'yi test et
 
 <link rel="stylesheet" href="~/css/product.css">
 

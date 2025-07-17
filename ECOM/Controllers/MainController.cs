@@ -73,7 +73,7 @@ namespace ECOM.Controllers
                     .Where(p => p.SupCategoryId == id || p.SubCategoryId == id)
                     .ToListAsync();
 
-                return View("Index",products);
+                return View("Index", products);
             }
             catch (Exception ex)
             {
@@ -86,7 +86,7 @@ namespace ECOM.Controllers
         {
             try
             {
-                if(search is null)
+                if (search is null)
                     return View("Index");
 
                 var products = await _context.Products
@@ -94,9 +94,11 @@ namespace ECOM.Controllers
                     .Include(p => p.SupCategory)
                     .Include(p => p.SubCategory)
                     .Include(p => p.Seller)
-                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper()) 
-                    || p.Seller.Name.ToUpper().Contains( search.ToUpper()) 
-                   )
+                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper())
+                    || p.Seller.Name!.ToUpper().Contains(search.ToUpper())
+                    || p.Brand.Name!.ToUpper().Contains(search.ToUpper())
+                    || p.SubCategory.Name.ToUpper().Contains(search.ToUpper())
+                    || p.SupCategory.Name.ToUpper().Contains(search.ToUpper()))
                     .ToListAsync();
 
                 return View("Index", products);

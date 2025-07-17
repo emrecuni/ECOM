@@ -46,6 +46,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Main index içindeki notları yap
 * Persistant cookie'yi test et
 * Main'deki ProductsOfCategory(int id) id kontrolüne tekrar bak yeterli değil if (id == 0) // buradaki kontrolü geliştir return View("Index")
+* Aramayı geliştir (yapay zeka yapılabilir mi) tuf yerine tug yazınca benzer ürünler gelmeli
 
 
 <link rel="stylesheet" href="~/css/product.css">

@@ -18,22 +18,36 @@
             <div class="badge badge-success badge-pill bg-success">@Model.Product.Brand.Name</div>
             <div class="score">
                 <div class="badge badge-success badge-pill text-bg-warning">@Model.Product.Score</div>
-                <div class="star-rating mt-3">
-                    @for (int i = 1; i <= 5; i++)
+                <div class="star-rating">
+                    @if (Model.Product.Comments.Count > 0)
                     {
-                        if (i < Model.Product.Score)
+                        for (int i = 1; i <= 5; i++)
                         {
-                            <span class="star" data-filled="true">&#9733;</span>
+                            if (i < Model.Product.Score)
+                            {
+                                <span class="star" data-filled="true">&#9733;</span>
+                            }
+                            else
+                            {
+                                <span class="star" data-filled="false">&#9733;</span>
+                            }
                         }
-                        else
-                        {
-                            <span class="star" data-filled="false">&#9733;</span>
-                        }
+                    }
+                    else
+                    {
+                        <span class="no-comment">Henüz Değirlendirilmemiş</span>
                     }
                 </div>
                 <div class="product-comment">
                     <a href="javascript:void(0);" onclick="scrollToSection('comments')">
-                        <b>@Model.Product.Comments.Count</b> Değerlendirme
+                        @if (Model.Product.Comments.Count > 0)
+                        {
+                            <span><b>@Model.Product.Comments.Count</b> Değerlendirme</span>
+                        }
+                        else
+                        {
+                            <b>İlk Sen Değerlendir</b>
+                        }
                     </a>
                 </div>
             </div>
@@ -100,13 +114,22 @@
             <form asp-controller="Product" asp-action="SendComment" method="post">
                 <label for="rating">Puanınızı Seçin:</label><br>
                 <span class="rating">
-                    <a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
-                    <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>
+                    <ul data-baseweb="rating" role="radiogroup" class="rating">
+                        <li role="radio" aria-setsize="5" aria-checked="true" aria-posinset="1" aria-label="1" color="#F69F29"  class="rating">&#9733;</li>
+                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="2" aria-label="2" color="#F69F29" class="rating">&#9733;</li>
+                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="3" aria-label="3" color="#F69F29" class="rating">&#9733;</li>
+                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="4" aria-label="4" color="#F69F29" class="rating">&#9733;</li>
+                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="5" aria-label="5" color="#F69F29" class="rating">&#9733;</li>
+                    </ul>
+
+                    @*<a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
+                        <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
+                        <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
+                        <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
+                        <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>*@
                 </span><br><br>
-                <input class="comment" type="text" hidden id="rate" name="rate">
+                <input class="comment" type="hidden" id="rate" name="rate">
+                <input class="comment" type="hidden" name="id" value="@Model.Product.ProductId">
                 <textarea class="comment" id="review-text" name="comment" rows="5" cols="60"
                           placeholder="Yorumunuzu buraya yazın..."></textarea><br><br>
                 <button class="send-comment" type="submit">

@@ -10,39 +10,25 @@ namespace ECOM.Controllers
     public class ProductController : Controller
     {
         private readonly DataContext _context;
+        private readonly ProductDataProcess _product;
 
-        public ProductController(DataContext context)
+        public ProductController(DataContext context, ProductDataProcess product)
         {
             _context = context;
+            _product = product;
         }
 
         public async Task<IActionResult> Index(int id)
         {
             try
             {
-                var product = await _context.Products
-                .Include(p => p.Brand)
-                .Include(p => p.SupCategory)
-                .Include(p => p.SubCategory)
-                .Include(p => p.Seller)
-                .FirstOrDefaultAsync(p => p.ProductId == id);
 
-                List<Comments> comments = new();
+                var productViewModel = await _product.GetProduct(id);
 
-                if (product is not null) // ürün db'de varsa yorumları çekilir
-                    comments = await _context.Comments
-                       .Include(c => c.Product)
-                       .Include(c => c.Customer)
-                       .Where(p => p.ProductId == id)
-                       .ToListAsync();
+                if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
+                    NotFound();
 
-                ProductDetailViewModel viewModel = new()
-                {
-                    Product = product,
-                    Comments = comments
-                };
-
-                return View(viewModel);
+                return View(productViewModel);
             }
             catch (Exception ex)
             {
@@ -53,12 +39,18 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendComment(string comment, int rate)
+        public async Task<IActionResult> SendComment(string? comment, int rate,int id)
         {
             ViewBag.Comment = comment;
             ViewBag.Rate = rate;
             ViewBag.CommentInfo = "Yorum Başarıyla Eklendi.";
-            return View("Index");
+
+            var productViewModel = await _product.GetProduct(id);
+
+            if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
+                NotFound();
+
+            return View("Index", productViewModel);
         }
 
         public IActionResult AddCart(string productName, float price) // seçilen ürünü sepete ekler

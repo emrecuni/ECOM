@@ -52,6 +52,8 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * Hiç yorum olmayan ürünler için "ilk yorumu sen yap" gibi bir şey ekle
 * Ürün detay sayfasında ürün skorunun yanında yorum sayısını da ekle
 * Ürün detay sayfasındaki ürün skorunun yıldızları unselectable olmalı
+* Ürün resimlerinin arka plan kısmını kontrol et nike krampon
+* Yorum yapabilmek için ürünü satın almış olması gerekir
 
 <link rel="stylesheet" href="~/css/product.css">
 

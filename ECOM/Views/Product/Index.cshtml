@@ -16,18 +16,26 @@
         <div class="product-info">
             <h1>@Model.Product.Name</h1>
             <div class="badge badge-success badge-pill bg-success">@Model.Product.Brand.Name</div>
-            <div class="star-rating mt-3">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    if (i < Model.Product.Score)
+            <div class="score">
+                <div class="badge badge-success badge-pill text-bg-warning">@Model.Product.Score</div>
+                <div class="star-rating mt-3">
+                    @for (int i = 1; i <= 5; i++)
                     {
-                        <span class="star" data-filled="true">&#9733;</span>
+                        if (i < Model.Product.Score)
+                        {
+                            <span class="star" data-filled="true">&#9733;</span>
+                        }
+                        else
+                        {
+                            <span class="star" data-filled="false">&#9733;</span>
+                        }
                     }
-                    else
-                    {
-                        <span class="star" data-filled="false">&#9733;</span>
-                    }
-                }
+                </div>
+                <div class="product-comment">
+                    <a href="javascript:void(0);" onclick="scrollToSection('comments')">
+                        <b>@Model.Product.Comments.Count</b> Değerlendirme
+                    </a>
+                </div>
             </div>
             <div>Satıcı: <span class="badge badge-success badge-pill bg-primary">@Model.Product.Seller.Name</span></div>
             <div class="product-price">₺@Model.Product.Price</div>
@@ -59,7 +67,7 @@
     </div>
 
     <!-- Yorumlar ve Değerlendirmeler Bölümü -->
-    <div class="review-section">
+    <div id="comments" class="review-section">
         <h3 class="review">Yorumlar (@Model.Comments.Count Yorum)</h3>
         @foreach (var comment in Model.Comments) // her bir yorum için döner
         {
@@ -130,4 +138,13 @@
             }
         });
     });
+</script>
+
+<script>
+    function scrollToSection(id) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
 </script>

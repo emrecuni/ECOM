@@ -6,7 +6,7 @@ X Header sepette çıkmayacak X
 * Bootstrap kütüphanelerini lokalden çek
 * Product sayfasında satın al ve sepete ekle butonlarını çerçevelet
 * Account için solda navbar ekle
-* Şifre koyarken kurallara uygun olup olmadığını kontrol et
+* Parola koyarken kurallara uygun olup olmadığını kontrol et
 * Parola değiştirme sayfasına placeholder koy // account
 * Account sayfasında ekranın sağındaki boşluğu yok et
 * Bir siparişin içinde birden fazla ürün varsa
@@ -47,7 +47,11 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Persistant cookie'yi test et
 * Main'deki ProductsOfCategory(int id) id kontrolüne tekrar bak yeterli değil if (id == 0) // buradaki kontrolü geliştir return View("Index")
 * Aramayı geliştir (yapay zeka yapılabilir mi) tuf yerine tug yazınca benzer ürünler gelmeli
-
+* Parolayı şifreleyerek tut veri tabanında
+X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
+* Hiç yorum olmayan ürünler için "ilk yorumu sen yap" gibi bir şey ekle
+* Ürün detay sayfasında ürün skorunun yanında yorum sayısını da ekle
+* Ürün detay sayfasındaki ürün skorunun yıldızları unselectable olmalı
 
 <link rel="stylesheet" href="~/css/product.css">
 

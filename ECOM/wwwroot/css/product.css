@@ -28,6 +28,7 @@
 .star-rating {
     font-size: 20px;
     align-items: stretch;
+    padding-left: 10px;
 }
 
 .star {
@@ -194,3 +195,15 @@ button {
     padding-left: 5px;
     
 }
+
+.product-comment {
+    padding-left: 25px;
+    color: #ff6000;
+    font-size: 13px;
+}
+
+.product-comment a{
+    color: #ff6000;
+    font-size: 13px;
+}
+

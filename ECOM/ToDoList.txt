@@ -58,6 +58,9 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * Yorum yapabilmek için ürünü satın almış olması gerekir
 * Yoruma resim ekleme ekle
 ??? Her kullanıcı bir ürüne tek bir yorum yapabilsin mi???
+* Comment tablosuna addition time ekle 
+* Ürün sayfasında yorumun ne zaman eklendiğini göster
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

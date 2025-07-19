@@ -3,6 +3,8 @@ using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog.Targets;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ECOM.Controllers
@@ -41,43 +43,36 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> SendComment(int id, int rate, string? review)
         {
+            if (rate < 1 || rate > 5)
+                return BadRequest("Geçersiz puan değeri.");
+
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var newComment = new Comments
             {
                 Comment = review,
                 ProductId = id,
                 Score = rate,
-                CustomerId = 1
+                CustomerId = customerId
             };
 
             _context.Comments.Add(newComment); // yorum comments tablosuna insert edilir
             await _context.SaveChangesAsync();
 
-
             var productViewModel = await _product.GetProductWithCommentsById(id);
             if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
                 return NotFound();
 
-            int totalScore = 0;
-            float average = 0;
+            var scores = await _context.Comments
+                .Where(c => c.ProductId == id && c.Score != null)
+                .Select(c => c.Score!.Value)
+                .ToListAsync();
 
+            productViewModel.Product!.Score = float.Parse(scores.Average().ToString("0.0"));
 
-            foreach (var comment in productViewModel.Comments)
-            {
-                if (comment.Score is not null)
-                    totalScore += comment.Score.Value;
-
-            }
-
-            average = (float)totalScore / productViewModel.Comments.Count;
-
-            productViewModel.Product!.Score = average;
-
-            _context.Products.Update(productViewModel.Product);
+            _context.Products.Update(productViewModel.Product); // ürün skoru güncellenir
             await _context.SaveChangesAsync();
 
-
-
-            return View("Index", productViewModel); // id'yi 0 gönderiyor
+            return RedirectToAction("Index", new { id = id });
         }
 
         public IActionResult AddCart(string productName, float price) // seçilen ürünü sepete ekler

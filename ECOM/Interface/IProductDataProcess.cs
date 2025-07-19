@@ -1,9 +1,11 @@
-﻿using ECOM.Models;
+﻿using ECOM.Data;
+using ECOM.Models;
 
 namespace ECOM.Interface
 {
     public interface IProductDataProcess
     {
-        Task<ProductDetailViewModel?> GetProduct(int id);        
+        Task<ProductDetailViewModel?> GetProductWithCommentsById(int id);
+        Task<Product?> GetProductById(int id);
     }
 }

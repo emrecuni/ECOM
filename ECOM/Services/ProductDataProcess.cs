@@ -15,7 +15,7 @@ namespace ECOM.Services
             _context = context;
         }
 
-        public async Task<ProductDetailViewModel?> GetProduct(int id)
+        public async Task<ProductDetailViewModel?> GetProductWithCommentsById(int id)
         {
             try
             {
@@ -45,7 +45,29 @@ namespace ECOM.Services
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"GetProduct Error => {ex}");
+                NLogger.logger.Error($"GetProductWithComments Error => {ex}");
+                return null;
+            }
+        }
+        public async Task<Product?> GetProductById(int id)
+        {
+            try
+            {
+                var product = await _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.SupCategory)
+                .Include(p => p.SubCategory)
+                .Include(p => p.Seller)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
+
+                if (product is null)
+                    return null;
+
+                return product;
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"GetProductById Error => {ex}");
                 return null;
             }
         }

@@ -23,10 +23,10 @@ namespace ECOM.Controllers
             try
             {
 
-                var productViewModel = await _product.GetProduct(id);
+                var productViewModel = await _product.GetProductWithCommentsById(id);
 
-                if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
-                    NotFound();
+                if (productViewModel?.Product is null) // ürün bulunamazsa hata mesajı döndürsün
+                    return NotFound();
 
                 return View(productViewModel);
             }
@@ -39,18 +39,45 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendComment(string? comment, int rate,int id)
+        public async Task<IActionResult> SendComment(int id, int rate, string? review)
         {
-            ViewBag.Comment = comment;
-            ViewBag.Rate = rate;
-            ViewBag.CommentInfo = "Yorum Başarıyla Eklendi.";
+            var newComment = new Comments
+            {
+                Comment = review,
+                ProductId = id,
+                Score = rate,
+                CustomerId = 1
+            };
 
-            var productViewModel = await _product.GetProduct(id);
+            _context.Comments.Add(newComment); // yorum comments tablosuna insert edilir
+            await _context.SaveChangesAsync();
 
+
+            var productViewModel = await _product.GetProductWithCommentsById(id);
             if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
-                NotFound();
+                return NotFound();
 
-            return View("Index", productViewModel);
+            int totalScore = 0;
+            float average = 0;
+
+
+            foreach (var comment in productViewModel.Comments)
+            {
+                if (comment.Score is not null)
+                    totalScore += comment.Score.Value;
+
+            }
+
+            average = (float)totalScore / productViewModel.Comments.Count;
+
+            productViewModel.Product!.Score = average;
+
+            _context.Products.Update(productViewModel.Product);
+            await _context.SaveChangesAsync();
+
+
+
+            return View("Index", productViewModel); // id'yi 0 gönderiyor
         }
 
         public IActionResult AddCart(string productName, float price) // seçilen ürünü sepete ekler

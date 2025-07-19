@@ -23,7 +23,7 @@
                     {
                         for (int i = 1; i <= 5; i++)
                         {
-                            if (i < Model.Product.Score)
+                            if (i <= Model.Product.Score)
                             {
                                 <span class="star" data-filled="true">&#9733;</span>
                             }
@@ -86,7 +86,7 @@
         @foreach (var comment in Model.Comments) // her bir yorum için döner
         {
             <div class="review">
-                <div class="rating">
+                <div class="comment-rating">
                     @for (int i = 0; i < 5; i++) // her bir yorumun skorunu ekrana basar
                     {
                         if (i < comment.Score)
@@ -113,24 +113,23 @@
             <h3 class="mt-3">Yorum Yapın</h3>
             <form asp-controller="Product" asp-action="SendComment" method="post">
                 <label for="rating">Puanınızı Seçin:</label><br>
-                <span class="rating">
-                    <ul data-baseweb="rating" role="radiogroup" class="rating">
-                        <li role="radio" aria-setsize="5" aria-checked="true" aria-posinset="1" aria-label="1" color="#F69F29"  class="rating">&#9733;</li>
-                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="2" aria-label="2" color="#F69F29" class="rating">&#9733;</li>
-                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="3" aria-label="3" color="#F69F29" class="rating">&#9733;</li>
-                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="4" aria-label="4" color="#F69F29" class="rating">&#9733;</li>
-                        <li role="radio" aria-setsize="5" aria-checked="false" aria-posinset="5" aria-label="5" color="#F69F29" class="rating">&#9733;</li>
-                    </ul>
+                @*<span class="rating">*@
+                <ul class="rating" id="rating">
+                    @for (int i = 5; i > 0; i--)
+                    {
+                        <li data-value="@i">&#9733;</li>
+                    }
+                </ul>
 
-                    @*<a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
-                        <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
-                        <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
-                        <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
-                        <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>*@
-                </span><br><br>
-                <input class="comment" type="hidden" id="rate" name="rate">
-                <input class="comment" type="hidden" name="id" value="@Model.Product.ProductId">
-                <textarea class="comment" id="review-text" name="comment" rows="5" cols="60"
+                @*<a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
+                    <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
+                    <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>*@
+                @*</span>*@<br><br>
+                <input type="hidden" id="rate" name="rate" value="3">
+                <input type="hidden" name="id" value="@Model.Product.ProductId">
+                <textarea class="comment" id="review-text" name="review" rows="5" cols="60"
                           placeholder="Yorumunuzu buraya yazın..."></textarea><br><br>
                 <button class="send-comment" type="submit">
                     Yorum Gönder
@@ -170,4 +169,34 @@
             element.scrollIntoView({ behavior: 'smooth' });
         }
     }
+</script>
+
+<script>
+    const stars = document.querySelectorAll('#rating li');
+    const rateInputValue = document.getElementById('rate');
+
+    stars.forEach((star, index) => {
+        // Hover efekti
+        star.addEventListener('mouseover', function () {
+            stars.forEach(s => s.classList.remove('hovered'));
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('hovered');
+            }
+        });
+
+        // Hover dışına çıkıldığında temizle
+        star.addEventListener('mouseout', function () {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        // Tıklama ile seçim yapıldığında
+        star.addEventListener('click', function () {
+            stars.forEach(s => s.classList.remove('selected'));
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('selected');
+            }
+            rateInputValue.value = star.getAttribute('data-value');
+            console.log("seçilen puan:", rateInputValue.value);
+        });
+    });
 </script>

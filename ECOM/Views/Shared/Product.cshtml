@@ -15,7 +15,7 @@
                 <div class="star-rating mt-3">
                     @for (int i = 1; i <= 5; i++)
                     {
-                        if (i < Model.Score)
+                        if (i <= Model.Score)
                         {
                             <span class="star" data-filled="true">&#9733;</span>
                         }

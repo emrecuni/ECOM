@@ -54,6 +54,8 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * Ürün detay sayfasındaki ürün skorunun yıldızları unselectable olmalı
 * Ürün resimlerinin arka plan kısmını kontrol et nike krampon
 * Yorum yapabilmek için ürünü satın almış olması gerekir
+* Yoruma resim ekleme ekle
+??? Her kullanıcı bir ürüne tek bir yorum yapabilsin mi???
 
 <link rel="stylesheet" href="~/css/product.css">
 

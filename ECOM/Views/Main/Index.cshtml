@@ -1,16 +1,19 @@
-﻿<link rel="stylesheet" href="~/css/main.css">
+﻿@model IEnumerable<ECOM.Data.Product>
+<link rel="stylesheet" href="~/css/main.css">
 
 <script src="~/js/fav-icon.js"></script>
 
 <!-- Ürünler -->
 <div class="container mt-4">
     <h3>Ürünler</h3>
-    <div class="row">
-        @await Html.PartialAsync("Product")
-        @await Html.PartialAsync("Product")
-        @await Html.PartialAsync("Product")
-        @await Html.PartialAsync("Product")
-        @await Html.PartialAsync("Product")
-        @await Html.PartialAsync("Product")
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @if (Model is not null)
+        {
+            foreach (var product in Model)
+            {
+                @await Html.PartialAsync("Product", product)
+            }
+        }
+
     </div>
 </div>

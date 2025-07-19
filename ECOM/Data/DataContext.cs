@@ -146,16 +146,16 @@ namespace ECOM.Data
                 entity.HasKey(c => c.CommentId);
 
                 entity.Property(c => c.CommentId).HasColumnName("ID").ValueGeneratedOnAdd();
-                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
-                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired(true);
+                entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired(true);
                 entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
-                entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired();
+                entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
 
                 // product relation
                 entity.HasOne(c => c.Product)
                 .WithMany(p => p.Comments)
-                .HasForeignKey(c=> c.ProductId)
+                .HasForeignKey(c => c.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 // customer relation
@@ -178,7 +178,7 @@ namespace ECOM.Data
                 entity.Property(c => c.Phone).HasColumnName("PHONE").IsRequired(false);
                 entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired();
                 entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired();
-                entity.Property(c => c.IsCustomer).HasColumnName("ISCUSTOMER").IsRequired(false);
+                entity.Property(c => c.IsCustomer).HasColumnName("IS_CUSTOMER").IsRequired(false);
                 entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
                 entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
@@ -342,6 +342,7 @@ namespace ECOM.Data
                 entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired(false);
                 entity.Property(p => p.SellerId).HasColumnName("SELLER_ID").IsRequired();
                 entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired(false);
+                entity.Property(p => p.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
                 entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 entity.HasOne(p => p.Brand)

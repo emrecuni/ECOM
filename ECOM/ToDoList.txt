@@ -6,7 +6,7 @@ X Header sepette çıkmayacak X
 * Bootstrap kütüphanelerini lokalden çek
 * Product sayfasında satın al ve sepete ekle butonlarını çerçevelet
 * Account için solda navbar ekle
-* Şifre koyarken kurallara uygun olup olmadığını kontrol et
+* Parola koyarken kurallara uygun olup olmadığını kontrol et
 * Parola değiştirme sayfasına placeholder koy // account
 * Account sayfasında ekranın sağındaki boşluğu yok et
 * Bir siparişin içinde birden fazla ürün varsa
@@ -36,9 +36,26 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Zaten kayıtlı bir telefon ile kayıt olmaya çalıştığında uyarı ver
 * Adreste müşteri silinmeden adres silinebilsin mi?
 * Kolon uzunluklarını sınırla
-* Telefon ile girişte otp göndermini dene 
-* Telefon ile login için bir info butonu koy (başında 0 olmadan girin gibi)
-
+* Mail bilgilerini appsettings'ten al
+* Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
+* Product tablosuna imagePath ekle
+* Product'a comments ilişkisi ekle
+* Main'de çekilen ürünlere sınırlama getir db'deki bütün ürünleri değil belirli bir kurala uyanları getir(en çok puan alanları gibi veya en çok satılan gibi)
+* CommentId'yi auto-increment yap
+* Main'de ürün kartlarında price'ın padding bottom'ını statik ver
+* Main index içindeki notları yap
+* Persistant cookie'yi test et
+* Main'deki ProductsOfCategory(int id) id kontrolüne tekrar bak yeterli değil if (id == 0) // buradaki kontrolü geliştir return View("Index")
+* Aramayı geliştir (yapay zeka yapılabilir mi) tuf yerine tug yazınca benzer ürünler gelmeli
+* Parolayı şifreleyerek tut veri tabanında
+X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
+* Hiç yorum olmayan ürünler için "ilk yorumu sen yap" gibi bir şey ekle
+* Ürün detay sayfasında ürün skorunun yanında yorum sayısını da ekle
+* Ürün detay sayfasındaki ürün skorunun yıldızları unselectable olmalı
+* Ürün resimlerinin arka plan kısmını kontrol et nike krampon
+* Yorum yapabilmek için ürünü satın almış olması gerekir
+* Yoruma resim ekleme ekle
+??? Her kullanıcı bir ürüne tek bir yorum yapabilsin mi???
 
 <link rel="stylesheet" href="~/css/product.css">
 

@@ -1,6 +1,11 @@
 ﻿using ECOM.Data;
+using ECOM.Models;
+using ECOM.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ECOM.Controllers
@@ -9,10 +14,12 @@ namespace ECOM.Controllers
     {
 
         private readonly DataContext _context;
+        private readonly Smtp_Sender _sender;
 
-        public LoginController(DataContext context)
+        public LoginController(DataContext context, Smtp_Sender sender)
         {
             _context = context;
+            _sender = sender;
         }
 
         public IActionResult Index()
@@ -25,9 +32,31 @@ namespace ECOM.Controllers
         {
             if (email is not null && password is not null)
             {
-                var customer = await _context.Customers.Where(c => c.Email == email || c.Phone == email && c.Password == password).ToListAsync();
-                if (customer.Count > 0)
+                var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email && c.Password == password);
+                if (customer is not null)
+                {
+
+                    var claims = new List<Claim>
+                    {
+                        new (ClaimTypes.Name, customer.Name!),
+                        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var autProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTime.UtcNow.AddDays(30)
+                    };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        autProperties);
+
                     return RedirectToAction("Index", "Main");
+                }
                 else // kullanıcı adı parola hatalı mesajı bastır
                 {
                     ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
@@ -41,31 +70,62 @@ namespace ECOM.Controllers
             }
         }
 
-        public IActionResult Logout()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                ViewBag.IsSuccess = StatusTypes.Success;
+                ViewBag.Info = "Başarıyla Çıkış Yapıldı.";            
+            }
+            catch (Exception ex)
+            {
+                ViewBag.IsSuccess = StatusTypes.Error;
+                ViewBag.Info = "Çıkış Yapılırken Bir Hata Oluştu.";
+                NLogger.logger.Error($"Logout Error => {ex}");
+            }
+            return View("Index");
         }
 
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            ViewBag.IsSuccess = false;
+
             return View("Forgot-Password");
         }
 
         [HttpPost]
         public IActionResult ForgotPassword(string email) // parola sıfırlama isteği girilen mail adresine girilmelidir
         {
-            if (email is null)
+            try
             {
-                ViewBag.Info = "E-Mail Alanı Boş Olamaz!";
-                ViewBag.IsSuccess = false;
-                return View("Forgot-Password");
+                if (email is null)
+                {
+                    ViewBag.Info = "E-Mail Alanı Boş Olamaz!";
+                    ViewBag.IsSuccess = StatusTypes.Warning;
+                    return View("Forgot-Password");
+                }
+
+                if (_sender.SendMail(email)) // mail başarıyla gönderilirse
+                {
+                    ViewBag.IsSuccess = StatusTypes.Success;
+                    ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
+                }
+                else
+                {
+                    ViewBag.IsSuccess = StatusTypes.Error;
+                    ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
+                }
             }
-
-
-            ViewBag.IsSuccess = true;
-            ViewBag.Info = "Parola sıfırlama isteği gönderildi.";
+            catch (Exception ex)
+            {
+                ViewBag.IsSuccess = StatusTypes.Error;
+                ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
+                NLogger.logger.Error($"ForgotPassword Post Error => {ex}");
+            }
             return View("Forgot-Password");
         }
 
@@ -76,10 +136,48 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string name, string surname, string email, string password) // parametreleri modele dönüştür
+        public async Task<IActionResult> Register(RegisterViewModel model) // parametreleri modele dönüştür
         {
-            ViewBag.Info = "Yeni Kayıt Başarılı";
-            return View("Index");
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // kayıt olacak kullanıcın veri tabanında olup olmadığı kontrol edilir
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email || c.Phone == model.Phone);
+            if (customer is not null) // müşteri kayıtlıysa
+            {
+                ViewBag.Info = "E-Mail veya Telefon Zaten Kayıtlı";
+                ViewBag.IsSuccess = StatusTypes.Warning;
+                return View(model);
+            }
+
+            try
+            {
+                Customers newCustomer = new()
+                {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Email = model.Email,
+                    Password = model.Password,
+                    Phone = model.Phone,
+                    Gender = model.Gender,
+                    BirthDate = model.Birthdate,
+                    AdditionTime = DateTime.Now,
+                    IsCustomer = true
+                };
+
+
+                _context.Customers.Add(newCustomer);
+                await _context.SaveChangesAsync();
+                ViewBag.Info = "Yeni Kayıt Başarılı.";
+                ViewBag.IsSuccess = StatusTypes.Success;
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"Register New Record Error => {ex}");
+                ViewBag.Info = "Kayıt Sırasında Bir Hata Oluştu Tekrar Deneyiniz.";
+                ViewBag.IsSuccess = StatusTypes.Error;
+            }
+            return View();
         }
     }
 }

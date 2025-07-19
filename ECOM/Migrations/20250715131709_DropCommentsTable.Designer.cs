@@ -4,6 +4,7 @@ using ECOM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOM.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250715131709_DropCommentsTable")]
+    partial class DropCommentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,30 +213,24 @@ namespace ECOM.Migrations
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
 
                     b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("COMMENT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("CUSTOMER_ID");
+                        .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("IMAGE_PATH");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("PRODUCT_ID");
+                        .HasColumnType("int");
 
                     b.Property<int?>("Score")
-                        .HasColumnType("int")
-                        .HasColumnName("SCORE");
+                        .HasColumnType("int");
 
                     b.HasKey("CommentId");
 
@@ -241,7 +238,7 @@ namespace ECOM.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("COMMENTS", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ECOM.Data.Customers", b =>
@@ -734,13 +731,13 @@ namespace ECOM.Migrations
                     b.HasOne("ECOM.Data.Customers", "Customer")
                         .WithMany("Comments")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ECOM.Data.Product", "Product")
                         .WithMany("Comments")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");

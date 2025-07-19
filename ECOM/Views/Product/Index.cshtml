@@ -1,25 +1,69 @@
-﻿<link rel="stylesheet" href="~/css/product.css">
+﻿@model ECOM.Models.ProductDetailViewModel
+<link rel="stylesheet" href="~/css/product.css">
 
 <div>
-    <p>Ürün Kategorisi: Elektronik > Bilgisayar</p><br>
+    <p class="product-category">
+        Ürün Kategorisi:
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SupCategoryId" class="product-category"><b>@Model.Product!.SupCategory.Name</b></a>  >
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SubCategoryId" class="product-category"><b>@Model.Product.SubCategory.Name</b></a>
+    </p>
+    <br>
     <!-- Ürün Başlık ve Resim Bölümü -->
     <div class="product-header">
         <div class="product-image">
-            <img src="~/img/msi 100m.jpg" alt="Osram Ampul">
+            <img src="~/@Model.Product.ImagePath" alt="msi">
         </div>
         <div class="product-info">
-            <h1>MSI 100M Gaming Kasa</h1>
-            <div class="badge badge-success badge-pill bg-success">MSI Resmi Satıcı</div>
-            <div class="product-price">₺79.90</div>
+            <h1>@Model.Product.Name</h1>
+            <div class="badge badge-success badge-pill bg-success">@Model.Product.Brand.Name</div>
+            <div class="score">
+                <div class="badge badge-success badge-pill text-bg-warning">@Model.Product.Score</div>
+                <div class="star-rating">
+                    @if (Model.Product.Comments.Count > 0)
+                    {
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Model.Product.Score)
+                            {
+                                <span class="star" data-filled="true">&#9733;</span>
+                            }
+                            else
+                            {
+                                <span class="star" data-filled="false">&#9733;</span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span class="no-comment">Henüz Değirlendirilmemiş</span>
+                    }
+                </div>
+                <div class="product-comment">
+                    <a href="javascript:void(0);" onclick="scrollToSection('comments')">
+                        @if (Model.Product.Comments.Count > 0)
+                        {
+                            <span><b>@Model.Product.Comments.Count</b> Değerlendirme</span>
+                        }
+                        else
+                        {
+                            <b>İlk Sen Değerlendir</b>
+                        }
+                    </a>
+                </div>
+            </div>
+            <div>Satıcı: <span class="badge badge-success badge-pill bg-primary">@Model.Product.Seller.Name</span></div>
+            <div class="product-price">₺@Model.Product.Price</div>
             <div class="forms">
                 <form action="AddCart" method="post">
-                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
-                    <input type="number" hidden name="price" value=79.9>
+                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Product.Name>
+                    <input type="number" hidden name="price" value=@Model.Product.Price>
                     <button class="addCart"><b>Sepete Ekle</b></button>
                 </form>
                 <form action="Buy" method="post">
-                    <input type="hidden" name="productName" value="MSI 100M Gaming Kasa">
-                    <input type="hidden" name="price" value=79.9>
+                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
+                    <input type="hidden" name="productName" value=@Model.Product.Name>
+                    <input type="hidden" name="price" value=@Model.Product.Price>
                     <button class="buy"><b>Satın Al</b></button>
                 </form>
             </div>
@@ -31,46 +75,57 @@
         <div class="description-content">
             <h2>Ürün Açıklaması</h2>
             <p>
-                Osram 9W LED Ampul, enerji verimliliği sağlayan ve uzaktan kumanda ile kontrol edilebilen modern bir
-                aydınlatma çözümüdür. Sarı-beyaz ışık seçenekleriyle evinizin her alanına uyum sağlar. Uzun ömürlü LED
-                teknolojisi ile ekonomik bir kullanım sunar.
+                @Model.Product.Description
             </p>
         </div>
     </div>
 
     <!-- Yorumlar ve Değerlendirmeler Bölümü -->
-    <div class="review-section">
-        <h3 class="review">Yorumlar (45 Yorum)</h3>
-
-        <div class="review">
-            <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-            <p><strong>Ahmet K.</strong> - 5 yıldız</p>
-            <p>Gerçekten çok memnunum. Ampul çok parlak ve uzaktan kumanda ile kontrol etmek çok pratik.</p>
-        </div>
-
-        <div class="review">
-            <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-            <p><strong>Ayşe Y.</strong> - 4 yıldız</p>
-            <p>İyi bir ürün ancak kumanda biraz daha dayanıklı olabilir.</p>
-        </div>
+    <div id="comments" class="review-section">
+        <h3 class="review">Yorumlar (@Model.Comments.Count Yorum)</h3>
+        @foreach (var comment in Model.Comments) // her bir yorum için döner
+        {
+            <div class="review">
+                <div class="comment-rating">
+                    @for (int i = 0; i < 5; i++) // her bir yorumun skorunu ekrana basar
+                    {
+                        if (i < comment.Score)
+                        {
+                            @:&#9733;
+                        }
+                        else
+                        {
+                            @:&#9734;
+                        }
+                    }
+                </div>
+                <p><strong>@comment.Customer.Name @comment.Customer.Surname!.Substring(0, 1).</strong> - @comment.Score yıldız</p>
+                <p>@comment.Comment</p>
+            </div>
+        }
         <br />
     </div>
     <br />
+
     <!-- Yorum Yapma Bölümü -->
     <div class="leave-review">
         <div class="write-comment">
             <h3 class="mt-3">Yorum Yapın</h3>
             <form asp-controller="Product" asp-action="SendComment" method="post">
                 <label for="rating">Puanınızı Seçin:</label><br>
-                <span class="rating">
-                    <a href="javascript:void(0);" id="rate5" class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</a>
-                    <a href="javascript:void(0);" id="rate4" class="rating">&#9733;&#9733;&#9733;&#9733;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate3" class="rating">&#9733;&#9733;&#9733;&#9734;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate2" class="rating">&#9733;&#9733;&#9734;&#9734;&#9734;</a>
-                    <a href="javascript:void(0);" id="rate1" class="rating">&#9733;&#9734;&#9734;&#9734;&#9734;</a>
-                </span><br><br>
-                <input class="comment" type="text" hidden id="rate" name="rate">
-                <textarea class="comment" id="review-text" name="comment" rows="5" cols="60"
+                @*<span class="rating">*@
+                <ul class="rating" id="rating">
+                    @for (int i = 5; i > 0; i--)
+                    {
+                        <li data-value="@i">&#9733;</li>
+                    }
+                </ul>
+                
+                <br><br>
+                
+                <input type="hidden" id="rate" name="rate" value="3">
+                <input type="hidden" name="id" value="@Model.Product.ProductId">
+                <textarea class="comment" id="review-text" name="review" rows="5" cols="60"
                           placeholder="Yorumunuzu buraya yazın..."></textarea><br><br>
                 <button class="send-comment" type="submit">
                     Yorum Gönder
@@ -89,7 +144,7 @@
     const rateInput = document.getElementById('rate');
 
     ratingLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             // Tıklanan linkin id'sine göre input değerini ayarlıyoruz
             const ratingValue = this.id.replace('rate', '');
             rateInput.value = ratingValue;
@@ -99,6 +154,45 @@
             for (let i = 0; i < ratingValue; i++) {
                 ratingLinks[i].style.color = 'gold'; // Seçilen yıldızları altın renginde yap
             }
+        });
+    });
+</script>
+
+<script>
+    function scrollToSection(id) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
+
+<script>
+    const stars = document.querySelectorAll('#rating li');
+    const rateInputValue = document.getElementById('rate');
+
+    stars.forEach((star, index) => {
+        // Hover efekti
+        star.addEventListener('mouseover', function () {
+            stars.forEach(s => s.classList.remove('hovered'));
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('hovered');
+            }
+        });
+
+        // Hover dışına çıkıldığında temizle
+        star.addEventListener('mouseout', function () {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        // Tıklama ile seçim yapıldığında
+        star.addEventListener('click', function () {
+            stars.forEach(s => s.classList.remove('selected'));
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('selected');
+            }
+            rateInputValue.value = star.getAttribute('data-value');
+            console.log("seçilen puan:", rateInputValue.value);
         });
     });
 </script>

@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/css/login.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <div class="container">
     <div class="register-container">
@@ -8,34 +9,84 @@
         <form action="Register" method="post">
             <!-- Ad -->
             <div class="mb-3">
-                <label for="name" class="form-label">Adınız: </label>
+                <label for="name" class="form-label">Ad: </label>
                 <input type="text" class="form-control" id="name" name="name"
                        placeholder="Adınızı Girin" required>
             </div>
 
             <!-- Soyad -->
             <div class="mb-3">
-                <label for="surname" class="form-label">Soyadınız: </label>
+                <label for="surname" class="form-label">Soyad: </label>
                 <input type="text" class="form-control" id="surname" name="surname"
                        placeholder="Soyadınızı Girin" required>
             </div>
 
             <!-- E-Mail -->
             <div class="mb-3">
-                <label for="email" class="form-label">E-Mail Adresiniz: </label>
+                <label for="email" class="form-label">E-Mail: </label>
                 <input type="email" class="form-control" id="email" name="email"
                        placeholder="E-Mail Adresinizi Girin" required>
             </div>
 
             <!-- Parola -->
             <div class="mb-3">
-                <label for="password" class="form-label">Parolanız: </label>
+                <label for="password" class="form-label">Parola: </label>
                 <input type="password" class="form-control" id="password" name="password"
                        placeholder="Parolanızı Girin" required>
             </div>
 
-            <!-- Giriş Yap Butonu -->
-            <button type="submit" class="btn btn-custom">Giriş Yap</button>
+            <!-- Telefon -->
+            <div class="mb-3">
+                <label for="phone" class="form-label">Telefon: </label>
+                <input type="tel" class="form-control" id="phone" name="phone"
+                       placeholder="Telefon Numaranızı Girin" required>
+            </div>
+
+            <!-- Cinsiyet -->
+            <div class="mb-3">
+                <label for="gender" class="form-label">Cinsiyet: </label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="male" value=true required>
+                    <label class="form-check-label" for="male">Erkek</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="female" value=false required>
+                    <label class="form-check-label" for="female">Kadın</label>
+                </div>
+            </div>
+
+            <!-- Doğum Tarihi -->
+            <div class="mb-3">
+                <label for="birthdate" class="form-label">Doğum Tarihi: </label>
+                <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+            </div>
+
+
+            <!-- Kayıt Ol Butonu -->
+            <button type="submit" class="btn btn-custom">Kayıt Ol</button>
         </form>
+        
+        <!-- işlem sonucuna göre css class'ı atanır'-->
+        @{ 
+            var cssClass = ViewBag.IsSuccess switch
+            {
+                StatusTypes.Success => "bg-success info",
+                StatusTypes.Warning => "bg-warning info",
+                StatusTypes.Error => "bg-danger info text-white",
+                _ => string.Empty
+            };
+
+            var iconClass = ViewBag.IsSuccess switch
+            {
+                StatusTypes.Success => "fas fa-check",
+                StatusTypes.Warning => "fas fa-exclamation-circle",
+                StatusTypes.Error => "fa-solid fa-x",
+                _ => string.Empty,
+            };
+        }
+        <div class="@cssClass">
+            <i class="@iconClass"></i>
+            @ViewBag.Info
+        </div>
     </div>
 </div>

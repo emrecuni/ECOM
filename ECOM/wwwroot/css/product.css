@@ -28,6 +28,7 @@
 .star-rating {
     font-size: 20px;
     align-items: stretch;
+    padding-left: 10px;
 }
 
 .star {
@@ -62,7 +63,10 @@ body {
 }
 
 .product-header {
+    background-color: #f8f9fa;
     display: flex;
+    padding: 15px;
+    border-radius: 15px;
     justify-content: space-between;
 }
 
@@ -139,12 +143,36 @@ body {
     margin-right: 15px;
 }
 
-.rating {
-    color: #ff9900;
+.comment-rating {
+    color: #F69F29;
+    font-size: larger;
 }
 
-    .rating a {
-        text-decoration: none;
+.rating {
+    display: flex;
+    font-size: xx-large;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    direction: rtl; /* önemli: ters sırada dizmek için */
+    justify-content: left;
+}
+
+.rating li {
+    display: inline-block;
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating li:hover,
+.rating li:hover ~ li {
+    color: #F69F29;
+}
+
+    .rating li.selected {
+        color: gold;
     }
 
 .forms {
@@ -153,21 +181,53 @@ body {
 }
 
 .addCart {
-    padding: 10px 20px;
     background-color: #ff6600;
+}
+
+.addCart, .buy {
+    padding: 10px 20px;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 10px;
 }
 
 .buy {
-    padding: 10px 20px;
     background-color: #008000;
-    color: white;
-    border: none;
-    cursor: pointer;
 }
 
 button {
     border-radius: 5px;
+}
+
+.badge {
+    display: table;
+}
+
+.product-category {
+    color: brown;
+    background-color: wheat;
+    border-radius: 15px;
+    padding-left: 15px;
+}
+
+    .product-category a {
+        color: green;
+        text-decoration: underline;
+        padding-left: 5px;
+    }
+
+.product-comment {
+    padding-left: 25px;
+    color: #ff6000;
+    font-size: 13px;
+}
+
+    .product-comment a {
+        color: #ff6000;
+        font-size: 13px;
+    }
+
+.no-comment {
+    font-size: 12px;
 }

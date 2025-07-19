@@ -92,12 +92,10 @@
     font-size: 20px;
 }
 
-.succes {
+.info {
     text-align: center;
     color: black;
     border-radius: 15px;
     margin-top: 15px;
     font-size: 18px;
-    background-color: green;
 }
-

@@ -27,7 +27,6 @@
 
                 <!--Hatalı Parola-->
                 <div class="bg-warning warning">
-
                     @{
                         if (ViewBag.WrongPassword is not null)
                         {
@@ -51,7 +50,29 @@
             <div class="footer-links">
                 <p>Henüz üye değil misiniz? <a asp-controller="Login" asp-action="Register">Kayıt Olun</a></p>
             </div>
-            @ViewBag.Info
+            
+            @{ 
+                string cssClass = ViewBag.IsSuccess switch
+                {
+                    StatusTypes.Success => "info bg-success",
+                    StatusTypes.Error => "info text-white bg-danger",
+                    _ => "test"
+                };
+
+                string iconClass = ViewBag.IsSuccess switch
+                {
+                    StatusTypes.Success => "fas fa-check",
+                    StatusTypes.Error => "fa-solid fa-x",
+                    _ => "test",
+                };
+            }
+
+
+            <div class="@cssClass">
+                <i class="@iconClass"></i>
+                @ViewBag.Info
+                @TempData["Info"]
+            </div>
         </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ namespace ECOM.Data
         public string? Description { get; set; }
         public decimal? Price { get; set; }
         public float? Score { get; set; }
+        public string? ImagePath { get; set; }
         public DateTime? AdditionTime { get; set; }
 
         //navigation property

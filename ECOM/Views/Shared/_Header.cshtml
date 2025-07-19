@@ -11,7 +11,7 @@
         </a>
 
         <div class="search-bar d-flex">
-            <form action="" method="post" class="d-flex">
+            <form asp-controller="Main" asp-action="SearchProductByName" method="get" class="d-flex">
                 <input type="text" name="search" class="form-control" placeholder="Ürün ara...">
                 <button type="submit" class="btn btn-warning ms-2">Ara</button>
             </form>
@@ -32,7 +32,10 @@
                     <a asp-controller="Account" asp-action="Index" asp-route-id="order">Siparişlerim</a>
                     <a asp-controller="Account" asp-action="Index" asp-route-id="favorite">Beğendiklerim</a>
                     <a asp-controller="Account" asp-action="Index" asp-route-id="coupon">Kuponlarım</a>
-                    <a asp-controller="Account" asp-action="Index" asp-route-id="exit">Çıkış Yap</a>
+                    <form id="logoutForm" asp-controller="Login" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                    </form>
+                    <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();">Çıkış Yap</a>
                 </div>
             </div>
             <a asp-controller="Cart" asp-action="Index" class="cart d-flex align-items-center text-dark">
@@ -46,12 +49,12 @@
     <div class="categories-container mt-4">
         <h4 class="mb-3">Kategoriler</h4>
         <ul class="list-unstyled d-flex flex-wrap gap-2">
-            <li><a href="#" class="btn btn-outline-primary"><b>Elektronik</b></a></li>
-            <li><a href="#" class="btn btn-outline-primary"><b>Moda</b></a></li>
-            <li><a href="#" class="btn btn-outline-primary"><b>Ev, Yaşam</b></a></li>
-            <li><a href="#" class="btn btn-outline-primary"><b>Oto, Bahçe</b></a></li>
-            <li><a href="#" class="btn btn-outline-primary"><b>Anne, Bebek</b></a></li>
-            <li><a href="#" class="btn btn-outline-primary"><b>Spor</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Elektronik" class="btn btn-outline-primary"><b>Elektronik</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Moda" class="btn btn-outline-primary"><b>Moda</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Ev, Yaşam" class="btn btn-outline-primary"><b>Ev, Yaşam</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Oto, Bahçe" class="btn btn-outline-primary"><b>Oto, Bahçe</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Anne, Bebek" class="btn btn-outline-primary"><b>Anne, Bebek</b></a></li>
+            <li><a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Spor" class="btn btn-outline-primary"><b>Spor</b></a></li>
         </ul>
     </div>
 </div>

@@ -56,17 +56,17 @@
         <!--sepetim-->
         <div class="my-cart">
             <div class="orders">
-                @foreach (var cart in Model)
+                @foreach (var cart in Model.ToList())
                 {
-                    @await Html.PartialAsync("~/Views/Cart/Order.cshtml", cart)
+                    @await Html.PartialAsync("~/Views/Cart/Cart.cshtml", cart)
                 }
             </div>
         </div>
         <!--beğendiklerim-->
-        <div class="suggestion">
+        @*<div class="suggestion">
             <h4 class="suggestion-header">Beğendiklerim</h4>
             @await Html.PartialAsync("Suggestion")
-        </div>
+        </div>*@
 
     }
 </div>

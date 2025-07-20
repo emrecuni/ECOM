@@ -62,6 +62,7 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * Ürün sayfasında yorumun ne zaman eklendiğini göster
 * AddCart'ın parametresini class'a aktar
 * Sepette beğendiklerim kısmını tek bir yerde tetikle
+* Suggestion'ı aktif ettiğinde cart kısmı patlayabilir product bekliyorum diyerek orayı kontrol et
 
 <link rel="stylesheet" href="~/css/product.css">
 

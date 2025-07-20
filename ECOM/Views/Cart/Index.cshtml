@@ -58,7 +58,7 @@
             <div class="orders">
                 @foreach (var cart in Model)
                 {
-                    @await Html.PartialAsync("Order", cart)
+                    @await Html.PartialAsync("~/Views/Cart/Order.cshtml", cart)
                 }
             </div>
         </div>

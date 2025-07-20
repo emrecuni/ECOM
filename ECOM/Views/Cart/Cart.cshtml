@@ -45,13 +45,19 @@
                 const cartId = this.dataset.id;
                 const piece = this.value;
 
-                await fetch('/Cart/UpdateQuantity', {
+                const response =  await fetch('/Cart/UpdateQuantity', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ cartId, piece })
                 });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const priceElement = this.closest('.order-info').querySelector('.price');
+                    priceElement.textContent = `₺${data.totalPrice}`;
+                }
             });
         });
     });

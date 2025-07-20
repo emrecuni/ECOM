@@ -7,12 +7,52 @@
     </div>
     <hr />
     <div class="order-body">
-        <input type="checkbox" name="order-is-active" class="order-is-active" />
+        <input type="checkbox" name="order-is-active" class="order-is-active" data-id="@Model.CartId" checked />
         <img src="~/@Model.Product.ImagePath" alt="Ürün" class="product-image" />
         <div class="order-info">
             <span class="order-name"><b>@Model.Product.Name</b></span>
-            <input type="number" name="order-count" class="order-count" value="@Model.Piece"/>
+            <input type="number" name="order-count" class="order-count"
+                   value="@Model.Piece" data-id="@Model.CartId" min="1" />
+           
             <span class="price">₺@Model.TotalPrice</span>
+            
+            
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Checkbox değişimi
+        document.querySelectorAll('.order-is-active').forEach(cb => {
+            cb.addEventListener('change', async function () {
+                const cartId = this.dataset.id;
+                const isActive = this.checked;
+
+                await fetch('/Cart/UpdateStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ cartId, isActive })
+                });
+            });
+        });
+
+        // Adet değişimi
+        document.querySelectorAll('.order-count').forEach(input => {
+            input.addEventListener('change', async function () {
+                const cartId = this.dataset.id;
+                const piece = this.value;
+
+                await fetch('/Cart/UpdateQuantity', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ cartId, piece })
+                });
+            });
+        });
+    });
+</script>

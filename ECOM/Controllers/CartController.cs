@@ -1,5 +1,6 @@
 ﻿using ECOM.Data;
 using ECOM.Models;
+using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -29,6 +30,57 @@ namespace ECOM.Controllers
                 .ToListAsync();
 
             return View(carts);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] CartStatusModel model) // sepetteki ürünün statüsünü günceller
+        {
+            try
+            {
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.CartId == model.CartId);
+
+                if (cart is null)
+                    return NotFound();
+
+                cart.Enable = model.IsActive;// veri tabanından çekilen ürünün statüsüne modelden gelen değer yazılır
+
+                _context.Carts.Update(cart); // değer güncellenir
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"UpdateStatus Error => {ex}");
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity([FromBody] CartQuantityModel model) // sepetteki ürünün adedini günceller
+        {
+            try
+            {
+                var cart = await _context.Carts
+                    .Include(c=> c.Product)
+                    .FirstOrDefaultAsync(c => c.CartId == model.CartId); // ilgili ürünü veri tabanından çekilir
+
+                if (cart is null)
+                    return NotFound();
+
+                cart.Piece = model.Piece; // veri tabanından çekilen ürünün adedine modelden gelen değer yazılır
+                cart.TotalPrice = (decimal)cart.Product.Price! * model.Piece; // toplam fiyat güncellenir
+
+                _context.Carts.Update(cart); // değer güncellenir
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"UpdateQuantity Error => {ex}");
+                return View("Error");
+            }
         }
     }
 }

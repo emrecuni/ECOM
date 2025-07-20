@@ -63,6 +63,11 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * AddCart'ın parametresini class'a aktar
 * Sepette beğendiklerim kısmını tek bir yerde tetikle
 * Suggestion'ı aktif ettiğinde cart kısmı patlayabilir product bekliyorum diyerek orayı kontrol et
+X Sepet ekranında siparişin tiki kaldırıldığında veri tabanında update yapılmalı X
+X Sepet ekranında siparişin adeti değiştirildiğinde veri tabanında update yapılmalı X
+* Error View'ını düzenle
+* Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

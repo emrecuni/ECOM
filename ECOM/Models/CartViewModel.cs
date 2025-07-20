@@ -1,10 +1,10 @@
 ﻿using ECOM.Data;
 
-namespace ECOM.Views.Cart
+namespace ECOM.Models
 {
     public class CartViewModel
     {
-        public List<Data.Cart> Carts { get; set; } = [];
+        public List<Cart> Carts { get; set; } = [];
         public List<Favorites> Favorites { get; set; } = [];
     }
 }

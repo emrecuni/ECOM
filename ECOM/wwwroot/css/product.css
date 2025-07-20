@@ -231,3 +231,7 @@ button {
 .no-comment {
     font-size: 12px;
 }
+
+.temp-info {
+    display:none;
+}

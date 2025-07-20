@@ -60,7 +60,8 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 ??? Her kullanıcı bir ürüne tek bir yorum yapabilsin mi???
 * Comment tablosuna addition time ekle 
 * Ürün sayfasında yorumun ne zaman eklendiğini göster
-
+* AddCart'ın parametresini class'a aktar
+* Sepette beğendiklerim kısmını tek bir yerde tetikle
 
 <link rel="stylesheet" href="~/css/product.css">
 

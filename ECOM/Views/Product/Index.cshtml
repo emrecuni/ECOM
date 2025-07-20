@@ -54,12 +54,16 @@
             <div>Satıcı: <span class="badge badge-success badge-pill bg-primary">@Model.Product.Seller.Name</span></div>
             <div class="product-price">₺@Model.Product.Price</div>
             <div class="forms">
-                <form action="AddCart" method="post">
+                <!--Sepete Ekle-->
+                <form asp-action="AddCart" method="post">
                     <input type="hidden" name="productId" value=@Model.Product.ProductId />
                     <input type="hidden" name="productName" value=@Model.Product.Name>
-                    <input type="number" hidden name="price" value=@Model.Product.Price>
+                    <input type="hidden" name="sellerId" value=@Model.Product.SellerId>
+                    <input type="hidden" name="price" value=@Model.Product.Price>
                     <button class="addCart"><b>Sepete Ekle</b></button>
                 </form>
+
+                <!--Satın Al-->
                 <form action="Buy" method="post">
                     <input type="hidden" name="productId" value=@Model.Product.ProductId />
                     <input type="hidden" name="productName" value=@Model.Product.Name>
@@ -120,9 +124,9 @@
                         <li data-value="@i">&#9733;</li>
                     }
                 </ul>
-                
+
                 <br><br>
-                
+
                 <input type="hidden" id="rate" name="rate" value="3">
                 <input type="hidden" name="id" value="@Model.Product.ProductId">
                 <textarea class="comment" id="review-text" name="review" rows="5" cols="60"
@@ -133,9 +137,6 @@
             </form>
         </div>
     </div>
-    Comment: @ViewBag.Comment <br>
-    Rate: @ViewBag.Rate <br>
-    CommentInfo: @ViewBag.CommentInfo <br>
 </div>
 
 <script>
@@ -196,3 +197,10 @@
         });
     });
 </script>
+
+@if (TempData["Info"] is not null)
+{
+    <script>
+        alert('@Html.Raw(TempData["Info"])');
+    </script>
+}

@@ -72,14 +72,43 @@ namespace ECOM.Controllers
             _context.Products.Update(productViewModel.Product); // ürün skoru güncellenir
             await _context.SaveChangesAsync();
 
+            TempData["Info"] = "Yorumunuz Başarıyla Eklendi.";
             return RedirectToAction("Index", new { id = id });
         }
 
-        public IActionResult AddCart(string productName, float price) // seçilen ürünü sepete ekler
+        [HttpPost]
+        public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, float price) // seçilen ürünü sepete ekler
         {
-            ViewBag.CartProductName = productName;
-            ViewBag.CartPrice = price;
-            return View("Index");
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+
+            // veri tabanında ilgili müşterinin ilgili ürün ve satıcıdan sepete eklediği bir ürünleri çeker
+            var carts = await _context.Carts
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.ProductId == productId && c.SellerId == sellerId && c.Enable == true);
+
+            if (carts is not null)
+            {
+                carts.Piece++;
+                carts.TotalPrice += decimal.Parse(price.ToString());
+                _context.Carts.Update(carts);
+            }
+            else
+            {
+                Cart cart = new()
+                {
+                    CustomerId = customerId,
+                    ProductId = productId,
+                    Piece = 1,
+                    SellerId = sellerId,
+                    TotalPrice = decimal.Parse(price.ToString()),
+                    Enable = true
+                };
+                _context.Carts.Add(cart);
+            }
+
+            await _context.SaveChangesAsync();
+
+            //index/addcart'a gidiyor
+            return RedirectToAction("Index", new { id = productId });
         }
 
         public IActionResult Buy(string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir

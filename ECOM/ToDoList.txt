@@ -68,6 +68,10 @@ X Sepet ekranında siparişin adeti değiştirildiğinde veri tabanında update 
 * Error View'ını düzenle
 X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir X
 * Sepette sağdaki sipariş özetinde ürünler ve kargo kısmının puntosunu düşür
+* Sipariş özetinde ürün adedi ve sepet tutarını modelden besle
+* Alışverişi tamamla formunu ilgili controller'a yönlendir ve ödeme adımına geç
+* Header'da sepet butonunda sepette ürün varsa ikon çıkart
+* Cart'tan "Kuponlarım"a tıklandığında hata veriyor
 
 <link rel="stylesheet" href="~/css/product.css">
 

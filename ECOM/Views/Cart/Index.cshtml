@@ -42,7 +42,7 @@
             </div>
         </div>
         <!--kuponlar-->
-        <div class="coupons d-flex justify-content-between align-items-center">
+        <div class="coupons d-flex justify-content-between align-items-center col-9">
             <a asp-controller="Account" asp-action="Index" asp-route-id="coupon" class="coupon">
                 <i class="fas fa-gift"></i>
                 Kuponlarım
@@ -55,15 +55,30 @@
         </div>
         <!--sepetim-->
         <div class="my-cart">
-            <div class="orders">
+            <div class="orders col-9">
                 @foreach (var cart in Model.Carts.ToList())
                 {
                     @await Html.PartialAsync("~/Views/Cart/Cart.cshtml", cart)
                 }
             </div>
+            <!--Sipariş Özeti-->
+            <div class="cart-total col-3"> <!--col kısmına bir tekrar bak-->
+                <h5>SEÇİLEN ÜRÜNLER (2)</h5>
+                <span><b>₺8513,00</b></span>
+                <form>
+                    <input type="hidden" name="cart-total" value="8513" />
+                    <button type="submit" class="btn btn-warning"><b>Alışverişi Tamamla</b></button>
+                </form>
+                <hr />
+                <div>
+                    Ürünler<span> ₺8513,00</span>
+                    <br />
+                    Kargo<span> Bedava</span>
+                </div>
+            </div>
         </div>
         <!--beğendiklerim-->
-        <div class="suggestion">
+        <div class="suggestion col-9">
             <h4 class="suggestion-header">Beğendiklerim</h4>
             @await Html.PartialAsync("Suggestion", Model.Favorites)
         </div>

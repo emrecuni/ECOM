@@ -74,7 +74,7 @@ namespace ECOM.Controllers
                 _context.Carts.Update(cart); // değer güncellenir
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                return Ok();
+                return Json(new { totalPrice = cart.TotalPrice.ToString("F2") });
             }
             catch (Exception ex)
             {

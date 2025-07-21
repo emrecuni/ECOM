@@ -14,7 +14,7 @@
             <input type="number" name="order-count" class="order-count"
                    value="@Model.Piece" data-id="@Model.CartId" min="1" />
            
-            <span class="price">₺@Model.TotalPrice</span>
+            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>
             
             
         </div>

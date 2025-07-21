@@ -66,7 +66,7 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 X Sepet ekranında siparişin tiki kaldırıldığında veri tabanında update yapılmalı X
 X Sepet ekranında siparişin adeti değiştirildiğinde veri tabanında update yapılmalı X
 * Error View'ını düzenle
-* Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir
+X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir X
 
 
 <link rel="stylesheet" href="~/css/product.css">

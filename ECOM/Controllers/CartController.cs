@@ -29,7 +29,17 @@ namespace ECOM.Controllers
                 .Where(c => c.CustomerId == customerId && c.Enable == true)
                 .ToListAsync();
 
-            return View(carts);
+
+            CartViewModel cartViewModel = new()
+            {
+                Carts = carts,
+                Favorites = await _context.Favorites
+                    .Include(f => f.Product)
+                    .Where(f => f.CustomerId == customerId)
+                    .ToListAsync()
+            };
+
+            return View(cartViewModel);
         }
 
         [HttpPost]

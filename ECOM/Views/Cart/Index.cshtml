@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ECOM.Data.Cart>
+﻿@model ECOM.Models.CartViewModel
 
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 @*<link rel="stylesheet" href="http://localhost:5045//lib/font-awesome/css/all.min.css">*@
@@ -12,7 +12,7 @@
         @await Html.PartialAsync("Cart-Header") <!--header-->
     </div>
 
-    @if (Model is null)
+    @if (Model.Carts is null)
     {<div class="empty-cart">
             <!--Sepet boşsa çıkacak mesaj-->
             <div class="message">
@@ -26,7 +26,7 @@
             <!--beğendiklerim-->
             <div class="suggestion">
                 <h4 class="suggestion-header">Beğendiklerim</h4>
-                @await Html.PartialAsync("Suggestion")
+                @await Html.PartialAsync("Suggestion", Model.Favorites)
             </div>
         </div>
     }
@@ -56,17 +56,17 @@
         <!--sepetim-->
         <div class="my-cart">
             <div class="orders">
-                @foreach (var cart in Model.ToList())
+                @foreach (var cart in Model.Carts.ToList())
                 {
                     @await Html.PartialAsync("~/Views/Cart/Cart.cshtml", cart)
                 }
             </div>
         </div>
         <!--beğendiklerim-->
-        @*<div class="suggestion">
+        <div class="suggestion">
             <h4 class="suggestion-header">Beğendiklerim</h4>
-            @await Html.PartialAsync("Suggestion")
-        </div>*@
+            @await Html.PartialAsync("Suggestion", Model.Favorites)
+        </div>
 
     }
 </div>

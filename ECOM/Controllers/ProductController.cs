@@ -111,13 +111,15 @@ namespace ECOM.Controllers
             return RedirectToAction("Index", new { id = productId });
         }
 
-        public IActionResult Buy(string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
+        [HttpPost]
+        public IActionResult Buy(int productId,string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
         {
 
             // direkt satın alma ekranın yönlendir
-            ViewBag.BuyProductName = productName;
-            ViewBag.BuyPrice = price;
-            return View("Index");
+            //ViewBag.BuyProductName = productName;
+            //ViewBag.BuyPrice = price;
+            TempData["Info"] = "Siparişin Başarıyla Alınmıştır. 10 Saniye İçinde Teslim Edilecektir.";
+            return RedirectToAction("Index",new {id = productId });
         }
     }
 }

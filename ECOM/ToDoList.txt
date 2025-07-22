@@ -72,6 +72,8 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * Alışverişi tamamla formunu ilgili controller'a yönlendir ve ödeme adımına geç
 * Header'da sepet butonunda sepette ürün varsa ikon çıkart
 * Cart'tan "Kuponlarım"a tıklandığında hata veriyor
+* AppSettings'i gitignore'a ekle
+* Arama geçmişini sakla
 
 <link rel="stylesheet" href="~/css/product.css">
 

@@ -64,7 +64,7 @@
                 </form>
 
                 <!--Satın Al-->
-                <form action="Buy" method="post">
+                <form asp-action="Buy" method="post">
                     <input type="hidden" name="productId" value=@Model.Product.ProductId />
                     <input type="hidden" name="productName" value=@Model.Product.Name>
                     <input type="hidden" name="price" value=@Model.Product.Price>

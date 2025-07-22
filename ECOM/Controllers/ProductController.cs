@@ -118,7 +118,6 @@ namespace ECOM.Controllers
             // direkt satın alma ekranın yönlendir
             //ViewBag.BuyProductName = productName;
             //ViewBag.BuyPrice = price;
-            TempData["Info"] = "Siparişin Başarıyla Alınmıştır. 10 Saniye İçinde Teslim Edilecektir.";
             return RedirectToAction("Index",new {id = productId });
         }
     }

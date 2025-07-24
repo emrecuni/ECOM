@@ -75,6 +75,7 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * AppSettings'i gitignore'a ekle
 * Arama geçmişini sakla
 * Payment-pay'de sepetin içindekilerin toplam tutardan farklı olmasını durumunu test et
+* dotnet watch run dedikten sonra product/index.cshtml'deki uyarıya bak nullable
 
 
 <link rel="stylesheet" href="~/css/product.css">
@@ -102,3 +103,10 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
         </div>
     </div>
 </div>
+
+
+Kart Numarası: 5526080000000006
+
+Tarih: 12/30
+
+CVV: 000

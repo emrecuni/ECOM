@@ -103,7 +103,7 @@ namespace ECOM.Controllers
 
             var response = CheckoutForm.Retrieve(request, _iyzico);
 
-            if(response.Result.Status == "Success")
+            if(response.Result.Status == "success")
             {
                 ViewBag.PaymentStatus = "Ödeme Başarılı";
                 ViewBag.PaymentId = response.Result.PaymentId;
@@ -116,9 +116,6 @@ namespace ECOM.Controllers
                 ViewBag.ErrorMessage = response.Result.ErrorMessage;
                 return View("Error");
             }
-
-                // ödemenin başarılı olup olmama durumu kontrol et
-                return View("Success");
         }
     }   
 }

@@ -74,6 +74,8 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * Cart'tan "Kuponlarım"a tıklandığında hata veriyor
 * AppSettings'i gitignore'a ekle
 * Arama geçmişini sakla
+* Payment-pay'de sepetin içindekilerin toplam tutardan farklı olmasını durumunu test et
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

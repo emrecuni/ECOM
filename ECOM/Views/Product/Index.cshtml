@@ -64,10 +64,10 @@
                 </form>
 
                 <!--Satın Al-->
-                <form asp-action="Buy" method="post">
-                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
+                <form asp-controller="Payment" asp-action="Pay" method="get">
+                    @*<input type="hidden" name="productId" value=@Model.Product.ProductId />
                     <input type="hidden" name="productName" value=@Model.Product.Name>
-                    <input type="hidden" name="price" value=@Model.Product.Price>
+                    <input type="hidden" name="price" value=@Model.Product.Price>*@
                     <button class="buy"><b>Satın Al</b></button>
                 </form>
             </div>

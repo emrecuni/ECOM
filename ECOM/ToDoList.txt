@@ -76,6 +76,14 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * Arama geçmişini sakla
 * Payment-pay'de sepetin içindekilerin toplam tutardan farklı olmasını durumunu test et
 * dotnet watch run dedikten sonra product/index.cshtml'deki uyarıya bak nullable
+* dotnet watch run ile çalıştırdığımda payment/callback'e gitmiyor
+* Payment/callback'e yönlendirilen linkte port numarasını nasıl dinamik yapabilirim
+* Sepetteki ürünleri Payment controller'a yönlendir
+* Satın al sayfasından seçilen ürünü doğrudan payment controller'a yönlendir
+* 3d secure ile ödemeyi dene
+??? Direkt satın al dedikten sonra o siparişi sepet tablosuna ekleyecek misin ???
+* Ödeme başarılı olduktan sonra sepeti pasife çek sipariş tablosuna insert at
+
 
 
 <link rel="stylesheet" href="~/css/product.css">

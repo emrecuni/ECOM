@@ -36,6 +36,8 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Zaten kayıtlı bir telefon ile kayıt olmaya çalıştığında uyarı ver
 * Adreste müşteri silinmeden adres silinebilsin mi?
 * Kolon uzunluklarını sınırla
+* Telefon ile girişte otp göndermini dene 
+* Telefon ile login için bir info butonu koy (başında 0 olmadan girin gibi)
 * Mail bilgilerini appsettings'ten al
 * Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
 * Product tablosuna imagePath ekle
@@ -56,6 +58,33 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
 * Yorum yapabilmek için ürünü satın almış olması gerekir
 * Yoruma resim ekleme ekle
 ??? Her kullanıcı bir ürüne tek bir yorum yapabilsin mi???
+* Comment tablosuna addition time ekle 
+* Ürün sayfasında yorumun ne zaman eklendiğini göster
+* AddCart'ın parametresini class'a aktar
+* Sepette beğendiklerim kısmını tek bir yerde tetikle
+* Suggestion'ı aktif ettiğinde cart kısmı patlayabilir product bekliyorum diyerek orayı kontrol et
+X Sepet ekranında siparişin tiki kaldırıldığında veri tabanında update yapılmalı X
+X Sepet ekranında siparişin adeti değiştirildiğinde veri tabanında update yapılmalı X
+* Error View'ını düzenle
+X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir X
+* Sepette sağdaki sipariş özetinde ürünler ve kargo kısmının puntosunu düşür
+* Sipariş özetinde ürün adedi ve sepet tutarını modelden besle
+* Alışverişi tamamla formunu ilgili controller'a yönlendir ve ödeme adımına geç
+* Header'da sepet butonunda sepette ürün varsa ikon çıkart
+* Cart'tan "Kuponlarım"a tıklandığında hata veriyor
+* AppSettings'i gitignore'a ekle
+* Arama geçmişini sakla
+* Payment-pay'de sepetin içindekilerin toplam tutardan farklı olmasını durumunu test et
+* dotnet watch run dedikten sonra product/index.cshtml'deki uyarıya bak nullable
+* dotnet watch run ile çalıştırdığımda payment/callback'e gitmiyor
+* Payment/callback'e yönlendirilen linkte port numarasını nasıl dinamik yapabilirim
+* Sepetteki ürünleri Payment controller'a yönlendir
+* Satın al sayfasından seçilen ürünü doğrudan payment controller'a yönlendir
+* 3d secure ile ödemeyi dene
+??? Direkt satın al dedikten sonra o siparişi sepet tablosuna ekleyecek misin ???
+* Ödeme başarılı olduktan sonra sepeti pasife çek sipariş tablosuna insert at
+
+
 
 <link rel="stylesheet" href="~/css/product.css">
 
@@ -82,3 +111,10 @@ X Ürün detay sayfasında yıldız'ın yanında puanı da yaz X
         </div>
     </div>
 </div>
+
+
+Kart Numarası: 5526080000000006
+
+Tarih: 12/30
+
+CVV: 000

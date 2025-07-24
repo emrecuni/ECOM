@@ -68,7 +68,7 @@
     margin-right: 15px;
 }
 
-.favorite-btn {
+.favorite-btn, .favorite-product {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -80,7 +80,8 @@
     transition: background 0.3s ease; /* Yumuşak geçiş ekledim */
 }
 
-    .favorite-btn:hover {
+    .favorite-btn:hover,
+    favorite-product:hover {
         background: rgba(200, 200, 200, 0.8); /* Hover durumunda butonun tamamının arka plan rengi değişiyor */
     }
 
@@ -95,4 +96,9 @@
 
 .footer {
     position: relative;
+}
+
+.favorite-product i {
+    color: red;
+    font-size: 1.2rem;
 }

@@ -19,6 +19,7 @@
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
+    padding: 10px;
 }
 
 .suggestion-header {
@@ -130,4 +131,40 @@
     bottom: 10px;
     font-weight: bolder;
     color: #333;
+}
+
+.cart-total {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    max-height: 250px;
+}
+
+    .cart-total h5 {
+        color: orangered;
+        margin-bottom: 20px;
+    }
+
+.cart-total span {
+    font-size: large;
+}
+
+    .cart-total form {
+        margin-top: 20px;
+    }
+
+    .cart-total button {
+        width: 100%;
+        padding: 10px;
+        background-color: orangered;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+.my-cart {
+    display: flex;
 }

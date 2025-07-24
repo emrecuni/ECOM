@@ -30,7 +30,7 @@ namespace ECOM.Controllers
                 .Include(p => p.Brand)
                 .Include(p => p.SupCategory)
                 .Include(p => p.SubCategory)
-                .Include(p => p.Seller)
+                .Include(p => p.Seller)                
                 .ToListAsync();
 
             return View(products);

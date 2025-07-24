@@ -3,6 +3,8 @@ using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog.Targets;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ECOM.Controllers
@@ -41,59 +43,82 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> SendComment(int id, int rate, string? review)
         {
+            if (rate < 1 || rate > 5)
+                return BadRequest("Geçersiz puan değeri.");
+
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var newComment = new Comments
             {
                 Comment = review,
                 ProductId = id,
                 Score = rate,
-                CustomerId = 1
+                CustomerId = customerId
             };
 
             _context.Comments.Add(newComment); // yorum comments tablosuna insert edilir
             await _context.SaveChangesAsync();
 
-
             var productViewModel = await _product.GetProductWithCommentsById(id);
             if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
                 return NotFound();
 
-            int totalScore = 0;
-            float average = 0;
+            var scores = await _context.Comments
+                .Where(c => c.ProductId == id && c.Score != null)
+                .Select(c => c.Score!.Value)
+                .ToListAsync();
 
+            productViewModel.Product!.Score = float.Parse(scores.Average().ToString("0.0"));
 
-            foreach (var comment in productViewModel.Comments)
-            {
-                if (comment.Score is not null)
-                    totalScore += comment.Score.Value;
-
-            }
-
-            average = (float)totalScore / productViewModel.Comments.Count;
-
-            productViewModel.Product!.Score = average;
-
-            _context.Products.Update(productViewModel.Product);
+            _context.Products.Update(productViewModel.Product); // ürün skoru güncellenir
             await _context.SaveChangesAsync();
 
-
-
-            return View("Index", productViewModel); // id'yi 0 gönderiyor
+            TempData["Info"] = "Yorumunuz Başarıyla Eklendi.";
+            return RedirectToAction("Index", new { id = id });
         }
 
-        public IActionResult AddCart(string productName, float price) // seçilen ürünü sepete ekler
+        [HttpPost]
+        public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, float price) // seçilen ürünü sepete ekler
         {
-            ViewBag.CartProductName = productName;
-            ViewBag.CartPrice = price;
-            return View("Index");
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+
+            // veri tabanında ilgili müşterinin ilgili ürün ve satıcıdan sepete eklediği bir ürünleri çeker
+            var carts = await _context.Carts
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.ProductId == productId && c.SellerId == sellerId && c.Enable == true);
+
+            if (carts is not null)
+            {
+                carts.Piece++;
+                carts.TotalPrice += decimal.Parse(price.ToString());
+                _context.Carts.Update(carts);
+            }
+            else
+            {
+                Cart cart = new()
+                {
+                    CustomerId = customerId,
+                    ProductId = productId,
+                    Piece = 1,
+                    SellerId = sellerId,
+                    TotalPrice = decimal.Parse(price.ToString()),
+                    Enable = true
+                };
+                _context.Carts.Add(cart);
+            }
+
+            await _context.SaveChangesAsync();
+
+            //index/addcart'a gidiyor
+            return RedirectToAction("Index", new { id = productId });
         }
 
-        public IActionResult Buy(string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
+        [HttpPost]
+        public IActionResult Buy(int productId,string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
         {
 
             // direkt satın alma ekranın yönlendir
-            ViewBag.BuyProductName = productName;
-            ViewBag.BuyPrice = price;
-            return View("Index");
+            //ViewBag.BuyProductName = productName;
+            //ViewBag.BuyPrice = price;
+            return RedirectToAction("Index",new {id = productId });
         }
     }
 }

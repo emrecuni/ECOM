@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Ödeme Başarılı";
+}
+
+<div class="container mt-5">
+    <div class="alert alert-success text-center" role="alert">
+        <h2>Ödeme Başarılı!</h2>
+        <p>Ödemeniz başarıyla alınmıştır. Teşekkür ederiz.</p>
+        <hr>
+        <p><strong>Ödeme ID:</strong> @ViewBag.PaymentId</p>
+        <p><strong>Ödenen Tutar:</strong> ₺@ViewBag.Price</p>
+    </div>
+
+    <div class="text-center">
+        <a href="/" class="btn btn-primary">Anasayfaya Dön</a>
+    </div>
+</div>

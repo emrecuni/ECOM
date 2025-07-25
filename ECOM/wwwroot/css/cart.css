@@ -168,3 +168,12 @@
 .my-cart {
     display: flex;
 }
+
+.cart-summary, .cart-summary div {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.cart-summary div {
+    display:flex;
+}

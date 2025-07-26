@@ -84,8 +84,8 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 ??? Direkt satın al dedikten sonra o siparişi sepet tablosuna ekleyecek misin ???
 * Ödeme başarılı olduktan sonra sepeti pasife çek sipariş tablosuna insert at
 * Aktif kuponları göster
-* Sepetteki ürün adetleri veya aktifliği değiştiğinde sepet özetini de güncelle
-* Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin
+X Sepetteki ürün adetleri veya aktifliği değiştiğinde sepet özetini de güncelle X
+X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 
 
 

@@ -169,11 +169,15 @@
     display: flex;
 }
 
-.cart-summary, .cart-summary div {
+.cart-summary, .cart-summary span {
     font-size: 10px;
     font-weight: bold;
 }
 
-.cart-summary div {
-    display:flex;
+.cart-summary span {
+    margin-right: 25px;
 }
+
+    .cart-summary div {
+        margin-left: 15px;
+    }

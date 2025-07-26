@@ -33,7 +33,10 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ cartId, isActive })
-                });
+                }).then(res => res.json())
+                    .then(data => {
+                        updateCartSummaryDisplay(data.totalPrice, data.count);
+                    });
             });
         });
 
@@ -53,10 +56,21 @@
 
                 if (response.ok) {
                     const data = await response.json();
+
+                    // Ürünün yanındaki toplam fiyatı güncelle
                     const priceElement = this.closest('.order-info').querySelector('.price');
-                    priceElement.textContent = `₺${data.totalPrice}`;
+                    priceElement.textContent = `₺${data.cartTotalPrice}`;
+
+                    // Genel sepet özetini güncelle
+                    updateCartSummaryDisplay(data.totalPrice, data.count);
                 }
             });
         });
     });
+
+    function updateCartSummaryDisplay(totalPrice, count) {
+        document.querySelector('.cart-total span b').textContent = `₺${totalPrice}`;
+        document.querySelector('.cart-summary .d-flex.justify-content-between span').textContent = `₺${totalPrice}`;
+        document.querySelector('.cart-total h5').textContent = `SEÇİLEN ÜRÜNLER (${count})`;
+    }
 </script>

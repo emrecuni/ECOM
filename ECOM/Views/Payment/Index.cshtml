@@ -58,15 +58,9 @@
                         <h5 class="mb-3">Adres Bilgileriniz</h5>
 
                         <div class="mb-3">
-                            <label class="form-label d-block">Adres Türü</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="addressType" id="home" value="home">
-                                <label class="form-check-label" for="home">Ev</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="addressType" id="work" value="work">
-                                <label class="form-check-label" for="work">İş Yeri</label>
-                            </div>
+                            <label class="form-label d-block">Adres Adı</label>
+                            <input type="text" name="surname" id="surname" class="form-control" placeholder="Adres adını giriniz">
+
                         </div>
 
                         <div class="mb-3">
@@ -77,29 +71,29 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label for="city" class="form-label">Şehir</label>
-                                <select class="form-select" id="city" name="city">
+                                <select class="form-select" id="cityId" name="cityId">
                                     <option selected disabled>Seçiniz</option>
-                                    <option>İstanbul</option>
-                                    <option>Samsun</option>
-                                    <option>Erzurum</option>
+                                    <option value="1">İstanbul</option>
+                                    <option value="2">Samsun</option>
+                                    <option value="3">Erzurum</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label for="district" class="form-label">İlçe</label>
-                                <select class="form-select" id="district" name="district">
+                                <select class="form-select" id="districtId" name="districtId">
                                     <option selected disabled>Seçiniz</option>
-                                    <option>Sultanbeyli</option>
-                                    <option>Ümraniye</option>
-                                    <option>Sancaktepe</option>
+                                    <option value="1">Sultanbeyli</option>
+                                    <option value="2">Ümraniye</option>
+                                    <option value="3">Sancaktepe</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label for="neighbourhood" class="form-label">Mahalle</label>
-                                <select class="form-select" id="neighbourhood" name="neighbourhood">
+                                <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
                                     <option selected disabled>Seçiniz</option>
-                                    <option>Ahmet Yesevi</option>
-                                    <option>Mimar Sinan</option>
-                                    <option>Hamidiye</option>
+                                    <option value="1">Ahmet Yesevi</option>
+                                    <option value="2">Mimar Sinan</option>
+                                    <option value="3">Hamidiye</option>
                                 </select>
                             </div>
                         </div>

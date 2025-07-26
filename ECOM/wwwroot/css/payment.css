@@ -1,0 +1,52 @@
+﻿body {
+}
+
+.my-addresses {
+    background-color: navajowhite;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.addresses {
+    margin: 5px;
+    display: none;
+}
+
+.address {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin: 5px;
+    padding-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+    .address.selected {
+        border-color: #007bff;
+        background-color: #e7f1ff;
+    }
+
+.addresses h4 {
+    margin: 10px;
+}
+
+.selected-address {
+    background-color: #d1e7dd;
+    border: 2px solid #0dcaf0;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.add-address button {
+    margin:10px;
+}
+
+.other-addresses {
+    display: block;
+}
+
+.new-address {
+    display:none;
+}

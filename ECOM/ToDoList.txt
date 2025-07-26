@@ -86,7 +86,11 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * Aktif kuponları göster
 X Sepetteki ürün adetleri veya aktifliği değiştiğinde sepet özetini de güncelle X
 X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
-
+* Direkt main'e yönlendir alışveriş yapma ve favoriye ekleme gibi kullanıcıya özel işlem yapmak istediğinde login'e yönlendir
+* "Alışverişi tamamla" dedikten sonra adres seçimi ekle
+* "Alışverişi tamamla" dedikten sonra payment/pay için gerekli parametreleri gönder
+* Bütün form parametrelerini class'a çevir
+* "Alışverişi Tamamla" butonunun class'ından btn-warning'i kaldır
 
 
 <link rel="stylesheet" href="~/css/product.css">

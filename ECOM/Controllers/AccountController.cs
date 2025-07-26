@@ -56,7 +56,7 @@ namespace ECOM.Controllers
             return View();
         }
 
-        public IActionResult Addres()
+        public IActionResult Address()
         {
             return View();
         }

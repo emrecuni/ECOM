@@ -81,8 +81,8 @@
 
                 <h5>SEÇİLEN ÜRÜNLER (@cartSummaryProductCount)</h5>
                 <span><b>₺@cartSummaryPrice.ToString("F2")</b></span>
-                <form>
-                    <input type="hidden" name="cart-total" value="8513" />
+                <form asp-controller="Payment" asp-action="Index" method="post">
+                    <input type="hidden" name="cart-total" value="@cartSummaryPrice" />
                     <button type="submit" class="btn btn-warning"><b>Alışverişi Tamamla</b></button>
                 </form>
                 <hr />
@@ -101,7 +101,3 @@
 
     }
 </div>
-
-<script>
-
-</script>

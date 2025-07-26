@@ -83,7 +83,7 @@ namespace ECOM.Controllers
 
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                return Ok();
+                return RedirectToAction("Index","Payment");
                 
             }
             catch (Exception ex)

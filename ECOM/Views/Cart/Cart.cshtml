@@ -13,8 +13,8 @@
             <span class="order-name"><b>@Model.Product.Name</b></span>
             <input type="number" name="order-count" class="order-count"
                    value="@Model.Piece" data-id="@Model.CartId" min="1" />
-           
-            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>                      
+
+            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>
         </div>
     </div>
 </div>
@@ -46,7 +46,7 @@
                 const cartId = this.dataset.id;
                 const piece = this.value;
 
-                const response =  await fetch('/Cart/UpdateQuantity', {
+                const response = await fetch('/Cart/UpdateQuantity', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -15,15 +15,13 @@
 </head>
 <body>
     <header>
-        @{ bool isLoginPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Login";
-        }
-        @{
-            bool isAccountPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Account";
-        }
-        @{
+        @{ 
+            bool isLoginPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Login";                
+            bool isAccountPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Account";        
             bool isCartPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Cart";
+            bool isPaymentPage = ViewContext.RouteData.Values["Controller"]?.ToString() == "Payment";
         }
-        @{ if (!isLoginPage && !isAccountPage && !isCartPage)
+        @{ if (!isLoginPage && !isAccountPage && !isCartPage && !isPaymentPage)
                 @await Html.PartialAsync("_Header");
         }
     </header>
@@ -35,7 +33,7 @@
     </div>
 
     <footer class="border-top text-muted">
-        @{ if (!isLoginPage)
+        @{ if (!isLoginPage && !isPaymentPage)
                 @await Html.PartialAsync("_Footer")
         }
     </footer>

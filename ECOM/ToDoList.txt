@@ -91,7 +91,8 @@ X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 * "Alışverişi tamamla" dedikten sonra payment/pay için gerekli parametreleri gönder
 * Bütün form parametrelerini class'a çevir
 * "Alışverişi Tamamla" butonunun class'ından btn-warning'i kaldır
-
+** Hover efekti ekle(siparişi onayla)
+* Adres sayfasının renklerine bak
 
 <link rel="stylesheet" href="~/css/product.css">
 

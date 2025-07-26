@@ -1,16 +1,24 @@
 ﻿using Azure;
+using ECOM.Data;
+using ECOM.Models;
+using ECOM.Services;
 using Iyzipay;
 using Iyzipay.Model;
+using Iyzipay.Model.V2.Subscription;
 using Iyzipay.Request;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
     public class PaymentController : Controller
     {
         private readonly Options _iyzico;
+        private readonly DataContext _context;
 
-        public PaymentController(IConfiguration config)
+        public PaymentController(IConfiguration config, DataContext context)
         {
             _iyzico = new Options
             {
@@ -18,14 +26,45 @@ namespace ECOM.Controllers
                 SecretKey = config["IyzicoOptions:SecretKey"],
                 BaseUrl = config["IyzicoOptions:BaseUrl"]
             };
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+                var addresses = await _context.Addresses
+                    .Include(a => a.City)
+                    .Include(a => a.District)
+                    .Include(a => a.Neighbourhood)
+                    .ToListAsync();
+
+                var cart = await _context.Carts
+                    .Include(c => c.Customer)
+                    .Include(c => c.Product)
+                    .Include(c => c.Seller)
+                    .Include(c => c.Coupon)
+                    .Where(c => c.CustomerId == customerId && c.Enable == true)
+                    .ToListAsync();
+
+                AddressViewModel model = new AddressViewModel
+                {
+                    Addresses = addresses,
+                    Cart = cart
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"Payment/Index Error => {ex}");
+                return View("Error");
+            }
         }
 
-        public IActionResult Pay()
+        [HttpPost]
+        public IActionResult Pay(AddressViewModel model)
         {
             var request = new CreateCheckoutFormInitializeRequest
             {
@@ -63,10 +102,10 @@ namespace ECOM.Controllers
                 ShippingAddress = new Address
                 {
                     ContactName = "Emre Cüni",
-                    City= "İstanbul",
+                    City = "İstanbul",
                     Country = "Türkiye",
                     Description = "Test test test",
-                    ZipCode= "34930"
+                    ZipCode = "34930"
                 },
                 BillingAddress = new Address
                 {
@@ -79,7 +118,7 @@ namespace ECOM.Controllers
             };
 
             var response = CheckoutFormInitialize.Create(request, _iyzico);
-            
+
             ViewBag.CheckoutFormContent = response.Result.CheckoutFormContent; // Iyzico'dan gelen ödeme formu içeriği
 
             return View();
@@ -96,14 +135,14 @@ namespace ECOM.Controllers
             var request = new RetrieveCheckoutFormRequest
             {
                 Token = token,
-                Locale = Locale.TR.ToString(), 
+                Locale = Locale.TR.ToString(),
                 ConversationId = "123456789" // sipariş ID vb. kullanılabilir
             };
 
 
             var response = CheckoutForm.Retrieve(request, _iyzico);
 
-            if(response.Result.Status == "success")
+            if (response.Result.Status == "success")
             {
                 ViewBag.PaymentStatus = "Ödeme Başarılı";
                 ViewBag.PaymentId = response.Result.PaymentId;
@@ -117,5 +156,5 @@ namespace ECOM.Controllers
                 return View("Error");
             }
         }
-    }   
+    }
 }

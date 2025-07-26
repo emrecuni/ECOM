@@ -2,7 +2,7 @@
 }
 
 .my-addresses {
-    background-color: navajowhite;
+    background-color: #f8f9fa;
     border-radius: 10px;
     padding: 10px;
 }
@@ -49,4 +49,13 @@
 
 .new-address {
     display:none;
+}
+
+.payment-amount {
+    font-size: x-large;
+}
+
+.select-address {
+    display:flex;
+    margin-top: 25px;
 }

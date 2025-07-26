@@ -1,0 +1,69 @@
+﻿.top {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.secure-payment h4 {
+    color: orange;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.logo {
+    margin-right: 20px; /* İsteğe bağlı, logo ile aradaki boşluğu artırmak için */
+}
+
+.search-bar {
+    flex-grow: 1; /* Arama çubuğunun daha geniş olmasını sağlar */
+    margin-right: 20px; /* Diğer div ile arasındaki boşluğu ayarlamak için */
+    display: flex;
+    align-items: center; /* Arama çubuğunun ortalanmasını sağlar */
+}
+
+.account {
+    background-color: white;
+    border: 3px solid;
+    border-color: #AAAAAA;
+    border-radius: 15px;
+}
+
+.cart {
+    background-color: #AAAAAA;
+}
+
+.account, .cart {
+    font-weight: 500;
+    padding: 8px 12px;
+    margin-right: 16px; /* Liste öğeleri arasındaki boşluğu artırabilirsiniz */
+    width: 120px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    margin-left: 20px; /* Hesap kısmı ile önceki eleman arasına boşluk ekler */
+    display: contents;
+}
+
+    .account i, .cart i {
+        font-size: 1.5rem;
+    }
+
+
+
+.container {
+    border-radius: 15px;
+}
+
+.cart-button {
+    border-radius: 15px;
+    padding-right: 5px;
+}
+
+.account-button {
+    border-radius: 25px;
+    margin-left: 5px;
+}
+
+.header-container {
+    display: contents;
+}

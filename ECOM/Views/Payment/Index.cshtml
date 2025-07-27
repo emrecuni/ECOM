@@ -12,12 +12,17 @@
 <div class="select-address">
     <div class="my-addresses col-9">
         <!--seçili adres-->
-        <div class="selected-address">
-            <div id="selected-address-content" class="address">
-                <h5>@Model.Addresses.ToList()[0].AddressName</h5>
-                <p>@Model.Addresses.ToList()[0].Address  (@Model.Addresses.ToList()[0].Neighbourhood.Name / @Model.Addresses.ToList()[0].District.Name / @Model.Addresses.ToList()[0].City.Name)</p>
+        @if (Model.Addresses.Count > 0)
+        {
+            <div class="selected-address">
+
+                <div id="selected-address-content" class="address">
+                    <h5>@Model.Addresses.ToList()[0].AddressName</h5>
+                    <p>@Model.Addresses.ToList()[0].Address  (@Model.Addresses.ToList()[0].Neighbourhood.Name / @Model.Addresses.ToList()[0].District.Name / @Model.Addresses.ToList()[0].City.Name)</p>
+                </div>
+
             </div>
-        </div>
+        }
         <div class="add-address">
             <button onclick="showAddresses()" class="btn btn-primary">Adres Ekle / Değiştir</button>
 
@@ -29,13 +34,17 @@
 
                 <!--mevcut adresler-->
                 <div id="other-addresses" class="other-addresses">
-
-                    @foreach (var address in Model.Addresses.ToList())
+                    @if (Model.Addresses.Count > 0)
                     {
-                        <div class="address" onclick="selectAddress(this)">
-                            <h5>@address.AddressName</h5>
-                            <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
-                        </div>
+
+                        @foreach (var address in Model.Addresses.ToList())
+                        {
+                            <div class="address" onclick="selectAddress(this)">
+                                <h5>@address.AddressName</h5>
+                                <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
+                            </div>
+
+                        }
                     }
                 </div>
 
@@ -82,27 +91,30 @@
                                     <label for="city" class="form-label">Şehir</label>
                                     <select class="form-select" id="cityId" name="cityId">
                                         <option selected disabled>Seçiniz</option>
-                                        <option value="1">İstanbul</option>
-                                        <option value="2">Samsun</option>
-                                        <option value="3">Erzurum</option>
+                                        @foreach (var city in Model.Cities.ToList())
+                                        {
+                                            <option value="@city.CityId">@city.Name</option>
+                                        }
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="district" class="form-label">İlçe</label>
                                     <select class="form-select" id="districtId" name="districtId">
                                         <option selected disabled>Seçiniz</option>
-                                        <option value="1">Sultanbeyli</option>
-                                        <option value="2">Ümraniye</option>
-                                        <option value="3">Sancaktepe</option>
+                                        @foreach (var district in Model.Districts.ToList())
+                                        {
+                                            <option value="@district.DistrictId">@district.Name</option>
+                                        }
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="neighbourhood" class="form-label">Mahalle</label>
                                     <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
                                         <option selected disabled>Seçiniz</option>
-                                        <option value="1">Ahmet Yesevi</option>
-                                        <option value="2">Mimar Sinan</option>
-                                        <option value="3">Hamidiye</option>
+                                        @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
+                                        {
+                                            <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -142,9 +154,9 @@
         }
 
         @*<form asp-controller="Payment" asp-action="Pay" method="post">
-            <input type="hidden" name="model" value="@Model" />
-            <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-        </form>*@
+                <input type="hidden" name="model" value="@Model" />
+                <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
+            </form>*@
         <hr />
         <div class="cart-summary">
             <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>

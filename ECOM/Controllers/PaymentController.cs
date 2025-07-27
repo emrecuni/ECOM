@@ -48,10 +48,24 @@ namespace ECOM.Controllers
                     .Where(c => c.CustomerId == customerId && c.Enable == true)
                     .ToListAsync();
 
+                var cities = await _context.Cities.ToListAsync();
+
+                var disricts = await _context.Districts
+                    .Include(d => d.City)
+                    .ToListAsync();
+
+                var neighbourhoods = await _context.Neighbourhoods
+                    .Include(n => n.City)
+                    .Include(n => n.District)
+                    .ToListAsync();                    
+
                 AddressViewModel model = new AddressViewModel
                 {
                     Addresses = addresses,
-                    Cart = cart
+                    Cart = cart,
+                    Cities = cities,
+                    Districts = disricts,
+                    Neighbourhoods = neighbourhoods
                 };
 
                 return View(model);

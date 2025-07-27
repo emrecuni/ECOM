@@ -50,22 +50,22 @@ namespace ECOM.Controllers
 
                 var cities = await _context.Cities.ToListAsync();
 
-                var disricts = await _context.Districts
-                    .Include(d => d.City)
-                    .ToListAsync();
+                //var disricts = await _context.Districts
+                //    .Include(d => d.City)
+                //    .ToListAsync();
 
-                var neighbourhoods = await _context.Neighbourhoods
-                    .Include(n => n.City)
-                    .Include(n => n.District)
-                    .ToListAsync();                    
+                //var neighbourhoods = await _context.Neighbourhoods
+                //    .Include(n => n.City)
+                //    .Include(n => n.District)
+                //    .ToListAsync();                    
 
                 AddressViewModel model = new AddressViewModel
                 {
                     Addresses = addresses,
                     Cart = cart,
-                    Cities = cities,
-                    Districts = disricts,
-                    Neighbourhoods = neighbourhoods
+                    Cities = cities
+                    //Districts = disricts,
+                    //Neighbourhoods = neighbourhoods
                 };
 
                 return View(model);
@@ -74,6 +74,48 @@ namespace ECOM.Controllers
             {
                 NLogger.logger.Error($"Payment/Index Error => {ex}");
                 return View("Error");
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDistrictsAsync(int cityId)
+        {
+            try
+            {
+                var disricts = await _context.Districts
+                    .Where(d => d.CityId == cityId)
+                    .Select(d => new { d.DistrictId, d.Name })
+                    .OrderBy(d => d.Name)
+                    .ToListAsync();
+
+                return Json(disricts);
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"GetDistricts Error => {ex}");
+                return Json(null);
+
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetNeighbourhoodsAsync(int districtId)
+        {
+            try
+            {
+                var neighbourhoods = await _context.Neighbourhoods
+                    .Where(n => n.DistrictId == districtId)
+                    .Select(n => new { n.NeighbourhoodId, n.Name })
+                    .OrderBy(n => n.Name)
+                    .ToListAsync();
+
+                return Json(neighbourhoods);
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"GetDistricts Error => {ex}");
+                return Json(null);
+
             }
         }
 

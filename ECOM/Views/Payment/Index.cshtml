@@ -16,6 +16,7 @@
         <!--seçili adres-->
         @if (Model.Addresses.Count > 0)
         {
+            var selectedAddress = Model.Addresses.ToList()[0];
             <div class="selected-address">
 
                 <div id="selected-address-content" class="address">
@@ -89,6 +90,7 @@
                             </div>
 
                             <div class="row g-3">
+                                <!--Şehir-->
                                 <div class="col-md-4">
                                     <label for="city" class="form-label">Şehir</label>
                                     <select class="form-select" id="cityId" name="cityId">
@@ -99,6 +101,7 @@
                                         }
                                     </select>
                                 </div>
+                                <!--İlçe-->
                                 <div class="col-md-4">
                                     <label for="district" class="form-label">İlçe</label>
                                     <select class="form-select" id="districtId" name="districtId">
@@ -113,6 +116,7 @@
                                         }
                                     </select>
                                 </div>
+                                <!--Mahalle-->
                                 <div class="col-md-4">
                                     <label for="neighbourhood" class="form-label">Mahalle</label>
                                     <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
@@ -157,16 +161,17 @@
         <h5>Ödenecek Tutar</h5>
         <span class="payment-amount"><b>₺@cartSummaryPrice.ToString("F2")</b></span>
 
-        @using (Html.BeginForm("Pay", "Payment", FormMethod.Post))
+        @*@using (Html.BeginForm("Pay", "Payment", FormMethod.Post))
         {
             @Html.EditorForModel()
             <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-        }
+        }*@
 
-        @*<form asp-controller="Payment" asp-action="Pay" method="post">
-                <input type="hidden" name="model" value="@Model" />
-                <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-            </form>*@
+        <form asp-controller="Payment" asp-action="Pay" method="post">
+            <input type="hidden" name="addresses" value="@Model.Addresses" />
+            <input type="hidden" name="cart" value="@Model.Cart" />
+            <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
+        </form>
         <hr />
         <div class="cart-summary">
             <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>

@@ -6,181 +6,181 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+@{
+    ECOM.Data.Addresses? selectedAddress = null;
+    <div class="top d-flex align-items-center justify-content-between shadow-sm">
+        @await Html.PartialAsync("Payment-Header") <!--header-->
+    </div>
 
-<div class="top d-flex align-items-center justify-content-between shadow-sm">
-    @await Html.PartialAsync("Payment-Header") <!--header-->
-</div>
+    <div class="select-address">
+        <div class="my-addresses col-9">
+            <!--seçili adres-->
+            @if (Model.Addresses.Count > 0)
+            {
+                selectedAddress = Model.Addresses.ToList()[0];
+                <div class="selected-address">
 
-<div class="select-address">
-    <div class="my-addresses col-9">
-        <!--seçili adres-->
-        @if (Model.Addresses.Count > 0)
-        {
-            var selectedAddress = Model.Addresses.ToList()[0];
-            <div class="selected-address">
+                    <div id="selected-address-content" class="address">
+                        <h5>@Model.Addresses.ToList()[0].AddressName</h5>
+                        <p>@Model.Addresses.ToList()[0].Address  (@Model.Addresses.ToList()[0].Neighbourhood.Name / @Model.Addresses.ToList()[0].District.Name / @Model.Addresses.ToList()[0].City.Name)</p>
+                    </div>
 
-                <div id="selected-address-content" class="address">
-                    <h5>@Model.Addresses.ToList()[0].AddressName</h5>
-                    <p>@Model.Addresses.ToList()[0].Address  (@Model.Addresses.ToList()[0].Neighbourhood.Name / @Model.Addresses.ToList()[0].District.Name / @Model.Addresses.ToList()[0].City.Name)</p>
                 </div>
+            }
+            <div class="add-address">
+                <button onclick="showAddresses()" class="btn btn-primary">Adres Ekle / Değiştir</button>
 
-            </div>
-        }
-        <div class="add-address">
-            <button onclick="showAddresses()" class="btn btn-primary">Adres Ekle / Değiştir</button>
+                <div id="addresses" class="addresses">
+                    <div class="d-flex justify-content-between">
+                        <h4>Adreslerim</h4>
+                        <button onclick="addAddress()" class="btn btn-warning">Adres Ekle</button>
+                    </div>
 
-            <div id="addresses" class="addresses">
-                <div class="d-flex justify-content-between">
-                    <h4>Adreslerim</h4>
-                    <button onclick="addAddress()" class="btn btn-warning">Adres Ekle</button>
-                </div>
-
-                <!--mevcut adresler-->
-                <div id="other-addresses" class="other-addresses">
-                    @if (Model.Addresses.Count > 0)
-                    {
-
-                        @foreach (var address in Model.Addresses.ToList())
+                    <!--mevcut adresler-->
+                    <div id="other-addresses" class="other-addresses">
+                        @if (Model.Addresses.Count > 0)
                         {
-                            <div class="address" onclick="selectAddress(this)">
-                                <h5>@address.AddressName</h5>
-                                <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
-                            </div>
+                            @foreach (var address in Model.Addresses.ToList())
+                            {
+                                <div class="address" onclick="selectAddress(this)">
+                                    <h5>@address.AddressName</h5>
+                                    <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
+                                </div>
 
+                            }
                         }
-                    }
-                </div>
+                    </div>
 
-                <!--adres ekleme-->
-                <div id="new-address" class="new-address">
-                    <form asp-controller="Account" asp-action="Address" method="post" class="container my-5 p-4 border rounded shadow-sm bg-light">
+                    <!--adres ekleme-->
+                    <div id="new-address" class="new-address">
+                        <form asp-controller="Account" asp-action="Address" method="post" class="container my-5 p-4 border rounded shadow-sm bg-light">
 
-                        <!-- Kişisel Bilgiler -->
-                        <div class="mb-4">
-                            <h5 class="mb-3">Kişisel Bilgileriniz</h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="name" class="form-label">Ad</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Adınızı giriniz">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="surname" class="form-label">Soyad</label>
-                                    <input type="text" name="surname" id="surname" class="form-control" placeholder="Soyadınızı giriniz">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Telefon</label>
-                                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="5xx xxx xx xx">
+                            <!-- Kişisel Bilgiler -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Kişisel Bilgileriniz</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label">Ad</label>
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Adınızı giriniz">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="surname" class="form-label">Soyad</label>
+                                        <input type="text" name="surname" id="surname" class="form-control" placeholder="Soyadınızı giriniz">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Telefon</label>
+                                        <input type="tel" name="phone" id="phone" class="form-control" placeholder="5xx xxx xx xx">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Adres Bilgileri -->
-                        <div class="mb-4">
-                            <h5 class="mb-3">Adres Bilgileriniz</h5>
+                            <!-- Adres Bilgileri -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Adres Bilgileriniz</h5>
 
-                            <div class="mb-3">
-                                <label class="form-label d-block">Adres Adı</label>
-                                <input type="text" name="addressName" id="addressName" class="form-control" placeholder="Adres adını giriniz">
+                                <div class="mb-3">
+                                    <label class="form-label d-block">Adres Adı</label>
+                                    <input type="text" name="addressName" id="addressName" class="form-control" placeholder="Adres adını giriniz">
 
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Adres</label>
-                                <textarea name="address" id="address" class="form-control" rows="3" placeholder="Adresinizi yazınız..."></textarea>
-                            </div>
-
-                            <div class="row g-3">
-                                <!--Şehir-->
-                                <div class="col-md-4">
-                                    <label for="city" class="form-label">Şehir</label>
-                                    <select class="form-select" id="cityId" name="cityId">
-                                        <option selected disabled>Seçiniz</option>
-                                        @foreach (var city in Model.Cities.ToList())
-                                        {
-                                            <option value="@city.CityId">@city.Name</option>
-                                        }
-                                    </select>
                                 </div>
-                                <!--İlçe-->
-                                <div class="col-md-4">
-                                    <label for="district" class="form-label">İlçe</label>
-                                    <select class="form-select" id="districtId" name="districtId">
-                                        <option selected disabled>Seçiniz</option>
-                                        @if (Model.Districts.Count > 0)
-                                        {
 
-                                            @foreach (var district in Model.Districts.ToList())
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Adres</label>
+                                    <textarea name="address" id="address" class="form-control" rows="3" placeholder="Adresinizi yazınız..."></textarea>
+                                </div>
+
+                                <div class="row g-3">
+                                    <!--Şehir-->
+                                    <div class="col-md-4">
+                                        <label for="city" class="form-label">Şehir</label>
+                                        <select class="form-select" id="cityId" name="cityId">
+                                            <option selected disabled>Seçiniz</option>
+                                            @foreach (var city in Model.Cities.ToList())
                                             {
-                                                <option value="@district.DistrictId">@district.Name</option>
+                                                <option value="@city.CityId">@city.Name</option>
                                             }
-                                        }
-                                    </select>
-                                </div>
-                                <!--Mahalle-->
-                                <div class="col-md-4">
-                                    <label for="neighbourhood" class="form-label">Mahalle</label>
-                                    <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
-                                        <option selected disabled>Seçiniz</option>
-                                        @if (Model.Neighbourhoods.Count > 0)
-                                        {
-
-                                            @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
+                                        </select>
+                                    </div>
+                                    <!--İlçe-->
+                                    <div class="col-md-4">
+                                        <label for="district" class="form-label">İlçe</label>
+                                        <select class="form-select" id="districtId" name="districtId">
+                                            <option selected disabled>Seçiniz</option>
+                                            @if (Model.Districts.Count > 0)
                                             {
-                                                <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
+
+                                                @foreach (var district in Model.Districts.ToList())
+                                                {
+                                                    <option value="@district.DistrictId">@district.Name</option>
+                                                }
                                             }
-                                        }
-                                    </select>
+                                        </select>
+                                    </div>
+                                    <!--Mahalle-->
+                                    <div class="col-md-4">
+                                        <label for="neighbourhood" class="form-label">Mahalle</label>
+                                        <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
+                                            <option selected disabled>Seçiniz</option>
+                                            @if (Model.Neighbourhoods.Count > 0)
+                                            {
+
+                                                @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
+                                                {
+                                                    <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Submit -->
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg">Adresi Ekle</button>
-                        </div>
-                    </form>
+                            <!-- Submit -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg">Adresi Ekle</button>
+                            </div>
+                        </form>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="cart-total col-3" style="margin-bottom: 0px;">
-        <!--col kısmına bir tekrar bak-->
-        @{
-            decimal cartSummaryPrice = 0;
+        <div class="cart-total col-3" style="margin-bottom: 0px;">
+            <!--col kısmına bir tekrar bak-->
+            @{
+                decimal cartSummaryPrice = 0;
 
-            foreach (var cart in Model.Cart.ToList())
-            {
-                if (cart.Enable == true)
+                foreach (var cart in Model.Cart.ToList())
                 {
-                    cartSummaryPrice += cart.TotalPrice;
+                    if (cart.Enable == true)
+                    {
+                        cartSummaryPrice += cart.TotalPrice;
+                    }
                 }
             }
-        }
 
-        <h5>Ödenecek Tutar</h5>
-        <span class="payment-amount"><b>₺@cartSummaryPrice.ToString("F2")</b></span>
+            <h5>Ödenecek Tutar</h5>
+            <span class="payment-amount"><b>₺@cartSummaryPrice.ToString("F2")</b></span>
 
-        @*@using (Html.BeginForm("Pay", "Payment", FormMethod.Post))
-        {
-            @Html.EditorForModel()
-            <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-        }*@
+            @*@using (Html.BeginForm("Pay", "Payment", FormMethod.Post))
+                {
+                    @Html.EditorForModel()
+                    <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
+                }*@
 
-        <form asp-controller="Payment" asp-action="Pay" method="post">
-            <input type="hidden" name="addresses" value="@Model.Addresses" />
-            <input type="hidden" name="cart" value="@Model.Cart" />
-            <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-        </form>
-        <hr />
-        <div class="cart-summary">
-            <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>
-            <br />
-            <div class="d-flex justify-content-between">Kargo <span> Bedava</span></div>
+            <form asp-controller="Payment" asp-action="Pay" method="post">
+                <input type="hidden" name="addresses" value="@selectedAddress" />
+                <input type="hidden" name="cart" value="@Model.Cart" />
+                <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
+            </form>
+            <hr />
+            <div class="cart-summary">
+                <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>
+                <br />
+                <div class="d-flex justify-content-between">Kargo <span> Bedava</span></div>
+            </div>
         </div>
     </div>
-</div>
-
+}
 <script>
     function showAddresses() {
         const addresses = document.querySelector('.addresses');

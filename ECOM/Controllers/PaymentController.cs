@@ -120,7 +120,7 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Pay(AddressViewModel model)
+        public IActionResult Pay(int addresses, List<Cart> cart)
         {
             var request = new CreateCheckoutFormInitializeRequest
             {

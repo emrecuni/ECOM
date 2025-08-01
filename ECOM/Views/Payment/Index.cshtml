@@ -108,7 +108,6 @@
                                             <option selected disabled>Seçiniz</option>
                                             @if (Model.Districts.Count > 0)
                                             {
-
                                                 @foreach (var district in Model.Districts.ToList())
                                                 {
                                                     <option value="@district.DistrictId">@district.Name</option>
@@ -123,7 +122,6 @@
                                             <option selected disabled>Seçiniz</option>
                                             @if (Model.Neighbourhoods.Count > 0)
                                             {
-
                                                 @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
                                                 {
                                                     <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
@@ -168,8 +166,8 @@
                 }*@
 
             <form asp-controller="Payment" asp-action="Pay" method="post">
-                <input type="hidden" name="addresses" value="@selectedAddress" />
-                <input type="hidden" name="cart" value="@Model.Cart" />
+                <input type="hidden" name="addresses" value="@Model.Addresses.ToList()[0].AddressId" />
+                <input type="hidden" name="cart" value="@Model.Cart.ToList() " />
                 <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
             </form>
             <hr />

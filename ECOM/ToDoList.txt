@@ -94,14 +94,15 @@ X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 ** Hover efekti ekle(siparişi onayla)
 * Adres sayfasının renklerine bak
 * Ödeme sayfasında seçili adres yoksa "Siparişi onayla" butonuna tıklanamasın
-* Ödeme başarılı olduktan sonra sepeti db'de disable yap
+X Ödeme başarılı olduktan sonra sepeti db'de disable yap X
 * Payment Succes'e header vs ekle
-* Ödeme sayfasına sadece adres id'si gönderilebilir kontrol et
-* Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et
+X Ödeme sayfasına sadece adres id'si gönderilebilir kontrol et X
+X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et X
 * Ödeme formunun arka planını düzeltmek gerekebilir
 * Boş sepeti kontrol et
 * Parola için uppercase-lowercase'e dikkat et
 * Kullanıcının hiç adresi yoksa payment/index'te totalprice foreach'inde hata veriyor
+* Login esnasında caps lock açıksa kullanıcıyı uyar
 
 
 <link rel="stylesheet" href="~/css/product.css">

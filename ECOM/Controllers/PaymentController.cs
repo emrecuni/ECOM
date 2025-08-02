@@ -255,6 +255,10 @@ namespace ECOM.Controllers
 
                         _context.Carts.UpdateRange(carts); // sepet güncellenir
                         await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                        /*
+                         order'a ekle
+                         */
                     }
                     catch (Exception ex)
                     {

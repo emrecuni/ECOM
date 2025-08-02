@@ -9,6 +9,7 @@ using Iyzipay.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -121,87 +122,100 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Pay(int addresses, string jsonCart)
+        public IActionResult Pay(string jsonAddress, string jsonCart)
         {
-            var cartList = JsonConvert.DeserializeObject<List<Cart>>(jsonCart);
-
-            if (cartList is null || cartList.Count > 0)
+            try
             {
-               return View("Error", new { message = "Sepet boş veya geçersiz." });
-            }
+                var address = JsonConvert.DeserializeObject<Addresses>(jsonAddress);
+                var cartList = JsonConvert.DeserializeObject<List<Cart>>(jsonCart);
+
+                if (cartList is null || cartList.Count == 0)
+                    return View("Error", new { message = "Sepet boş veya geçersiz." });
+                if (address is null)
+                    return View("Error", new { message = "Adres seçimi yapınız." });
 
 
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 
-            var cartIds = cartList.Select(c => c.CartId).ToList();
+                var cartIds = cartList.Select(c => c.CartId).ToList();
+                var validCart = _context.Carts
+                    .Include(p => p.Product)
+                    .Include(p => p.Customer)
+                    .Include(p => p.Seller)
+                    .Include(p => p.Product.SupCategory)
+                    .Include(p => p.Product.SubCategory)
+                    .Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId)
+                    .ToList();
 
-            var validCart = _context.Carts.Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId).ToList();
+                var validAddress = _context.Addresses
+                    .Include(a => a.City)
+                    .Include(a => a.District)
+                    .Include(a => a.Neighbourhood)
+                    .FirstOrDefault(a => a.AddressId == address.AddressId);
 
-            List<BasketItem> basket = new ();
+                List<BasketItem> basket = new();
 
-            foreach (var basketItem in validCart)
-            {
-                basket.Add(new BasketItem
+                foreach (var basketItem in validCart)
                 {
-                    Id = basketItem.CartId.ToString(),
-                    Name = basketItem.Product.Name,
-                    Category1 = basketItem.Product.SupCategory.Name,
-                    ItemType = BasketItemType.PHYSICAL.ToString(),
-                    Price = basketItem.TotalPrice.ToString("F2") // Fiyatı iki ondalık basamakla formatla
-                });
-            }
+                    basket.Add(new BasketItem
+                    {
+                        Id = $"BI{basketItem.CartId}",
+                        Name = basketItem.Product.Name,
+                        Category1 = basketItem.Product.SupCategory.Name,
+                        Category2 = basketItem.Product.SubCategory.Name,
+                        ItemType = BasketItemType.PHYSICAL.ToString(),
+                        Price = basketItem.TotalPrice.ToString("0.00", CultureInfo.InvariantCulture) // iyzico "," ile değil "." ile ondalık ayracı bekliyor
 
-//            Address address = new()
-//            {
-//City = validCart
-//            };
-
-            var request = new CreateCheckoutFormInitializeRequest
-            {
-                Locale = Locale.TR.ToString(),
-                ConversationId = "123456789",
-                Price = "100",
-                PaidPrice = "100",
-                Currency = Currency.TRY.ToString(),
-                CallbackUrl = "https://localhost:7064/Payment/Callback",
-                PaymentGroup = PaymentGroup.PRODUCT.ToString(),
-                Buyer = new Buyer
-                {
-                    Id = customerId.ToString(),
-                    Name = validCart[0].Customer.Name,
-                    Surname = validCart[0].Customer.Surname,
-                    Email = validCart[0].Customer.Email,
-                    GsmNumber = $"+90{validCart[0].Customer.Phone}",
-                    IdentityNumber = "12345678901",
-                    RegistrationAddress = "İstanbul, Türkiye",
-                    Ip = "85.34.78.112",
-                    City = "İstanbul",
-                    Country = "Turkey",
-                },
-                BasketItems = basket,
-                ShippingAddress = new Address
-                {
-                    ContactName = "Emre Cüni",
-                    City = "İstanbul",
-                    Country = "Türkiye",
-                    Description = "Test test test",
-                    ZipCode = "34930"
-                },
-                BillingAddress = new Address
-                {
-                    ContactName = "Emre Cüni",
-                    City = "İstanbul",
-                    Country = "Türkiye",
-                    Description = "Test fatura adresi",
-                    ZipCode = "34000"
+                    });
                 }
-            };
 
-            var response = CheckoutFormInitialize.Create(request, _iyzico);
+                Address orderAddress = new()
+                {
+                    City = validAddress?.City.Name,
+                    Country = "Türkiye",
+                    ContactName = validCart[0].Customer.Name + " " + validCart[0].Customer.Surname,
+                    Description = "test",
+                    ZipCode = "34930"
+                };
 
-            ViewBag.CheckoutFormContent = response.Result.CheckoutFormContent; // Iyzico'dan gelen ödeme formu içeriği
+                var request = new CreateCheckoutFormInitializeRequest
+                {
+                    Locale = Locale.TR.ToString(),
+                    ConversationId = "123456789", //guid oluştur
+                    Price = validCart[0].TotalPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                    PaidPrice = validCart[0].TotalPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                    Currency = Currency.TRY.ToString(),
+                    CallbackUrl = "https://localhost:7064/Payment/Callback",
+                    PaymentGroup = PaymentGroup.PRODUCT.ToString(),
+                    Buyer = new Buyer
+                    {
+                        Id = $"BY{customerId}",
+                        Name = validCart[0].Customer.Name,
+                        Surname = validCart[0].Customer.Surname,
+                        Email = validCart[0].Customer.Email,
+                        GsmNumber = $"+90{validCart[0].Customer.Phone}",
+                        IdentityNumber = "12345678901",
+                        RegistrationAddress = "İstanbul, Türkiye",
+                        Ip = "85.34.78.112",
+                        City = "İstanbul",
+                        Country = "Turkey",
+                    },
+                    BasketItems = basket,
+                    ShippingAddress = orderAddress,
+                    BillingAddress = orderAddress
+                };
 
-            return View();
+                var response = CheckoutFormInitialize.Create(request, _iyzico);
+
+                ViewBag.CheckoutFormContent = response.Result.CheckoutFormContent; // Iyzico'dan gelen ödeme formu içeriği
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                NLogger.logger.Error($"Payment/Pay Error => {ex}");
+                return View("Error");
+            }
         }
 
         [HttpPost]

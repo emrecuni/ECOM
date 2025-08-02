@@ -93,6 +93,9 @@ X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 * "Alışverişi Tamamla" butonunun class'ından btn-warning'i kaldır
 ** Hover efekti ekle(siparişi onayla)
 * Adres sayfasının renklerine bak
+* Ödeme sayfasında seçili adres yoksa "Siparişi onayla" butonuna tıklanamasın
+* Ödeme başarılı olduktan sonra sepeti db'de disable yap
+
 
 <link rel="stylesheet" href="~/css/product.css">
 

@@ -105,6 +105,10 @@ X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı k
 * Login esnasında caps lock açıksa kullanıcıyı uyar
 
 
+
+
+
+
 <link rel="stylesheet" href="~/css/product.css">
 
 <div class="row">
@@ -133,7 +137,5 @@ X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı k
 
 
 Kart Numarası: 5526080000000006
-
 Tarih: 12/30
-
 CVV: 000

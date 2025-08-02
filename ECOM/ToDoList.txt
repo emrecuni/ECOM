@@ -100,6 +100,8 @@ X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 * Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et
 * Ödeme formunun arka planını düzeltmek gerekebilir
 * Boş sepeti kontrol et
+* Parola için uppercase-lowercase'e dikkat et
+* Kullanıcının hiç adresi yoksa payment/index'te totalprice foreach'inde hata veriyor
 
 
 <link rel="stylesheet" href="~/css/product.css">

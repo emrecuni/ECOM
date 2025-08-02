@@ -122,44 +122,44 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pay(string jsonAddress, string jsonCart)
+        public async Task<IActionResult> Pay(string addressId)
         {
             try
             {
                 //view'dan gönderilen json'lar deserialize edilir
-                var address = JsonConvert.DeserializeObject<Addresses>(jsonAddress);
-                var cartList = JsonConvert.DeserializeObject<List<Cart>>(jsonCart);
-
-                if (cartList is null || cartList.Count == 0)
-                    return View("Error", new { message = "Sepet boş veya geçersiz." });
-                if (address is null)
+                //var address = JsonConvert.DeserializeObject<Addresses>(jsonAddress);
+                if (addressId is null)
                     return View("Error", new { message = "Adres seçimi yapınız." });
 
 
                 int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 
-                var cartIds = cartList.Select(c => c.CartId).ToList();
+                //var cartIds = cartList.Select(c => c.CartId).ToList();
                 // sepetteki ürünler db'den çekilir
-                var validCart = await _context.Carts
+                var carts = await _context.Carts
                     .Include(p => p.Product)
                     .Include(p => p.Customer)
                     .Include(p => p.Seller)
                     .Include(p => p.Product.SupCategory)
                     .Include(p => p.Product.SubCategory)
-                    .Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId && c.Enable == true)
+                    .Where(c => c.CustomerId == customerId && c.Enable == true)
                     .ToListAsync();
+                if (carts is null || carts.Count == 0)
+                    return View("Error", new { message = "Sepet boş veya geçersiz." });
+
                 // seçilen adres db'den çekilir
                 var validAddress = await _context.Addresses
                     .Include(a => a.City)
                     .Include(a => a.District)
                     .Include(a => a.Neighbourhood)
-                    .FirstOrDefaultAsync(a => a.AddressId == address.AddressId);
+                    .FirstOrDefaultAsync(a => a.AddressId == int.Parse(addressId));
 
                 List<BasketItem> basket = new();
                 float totalPrice = 0;
 
+                
                 // ödeme request'i için sepetteki ürünler basketitem list'e eklenir
-                foreach (var basketItem in validCart)
+                foreach (var basketItem in carts)
                 {
                     basket.Add(new BasketItem
                     {
@@ -178,7 +178,7 @@ namespace ECOM.Controllers
                 {
                     City = validAddress?.City.Name,
                     Country = "Türkiye",
-                    ContactName = validCart[0].Customer.Name + " " + validCart[0].Customer.Surname,
+                    ContactName = carts[0].Customer.Name + " " + carts[0].Customer.Surname,
                     Description = "test",
                     ZipCode = "34930"
                 };
@@ -196,10 +196,10 @@ namespace ECOM.Controllers
                     Buyer = new Buyer
                     {
                         Id = $"BY{customerId}",
-                        Name = validCart[0].Customer.Name,
-                        Surname = validCart[0].Customer.Surname,
-                        Email = validCart[0].Customer.Email,
-                        GsmNumber = $"+90{validCart[0].Customer.Phone}",
+                        Name = carts[0].Customer.Name,
+                        Surname = carts[0].Customer.Surname,
+                        Email = carts[0].Customer.Email,
+                        GsmNumber = $"+90{carts[0].Customer.Phone}",
                         IdentityNumber = "12345678901",
                         RegistrationAddress = "İstanbul, Türkiye",
                         Ip = "85.34.78.112",

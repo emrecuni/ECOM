@@ -41,12 +41,7 @@
                         {
                             <div class="address"
                                  onclick="selectAddress(this)"
-                                 data-address-id="@address.AddressId"
-                                 data-address-name="@address.AddressName"
-                                 data-address="@address.Address"
-                                 data-neighbourhood-id="@address.Neighbourhood.NeighbourhoodId"
-                                 data-district-id="@address.District.DistrictId"
-                                 data-city-id="@address.City.CityId">
+                                 data-address-id="@address.AddressId">
 
                                 <h5>@address.AddressName</h5>
                                 <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
@@ -163,16 +158,9 @@
         <h5>Ödenecek Tutar</h5>
         <span class="payment-amount"><b>₺@cartSummaryPrice.ToString("F2")</b></span>
 
-        @*@using (Html.BeginForm("Pay", "Payment", FormMethod.Post))
-            {
-                @Html.EditorForModel()
-                <button type="submit" class="btn"><b>Siparişi Onayla</b></button>
-            }*@
-
         <form asp-controller="Payment" asp-action="Pay" method="post">
-            <input type="hidden" name="jsonAddress" id="jsonAddress" />
-            <input type="hidden" name="jsonCart" id="jsonCart" />
-            <button type="submit" class="btn" onclick="prepareAddressJson(); prepareCartJson()"><b>Siparişi Onayla</b></button>
+            <input type="hidden" name="addressId" id="addressId" />
+            <button type="submit" class="btn" onclick="prepareAddressId()"><b>Siparişi Onayla</b></button>
         </form>
         <hr />
         <div class="cart-summary">
@@ -241,54 +229,17 @@
 </script>
 
 <script>
-    function prepareCartJson() {
-        const carts = [];
-
-        @foreach (var cart in Model.Cart)
-        {
-            if (cart.Enable == true)
-            {
-                <text>
-                    carts.push({
-                        cartId: @cart.CartId,
-                        productId: @cart.ProductId,
-                        customerId: @cart.CustomerId,
-                        price: @cart.TotalPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                    });
-                </text>
-            }
-        }
-
-        document.getElementById("jsonCart").value = JSON.stringify(carts);
-    }
-</script>
-
-<script>
-    function prepareAddressJson() {
+    function prepareAddressId() {
         const selected = document.querySelector(".address.selected");
         let address; // Tek bir değişken tanımı, hem if hem else için kullanılacak
 
         if (selected == null) {
             // Razor verilerini doğrudan bir JS objesi olarak yaz
-            address = {
-                addressId: @Model.Addresses[0].AddressId,
-                addressName: "@Model.Addresses[0].AddressName",
-                address: "@Model.Addresses[0].Address",
-                neighbourhoodId: @Model.Addresses[0].Neighbourhood.NeighbourhoodId,
-                districtId: @Model.Addresses[0].District.DistrictId,
-                cityId: @Model.Addresses[0].City.CityId
-            };
+            address = @Model.Addresses[0].AddressId;
         } else {
-            address = {
-                addressId: selected.dataset.addressId,
-                addressName: selected.dataset.addressName,
-                address: selected.dataset.address,
-                neighbourhoodId: selected.dataset.neighbourhoodId,
-                districtId: selected.dataset.districtId,
-                cityId: selected.dataset.cityId
-            };
+            address = selected.dataset.addressId;
         }
 
-        document.getElementById("jsonAddress").value = JSON.stringify(address);
+        document.getElementById("addressId").value = address;
     }
 </script>

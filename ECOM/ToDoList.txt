@@ -95,6 +95,11 @@ X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
 * Adres sayfasının renklerine bak
 * Ödeme sayfasında seçili adres yoksa "Siparişi onayla" butonuna tıklanamasın
 * Ödeme başarılı olduktan sonra sepeti db'de disable yap
+* Payment Succes'e header vs ekle
+* Ödeme sayfasına sadece adres id'si gönderilebilir kontrol et
+* Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et
+* Ödeme formunun arka planını düzeltmek gerekebilir
+* Boş sepeti kontrol et
 
 
 <link rel="stylesheet" href="~/css/product.css">

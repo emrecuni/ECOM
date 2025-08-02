@@ -122,10 +122,11 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Pay(string jsonAddress, string jsonCart)
+        public async Task<IActionResult> Pay(string jsonAddress, string jsonCart)
         {
             try
             {
+                //view'dan gönderilen json'lar deserialize edilir
                 var address = JsonConvert.DeserializeObject<Addresses>(jsonAddress);
                 var cartList = JsonConvert.DeserializeObject<List<Cart>>(jsonCart);
 
@@ -138,23 +139,26 @@ namespace ECOM.Controllers
                 int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 
                 var cartIds = cartList.Select(c => c.CartId).ToList();
-                var validCart = _context.Carts
+                // sepetteki ürünler db'den çekilir
+                var validCart = await _context.Carts
                     .Include(p => p.Product)
                     .Include(p => p.Customer)
                     .Include(p => p.Seller)
                     .Include(p => p.Product.SupCategory)
                     .Include(p => p.Product.SubCategory)
-                    .Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId)
-                    .ToList();
-
-                var validAddress = _context.Addresses
+                    .Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId && c.Enable == true)
+                    .ToListAsync();
+                // seçilen adres db'den çekilir
+                var validAddress = await _context.Addresses
                     .Include(a => a.City)
                     .Include(a => a.District)
                     .Include(a => a.Neighbourhood)
-                    .FirstOrDefault(a => a.AddressId == address.AddressId);
+                    .FirstOrDefaultAsync(a => a.AddressId == address.AddressId);
 
                 List<BasketItem> basket = new();
+                float totalPrice = 0;
 
+                // ödeme request'i için sepetteki ürünler basketitem list'e eklenir
                 foreach (var basketItem in validCart)
                 {
                     basket.Add(new BasketItem
@@ -165,10 +169,11 @@ namespace ECOM.Controllers
                         Category2 = basketItem.Product.SubCategory.Name,
                         ItemType = BasketItemType.PHYSICAL.ToString(),
                         Price = basketItem.TotalPrice.ToString("0.00", CultureInfo.InvariantCulture) // iyzico "," ile değil "." ile ondalık ayracı bekliyor
-
                     });
+                    totalPrice += (float)basketItem.TotalPrice; // toplam fiyat hesaplanır
                 }
 
+                // ödeme için adres bilgileri hazırlanır
                 Address orderAddress = new()
                 {
                     City = validAddress?.City.Name,
@@ -178,12 +183,13 @@ namespace ECOM.Controllers
                     ZipCode = "34930"
                 };
 
+                // istek hazırlanır
                 var request = new CreateCheckoutFormInitializeRequest
                 {
                     Locale = Locale.TR.ToString(),
-                    ConversationId = "123456789", //guid oluştur
-                    Price = validCart[0].TotalPrice.ToString("0.00", CultureInfo.InvariantCulture),
-                    PaidPrice = validCart[0].TotalPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                    ConversationId = Guid.NewGuid().ToString(), //guid oluştur
+                    Price = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
+                    PaidPrice = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
                     Currency = Currency.TRY.ToString(),
                     CallbackUrl = "https://localhost:7064/Payment/Callback",
                     PaymentGroup = PaymentGroup.PRODUCT.ToString(),
@@ -219,34 +225,59 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Callback(IFormCollection form)
+        public async Task<IActionResult> Callback(IFormCollection form)
         {
-            var token = form["token"];
-
-            if (string.IsNullOrEmpty(token))
-                return View("Error");
-
-            var request = new RetrieveCheckoutFormRequest
+            try
             {
-                Token = token,
-                Locale = Locale.TR.ToString(),
-                ConversationId = "123456789" // sipariş ID vb. kullanılabilir
-            };
+                var token = form["token"];
+
+                if (string.IsNullOrEmpty(token))
+                    return View("Error");
+
+                var request = new RetrieveCheckoutFormRequest
+                {
+                    Token = token,
+                    Locale = Locale.TR.ToString(),
+                    ConversationId = Guid.NewGuid().ToString() // sipariş ID vb. kullanılabilir
+                };
 
 
-            var response = CheckoutForm.Retrieve(request, _iyzico);
+                var response = CheckoutForm.Retrieve(request, _iyzico);
 
-            if (response.Result.Status == "success")
-            {
-                ViewBag.PaymentStatus = "Ödeme Başarılı";
-                ViewBag.PaymentId = response.Result.PaymentId;
-                ViewBag.Price = response.Result.Price;
+                if (response.Result.Status == "success")
+                {
+                    try
+                    {
+                        int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+                        var carts = await _context.Carts
+                            .Where(c => c.CustomerId == customerId && c.Enable == true)
+                            .ToListAsync();
 
-                return View("Success");
+                        for (int i = 0; i < carts.Count; i++)
+                            carts[i].Enable = false; // sepet ürünleri ödeme sonrası devre dışı bırakılır
+
+                        _context.Carts.UpdateRange(carts); // sepet güncellenir
+                        await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                    }
+                    catch (Exception ex)
+                    {
+                        NLogger.logger.Error($"Payment/Callback Success Error => {ex}");
+                    }
+                    ViewBag.PaymentStatus = "Ödeme Başarılı";
+                    ViewBag.PaymentId = response.Result.PaymentId;
+                    ViewBag.Price = float.Parse(response.Result.Price.Replace(".", ","));
+
+                    return View("Success");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = response.Result.ErrorMessage;
+                    return View("Error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.ErrorMessage = response.Result.ErrorMessage;
+                NLogger.logger.Error($"Payment/Callback Error => {ex}");
                 return View("Error");
             }
         }

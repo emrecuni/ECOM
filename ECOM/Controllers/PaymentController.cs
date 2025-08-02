@@ -126,11 +126,8 @@ namespace ECOM.Controllers
         {
             try
             {
-                //view'dan gönderilen json'lar deserialize edilir
-                //var address = JsonConvert.DeserializeObject<Addresses>(jsonAddress);
                 if (addressId is null)
                     return View("Error", new { message = "Adres seçimi yapınız." });
-
 
                 int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 

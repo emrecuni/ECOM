@@ -8,6 +8,7 @@ using Iyzipay.Model.V2.Subscription;
 using Iyzipay.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -120,8 +121,41 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult Pay(int addresses, List<Cart> cart)
+        public IActionResult Pay(int addresses, string jsonCart)
         {
+            var cartList = JsonConvert.DeserializeObject<List<Cart>>(jsonCart);
+
+            if (cartList is null || cartList.Count > 0)
+            {
+               return View("Error", new { message = "Sepet boş veya geçersiz." });
+            }
+
+
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+
+            var cartIds = cartList.Select(c => c.CartId).ToList();
+
+            var validCart = _context.Carts.Where(c => cartIds.Contains(c.CartId) && c.CustomerId == customerId).ToList();
+
+            List<BasketItem> basket = new ();
+
+            foreach (var basketItem in validCart)
+            {
+                basket.Add(new BasketItem
+                {
+                    Id = basketItem.CartId.ToString(),
+                    Name = basketItem.Product.Name,
+                    Category1 = basketItem.Product.SupCategory.Name,
+                    ItemType = BasketItemType.PHYSICAL.ToString(),
+                    Price = basketItem.TotalPrice.ToString("F2") // Fiyatı iki ondalık basamakla formatla
+                });
+            }
+
+//            Address address = new()
+//            {
+//City = validCart
+//            };
+
             var request = new CreateCheckoutFormInitializeRequest
             {
                 Locale = Locale.TR.ToString(),
@@ -133,28 +167,18 @@ namespace ECOM.Controllers
                 PaymentGroup = PaymentGroup.PRODUCT.ToString(),
                 Buyer = new Buyer
                 {
-                    Id = "BY789",
-                    Name = "Emre",
-                    Surname = "Cüni",
-                    Email = "cuniiemre@gmail.com",
-                    GsmNumber = "+905459690208",
+                    Id = customerId.ToString(),
+                    Name = validCart[0].Customer.Name,
+                    Surname = validCart[0].Customer.Surname,
+                    Email = validCart[0].Customer.Email,
+                    GsmNumber = $"+90{validCart[0].Customer.Phone}",
                     IdentityNumber = "12345678901",
                     RegistrationAddress = "İstanbul, Türkiye",
                     Ip = "85.34.78.112",
                     City = "İstanbul",
                     Country = "Turkey",
                 },
-                BasketItems = new List<BasketItem>
-                {
-                    new BasketItem
-                    {
-                        Id = "BI101",
-                        Name = "Product 1",
-                        Category1 = "Category 1",
-                        ItemType = BasketItemType.PHYSICAL.ToString(),
-                        Price = "100"
-                    }
-                },
+                BasketItems = basket,
                 ShippingAddress = new Address
                 {
                     ContactName = "Emre Cüni",

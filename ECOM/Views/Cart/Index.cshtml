@@ -12,8 +12,9 @@
         @await Html.PartialAsync("Cart-Header") <!--header-->
     </div>
 
-    @if (Model.Carts is null)
-    {<div class="empty-cart">
+    @if (Model.Carts is null || Model.Carts.Count == 0)
+    {
+        <div class="empty-cart">
             <!--Sepet boşsa çıkacak mesaj-->
             <div class="message">
                 <img src="~/img/cart.gif" width="150" alt="cart" />
@@ -24,7 +25,7 @@
             </div>
             <hr />
             <!--beğendiklerim-->
-            <div class="suggestion">
+            <div class="suggestion col-9">
                 <h4 class="suggestion-header">Beğendiklerim</h4>
                 @await Html.PartialAsync("Suggestion", Model.Favorites)
             </div>

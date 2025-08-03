@@ -256,9 +256,20 @@ namespace ECOM.Controllers
                         _context.Carts.UpdateRange(carts); // sepet güncellenir
                         await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                        /*
-                         order'a ekle
-                         */
+
+                        foreach (var order in carts)
+                        {
+                            _context.OrderHistory.Add(new OrderHistory
+                            {
+                                ProductId = order.ProductId,
+                                CustomerId = order.CustomerId,
+                                SellerId = order.SellerId,
+                                Piece = order.Piece,
+                                OrderDate = DateTime.Now
+                            });
+                        }
+
+                        await _context.SaveChangesAsync();
                     }
                     catch (Exception ex)
                     {

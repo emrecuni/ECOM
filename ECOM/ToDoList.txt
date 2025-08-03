@@ -103,8 +103,9 @@ X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı k
 * Parola için uppercase-lowercase'e dikkat et
 * Kullanıcının hiç adresi yoksa payment/index'te totalprice foreach'inde hata veriyor
 * Login esnasında caps lock açıksa kullanıcıyı uyar
-* Cart'a additionTime ekle
-* Ödemesi tamamlanan ve sepetten pasife alınanları orderHistory'e ekle
+X Cart'a additionTime ekle X
+X Ödemesi tamamlanan ve sepetten pasife alınanları orderHistory'e ekle X
+??? Card tablosunu kullanmaya gerek var mı ???
 
 
 

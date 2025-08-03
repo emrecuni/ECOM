@@ -4,6 +4,7 @@ using ECOM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOM.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250803131745_UpdateOrderHistory")]
+    partial class UpdateOrderHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,10 +149,6 @@ namespace ECOM.Migrations
                         .HasColumnName("ID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
-
-                    b.Property<DateTime?>("AdditionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -466,10 +465,6 @@ namespace ECOM.Migrations
                         .HasColumnType("int")
                         .HasColumnName("CARD_ID");
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int")
-                        .HasColumnName("CART_ID");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
                         .HasColumnName("CUSTOMER_ID");
@@ -493,10 +488,6 @@ namespace ECOM.Migrations
                     b.Property<int>("SellerId")
                         .HasColumnType("int")
                         .HasColumnName("SELLER_ID");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("TOTAL_PRICE");
 
                     b.HasKey("OrderId");
 

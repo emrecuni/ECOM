@@ -243,6 +243,7 @@ namespace ECOM.Controllers
 
                 if (response.Result.Status == "success")
                 {
+                    using var transaction = await _context.Database.BeginTransactionAsync(); // transaction başlatılır
                     try
                     {
                         int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
@@ -253,26 +254,32 @@ namespace ECOM.Controllers
                         for (int i = 0; i < carts.Count; i++)
                             carts[i].Enable = false; // sepet ürünleri ödeme sonrası devre dışı bırakılır
 
-                        _context.Carts.UpdateRange(carts); // sepet güncellenir
+                        //_context.Carts.UpdateRange(carts); // sepet güncellenir
                         await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
+                        var now = DateTime.Now;
 
-                        foreach (var order in carts)
+                        // sepetteki bütün ürünler liste eklenir
+                        var orderList = carts.Select(order => new OrderHistory
                         {
-                            _context.OrderHistory.Add(new OrderHistory
-                            {
-                                ProductId = order.ProductId,
-                                CustomerId = order.CustomerId,
-                                SellerId = order.SellerId,
-                                Piece = order.Piece,
-                                OrderDate = DateTime.Now
-                            });
-                        }
+                            ProductId = order.ProductId,
+                            CustomerId = order.CustomerId,
+                            SellerId = order.SellerId,
+                            CartId = order.CartId,
+                            Piece = order.Piece,
+                            TotalPrice = order.TotalPrice,
+                            OrderDate = now
+                        });
 
-                        await _context.SaveChangesAsync();
+                        _context.OrderHistory.AddRange(orderList); // siparişler orderhistory tablosuna eklenir
+
+                        await _context.SaveChangesAsync(); // veri tabanı güncellenir
+
+                        await transaction.CommitAsync(); // transaction commit edilir
                     }
                     catch (Exception ex)
                     {
+                        await transaction.RollbackAsync(); // hata durumunda transaction geri alınır
                         NLogger.logger.Error($"Payment/Callback Success Error => {ex}");
                     }
                     ViewBag.PaymentStatus = "Ödeme Başarılı";

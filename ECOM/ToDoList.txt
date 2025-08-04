@@ -99,7 +99,7 @@ X Ödeme başarılı olduktan sonra sepeti db'de disable yap X
 X Ödeme sayfasına sadece adres id'si gönderilebilir kontrol et X
 X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et X
 * Ödeme formunun arka planını düzeltmek gerekebilir
- Boş sepeti kontrol et X
+X Boş sepeti kontrol et X
 * Parola için uppercase-lowercase'e dikkat et
 * Kullanıcının hiç adresi yoksa payment/index'te totalprice foreach'inde hata veriyor
 * Login esnasında caps lock açıksa kullanıcıyı uyar

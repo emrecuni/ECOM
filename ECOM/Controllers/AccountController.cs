@@ -15,26 +15,26 @@ namespace ECOM.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string id)
+        public IActionResult Index()
         {
 
-            return View("Index", new { tab = id });
+            return View("Index");
         }
 
         public IActionResult Order()
         {
             //ViewBag.MenuId = "order";
-            return View();
+            return View("Index");
         }
 
         public IActionResult Favorite()
         {
-            return View();
+            return View("Index");
         }
 
         public IActionResult Coupon()
         {
-            return View();
+            return View("Index");
         }
 
         public IActionResult Rating()

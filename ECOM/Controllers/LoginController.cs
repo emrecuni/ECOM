@@ -15,11 +15,13 @@ namespace ECOM.Controllers
 
         private readonly DataContext _context;
         private readonly Smtp_Sender _sender;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(DataContext context, Smtp_Sender sender)
+        public LoginController(DataContext context, Smtp_Sender sender, ILogger<LoginController> logger)
         {
             _context = context;
             _sender = sender;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -31,44 +33,58 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string email, string password)
         {
-            if (email is not null && password is not null)
+            try
             {
-                var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email && c.Password == password);
-                if (customer is not null)
+                if (email is not null && password is not null)
                 {
+                    var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email && c.Password == password);
+                    if (customer is not null)
+                    {
 
-                    var claims = new List<Claim>
+                        var claims = new List<Claim>
                     {
                         new (ClaimTypes.Name, customer.Name!),
                         new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
                         new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
                     };
 
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    var autProperties = new AuthenticationProperties
+                        var autProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTime.UtcNow.AddDays(30)
+                        };
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            autProperties);
+
+                        return RedirectToAction("Index", "Main");
+                    }
+                    else // kullanıcı adı parola hatalı mesajı bastır
                     {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTime.UtcNow.AddDays(30)
-                    };
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        autProperties);
-
-                    return RedirectToAction("Index", "Main");
+                        ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                        return View();
+                    }
                 }
-                else // kullanıcı adı parola hatalı mesajı bastır
+                else
                 {
-                    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                    ViewBag.NullCheck = "Email ve Parola Alanları Boş Olamaz!";
                     return View();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.NullCheck = "Email ve Parola Alanları Boş Olamaz!";
-                return View();
-            }
+                ErrorViewModel error = new()
+                {
+                    RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                    Message = "Email veya Parolanızı Kontrol Ediniz.",
+                    Title = "Giriş Yapılırken Bir Hata Oluştu."
+                };
+                _logger.LogError($"Login/Index(POST) Error => {ex}");
+                return View("Error");
+            }           
         }
 
         [HttpPost]

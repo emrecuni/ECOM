@@ -22,6 +22,7 @@ namespace ECOM.Controllers
             _sender = sender;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

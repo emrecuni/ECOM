@@ -37,16 +37,17 @@ namespace ECOM.Controllers
             {
                 if (email is not null && password is not null)
                 {
-                    var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email && c.Password == password);
-                    if (customer is not null)
+                    
+                    var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email);
+                    if (customer is not null && Encryption.VerifyPassword(password,customer.Password!))
                     {
 
                         var claims = new List<Claim>
-                    {
-                        new (ClaimTypes.Name, customer.Name!),
-                        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
-                        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
-                    };
+                        {
+                            new (ClaimTypes.Name, customer.Name!),
+                            new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                            new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
+                        };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -169,12 +170,14 @@ namespace ECOM.Controllers
 
             try
             {
+                var encryptedPassword = Encryption.HashPassword(model.Password!);
+
                 Customers newCustomer = new()
                 {
                     Name = model.Name,
                     Surname = model.Surname,
                     Email = model.Email,
-                    Password = model.Password,
+                    Password = encryptedPassword,
                     Phone = model.Phone,
                     Gender = model.Gender,
                     BirthDate = model.Birthdate,

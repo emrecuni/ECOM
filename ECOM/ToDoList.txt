@@ -38,7 +38,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Kolon uzunluklarını sınırla
 * Telefon ile girişte otp göndermini dene 
 * Telefon ile login için bir info butonu koy (başında 0 olmadan girin gibi)
-* Mail bilgilerini appsettings'ten al
+X Mail bilgilerini appsettings'ten al X
 * Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
 * Product tablosuna imagePath ekle
 * Product'a comments ilişkisi ekle
@@ -107,6 +107,9 @@ X Cart'a additionTime ekle X
 X Ödemesi tamamlanan ve sepetten pasife alınanları orderHistory'e ekle X
 ??? Card tablosunu kullanmaya gerek var mı ???
 * Ürünleri favoriye eklemeye bak
+X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
+* Kayıt ol ekranından login ekranına geçiş butonu koy
+
 
 
 

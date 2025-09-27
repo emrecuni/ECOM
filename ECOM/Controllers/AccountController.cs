@@ -1,6 +1,8 @@
 ﻿using ECOM.Data;
+using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -9,16 +11,35 @@ namespace ECOM.Controllers
     public class AccountController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(DataContext context)
+        public AccountController(DataContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            try
+            {
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 
-            return View("Index");
+                var customer = await _context.Customers.FirstAsync(c => c.CustomerId == customerId);
+                return View("Index", customer);
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = "Hesap bilgileri getirilirken bir hata oluştu.",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = $"Hata Kodu: {guid}"
+                };
+                _logger.LogError($"Account/Index Error Hata Kodu: {guid} => {ex}");
+                return View ("Error", error);   
+            }           
         }
 
         public IActionResult Order()

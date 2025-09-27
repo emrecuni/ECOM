@@ -6,7 +6,7 @@ namespace ECOM.Services
 {
     public static class Encryption
     {
-        private static readonly ILogger _logger;
+        private static readonly ILogger _logger = null!;
         private const int SaltSize = 16;        // 16 byte salt
         private const int HashSize = 32;        // 32 byte hash (256 bit)
         private const int Iterations = 3;       // Time cost

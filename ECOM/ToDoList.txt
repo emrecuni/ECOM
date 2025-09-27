@@ -109,6 +109,7 @@ X Ödemesi tamamlanan ve sepetten pasife alınanları orderHistory'e ekle X
 * Ürünleri favoriye eklemeye bak
 X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * Kayıt ol ekranından login ekranına geçiş butonu koy
+* Ürün sepete eklenince bilgi ver
 
 
 

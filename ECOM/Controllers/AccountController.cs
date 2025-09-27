@@ -68,7 +68,8 @@ namespace ECOM.Controllers
             return View();
         }
 
-        public IActionResult EditMembership()
+        [HttpPost]
+        public IActionResult EditMembership(Customers customer)
         {
             return View();
         }

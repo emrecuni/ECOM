@@ -111,7 +111,7 @@ X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * Kayıt ol ekranından login ekranına geçiş butonu koy
 * Ürün sepete eklenince bilgi ver
 * Ürüne tek resim değil resim listesi ekle
-
+* Yanlış mail'i tekrar kontrol et
 
 
 

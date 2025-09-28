@@ -69,9 +69,44 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditMembership(Customers customer)
+        public async Task<IActionResult> EditMembership(Customers customer)
         {
-            return View();
+            try
+            {
+                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
+
+                if(existingCustomer is null)
+                {// mesaj döndür
+                    return NotFound();
+                }
+
+                
+                existingCustomer.Name = customer.Name;
+                existingCustomer.Surname = customer.Surname;
+                //existingCustomer.Email = customer.Email;
+                //existingCustomer.Phone = customer.Phone;
+                existingCustomer.Gender = customer.Gender;
+                //existingCustomer.Password = Encryption.HashPassword(customer.Password!);
+
+                _context.Update(existingCustomer); // güncellenir
+
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            { 
+                                
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Üyelik bilgileri güncellenirken bir hata oluştu."
+                };                     
+                _logger.LogError($"Account/EditMembership Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);    
+            }            
         }
 
         public IActionResult ChangePassword()

@@ -1,6 +1,7 @@
 ﻿using ECOM.Data;
 using ECOM.Models;
 using ECOM.Services;
+using Iyzipay.Model.V2.Subscription;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -108,11 +109,23 @@ namespace ECOM.Controllers
             }            
         }
 
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangePasswordAsync(Customers customer)
         {
             try
             {
-                return View();
+                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
+
+                if (existingCustomer is null)
+                {// mesaj döndür
+                    return NotFound();
+                }
+                existingCustomer.Password = Encryption.HashPassword(customer.Password!);
+
+                _context.Update(existingCustomer); // güncellenir
+
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

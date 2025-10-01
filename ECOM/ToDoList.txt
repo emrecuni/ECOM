@@ -112,7 +112,9 @@ X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * Ürün sepete eklenince bilgi ver
 * Ürüne tek resim değil resim listesi ekle
 * Yanlış mail'i tekrar kontrol et
-
+* İletişim bilgileri açıldığında mevcut bilgiler gelsin
+* Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin
+* Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et
 
 
 

@@ -28,7 +28,7 @@
             @await Html.PartialAsync("Tab-Menu-User") <!--kullanıcı bilgilerim tab menu-->
             <div class="tab-content mt-3">
                 @await Html.PartialAsync("Membership",@Model) <!--üyelik bilgileri-->
-                @await Html.PartialAsync("Communication-Settings") <!--iletişim bilgileri-->
+                @await Html.PartialAsync("Communication-Settings", @Model) <!--iletişim bilgileri-->
                 @await Html.PartialAsync("Change-Password") <!--parola değişikliği-->
             </div>
         </div>

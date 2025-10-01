@@ -1,4 +1,5 @@
 ﻿using ECOM.Data;
+using ECOM.Interface;
 using ECOM.Models;
 using ECOM.Services;
 using Iyzipay.Model.V2.Subscription;
@@ -12,11 +13,13 @@ namespace ECOM.Controllers
     public class AccountController : Controller
     {
         private readonly DataContext _context;
+        private readonly ISmtp_Sender _sender;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(DataContext context, ILogger<AccountController> logger)
+        public AccountController(DataContext context, ISmtp_Sender sender, ILogger<AccountController> logger)
         {
             _context = context;
+            _sender = sender;
             _logger = logger;
         }
 
@@ -39,8 +42,8 @@ namespace ECOM.Controllers
                     Title = $"Hata Kodu: {guid}"
                 };
                 _logger.LogError($"Account/Index Error Hata Kodu: {guid} => {ex}");
-                return View ("Error", error);   
-            }           
+                return View("Error", error);
+            }
         }
 
         public IActionResult Order()
@@ -76,12 +79,12 @@ namespace ECOM.Controllers
             {
                 var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
 
-                if(existingCustomer is null)
+                if (existingCustomer is null)
                 {// mesaj döndür
                     return NotFound();
                 }
 
-                
+
                 existingCustomer.Name = customer.Name;
                 existingCustomer.Surname = customer.Surname;
                 //existingCustomer.Email = customer.Email;
@@ -96,17 +99,17 @@ namespace ECOM.Controllers
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
-            {                                 
+            {
                 Guid guid = Guid.NewGuid();
                 ErrorViewModel error = new ErrorViewModel
                 {
                     Message = $"Hata Kodu: {guid}",
                     RequestId = HttpContext.TraceIdentifier,
                     Title = "Üyelik bilgileri güncellenirken bir hata oluştu."
-                };                     
+                };
                 _logger.LogError($"Account/EditMembership Error Hata Kodu: {guid} => {ex}");
-                return View("Error", error);    
-            }            
+                return View("Error", error);
+            }
         }
 
         public async Task<IActionResult> ChangePasswordAsync(Customers customer)
@@ -139,12 +142,85 @@ namespace ECOM.Controllers
                 _logger.LogError($"Account/ChangePassword Error Hata Kodu: {guid} => {ex}");
                 return View("Error", error);
             }
-            
+
         }
 
+        [HttpPost]
         public IActionResult CommunicationSettings()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Parola değiştirilirken bir hata oluştu."
+                };
+                _logger.LogError($"Account/CommunicationSettings Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
+        }
+
+        public async Task<IActionResult> EditCommunicationSettings(Customers customer)
+        {
+            try
+            {
+                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
+
+                if (existingCustomer is null)
+                {// mesaj döndür
+                    return NotFound();
+                }
+
+                existingCustomer.Email = customer.Email;
+                existingCustomer.Phone = customer.Phone;
+
+                _context.Update(existingCustomer); // güncellenir
+
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Parola değiştirilirken bir hata oluştu."
+                };
+                _logger.LogError($"Account/EditCommunicationSettings Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
+        }
+
+        public IActionResult SendOTPCode()
+        {
+            try
+            {
+                _sender.SendMail("cuniiemre@gmail.com");
+
+                return PartialView("ChangeEmail");
+
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Parola değiştirilirken bir hata oluştu."
+                };
+                _logger.LogError($"Account/LoadForm Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
         }
 
         public IActionResult Cards()
@@ -168,8 +244,8 @@ namespace ECOM.Controllers
 
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                return RedirectToAction("Index","Payment");
-                
+                return RedirectToAction("Index", "Payment");
+
             }
             catch (Exception ex)
             {

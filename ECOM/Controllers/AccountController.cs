@@ -95,8 +95,7 @@ namespace ECOM.Controllers
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
-            { 
-                                
+            {                                 
                 Guid guid = Guid.NewGuid();
                 ErrorViewModel error = new ErrorViewModel
                 {
@@ -111,7 +110,23 @@ namespace ECOM.Controllers
 
         public IActionResult ChangePassword()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Parola değiştirilirken bir hata oluştu."
+                };
+                _logger.LogError($"Account/ChangePassword Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
+            
         }
 
         public IActionResult CommunicationSettings()

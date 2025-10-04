@@ -364,3 +364,5 @@ FodyWeavers.xsd
 NLog.xsd
 appsettings.json
 appsettings.Development.json
+/ECOM/appsettings.json
+/ECOM/appsettings.Development.json

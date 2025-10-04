@@ -1,15 +1,80 @@
-﻿<div class="tab-pane fade" id="communication-settings">
+﻿@model ECOM.Data.Customers
+
+<div class="tab-pane fade" id="communication-settings">
     <h5>İletişim Bilgileri</h5>
     <p>Bu bilgileri değiştirebilmek için yeni e-posta adresinizi doğrulamanızı isteyeceğiz.</p>
     <form method="post" action="CommunicationSettings">
         <div class="mb-3 phone">
             <label for="phone" class="form-label">Cep Telefonu</label>
-            <input type="email" class="form-control" id="phone" name="phone" placeholder="Telefon numaranızı girin" required>
+            <input type="email" class="form-control" id="phone" name="phone" value="@Model.Phone" placeholder="Telefon numaranızı girin" required>
         </div>
         <div class="mb-3 email">
             <label for="email" class="form-label">E-Posta</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="E-Posta adresinizi girin" required>
+            <input type="email" class="form-control" id="email" name="email" value="@Model.Email" placeholder="E-Posta adresinizi girin" required>
         </div>
+        <button type="button" class="btn btn-primary" id="btnOpenForm">Formu Aç</button>
         <button class="btn btn-primary" type="submit">Güncelle</button>
     </form>
 </div>
+
+<!-- Boş Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- İçerik AJAX ile gelecek -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!--<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">-->
+<!-- Modal Header -->
+<!--<div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel">Form</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+</div>-->
+<!-- Modal Body -->
+<!--<div class="modal-body">
+                <form asp-action="EditCommunicationSettingsAsync" asp-controller="Account" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Posta</label>
+                        <input type="email" class="form-control" id="email" name="Email" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>-->
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Butona tıklayınca form yükle
+    $("#btnOpenForm").click(function () {
+        $.get("/Account/SendOTPCode", function (data) {
+            $("#myModal .modal-content").html(data); // partial'ı modal içine bas
+            var modal = new bootstrap.Modal(document.getElementById('myModal'));
+            modal.show(); // modalı aç
+        });
+    });
+
+    // Modal içindeki form submit olayı
+    $(document).on("submit", "#userForm", function (e) {
+        e.preventDefault();
+
+        $.post("/Account/EditCommunicationSettings", $(this).serialize(), function (result) {
+            if (result.success) {
+                alert(result.message);
+                var modalEl = document.getElementById('myModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+            } else {
+                alert(result.message);
+            }
+        });
+    });
+</script>

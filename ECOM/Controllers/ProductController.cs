@@ -100,7 +100,8 @@ namespace ECOM.Controllers
                     Piece = 1,
                     SellerId = sellerId,
                     TotalPrice = decimal.Parse(price.ToString()),
-                    Enable = true
+                    Enable = true,
+                    AdditionTime = DateTime.Now
                 };
                 _context.Carts.Add(cart);
             }
@@ -111,14 +112,14 @@ namespace ECOM.Controllers
             return RedirectToAction("Index", new { id = productId });
         }
 
-        [HttpPost]
-        public IActionResult Buy(int productId,string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
-        {
+        //[HttpPost]
+        //public IActionResult Buy(int productId,string productName, float price) // seçilen ürünü doğrudan satın alma ekranına yönlendirir
+        //{
 
-            // direkt satın alma ekranın yönlendir
-            //ViewBag.BuyProductName = productName;
-            //ViewBag.BuyPrice = price;
-            return RedirectToAction("Index",new {id = productId });
-        }
+        //    // direkt satın alma ekranın yönlendir
+        //    //ViewBag.BuyProductName = productName;
+        //    //ViewBag.BuyPrice = price;
+        //    return RedirectToAction("Index",new {id = productId });
+        //}
     }
 }

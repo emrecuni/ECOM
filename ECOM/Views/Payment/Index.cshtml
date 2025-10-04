@@ -1,0 +1,245 @@
+﻿@model ECOM.Models.AddressViewModel
+
+<link href="~/css/payment.css" rel="stylesheet" />
+<link href="~/css/payment-header.css" rel="stylesheet" />
+<link href="~/css/cart.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="top d-flex align-items-center justify-content-between shadow-sm">
+    @await Html.PartialAsync("Payment-Header") <!--header-->
+</div>
+
+<div class="select-address">
+    <div class="my-addresses col-9">
+        <!--seçili adres-->
+        @if (Model.Addresses.Count > 0)
+        {
+            <div class="selected-address">
+
+                <div id="selected-address-content" class="address">
+                    <h5>@Model.Addresses.ToList()[0].AddressName</h5>
+                    <p>@Model.Addresses.ToList()[0].Address  (@Model.Addresses.ToList()[0].Neighbourhood.Name / @Model.Addresses.ToList()[0].District.Name / @Model.Addresses.ToList()[0].City.Name)</p>
+                </div>
+
+            </div>
+        }
+        <div class="add-address">
+            <button onclick="showAddresses()" class="btn btn-primary">Adres Ekle / Değiştir</button>
+
+            <div id="addresses" class="addresses">
+                <div class="d-flex justify-content-between">
+                    <h4>Adreslerim</h4>
+                    <button onclick="addAddress()" class="btn btn-warning">Adres Ekle</button>
+                </div>
+
+                <!--mevcut adresler-->
+                <div id="other-addresses" class="other-addresses">
+                    @if (Model.Addresses.Count > 0)
+                    {
+                        @foreach (var address in Model.Addresses.ToList())
+                        {
+                            <div class="address"
+                                 onclick="selectAddress(this)"
+                                 data-address-id="@address.AddressId">
+
+                                <h5>@address.AddressName</h5>
+                                <p>@address.Address (@address.Neighbourhood.Name / @address.District.Name / @address.City.Name)</p>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!--adres ekleme-->
+                <div id="new-address" class="new-address">
+                    <form asp-controller="Account" asp-action="Address" method="post" class="container my-5 p-4 border rounded shadow-sm bg-light">
+
+                        <!-- Kişisel Bilgiler -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Kişisel Bilgileriniz</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Ad</label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Adınızı giriniz">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="surname" class="form-label">Soyad</label>
+                                    <input type="text" name="surname" id="surname" class="form-control" placeholder="Soyadınızı giriniz">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Telefon</label>
+                                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="5xx xxx xx xx">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Adres Bilgileri -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Adres Bilgileriniz</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label d-block">Adres Adı</label>
+                                <input type="text" name="addressName" id="addressName" class="form-control" placeholder="Adres adını giriniz">
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Adres</label>
+                                <textarea name="address" id="address" class="form-control" rows="3" placeholder="Adresinizi yazınız..."></textarea>
+                            </div>
+
+                            <div class="row g-3">
+                                <!--Şehir-->
+                                <div class="col-md-4">
+                                    <label for="city" class="form-label">Şehir</label>
+                                    <select class="form-select" id="cityId" name="cityId">
+                                        <option selected disabled>Seçiniz</option>
+                                        @foreach (var city in Model.Cities.ToList())
+                                        {
+                                            <option value="@city.CityId">@city.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <!--İlçe-->
+                                <div class="col-md-4">
+                                    <label for="district" class="form-label">İlçe</label>
+                                    <select class="form-select" id="districtId" name="districtId">
+                                        <option selected disabled>Seçiniz</option>
+                                        @if (Model.Districts.Count > 0)
+                                        {
+                                            @foreach (var district in Model.Districts.ToList())
+                                            {
+                                                <option value="@district.DistrictId">@district.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <!--Mahalle-->
+                                <div class="col-md-4">
+                                    <label for="neighbourhood" class="form-label">Mahalle</label>
+                                    <select class="form-select" id="neighbourhoodId" name="neighbourhoodId">
+                                        <option selected disabled>Seçiniz</option>
+                                        @if (Model.Neighbourhoods.Count > 0)
+                                        {
+                                            @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
+                                            {
+                                                <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Adresi Ekle</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cart-total col-3" style="margin-bottom: 0px;">
+        <!--col kısmına bir tekrar bak-->
+        @{
+            decimal cartSummaryPrice = 0;
+
+            foreach (var cart in Model.Cart.ToList())
+            {
+                if (cart.Enable == true)
+                {
+                    cartSummaryPrice += cart.TotalPrice;
+                }
+            }
+        }
+
+        <h5>Ödenecek Tutar</h5>
+        <span class="payment-amount"><b>₺@cartSummaryPrice.ToString("F2")</b></span>
+
+        <form asp-controller="Payment" asp-action="Pay" method="post">
+            <input type="hidden" name="addressId" id="addressId" />
+            <button type="submit" class="btn" onclick="prepareAddressId()"><b>Siparişi Onayla</b></button>
+        </form>
+        <hr />
+        <div class="cart-summary">
+            <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>
+            <br />
+            <div class="d-flex justify-content-between">Kargo <span> Bedava</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAddresses() {
+        const addresses = document.querySelector('.addresses');
+        addresses.style.display = addresses.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function addAddress() {
+        const addresses = document.querySelector('.other-addresses');
+        addresses.style.display = addresses.style.display === 'block' ? 'none' : 'block';
+        const newAddress = document.querySelector('.new-address');
+        newAddress.style.display = newAddress.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function selectAddress(element) {
+        // Tüm adreslerden selected sınıfını kaldır
+        const allAddresses = document.querySelectorAll('.other-addresses .address');
+        allAddresses.forEach(addr => addr.classList.remove('selected'));
+
+        // Seçilen adresi vurgula
+        element.classList.add('selected');
+
+        // Seçilen adresin içeriğini al ve "selected-address" kısmını güncelle
+        const selectedAddressDiv = document.getElementById('selected-address-content');
+        selectedAddressDiv.innerHTML = element.innerHTML;
+        showAddresses();
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#cityId').change(function () {
+            var cityId = $(this).val();
+            $('#districtId').empty().append('<option selected disabled>Yükleniyor...</option>');
+            $('#neighbourhoodId').empty().append('<option selected disabled>Seçiniz</option>');
+
+            $.getJSON('/Payment/GetDistricts', { cityId: cityId }, function (data) {
+                $('#districtId').empty().append('<option selected disabled>Seçiniz</option>');
+                $.each(data, function (i, district) {
+                    $('#districtId').append(`<option value="${district.districtId}">${district.name}</option>`);
+                });
+            });
+        });
+
+        $('#districtId').change(function () {
+            var districtId = $(this).val();
+            $('#neighbourhoodId').empty().append('<option selected disabled>Yükleniyor...</option>');
+
+            $.getJSON('/Payment/GetNeighbourhoods', { districtId: districtId }, function (data) {
+                $('#neighbourhoodId').empty().append('<option selected disabled>Seçiniz</option>');
+                $.each(data, function (i, neighbourhood) {
+                    $('#neighbourhoodId').append(`<option value="${neighbourhood.neighbourhoodId}">${neighbourhood.name}</option>`);
+                });
+            });
+        });
+    });
+</script>
+
+<script>
+    function prepareAddressId() {
+        const selected = document.querySelector(".address.selected");
+        let address; // Tek bir değişken tanımı, hem if hem else için kullanılacak
+
+        if (selected == null) {
+            // Razor verilerini doğrudan bir JS objesi olarak yaz
+            address = @Model.Addresses[0].AddressId;
+        } else {
+            address = selected.dataset.addressId;
+        }
+
+        document.getElementById("addressId").value = address;
+    }
+</script>

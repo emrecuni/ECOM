@@ -1,19 +1,20 @@
 ﻿@model ECOM.Models.CartViewModel
 
+
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 @*<link rel="stylesheet" href="http://localhost:5045//lib/font-awesome/css/all.min.css">*@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="~/css/cart-header.css">
 <link rel="stylesheet" href="~/css/cart.css">
 
-
 <div class="container mt-4">
     <div class="top d-flex align-items-center justify-content-between shadow-sm">
         @await Html.PartialAsync("Cart-Header") <!--header-->
     </div>
 
-    @if (Model.Carts is null)
-    {<div class="empty-cart">
+    @if (Model.Carts is null || Model.Carts.Count == 0)
+    {
+        <div class="empty-cart">
             <!--Sepet boşsa çıkacak mesaj-->
             <div class="message">
                 <img src="~/img/cart.gif" width="150" alt="cart" />
@@ -58,22 +59,38 @@
             <div class="orders col-9">
                 @foreach (var cart in Model.Carts.ToList())
                 {
-                    @await Html.PartialAsync("~/Views/Cart/Cart.cshtml", cart)
+                    @await Html.PartialAsync("Cart", cart)
                 }
             </div>
             <!--Sipariş Özeti-->
-            <div class="cart-total col-3"> <!--col kısmına bir tekrar bak-->
-                <h5>SEÇİLEN ÜRÜNLER (2)</h5>
-                <span><b>₺8513,00</b></span>
-                <form>
-                    <input type="hidden" name="cart-total" value="8513" />
+            <div class="cart-total col-3">
+                <!--col kısmına bir tekrar bak-->
+                @{
+                    decimal cartSummaryPrice = 0;
+                    int cartSummaryProductCount = 0;
+
+                    foreach (var cart in Model.Carts.ToList())
+                    {
+                        if (cart.Enable == true)
+                        {
+                            cartSummaryPrice += cart.TotalPrice;
+                            cartSummaryProductCount++;
+                        }
+
+                    }
+                }
+
+                <h5>SEÇİLEN ÜRÜNLER (@cartSummaryProductCount)</h5>
+                <span><b>₺@cartSummaryPrice.ToString("F2")</b></span>
+                <form asp-controller="Payment" asp-action="Index" method="post">
+                    <input type="hidden" name="cart-total" value="@cartSummaryPrice" />
                     <button type="submit" class="btn btn-warning"><b>Alışverişi Tamamla</b></button>
                 </form>
                 <hr />
-                <div>
-                    Ürünler<span> ₺8513,00</span>
+                <div class="cart-summary">
+                    <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>
                     <br />
-                    Kargo<span> Bedava</span>
+                    <div class="d-flex justify-content-between">Kargo <span> Bedava</span></div>
                 </div>
             </div>
         </div>
@@ -82,6 +99,5 @@
             <h4 class="suggestion-header">Beğendiklerim</h4>
             @await Html.PartialAsync("Suggestion", Model.Favorites)
         </div>
-
     }
 </div>

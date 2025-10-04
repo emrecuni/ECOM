@@ -103,6 +103,7 @@ namespace ECOM.Data
                 entity.Property(c => c.Piece).HasColumnName("PIECE").IsRequired(false);
                 entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
                 entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired(false);
+                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 // product relation
                 entity.HasOne(c => c.Product)
@@ -296,9 +297,11 @@ namespace ECOM.Data
                 entity.Property(o => o.OrderId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(o => o.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
                 entity.Property(o => o.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
-                entity.Property(o => o.CardId).HasColumnName("CARD_ID").IsRequired();
+                entity.Property(o => o.CardId).HasColumnName("CARD_ID").IsRequired(false);
                 entity.Property(o => o.SellerId).HasColumnName("SELLER_ID").IsRequired();
+                entity.Property(o => o.CartId).HasColumnName("CART_ID").IsRequired(false);
                 entity.Property(o => o.Piece).HasColumnName("PIECE").IsRequired(false);
+                entity.Property(o => o.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
                 entity.Property(o => o.OrderDate).HasColumnName("ORDER_DATE").IsRequired(false);
                 entity.Property(o => o.DeliveryDate).HasColumnName("DELIVERY_DATE").IsRequired(false);
 

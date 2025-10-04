@@ -26,23 +26,16 @@ namespace ECOM.Services
                     && emailSettings.Host is not null) // email ayarları null değilse 
                 {
 
-                    var client = new SmtpClient("smtp.zoho.com", 465)
-                    {
-                        EnableSsl = true,
-                        UseDefaultCredentials =false,
-                        Credentials = new NetworkCredential("info@emrecuni.xyz", "p3zUZzTifbkv")
-                    };
-
-                    //SmtpClient client = new();
+                    SmtpClient client = new SmtpClient(emailSettings.Host, emailSettings.Port);
                     MailMessage message = new();
 
-                    ////mail gönderecek smtp ayarları yapılır
-                    //client.Credentials = new NetworkCredential(emailSettings.SenderMail, emailSettings.Password);
-                    //client.Port = emailSettings.Port;
-                    //client.Host = emailSettings.Host;
-                    //client.EnableSsl = emailSettings.SSL;
+                    //mail gönderecek smtp ayarları yapılır
+                    client.Credentials = new NetworkCredential(emailSettings.SenderMail, emailSettings.Password);
+                    client.Port = emailSettings.Port;
+                    client.Host = emailSettings.Host;
+                    client.EnableSsl = emailSettings.SSL;
 
-                    //// mail içeriği hazırlanır
+                    // mail içeriği hazırlanır
                     message.To.Add(toMail);
                     message.From = new MailAddress(emailSettings.SenderMail);
                     message.Subject = "Parola Yenileme";

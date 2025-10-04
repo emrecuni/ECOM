@@ -11,7 +11,6 @@
 .empty-cart {
     text-align: center;
     margin-top: 40px;
-    display: none;
 }
 
 .suggestion {
@@ -168,3 +167,16 @@
 .my-cart {
     display: flex;
 }
+
+.cart-summary, .cart-summary span {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.cart-summary span {
+    margin-right: 25px;
+}
+
+    .cart-summary div {
+        margin-left: 15px;
+    }

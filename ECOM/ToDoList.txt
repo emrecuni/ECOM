@@ -38,7 +38,7 @@ X Footer sepetimde sayfanın altını kapatıyor X
 * Kolon uzunluklarını sınırla
 * Telefon ile girişte otp göndermini dene 
 * Telefon ile login için bir info butonu koy (başında 0 olmadan girin gibi)
-* Mail bilgilerini appsettings'ten al
+X Mail bilgilerini appsettings'ten al X
 * Register'da kayıt işleminde geri ileri yaptığımızda bütün adımları tekrar tekrar gösteriyor geri dön dediğimde direkt anasayfaya dönsün
 * Product tablosuna imagePath ekle
 * Product'a comments ilişkisi ekle
@@ -83,6 +83,38 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 * 3d secure ile ödemeyi dene
 ??? Direkt satın al dedikten sonra o siparişi sepet tablosuna ekleyecek misin ???
 * Ödeme başarılı olduktan sonra sepeti pasife çek sipariş tablosuna insert at
+* Aktif kuponları göster
+X Sepetteki ürün adetleri veya aktifliği değiştiğinde sepet özetini de güncelle X
+X Sepette ürün pasifse adet değiştiğinde sepet özetini güncellenmesin X
+* Direkt main'e yönlendir alışveriş yapma ve favoriye ekleme gibi kullanıcıya özel işlem yapmak istediğinde login'e yönlendir
+* "Alışverişi tamamla" dedikten sonra adres seçimi ekle
+* "Alışverişi tamamla" dedikten sonra payment/pay için gerekli parametreleri gönder
+* Bütün form parametrelerini class'a çevir
+* "Alışverişi Tamamla" butonunun class'ından btn-warning'i kaldır
+** Hover efekti ekle(siparişi onayla)
+* Adres sayfasının renklerine bak
+* Ödeme sayfasında seçili adres yoksa "Siparişi onayla" butonuna tıklanamasın
+X Ödeme başarılı olduktan sonra sepeti db'de disable yap X
+* Payment Succes'e header vs ekle
+X Ödeme sayfasına sadece adres id'si gönderilebilir kontrol et X
+X Ödeme sayfasında customer'ın enable cart'ları çekilse yeterli olmaz mı kontrol et X
+* Ödeme formunun arka planını düzeltmek gerekebilir
+X Boş sepeti kontrol et X
+* Parola için uppercase-lowercase'e dikkat et
+* Kullanıcının hiç adresi yoksa payment/index'te totalprice foreach'inde hata veriyor
+* Login esnasında caps lock açıksa kullanıcıyı uyar
+X Cart'a additionTime ekle X
+X Ödemesi tamamlanan ve sepetten pasife alınanları orderHistory'e ekle X
+??? Card tablosunu kullanmaya gerek var mı ???
+* Ürünleri favoriye eklemeye bak
+X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
+* Kayıt ol ekranından login ekranına geçiş butonu koy
+* Ürün sepete eklenince bilgi ver
+* Ürüne tek resim değil resim listesi ekle
+* Yanlış mail'i tekrar kontrol et
+* İletişim bilgileri açıldığında mevcut bilgiler gelsin
+* Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin
+* Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et
 
 
 
@@ -114,7 +146,5 @@ X Sepet ekranında ürünün adedi değiştirildiğide fiyatını da değiştir 
 
 
 Kart Numarası: 5526080000000006
-
 Tarih: 12/30
-
 CVV: 000

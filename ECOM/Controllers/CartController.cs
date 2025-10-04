@@ -57,7 +57,15 @@ namespace ECOM.Controllers
                 _context.Carts.Update(cart); // değer güncellenir
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                return Ok();
+                var newTotal = await _context.Carts
+                   .Where(c => c.Enable == true)
+                   .SumAsync(c => c.TotalPrice);
+
+                var count = await _context.Carts
+                    .Where(c => c.Enable == true)
+                    .CountAsync();
+
+                return Json(new { totalPrice = newTotal.ToString("F2"), count });
             }
             catch (Exception ex)
             {
@@ -72,7 +80,7 @@ namespace ECOM.Controllers
             try
             {
                 var cart = await _context.Carts
-                    .Include(c=> c.Product)
+                    .Include(c => c.Product)
                     .FirstOrDefaultAsync(c => c.CartId == model.CartId); // ilgili ürünü veri tabanından çekilir
 
                 if (cart is null)
@@ -84,7 +92,15 @@ namespace ECOM.Controllers
                 _context.Carts.Update(cart); // değer güncellenir
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
 
-                return Json(new { totalPrice = cart.TotalPrice.ToString("F2") });
+                var newTotal = await _context.Carts
+                    .Where(c => c.Enable == true)
+                    .SumAsync(c => c.TotalPrice);
+
+                var count = await _context.Carts
+                    .Where(c => c.Enable == true)
+                    .CountAsync();
+
+                return Json(new { totalPrice = newTotal.ToString("F2"), count, cartTotalPrice = cart.TotalPrice.ToString("F2") });
             }
             catch (Exception ex)
             {

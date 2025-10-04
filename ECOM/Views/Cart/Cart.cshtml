@@ -13,8 +13,8 @@
             <span class="order-name"><b>@Model.Product.Name</b></span>
             <input type="number" name="order-count" class="order-count"
                    value="@Model.Piece" data-id="@Model.CartId" min="1" />
-           
-            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>                      
+
+            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>
         </div>
     </div>
 </div>
@@ -33,7 +33,10 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ cartId, isActive })
-                });
+                }).then(res => res.json())
+                    .then(data => {
+                        updateCartSummaryDisplay(data.totalPrice, data.count);
+                    });
             });
         });
 
@@ -43,7 +46,7 @@
                 const cartId = this.dataset.id;
                 const piece = this.value;
 
-                const response =  await fetch('/Cart/UpdateQuantity', {
+                const response = await fetch('/Cart/UpdateQuantity', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -53,10 +56,21 @@
 
                 if (response.ok) {
                     const data = await response.json();
+
+                    // Ürünün yanındaki toplam fiyatı güncelle
                     const priceElement = this.closest('.order-info').querySelector('.price');
-                    priceElement.textContent = `₺${data.totalPrice}`;
+                    priceElement.textContent = `₺${data.cartTotalPrice}`;
+
+                    // Genel sepet özetini güncelle
+                    updateCartSummaryDisplay(data.totalPrice, data.count);
                 }
             });
         });
     });
+
+    function updateCartSummaryDisplay(totalPrice, count) {
+        document.querySelector('.cart-total span b').textContent = `₺${totalPrice}`;
+        document.querySelector('.cart-summary .d-flex.justify-content-between span').textContent = `₺${totalPrice}`;
+        document.querySelector('.cart-total h5').textContent = `SEÇİLEN ÜRÜNLER (${count})`;
+    }
 </script>

@@ -6,15 +6,15 @@
     <form method="post" action="CommunicationSettings">
         <div class="mb-3 phone">
             <label for="phone" class="form-label">Cep Telefonu</label>
-            <input type="email" class="form-control" id="phone" name="phone" value="@Model.Phone" placeholder="Telefon numaranızı girin" required>
+            <input type="tel" class="form-control" id="phone" name="phone" value="@Model.Phone" placeholder="Telefon numaranızı girin" required>
         </div>
-        <div class="mb-3 email">
-            <label for="email" class="form-label">E-Posta</label>
-            <input type="email" class="form-control" id="email" name="email" value="@Model.Email" placeholder="E-Posta adresinizi girin" required>
-        </div>
-        <button type="button" class="btn btn-primary" id="btnOpenForm">E-Mail Değiştir</button>
         <button class="btn btn-primary" type="submit">Güncelle</button>
     </form>
+    <div class="mt-3 mb-3 email">
+        <label for="email" class="form-label">E-Posta</label>
+        <input type="email" class="form-control" id="email" name="email" value="@Model.Email" placeholder="E-Posta adresinizi girin" required>
+    </div>
+    <button type="button" class="btn btn-primary" id="btnOpenForm">E-Mail Değiştir</button>
 </div>
 
 <!-- Boş Modal -->
@@ -54,8 +54,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Butona tıklayınca form yükle
+    const formData = "toMail=@Model.Email"
     $("#btnOpenForm").click(function () {
-        $.get("/Account/SendOTPCode", function (data) {
+        $.post("/Account/SendOTPCode", formData, function (data) {
             $("#myModal .modal-content").html(data); // partial'ı modal içine bas
             var modal = new bootstrap.Modal(document.getElementById('myModal'));
             modal.show(); // modalı aç
@@ -66,15 +67,10 @@
     $(document).on("submit", "#userForm", function (e) {
         e.preventDefault();
 
-        $.post("/Account/EditCommunicationSettings", $(this).serialize(), function (result) {
-            if (result.success) {
-                alert(result.message);
-                var modalEl = document.getElementById('myModal');
-                var modal = bootstrap.Modal.getInstance(modalEl);
-                modal.hide();
-            } else {
-                alert(result.message);
-            }
+        const customer = "customerId=@Model.CustomerId&phone=@Model.Phone&" + $(this).serialize();        
+
+        $.post("/Account/EditCommunicationSettings", customer  , function (result) {
+           
         });
     });
 </script>

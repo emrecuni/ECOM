@@ -87,8 +87,6 @@ namespace ECOM.Controllers
 
                 existingCustomer.Name = customer.Name;
                 existingCustomer.Surname = customer.Surname;
-                //existingCustomer.Email = customer.Email;
-                //existingCustomer.Phone = customer.Phone;
                 existingCustomer.Gender = customer.Gender;
                 //existingCustomer.Password = Encryption.HashPassword(customer.Password!);
 
@@ -200,7 +198,8 @@ namespace ECOM.Controllers
             }
         }
 
-        public IActionResult SendOTPCode()
+        [HttpPost]
+        public IActionResult SendOTPCode(string toMail)
         {
             try
             {
@@ -212,7 +211,7 @@ namespace ECOM.Controllers
 
                 EmailContent content = new()
                 {
-                    ToMail = "cuniiemre@gmail.com",
+                    ToMail = toMail,
                     Subject = "Parola Yenileme Doğrulama Kodu",
                     Body = $"Parola yenileme işlemi için doğrulama kodunuz: {code}. Bu kod 2 dakika içerisinde geçersiz olacaktır.",
                     Expire = 120

@@ -113,10 +113,11 @@ X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * Ürüne tek resim değil resim listesi ekle
 * Yanlış mail'i tekrar kontrol et
 * İletişim bilgileri açıldığında mevcut bilgiler gelsin
-* Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin
+X Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin X
 * Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et
-* Email içeriği için class yapısı oluştur
-* Email güncellemek için gönderilen kodun geçerlilik süresi olmalı
+X Email içeriği için class yapısı oluştur X
+X Email güncellemek için gönderilen kodun geçerlilik süresi olmalı X
+* Account sayfasındaki email alanı disable olmalı dışarıdan müdahele edilememeli
 
 
 

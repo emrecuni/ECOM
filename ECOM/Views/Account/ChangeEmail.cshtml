@@ -19,16 +19,38 @@
     <form id="userForm">
         <div class="mb-3">
             <label class="form-label">E-Posta</label>
-            <input type="email" class="form-control" name="Email"  required>
+            <input type="email" class="form-control" name="Email" required>
         </div>
         <button type="submit" class="btn btn-success">Kaydet</button>
     </form>
 </div>
 
 <script>
+    let otpStartTime = null; // Başlangıç zamanı
+    const otpTimeout = 5 * 1000; // 2 dakika (ms cinsinden)
 
-$(document).on("submit", "#verificationForm", function (e) {
+    // Modal açıldığında zaman başlasın
+    $(document).on('shown.bs.modal', '#myModal', function () {
+        otpStartTime = new Date().getTime();
+        console.log("OTP süresi başladı: " + new Date(otpStartTime).toLocaleTimeString());
+    });
+
+    // Modal kapandığında sıfırla
+    $(document).on('hidden.bs.modal', '#myModal', function () {
+        otpStartTime = null;
+    });
+
+
+    $(document).on("submit", "#verificationForm", function (e) {
         e.preventDefault();
+
+        // Süre dolmuş mu kontrol et
+        const now = new Date().getTime();
+        if (!otpStartTime || (now - otpStartTime) > otpTimeout) {
+            alert("Kodun süresi doldu. Lütfen yeniden kod isteyin.");
+            return;
+        }
+
 
         // Form verisi + model değeri birlikte gönderilecek
         const formData = $(this).serialize() + "&modelCode=@Model";

@@ -115,6 +115,8 @@ X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * İletişim bilgileri açıldığında mevcut bilgiler gelsin
 * Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin
 * Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et
+* Email içeriği için class yapısı oluştur
+* Email güncellemek için gönderilen kodun geçerlilik süresi olmalı
 
 
 

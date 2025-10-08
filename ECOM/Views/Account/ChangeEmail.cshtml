@@ -1,9 +1,21 @@
-﻿<div class="modal-header">
+﻿@model string
+
+<div class="modal-header">
     <h5 class="modal-title" id="myModalLabel">Form</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" id="verificationSection">
+    <form id="verificationForm">
+        <div class="mb-3">
+            <label class="form-label">Kod</label>
+            <input type="number" class="form-control" name="code" required>
+        </div>
+        <button id="verificationCode" type="submit" class="btn btn-success">Doğrula</button>
+    </form>
+</div>
+
+<div class="modal-body" id="userSection" style="display:none">
     <form id="userForm">
         <div class="mb-3">
             <label class="form-label">E-Posta</label>
@@ -12,3 +24,32 @@
         <button type="submit" class="btn btn-success">Kaydet</button>
     </form>
 </div>
+
+<script>
+
+$(document).on("submit", "#verificationForm", function (e) {
+        e.preventDefault();
+
+        // Form verisi + model değeri birlikte gönderilecek
+        const formData = $(this).serialize() + "&modelCode=@Model";
+
+        $.post("/Account/CheckOTPCode", formData, function (result) {
+            if (result.success) {
+                alert(result.message);
+
+                // Doğrulama başarılıysa: verificationForm gizle, userForm göster
+                $("#verificationSection").hide();
+                $("#userSection").show();
+
+            } else {
+                alert(result.message);
+
+                // Başarısızsa: userForm gizli kalsın, verificationForm görünür olsun
+                $("#userSection").hide();
+                $("#verificationSection").show();
+            }
+        }).fail(function () {
+            alert("Sunucuya bağlanırken hata oluştu.");
+        });
+    });
+</script>

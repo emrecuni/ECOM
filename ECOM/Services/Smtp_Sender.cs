@@ -16,7 +16,7 @@ namespace ECOM.Services
             _configuration = configuration;
         }
 
-        public bool SendMail(string toMail)
+        public bool SendMail(string toMail,string subject, string body)
         {
             try
             {
@@ -38,8 +38,8 @@ namespace ECOM.Services
                     // mail içeriği hazırlanır
                     message.To.Add(toMail);
                     message.From = new MailAddress(emailSettings.SenderMail);
-                    message.Subject = "Parola Yenileme";
-                    message.Body = "Parola Yenileme İçin Aşağıdaki Linke Tıklayınız.";
+                    message.Subject = subject;
+                    message.Body = body;
 
                     client.Send(message); // mail gönderilir
 

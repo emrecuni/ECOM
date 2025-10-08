@@ -1,4 +1,5 @@
 ﻿using ECOM.Data;
+using ECOM.Interface;
 using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -14,10 +15,10 @@ namespace ECOM.Controllers
     {
 
         private readonly DataContext _context;
-        private readonly Smtp_Sender _sender;
+        private readonly ISmtp_Sender _sender;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(DataContext context, Smtp_Sender sender, ILogger<LoginController> logger)
+        public LoginController(DataContext context, ISmtp_Sender sender, ILogger<LoginController> logger)
         {
             _context = context;
             _sender = sender;
@@ -127,7 +128,7 @@ namespace ECOM.Controllers
                     return View("Forgot-Password");
                 }
 
-                if (_sender.SendMail(email)) // mail başarıyla gönderilirse
+                if (_sender.SendMail(email, "Parola Sıfırlama İsteği", "Aşağıdaki linke tıklayınız.")) // mail başarıyla gönderilirse
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";

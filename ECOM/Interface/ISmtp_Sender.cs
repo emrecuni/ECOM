@@ -2,6 +2,6 @@
 {
     public interface ISmtp_Sender
     {
-        bool SendMail(string toMail);
+        bool SendMail(string toMail, string subject, string body);
     }
 }

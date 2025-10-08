@@ -1,4 +1,5 @@
 using ECOM.Data;
+using ECOM.Interface;
 using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
-builder.Services.AddScoped<Smtp_Sender>();
+//builder.Services.AddScoped<Smtp_Sender>();
+builder.Services.AddScoped<ISmtp_Sender, Smtp_Sender>();
 builder.Services.AddScoped<EmailSettings>();
 builder.Services.AddScoped<ProductDataProcess>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -204,9 +204,15 @@ namespace ECOM.Controllers
         {
             try
             {
-                _sender.SendMail("cuniiemre@gmail.com");
+                string code = string.Empty;
+                Random random = new();
 
-                return PartialView("ChangeEmail");
+                for (int i = 0; i < 6; i++)
+                    code += random.Next(1, 9);
+
+                _sender.SendMail("cuniiemre@gmail.com", "Parola Yenileme Doğrulama Kodu", code);
+
+                return PartialView("ChangeEmail", code);
 
             }
             catch (Exception ex)
@@ -219,6 +225,32 @@ namespace ECOM.Controllers
                     Title = "Parola değiştirilirken bir hata oluştu."
                 };
                 _logger.LogError($"Account/LoadForm Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CheckOTPCode(string code,string modelCode)
+        {
+            try
+            {
+
+                if(code == modelCode)
+                    return Json(new { success = true, message = "Kod doğrulandı." });
+                else
+                    return Json(new { success = false, message = "Kod doğrulanamadı." });
+
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Kod doğrulanırken bir hata oluştu."
+                };
+                _logger.LogError($"Account/CheckOTPCode Error Hata Kodu: {guid} => {ex}");
                 return View("Error", error);
             }
         }

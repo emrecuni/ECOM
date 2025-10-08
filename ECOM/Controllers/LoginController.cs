@@ -128,7 +128,14 @@ namespace ECOM.Controllers
                     return View("Forgot-Password");
                 }
 
-                if (_sender.SendMail(email, "Parola Sıfırlama İsteği", "Aşağıdaki linke tıklayınız.")) // mail başarıyla gönderilirse
+                EmailContent content = new()
+                {
+                    ToMail = email,
+                    Subject = "Parola Sıfırlama İsteği",
+                    Body = "Aşağıdaki linke tıklayınız."
+                };
+
+                if (_sender.SendMail(content)) // mail başarıyla gönderilirse
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";

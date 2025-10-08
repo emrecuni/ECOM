@@ -1,7 +1,9 @@
-﻿namespace ECOM.Interface
+﻿using ECOM.Models;
+
+namespace ECOM.Interface
 {
     public interface ISmtp_Sender
     {
-        bool SendMail(string toMail, string subject, string body);
+        bool SendMail(EmailContent content);
     }
 }

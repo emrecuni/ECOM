@@ -16,7 +16,7 @@ namespace ECOM.Services
             _configuration = configuration;
         }
 
-        public bool SendMail(string toMail,string subject, string body)
+        public bool SendMail(EmailContent content)
         {
             try
             {
@@ -36,10 +36,10 @@ namespace ECOM.Services
                     client.EnableSsl = emailSettings.SSL;
 
                     // mail içeriği hazırlanır
-                    message.To.Add(toMail);
+                    message.To.Add(content.ToMail);
                     message.From = new MailAddress(emailSettings.SenderMail);
-                    message.Subject = subject;
-                    message.Body = body;
+                    message.Subject = content.Subject;
+                    message.Body = content.Body;
 
                     client.Send(message); // mail gönderilir
 

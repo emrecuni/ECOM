@@ -210,7 +210,15 @@ namespace ECOM.Controllers
                 for (int i = 0; i < 6; i++)
                     code += random.Next(1, 9);
 
-                _sender.SendMail("cuniiemre@gmail.com", "Parola Yenileme Doğrulama Kodu", code);
+                EmailContent content = new()
+                {
+                    ToMail = "cuniiemre@gmail.com",
+                    Subject = "Parola Yenileme Doğrulama Kodu",
+                    Body = $"Parola yenileme işlemi için doğrulama kodunuz: {code}. Bu kod 2 dakika içerisinde geçersiz olacaktır.",
+                    Expire = 120
+                };
+
+                _sender.SendMail(content);
 
                 return PartialView("ChangeEmail", code);
 

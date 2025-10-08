@@ -175,6 +175,8 @@ namespace ECOM.Controllers
                     return NotFound();
                 }
 
+                // yeni email'in db'de var olan bir email olmamasını kontrol et
+
                 existingCustomer.Email = customer.Email;
                 existingCustomer.Phone = customer.Phone;
 

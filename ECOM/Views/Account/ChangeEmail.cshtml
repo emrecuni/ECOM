@@ -1,18 +1,20 @@
 ﻿@model string
 
-<div class="modal-header">
-    <h5 class="modal-title" id="myModalLabel">Form</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-</div>
+
 
 <div class="modal-body" id="verificationSection">
     <form id="verificationForm">
         <div class="mb-3">
             <label class="form-label">Kod</label>
-            <input type="number" class="form-control" name="code" required>
+            <input type="text" class="form-control" name="code" required>
         </div>
         <button id="verificationCode" type="submit" class="btn btn-success">Doğrula</button>
     </form>
+</div>
+
+<!-- Geri sayım göstergesi -->
+<div class="mb-2 text-muted" style="margin-left:15px;">
+    Kalan süre: <span id="countdownTimer">02:00</span>
 </div>
 
 <div class="modal-body" id="userSection" style="display:none">
@@ -27,16 +29,46 @@
 
 <script>
     let otpStartTime = null; // Başlangıç zamanı
-    const otpTimeout = 5 * 1000; // 2 dakika (ms cinsinden)
+    let otpInterval = null;
+    const otpTimeout = 2 * 60 * 1000; // 2 dakika (ms cinsinden)
+
+    // Zamanlayıcı başlatma fonksiyonu
+    function startOtpTimer() {
+        const countdownEl = $("#countdownTimer");
+        otpStartTime = new Date().getTime();
+
+        if (otpInterval) clearInterval(otpInterval);
+
+        otpInterval = setInterval(function () {
+            const now = new Date().getTime();
+            const remaining = otpTimeout - (now - otpStartTime);
+
+            if (remaining <= 0) {
+                clearInterval(otpInterval);
+                countdownEl.text("00:00");
+                alert("Kodun süresi doldu. Lütfen yeniden kod isteyin.");
+                $("#verificationCode").prop("disabled", true);
+                return;
+            }
+
+            const minutes = Math.floor((remaining / 1000) / 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+            countdownEl.text(
+                `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+            );
+        }, 1000);
+    }
 
     // Modal açıldığında zaman başlasın
     $(document).on('shown.bs.modal', '#myModal', function () {
-        otpStartTime = new Date().getTime();
-        console.log("OTP süresi başladı: " + new Date(otpStartTime).toLocaleTimeString());
+        $("#verificationCode").prop("disabled", false);
+        $("#countdownTimer").text("02:00");
+        startOtpTimer();
     });
 
     // Modal kapandığında sıfırla
     $(document).on('hidden.bs.modal', '#myModal', function () {
+        clearInterval(otpInterval);
         otpStartTime = null;
     });
 

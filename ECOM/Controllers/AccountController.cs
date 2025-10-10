@@ -175,6 +175,7 @@ namespace ECOM.Controllers
                     return NotFound();
                 }
 
+                var checkEmail = await _context.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email);
                 // yeni email'in db'de var olan bir email olmamasını kontrol et
 
                 existingCustomer.Email = customer.Email;

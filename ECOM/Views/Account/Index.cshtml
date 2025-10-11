@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="content" id="order">
-            @await Html.PartialAsync("Order") <!--sipariş geçmişi-->
+            @await Html.PartialAsync("Order",Model.Orders) <!--sipariş geçmişi-->
         </div>
         <div class="content" id="coupon">
             @await Html.PartialAsync("Tab-Menu-Coupon") <!--kullanıcı bilgilerim tab menu-->

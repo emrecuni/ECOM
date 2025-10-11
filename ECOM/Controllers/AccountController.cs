@@ -68,12 +68,9 @@ namespace ECOM.Controllers
                     return NotFound();
                 }
 
-                AccountViewModel accountViewModel = new()
-                {
-                    Orders = orders
-                };
+                AccountViewModel accountViewModel = new() { Orders = orders };
 
-                return View("Index", accountViewModel);
+                return View("Order", orders);
             }
             catch (Exception ex)
             {
@@ -120,7 +117,6 @@ namespace ECOM.Controllers
                 {// mesaj döndür
                     return NotFound();
                 }
-
 
                 existingCustomer.Name = customer.Name;
                 existingCustomer.Surname = customer.Surname;
@@ -291,7 +287,6 @@ namespace ECOM.Controllers
                     return Json(new { success = true, message = "Kod doğrulandı." });
                 else
                     return Json(new { success = false, message = "Kod doğrulanamadı." });
-
             }
             catch (Exception ex)
             {

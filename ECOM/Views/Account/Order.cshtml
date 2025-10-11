@@ -1,4 +1,9 @@
-﻿<div class="order-header">
+﻿@model IEnumerable<ECOM.Data.OrderHistory>?
+
+<link rel="stylesheet" href="~/css/account.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<div class="order-header">
     <form action="" method="post" class="d-flex">
         <input type="text" name="search" class="form-control" placeholder="Siparişlerimde ara...">
         @*<button type="submit" class="btn btn-warning ms-2">Ara</button>*@
@@ -19,32 +24,32 @@
     </select>
 </div>
 <div class="order-body">
-    <div class="orders mt-3 mb-3">
-        <img class="order-image" src="~/img/AMD Ryzen 5 5600X.jpg" />
-        <span class="order-no">Sipariş No: <b>123</b></span>
-        <span class="order-status"><i class="bi bi-check"></i> Sipariş Tamamlandı</span>
-        <span class="order-date">11 Aralık 2024 </span>
-        <span class="order-price">₺134,90 </span>
-    </div>
-    <div class="orders mt-3 mb-3">
-        <img class="order-image" src="~/img/AMD Ryzen 5 5600X.jpg" />
-        <span class="order-no">Sipariş No: <b>123</b></span>
-        <span class="order-status"><i class="bi bi-check"></i> Sipariş Tamamlandı</span>
-        <span class="order-date">11 Aralık 2024 </span>
-        <span class="order-price">₺134,90 </span>
-    </div>
-    <div class="orders mt-3 mb-3">
-        <img class="order-image" src="~/img/AMD Ryzen 5 5600X.jpg" />
-        <span class="order-no">Sipariş No: <b>123</b></span>
-        <span class="order-status"><i class="bi bi-check"></i> Sipariş Tamamlandı</span>
-        <span class="order-date">11 Aralık 2024 </span>
-        <span class="order-price">₺134,90 </span>
-    </div>
-    <div class="orders mt-3 mb-3">
-        <img class="order-image" src="~/img/AMD Ryzen 5 5600X.jpg" />
-        <span class="order-no">Sipariş No: <b>123</b></span>
-        <span class="order-status"><i class="bi bi-check"></i> Sipariş Tamamlandı</span>
-        <span class="order-date">11 Aralık 2024 </span>
-        <span class="order-price">₺134,90 </span>
-    </div>
+    @if (Model is null)
+    {
+        <div class="alert alert-info">
+            <p>Henüz Siparişiniz Yok</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            string? orderStatus;
+            @if (order.DeliveryDate is not null)
+            {
+                orderStatus = "Teslim Edildi.";
+            }
+            else
+            {
+                orderStatus = "Sipariş Hazırlanıyor.";
+            }
+            <div class="orders mt-3 mb-3">
+                <img class="order-image" src="~/@order.Product.ImagePath" />
+                <span class="order-no">Sipariş No: <b>@order.OrderId</b></span>
+                <span class="order-status"><i class="bi bi-check"></i> @orderStatus</span>
+                <span class="order-date">@order.OrderDate!.Value.ToShortDateString()</span>
+                <span class="order-price">₺@order.TotalPrice</span>
+            </div>
+        }
+    }
 </div>

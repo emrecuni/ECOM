@@ -30,7 +30,13 @@ namespace ECOM.Controllers
                 int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
 
                 var customer = await _context.Customers.FirstAsync(c => c.CustomerId == customerId);
-                return View("Index", customer);
+
+                AccountViewModel accountViewModel = new()
+                {
+                    Customers = customer
+                };
+
+                return View("Index", accountViewModel);
             }
             catch (Exception ex)
             {
@@ -46,10 +52,41 @@ namespace ECOM.Controllers
             }
         }
 
-        public IActionResult Order()
+        public async Task<IActionResult> Order()
         {
-            //ViewBag.MenuId = "order";
-            return View("Index");
+            try
+            {
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var orders = await _context.OrderHistory
+                    .Include(o => o.Product)
+                    .Where(o => o.CustomerId == customerId)
+                    .ToListAsync();
+
+                if (orders is null)
+                {
+                    return NotFound();
+                }
+
+                AccountViewModel accountViewModel = new()
+                {
+                    Orders = orders
+                };
+
+                return View("Index", accountViewModel);
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = "Hesap bilgileri getirilirken bir hata oluştu.",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = $"Hata Kodu: {guid}"
+                };
+                _logger.LogError($"Account/Order Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
+            }
         }
 
         public IActionResult Favorite()
@@ -177,7 +214,7 @@ namespace ECOM.Controllers
 
                 // yeni email'in db'de var olan bir email olmamasını kontrol et
                 var checkEmail = await _context.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email);
-                if(checkEmail is not null && checkEmail.CustomerId != customer.CustomerId)
+                if (checkEmail is not null && checkEmail.CustomerId != customer.CustomerId)
                 {
                     ModelState.AddModelError("Email", "Bu email zaten kayıtlı.");
                     return View("CommunicationSettings", customer);
@@ -245,12 +282,12 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult CheckOTPCode(string code,string modelCode)
+        public IActionResult CheckOTPCode(string code, string modelCode)
         {
             try
             {
 
-                if(code == modelCode)
+                if (code == modelCode)
                     return Json(new { success = true, message = "Kod doğrulandı." });
                 else
                     return Json(new { success = false, message = "Kod doğrulanamadı." });

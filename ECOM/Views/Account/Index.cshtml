@@ -1,4 +1,4 @@
-﻿@model ECOM.Data.Customers
+﻿@model ECOM.Models.AccountViewModel
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +27,8 @@
         <div class="content" id="user">
             @await Html.PartialAsync("Tab-Menu-User") <!--kullanıcı bilgilerim tab menu-->
             <div class="tab-content mt-3">
-                @await Html.PartialAsync("Membership",@Model) <!--üyelik bilgileri-->
-                @await Html.PartialAsync("Communication-Settings", @Model) <!--iletişim bilgileri-->
+                @await Html.PartialAsync("Membership",@Model.Customers) <!--üyelik bilgileri-->
+                @await Html.PartialAsync("Communication-Settings", @Model.Customers) <!--iletişim bilgileri-->
                 @await Html.PartialAsync("Change-Password") <!--parola değişikliği-->
             </div>
         </div>

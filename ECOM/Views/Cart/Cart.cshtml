@@ -10,7 +10,7 @@
         <input type="checkbox" name="order-is-active" class="order-is-active" data-id="@Model.CartId" checked />
         <img src="~/@Model.Product.ImagePath" alt="Ürün" class="product-image" />
         <div class="order-info">
-            <span class="order-name"><b>@Model.Product.Name</b></span>
+            <span class="order-name"><b><a asp-controller="Product" asp-action="Index" asp-route-id="@Model.ProductId">@Model.Product.Name</a></b></span>
             <input type="number" name="order-count" class="order-count"
                    value="@Model.Piece" data-id="@Model.CartId" min="1" />
 

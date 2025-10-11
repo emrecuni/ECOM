@@ -118,6 +118,7 @@ X Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et
 X Email içeriği için class yapısı oluştur X
 X Email güncellemek için gönderilen kodun geçerlilik süresi olmalı X
 X Account sayfasındaki email alanı disable olmalı dışarıdan müdahele edilememeli X
+X Sepetteki ürünlerin adına tıklandığında ürün sayfasına yönlendir X
 
 
 

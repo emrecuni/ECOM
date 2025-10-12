@@ -1,4 +1,5 @@
 ﻿using ECOM.Data;
+using ECOM.DTO;
 using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -30,14 +31,41 @@ namespace ECOM.Controllers
              */
 
             // veri tabanındaki bütün ürünleri çeker
+
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);   
+
+            // bütün ürünler çekilir
             var products = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.SupCategory)
                 .Include(p => p.SubCategory)
-                .Include(p => p.Seller)                
+                .Include(p => p.Seller)                 
                 .ToListAsync();
 
-            return View(products);
+            // kulanıcının favorilediği ürünlerin id'leri alınır
+            var favorites = await _context.Favorites
+                .Where(f => f.CustomerId == customerId)
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            // bütün ürünler dto'ya aktarılır ve favori bilgisi eklenir
+            List<ProductDTO> productDTOs = [.. products.Select(p => new ProductDTO
+            {
+                ProductId = p.ProductId,
+                Name = p.Name,
+                Price = p.Price,
+                Score = p.Score,
+                ImagePath = p.ImagePath,
+                BrandName = p.Brand.Name,
+                SupCategory = p.SupCategory.Name,
+                SubCategory = p.SubCategory.Name,
+                SellerName = p.Seller.Name,
+                IsFavorite = favorites.Contains(p.ProductId)
+            })];
+
+
+
+            return View(productDTOs);
         }
 
         [Authorize]

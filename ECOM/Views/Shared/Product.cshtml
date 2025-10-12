@@ -1,11 +1,11 @@
-﻿@model ECOM.Data.Product
+﻿@model ECOM.DTO.ProductDTO
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div class="col">
     <div class="card product-card h-100">
-        <a href="#" class="favorite-btn" data-id="@Model.ProductId">
-            <i class="fas fa-heart"></i>
+        <a href="#" class="favorite-btn" data-id="@Model.ProductId">          
+                <i class="fas fa-heart @(Model.IsFavorite ? "text-danger" : "")"></i>            
         </a>
         <a asp-controller="Product" asp-action="Index" asp-route-id="@Model.ProductId" class="product">
             <img src="~/@Model.ImagePath" class="card-img-top" alt="Ürün 1">

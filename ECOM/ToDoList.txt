@@ -111,7 +111,7 @@ X Kayıt olurken aynı telefon ve mail ile başka bir kayıt olmamalı X
 * Kayıt ol ekranından login ekranına geçiş butonu koy
 * Ürün sepete eklenince bilgi ver
 * Ürüne tek resim değil resim listesi ekle
-* Yanlış mail'i tekrar kontrol et
+??? Yanlış mail'i tekrar kontrol et ???
 X İletişim bilgileri açıldığında mevcut bilgiler gelsin X
 X Email güncellemek için email'e kod gitsin ve gelen kod girilmeden güncellenmesin X
 X Email güncellenirken db'de olmayan bir email ile güncellendiğini kontrol et X

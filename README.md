@@ -21,7 +21,7 @@
 
 <br/>
 
-> Kullanıcı dostu arayüzü ve güçlü altyapısıyla tam kapsamlı bir online alışveriş deneyimi sunan ASP.NET Core MVC tabanlı e-ticaret uygulaması.
+> Online alışveriş deneyimi sunan ASP.NET Core MVC tabanlı e-ticaret uygulaması.
 
 </div>
 

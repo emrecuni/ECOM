@@ -127,6 +127,7 @@ X Favorideki ürünlerin kalplerini kırmızı olarak getir main ve product sayf
 * Payment sayfasında yeni adres ekleme yapılmıyor
 * Ödeme yaparken view'dan gönderilen fiyat ile db'deki fiyat farklı olabilir bu durumun kontrolü yapılmalı
 * Appsettings'e iyzico bilgilerini ekle
+* Appsettings taslağını repo'ya ekle
 
 <link rel="stylesheet" href="~/css/product.css">
 

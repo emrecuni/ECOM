@@ -1,43 +1,56 @@
-﻿@model ECOM.Data.Customers
+@model ECOM.Data.Customers
 
-<div class="tab-pane fade show active" id="membership">
-    <h5>Üyelik Bilgileri</h5>
-    <form method="post" asp-action="EditMembership" asp-controller="Account" >
-        <div class="name-surname">
-            <div class="mb-3 w-50">
-                <label for="name" class="form-label">Ad</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Ad" value="@Model.Name" required>
-            </div>
-            <div class="mb-3 w-50">
-                <label for="surname" class="form-label">Soyad</label>
-                <input type="text" class="form-control" id="surname" name="surname" placeholder="Soyad" value="@Model.Surname" required>
-            </div>
-        </div>
-        <div class="mb-3 birthdate">
-            <label for="birthdate" class="form-label">Doğum Tarihi</label>
-            @{
-                string birthDate = null!;
-                if (Model.BirthDate is not null)
-                    birthDate = Model.BirthDate.Value.ToString("yyyy-MM-dd");
-                <input type="date" class="form-control" id="birthdate" name="birthdate" value="@birthDate" required>
-            }
-        </div>
-        <div class="mb-3 gender">
-            <label class="form-label">Cinsiyet</label>
-            <div class="d-flex gap-3">              
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gender" id="gender" value="true" checked ="@(Model.Gender == true)" required>
-                    <label class="form-check-label" for="gender">Erkek</label>
+<div class="membership-form">
+    <form method="post" asp-action="EditMembership" asp-controller="Account">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-field-group">
+                <label class="field-label">Ad</label>
+                <div class="field-input-wrapper">
+                    <input type="text" class="field-input" name="name" placeholder="Adınız" value="@Model.Name" required>
+                    <i class="fas fa-user"></i>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gender" id="female" value="false" checked ="@(Model.Gender == false)" required>
-                    <label class="form-check-label" for="gender">
-                        Kadın
-                    </label>
+            </div>
+            <div class="form-field-group">
+                <label class="field-label">Soyad</label>
+                <div class="field-input-wrapper">
+                    <input type="text" class="field-input" name="surname" placeholder="Soyadınız" value="@Model.Surname" required>
+                    <i class="fas fa-user"></i>
                 </div>
             </div>
         </div>
-        <input type="hidden" name="customerId" value="@Model.CustomerId"/>
-        <button class="btn btn-primary" type="submit">Güncelle</button>
+
+        <div class="form-field-group">
+            <label class="field-label">Doğum Tarihi</label>
+            <div class="field-input-wrapper">
+                @{
+                    string birthDate = null!;
+                    if (Model.BirthDate is not null)
+                        birthDate = Model.BirthDate.Value.ToString("yyyy-MM-dd");
+                }
+                <input type="date" class="field-input" name="birthdate" value="@birthDate" required>
+                <i class="fas fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-field-group">
+            <label class="field-label">Cinsiyet</label>
+            <div style="display:flex; gap:16px; margin-top:6px;">
+                <label class="radio-option @(Model.Gender == true ? "selected" : "")">
+                    <input type="radio" name="gender" value="true" @(Model.Gender == true ? "checked" : "")>
+                    <i class="fas fa-mars"></i> Erkek
+                </label>
+                <label class="radio-option @(Model.Gender == false ? "selected" : "")">
+                    <input type="radio" name="gender" value="false" @(Model.Gender == false ? "checked" : "")>
+                    <i class="fas fa-venus"></i> Kadın
+                </label>
+            </div>
+        </div>
+
+        <input type="hidden" name="customerId" value="@Model.CustomerId" />
+
+        <button class="account-save-btn" type="submit">
+            <i class="fas fa-check"></i> Değişiklikleri Kaydet
+        </button>
     </form>
 </div>

@@ -1,138 +1,181 @@
-﻿@model ECOM.Models.ProductDetailViewModel
-<link rel="stylesheet" href="~/css/product.css">
+@model ECOM.Models.ProductDetailViewModel
 
-<div>
-    <p class="product-category">
-        Ürün Kategorisi:
-        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SupCategoryId" class="product-category"><b>@Model.Product!.SupCategory.Name</b></a>  >
-        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SubCategoryId" class="product-category"><b>@Model.Product.SubCategory.Name</b></a>
-    </p>
-    <br>
-    <!-- Ürün Başlık ve Resim Bölümü -->
-    <div class="product-header">
-        <div class="product-image">
-            <img src="~/@Model.Product.ImagePath" alt="msi">
+@section Styles {
+    <link rel="stylesheet" href="~/css/product.css">
+}
+
+<div class="container product-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <a asp-controller="Main" asp-action="Index">Ana Sayfa</a>
+        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SupCategoryId">@Model.Product!.SupCategory.Name</a>
+        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SubCategoryId">@Model.Product.SubCategory.Name</a>
+        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+        <span class="current">@Model.Product.Name</span>
+    </div>
+
+    <!-- Main Product Card -->
+    <div class="product-main-card">
+        <!-- Image -->
+        <div class="product-gallery">
+            <div class="product-main-img">
+                <img src="~/@Model.Product.ImagePath" alt="@Model.Product.Name">
+            </div>
         </div>
-        <div class="product-info">
-            <h1>@Model.Product.Name</h1>
-            <div class="badge badge-success badge-pill bg-success">@Model.Product.Brand.Name</div>
-            <div class="score">
-                <div class="badge badge-success badge-pill text-bg-warning">@Model.Product.Score</div>
-                <div class="star-rating">
-                    @if (Model.Product.Comments.Count > 0)
-                    {
-                        for (int i = 1; i <= 5; i++)
+
+        <!-- Info -->
+        <div class="product-info-panel">
+            <span class="product-brand-badge">
+                <i class="fas fa-tag"></i>
+                @Model.Product.Brand.Name
+            </span>
+
+            <h1 class="product-title">@Model.Product.Name</h1>
+
+            <!-- Rating -->
+            <div class="product-rating-row">
+                @if (Model.Product.Comments.Count > 0)
+                {
+                    <div class="score-badge">
+                        <i class="fas fa-star"></i>
+                        @Model.Product.Score
+                    </div>
+                    <div class="star-row">
+                        @for (int i = 1; i <= 5; i++)
                         {
-                            if (i <= Model.Product.Score)
-                            {
-                                <span class="star" data-filled="true">&#9733;</span>
-                            }
-                            else
-                            {
-                                <span class="star" data-filled="false">&#9733;</span>
-                            }
+                            <span class="star" data-filled="@(i <= Model.Product.Score ? "true" : "false")">&#9733;</span>
                         }
-                    }
-                    else
-                    {
-                        <span class="no-comment">Henüz Değirlendirilmemiş</span>
-                    }
-                </div>
-                <div class="product-comment">
-                    <a href="javascript:void(0);" onclick="scrollToSection('comments')">
-                        @if (Model.Product.Comments.Count > 0)
-                        {
-                            <span><b>@Model.Product.Comments.Count</b> Değerlendirme</span>
-                        }
-                        else
-                        {
-                            <b>İlk Sen Değerlendir</b>
-                        }
+                    </div>
+                    <a class="review-count-link" href="javascript:void(0);" onclick="scrollToSection('comments')">
+                        @Model.Product.Comments.Count Değerlendirme
                     </a>
-                </div>
+                }
+                else
+                {
+                    <span style="font-size:13px; color:var(--text-muted);">
+                        <i class="far fa-star"></i> Henüz değerlendirilmemiş
+                    </span>
+                    <a class="review-count-link" href="javascript:void(0);" onclick="scrollToSection('leave-review')">
+                        İlk sen değerlendir →
+                    </a>
+                }
             </div>
-            <div>Satıcı: <span class="badge badge-success badge-pill bg-primary">@Model.Product.Seller.Name</span></div>
-            <div class="product-price">₺@Model.Product.Price</div>
-            <div class="forms">
-                <!--Sepete Ekle-->
-                <form asp-action="AddCart" method="post">
-                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
-                    <input type="hidden" name="productName" value=@Model.Product.Name>
-                    <input type="hidden" name="sellerId" value=@Model.Product.SellerId>
-                    <input type="hidden" name="price" value=@Model.Product.Price>
-                    <button class="addCart"><b>Sepete Ekle</b></button>
+
+            <!-- Seller -->
+            <div class="seller-info">
+                <i class="fas fa-store" style="color:var(--primary)"></i>
+                <span>Satıcı:</span>
+                <span class="seller-badge">@Model.Product.Seller.Name</span>
+            </div>
+
+            <!-- Price -->
+            <div class="product-price-block">
+                <span class="price-currency">₺</span>
+                <span class="price-amount">@Model.Product.Price</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="product-actions">
+                <form asp-action="AddCart" method="post" style="flex:1; min-width:160px;">
+                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                    <input type="hidden" name="productName" value="@Model.Product.Name">
+                    <input type="hidden" name="sellerId" value="@Model.Product.SellerId">
+                    <input type="hidden" name="price" value="@Model.Product.Price">
+                    <button type="submit" class="btn-add-cart" style="width:100%;">
+                        <i class="fas fa-shopping-cart"></i>
+                        Sepete Ekle
+                    </button>
                 </form>
+            </div>
 
-                <!--<!--Satın Al--
-                <form asp-controller="Payment" asp-action="Pay" method="get">
-                    <input type="hidden" name="productId" value=@Model.Product.ProductId />
-                    <input type="hidden" name="productName" value=@Model.Product.Name>
-                    <input type="hidden" name="price" value=@Model.Product.Price>
-                    <button class="buy"><b>Satın Al</b></button>
-                </for>-->
+            <!-- Trust Badges -->
+            <div style="display:flex; gap:16px; flex-wrap:wrap; padding-top:4px;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-muted);">
+                    <i class="fas fa-shield-alt" style="color:var(--success);"></i> Güvenli Ödeme
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-muted);">
+                    <i class="fas fa-truck" style="color:var(--primary);"></i> Ücretsiz Kargo
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-muted);">
+                    <i class="fas fa-undo" style="color:var(--warning);"></i> Kolay İade
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Ürün Açıklaması Bölümü -->
-    <div class="description">
-        <div class="description-content">
-            <h2>Ürün Açıklaması</h2>
-            <p>
-                @Model.Product.Description
-            </p>
-        </div>
+    <!-- Description -->
+    <div class="product-section-card">
+        <h2 class="section-card-title">
+            <i class="fas fa-align-left"></i> Ürün Açıklaması
+        </h2>
+        <p class="description-text">@Model.Product.Description</p>
     </div>
 
-    <!-- Yorumlar ve Değerlendirmeler Bölümü -->
-    <div id="comments" class="review-section">
-        <h3 class="review">Yorumlar (@Model.Comments.Count Yorum)</h3>
-        @foreach (var comment in Model.Comments) // her bir yorum için döner
+    <!-- Reviews -->
+    <div id="comments" class="product-section-card">
+        <h2 class="section-card-title">
+            <i class="fas fa-comments"></i>
+            Yorumlar
+            <span style="font-size:14px; font-weight:500; color:var(--text-muted); margin-left:4px;">(@Model.Comments.Count yorum)</span>
+        </h2>
+
+        @if (Model.Comments.Count == 0)
         {
-            <div class="review">
-                <div class="comment-rating">
-                    @for (int i = 0; i < 5; i++) // her bir yorumun skorunu ekrana basar
-                    {
-                        if (i < comment.Score)
-                        {
-                            @:&#9733;
-                        }
-                        else
-                        {
-                            @:&#9734;
-                        }
-                    }
-                </div>
-                <p><strong>@comment.Customer.Name @comment.Customer.Surname!.Substring(0, 1).</strong> - @comment.Score yıldız</p>
-                <p>@comment.Comment</p>
+            <div class="no-reviews">
+                <i class="far fa-comment-dots"></i>
+                Bu ürün henüz yorum almamış. İlk yorumu siz yapın!
             </div>
         }
-        <br />
+        else
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="review-item">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            @comment.Customer.Name.Substring(0, 1).ToUpper()
+                        </div>
+                        <div>
+                            <div class="reviewer-name">@comment.Customer.Name @comment.Customer.Surname!.Substring(0, 1).</div>
+                            <div class="review-stars">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    @(i < comment.Score ? "★" : "☆")
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">@comment.Comment</p>
+                </div>
+            }
+        }
     </div>
-    <br />
 
-    <!-- Yorum Yapma Bölümü -->
-    <div class="leave-review">
-        <div class="write-comment">
-            <h3 class="mt-3">Yorum Yapın</h3>
+    <!-- Leave Review -->
+    <div id="leave-review" class="product-section-card">
+        <h2 class="section-card-title">
+            <i class="fas fa-pen"></i> Yorum Yapın
+        </h2>
+        <div class="write-review-form">
             <form asp-controller="Product" asp-action="SendComment" method="post">
-                <label for="rating">Puanınızı Seçin:</label><br>
-                @*<span class="rating">*@
-                <ul class="rating" id="rating">
+                <label style="font-size:13.5px; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:10px;">Puanınızı Seçin:</label>
+                <ul class="rating-stars-select" id="rating">
                     @for (int i = 5; i > 0; i--)
                     {
                         <li data-value="@i">&#9733;</li>
                     }
                 </ul>
 
-                <br><br>
-
                 <input type="hidden" id="rate" name="rate" value="3">
                 <input type="hidden" name="id" value="@Model.Product.ProductId">
-                <textarea class="comment" id="review-text" name="review" rows="5" cols="60"
-                          placeholder="Yorumunuzu buraya yazın..."></textarea><br><br>
-                <button class="send-comment" type="submit">
-                    Yorum Gönder
+
+                <textarea class="review-textarea" id="review-text" name="review" rows="4"
+                          placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..."></textarea>
+
+                <button class="btn-send-review" type="submit">
+                    <i class="fas fa-paper-plane"></i> Yorumu Gönder
                 </button>
             </form>
         </div>
@@ -140,62 +183,46 @@
 </div>
 
 <script>
-    // Rating yıldızlarına tıklama işlevini ekleyelim
-    const ratingLinks = document.querySelectorAll('.rating');
-    const rateInput = document.getElementById('rate');
-
-    ratingLinks.forEach(link => {
-        link.addEventListener('click', function () {
-            // Tıklanan linkin id'sine göre input değerini ayarlıyoruz
-            const ratingValue = this.id.replace('rate', '');
-            rateInput.value = ratingValue;
-
-            // Seçilen yıldızları görsel olarak değiştirebiliriz (altın renginde)
-            ratingLinks.forEach(link => link.style.color = ''); // Tüm yıldızları sıfırla
-            for (let i = 0; i < ratingValue; i++) {
-                ratingLinks[i].style.color = 'gold'; // Seçilen yıldızları altın renginde yap
-            }
-        });
-    });
-</script>
-
-<script>
     function scrollToSection(id) {
         const element = document.getElementById(id);
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
-</script>
 
-<script>
     const stars = document.querySelectorAll('#rating li');
     const rateInputValue = document.getElementById('rate');
 
     stars.forEach((star, index) => {
-        // Hover efekti
         star.addEventListener('mouseover', function () {
-            stars.forEach(s => s.classList.remove('hovered'));
-            for (let i = 0; i <= index; i++) {
-                stars[i].classList.add('hovered');
+            stars.forEach(s => s.style.color = '');
+            for (let i = stars.length - 1; i >= index; i--) {
+                stars[i].style.color = '#F6A623';
             }
         });
 
-        // Hover dışına çıkıldığında temizle
         star.addEventListener('mouseout', function () {
-            stars.forEach(s => s.classList.remove('hovered'));
+            updateStarDisplay();
         });
 
-        // Tıklama ile seçim yapıldığında
         star.addEventListener('click', function () {
             stars.forEach(s => s.classList.remove('selected'));
-            for (let i = 0; i <= index; i++) {
-                stars[i].classList.add('selected');
-            }
-            rateInputValue.value = star.getAttribute('data-value');
-            console.log("seçilen puan:", rateInputValue.value);
+            const val = parseInt(star.getAttribute('data-value'));
+            rateInputValue.value = val;
+            stars.forEach(s => {
+                const sv = parseInt(s.getAttribute('data-value'));
+                if (sv >= val) s.classList.add('selected');
+            });
         });
     });
+
+    function updateStarDisplay() {
+        const selected = rateInputValue.value;
+        stars.forEach(s => {
+            const sv = parseInt(s.getAttribute('data-value'));
+            s.style.color = s.classList.contains('selected') ? '#F6A623' : '';
+        });
+    }
 </script>
 
 @if (TempData["Info"] is not null)

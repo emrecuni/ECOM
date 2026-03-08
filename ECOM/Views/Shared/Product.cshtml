@@ -1,36 +1,33 @@
-﻿@model ECOM.DTO.ProductDTO
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@model ECOM.DTO.ProductDTO
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div class="col">
-    <div class="card product-card h-100">
-        <a href="#" class="favorite-btn" data-id="@Model.ProductId">          
-                <i class="fas fa-heart @(Model.IsFavorite ? "text-danger" : "")"></i>            
+    <div class="product-card">
+        <!-- Favorite Button -->
+        <a href="#" class="favorite-btn @(Model.IsFavorite ? "favorite-product" : "")" data-id="@Model.ProductId">
+            <i class="fas fa-heart @(Model.IsFavorite ? "text-danger" : "")"></i>
         </a>
+
+        <!-- Product Link -->
         <a asp-controller="Product" asp-action="Index" asp-route-id="@Model.ProductId" class="product">
-            <img src="~/@Model.ImagePath" class="card-img-top" alt="Ürün 1">
-            <div class="card-body ">
-                <div class="product-name">
-                    <h5 class="card-title">@Model.Name</h5>
-                </div>
-                <div class="star-rating mt-3">
+            <!-- Image -->
+            <div class="product-img-wrapper">
+                <img src="~/@Model.ImagePath" alt="@Model.Name">
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="product-name">@Model.Name</div>
+
+                <div class="star-rating">
                     @for (int i = 1; i <= 5; i++)
                     {
-                        if (i <= Model.Score)
-                        {
-                            <span class="star" data-filled="true">&#9733;</span>
-                        }
-                        else
-                        {
-                            <span class="star" data-filled="false">&#9733;</span>
-                        }
+                        <span class="star" data-filled="@(i <= Model.Score ? "true" : "false")">&#9733;</span>
                     }
                 </div>
-                <div class="price mt-auto"><b>₺@Model.Price</b></div>
+
+                <div class="price">₺@Model.Price</div>
             </div>
         </a>
     </div>
 </div>
-
-
-

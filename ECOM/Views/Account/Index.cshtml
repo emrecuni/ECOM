@@ -1,100 +1,207 @@
-﻿@model ECOM.Models.AccountViewModel
+@model ECOM.Models.AccountViewModel
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hesabım</title>
-@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">*@
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
-<link rel="stylesheet" href="~/css/account.css">
-<link rel="stylesheet" href="~/css/main.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css">
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
+}
 
-@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
-<script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
-@*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>*@
-<script src="~/lib/jquery/dist/bootstrap.bundle.min.js"></script>
-<script src="~/js/select-nav-menu.js"></script>
+<div class="container account-page">
+    <div class="account-layout">
 
-
-
-<div class="container mt-3">
-    <div class="menu-container col-md-3" style="margin-left:3px">
-        @await Html.PartialAsync("Nav")
-    </div>
-    <div class="content-container col-md-8" style="margin-right:3px">
-        <div class="content" id="user">
-            @await Html.PartialAsync("Tab-Menu-User") <!--kullanıcı bilgilerim tab menu-->
-            <div class="tab-content mt-3">
-                @await Html.PartialAsync("Membership",@Model.Customers) <!--üyelik bilgileri-->
-                @await Html.PartialAsync("Communication-Settings", @Model.Customers) <!--iletişim bilgileri-->
-                @await Html.PartialAsync("Change-Password") <!--parola değişikliği-->
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="account-sidebar">
+            <div class="account-user-info">
+                <div class="user-avatar">
+                    @Model.Customers.Name.Substring(0, 1).ToUpper()
+                </div>
+                <div class="user-name">@Model.Customers.Name @Model.Customers.Surname</div>
+                <div class="user-email">@Model.Customers.Email</div>
             </div>
-        </div>
-        <div class="content" id="order">
-            @await Html.PartialAsync("Order",Model.Orders) <!--sipariş geçmişi-->
-        </div>
-        <div class="content" id="coupon">
-            @await Html.PartialAsync("Tab-Menu-Coupon") <!--kullanıcı bilgilerim tab menu-->
-            <div class="tab-content mt-3">
-                @await Html.PartialAsync("All-Coupons")
-                @await Html.PartialAsync("Enable-Coupons")
-                @await Html.PartialAsync("Disable-Coupons")
+
+            <nav class="account-nav">
+                <a href="#user" class="account-nav-item" data-tab="user">
+                    <i class="fas fa-user"></i> Kullanıcı Bilgilerim
+                </a>
+                <a href="#order" class="account-nav-item" data-tab="order">
+                    <i class="fas fa-box"></i> Siparişlerim
+                    @if (Model.Orders != null && Model.Orders.Any())
+                    {
+                        <span style="margin-left:auto; background:var(--primary); color:white; border-radius:99px; padding:1px 8px; font-size:11px; font-weight:700;">@Model.Orders.Count()</span>
+                    }
+                </a>
+                <a href="#coupon" class="account-nav-item" data-tab="coupon">
+                    <i class="fas fa-gift"></i> Kuponlarım
+                </a>
+                <a href="#favorite" class="account-nav-item" data-tab="favorite">
+                    <i class="fas fa-heart"></i> Beğendiklerim
+                </a>
+                <div class="account-nav-divider"></div>
+                <a asp-controller="Login" asp-action="Logout" class="account-nav-item" style="color:var(--danger);">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== CONTENT ===== -->
+        <div class="account-content-area">
+
+            <!-- USER TAB -->
+            <div class="account-tab-content" id="tab-user">
+                <div class="account-content">
+                    <h2 class="account-content-title">Kullanıcı Bilgilerim</h2>
+
+                    <!-- Sub Tabs -->
+                    <div class="account-sub-tabs">
+                        <button class="sub-tab-btn active" data-subtab="membership">Üyelik Bilgileri</button>
+                        <button class="sub-tab-btn" data-subtab="communication">İletişim Bilgileri</button>
+                        <button class="sub-tab-btn" data-subtab="change-password">Parola Değişikliği</button>
+                    </div>
+
+                    <!-- Membership -->
+                    <div class="sub-tab-pane active" id="subtab-membership">
+                        @await Html.PartialAsync("Membership", @Model.Customers)
+                    </div>
+
+                    <!-- Communication -->
+                    <div class="sub-tab-pane" id="subtab-communication">
+                        @await Html.PartialAsync("Communication-Settings", @Model.Customers)
+                    </div>
+
+                    <!-- Password -->
+                    <div class="sub-tab-pane" id="subtab-change-password">
+                        @await Html.PartialAsync("Change-Password")
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="content" id="favorite">
-            <form action="" method="post" class="d-flex">
-                <input type="text" name="search" class="form-control" placeholder="Beğendiklerimde ara...">
-                <button type="submit" class="btn btn-warning ms-2">Ara</button>
-            </form>
-            <div class="row">
-                @*@await Html.PartialAsync("Product")*@
-                
+
+            <!-- ORDER TAB -->
+            <div class="account-tab-content" id="tab-order">
+                <div class="account-content">
+                    <h2 class="account-content-title">Siparişlerim</h2>
+                    @await Html.PartialAsync("Order", Model.Orders)
+                </div>
             </div>
-        </div>
-        <div class="content" id="rating">
-            rating
+
+            <!-- COUPON TAB -->
+            <div class="account-tab-content" id="tab-coupon">
+                <div class="account-content">
+                    <h2 class="account-content-title">Kuponlarım</h2>
+
+                    <div class="account-sub-tabs">
+                        <button class="sub-tab-btn active" data-subtab="all-coupons">Tüm Kuponlar</button>
+                        <button class="sub-tab-btn" data-subtab="enable-coupons">Aktif Kuponlar</button>
+                        <button class="sub-tab-btn" data-subtab="disable-coupons">Geçmiş Kuponlar</button>
+                    </div>
+
+                    <div class="sub-tab-pane active" id="subtab-all-coupons">
+                        @await Html.PartialAsync("All-Coupons")
+                    </div>
+                    <div class="sub-tab-pane" id="subtab-enable-coupons">
+                        @await Html.PartialAsync("Enable-Coupons")
+                    </div>
+                    <div class="sub-tab-pane" id="subtab-disable-coupons">
+                        @await Html.PartialAsync("Disable-Coupons")
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAVORITE TAB -->
+            <div class="account-tab-content" id="tab-favorite">
+                <div class="account-content">
+                    <h2 class="account-content-title">Beğendiklerim</h2>
+                    <form action="" method="post" style="display:flex; gap:10px; margin-bottom:24px;">
+                        <div style="flex:1; position:relative;">
+                            <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--gray-400); font-size:13px;"></i>
+                            <input type="text" name="search" class="form-control" placeholder="Beğendiklerimde ara..." style="padding-left:38px;">
+                        </div>
+                        <button type="submit" class="btn-primary-custom">Ara</button>
+                    </form>
+                    <div class="products-grid">
+                        @* Favorite products will be rendered here *@
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
+<!-- Email Change Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:var(--radius-xl); border:none; box-shadow:var(--shadow-lg);">
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
+<script src="~/lib/jquery/dist/bootstrap.bundle.min.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let urlParams = window.location.pathname.split('/'); // url'i '/' karakteri ile split eder
-        let defaultTab = urlParams[3] || "user"; // id değerini alır eğer null ise default 'user' atar
+document.addEventListener("DOMContentLoaded", function () {
+    // ===== MAIN TAB SWITCHING =====
+    const urlParts = window.location.pathname.split('/');
+    const defaultTab = urlParts[3] || "user";
 
-        function showTab(tabId) {
-            // Tüm içerikleri gizle
-            document.querySelectorAll(".content").forEach(el => el.style.display = "none");
+    function showMainTab(tabId) {
+        document.querySelectorAll(".account-tab-content").forEach(el => {
+            el.style.display = "none";
+        });
+        document.querySelectorAll(".account-nav-item[data-tab]").forEach(el => {
+            el.classList.remove("active");
+        });
 
-            // Seçilen sekmeyi göster
-            let activeTab = document.getElementById(tabId);
-            if (activeTab) {
-                activeTab.style.display = "block";
-            }
+        const target = document.getElementById("tab-" + tabId);
+        if (target) target.style.display = "block";
 
-            // Tüm menü linklerinden active sınıfını kaldır
-            document.querySelectorAll(".menu-container a").forEach(el => el.classList.remove("active"));
+        const link = document.querySelector(`.account-nav-item[data-tab="${tabId}"]`);
+        if (link) link.classList.add("active");
+    }
 
-            // Aktif sekmeye ait olan menü linkini seç ve active sınıfını ekle
-            let activeLink = document.querySelector(`.menu-container a[href="#${tabId}"]`);
-            if (activeLink) {
-                activeLink.classList.add("active");
-            }
-        }
+    showMainTab(defaultTab);
 
-        console.log(defaultTab);
-        // Sayfa ilk açıldığında "user" sekmesini göster
-        showTab(defaultTab);
-
-        // Menü bağlantılarına tıklama olayını ekle
-        document.querySelectorAll(".menu-container a").forEach(link => {
-            link.addEventListener("click", function (event) {
-                let targetId = this.getAttribute("href").substring(1); // # işaretini kaldır
-                showTab(targetId);
-            });
+    document.querySelectorAll(".account-nav-item[data-tab]").forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const tabId = this.getAttribute("data-tab");
+            showMainTab(tabId);
+            history.pushState(null, '', '#' + tabId);
         });
     });
-</script>
 
+    // ===== SUB TAB SWITCHING =====
+    document.querySelectorAll(".sub-tab-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const subtabId = this.getAttribute("data-subtab");
+            const parentContent = this.closest(".account-tab-content");
+
+            parentContent.querySelectorAll(".sub-tab-btn").forEach(b => b.classList.remove("active"));
+            parentContent.querySelectorAll(".sub-tab-pane").forEach(p => p.classList.remove("active"));
+
+            this.classList.add("active");
+            const pane = parentContent.querySelector("#subtab-" + subtabId);
+            if (pane) pane.classList.add("active");
+        });
+    });
+
+    // ===== EMAIL CHANGE MODAL =====
+    const btnOpenForm = document.getElementById("btnOpenForm");
+    if (btnOpenForm) {
+        const email = btnOpenForm.getAttribute("data-email");
+        btnOpenForm.addEventListener("click", function () {
+            $.post("/Account/SendOTPCode", "toMail=" + email, function (data) {
+                $("#myModal .modal-content").html(data);
+                new bootstrap.Modal(document.getElementById('myModal')).show();
+            });
+        });
+    }
+
+    $(document).on("submit", "#userForm", function (e) {
+        e.preventDefault();
+        const extra = $(this).data("extra");
+        $.post("/Account/EditCommunicationSettings", extra + "&" + $(this).serialize(), function () {});
+    });
+});
+</script>

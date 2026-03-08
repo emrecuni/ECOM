@@ -38,9 +38,9 @@ namespace ECOM.Controllers
             {
                 if (email is not null && password is not null)
                 {
-                    
+
                     var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email);
-                    if (customer is not null && Encryption.VerifyPassword(password,customer.Password!))
+                    if (customer is not null && Encryption.VerifyPassword(password, customer.Password!))
                     {
 
                         var claims = new List<Claim>
@@ -85,8 +85,8 @@ namespace ECOM.Controllers
                     Title = "Giriş Yapılırken Bir Hata Oluştu."
                 };
                 _logger.LogError($"Login/Index(POST) Error => {ex}");
-                return View("Error");
-            }           
+                return View("Error", error);
+            }
         }
 
         [HttpPost]
@@ -98,7 +98,7 @@ namespace ECOM.Controllers
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
                 ViewBag.IsSuccess = StatusTypes.Success;
-                ViewBag.Info = "Başarıyla Çıkış Yapıldı.";            
+                ViewBag.Info = "Başarıyla Çıkış Yapıldı.";
             }
             catch (Exception ex)
             {

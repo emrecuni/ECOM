@@ -186,6 +186,8 @@
     align-items: flex-start;
     gap: 16px;
     position: relative;
+    background-color: white;
+    border-radius: var(--radius-lg);
 }
 
 .order-checkbox {

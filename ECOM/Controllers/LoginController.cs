@@ -81,7 +81,7 @@ namespace ECOM.Controllers
                 ErrorViewModel error = new()
                 {
                     RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                    Message = "Email veya Parolanızı Kontrol Ediniz.",
+                    Message = $"Message: {ex.Message}\nStacktrace: {ex.StackTrace}",
                     Title = "Giriş Yapılırken Bir Hata Oluştu."
                 };
                 _logger.LogError($"Login/Index(POST) Error => {ex}");

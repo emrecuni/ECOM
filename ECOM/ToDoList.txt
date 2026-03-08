@@ -120,6 +120,13 @@ X Email güncellemek için gönderilen kodun geçerlilik süresi olmalı X
 X Account sayfasındaki email alanı disable olmalı dışarıdan müdahele edilememeli X
 X Sepetteki ürünlerin adına tıklandığında ürün sayfasına yönlendir X
 X Favorideki ürünlerin kalplerini kırmızı olarak getir main ve product sayfalarında X
+* Db işlemlerini vs api ile yap ve mvc controller'larında api calling yap
+* Ana sayfadan kategorilere gitmiyor
+* Ana sayfa üzerinde siparişlere gidince account/order'a gidiyor kullanıcı bilgileri üzerinde gidince account#order'a gidiyor
+* Kuponlarda geçmiş olan kupon görünmüyor
+* Payment sayfasında yeni adres ekleme yapılmıyor
+* Ödeme yaparken view'dan gönderilen fiyat ile db'deki fiyat farklı olabilir bu durumun kontrolü yapılmalı
+* Appsettings'e iyzico bilgilerini ekle
 
 <link rel="stylesheet" href="~/css/product.css">
 

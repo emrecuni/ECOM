@@ -40,6 +40,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    margin-bottom:20px;
+    background-color: var(--gray-100);
 }
 
 .product-card:hover {
@@ -160,6 +162,7 @@
     font-family: var(--font-display);
     margin-top: auto;
     align-self: flex-start;
+    margin-left: auto;
 }
 
 /* Products Grid */

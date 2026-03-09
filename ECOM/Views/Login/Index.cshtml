@@ -1,81 +1,86 @@
-﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="~/css/login.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css">
+}
 
-<div class="container">
-    <div class="login-container">
-        <div>
-            <h3>Hesabınıza Giriş Yapın</h3>
+<div class="auth-page">
+    <div class="auth-card">
+        <!-- Logo -->
+        <div class="auth-logo">
+            <a asp-controller="Main" asp-action="Index">
+                <span class="auth-logo-text">e-com</span>
+            </a>
+        </div>
 
-            <form asp-action="Index" method="post">
-                <!-- Kullanıcı Adı -->
-                <div class="mb-3">
-                    <label for="email" class="form-label">E-Mail:</label>
-                    <input type="text" class="form-control" id="email" name="email"
-                           placeholder="E-Mail Adresinizi veya Telefon Numaranızı Girin" required>
+        <h1 class="auth-title">Tekrar hoş geldiniz</h1>
+        <p class="auth-subtitle">Hesabınıza giriş yapın</p>
+
+        <form asp-action="Index" method="post">
+            <!-- E-Mail -->
+            <div class="auth-form-group">
+                <label class="auth-label" for="email">E-Posta Adresi</label>
+                <div class="auth-input-wrapper">
+                    <input type="text" class="auth-input" id="email" name="email"
+                           placeholder="ornek@email.com" required>
+                    <i class="fas fa-envelope"></i>
                 </div>
-
-                <!-- Parola -->
-                <div class="mb-3">
-                    <label for="password" class="form-label">Parola:</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                           placeholder="Parolanızı Girin" required>
-                </div>
-
-                <!-- Giriş Yap Butonu -->
-                <button type="submit" class="btn btn-custom">Giriş Yap</button>
-
-                <!--Hatalı Parola-->
-                <div class="bg-warning warning">
-                    @{
-                        if (ViewBag.WrongPassword is not null)
-                        {
-                            <i class="fas fa-exclamation-circle warning-icon"></i>
-                            @ViewBag.WrongPassword
-                        }
-                        else if (ViewBag.NullCheck is not null)
-                        {
-                            <i class="fas fa-exclamation-circle warning-icon"></i>
-                            @ViewBag.NullCheck
-                        }
-                    }
-                </div>
-
-                <!-- Şifre unuttum Linki -->
-                <div class="text-center mt-3">
-                    <a asp-action="ForgotPassword">Şifrenizi mi Unuttunuz?</a>
-                </div>
-            </form>
-
-            <div class="footer-links">
-                <p>Henüz üye değil misiniz? <a asp-controller="Login" asp-action="Register">Kayıt Olun</a></p>
             </div>
-            
-            @{ 
-                string cssClass = ViewBag.IsSuccess switch
-                {
-                    StatusTypes.Success => "info bg-success",
-                    StatusTypes.Error => "info text-white bg-danger",
-                    _ => "test"
-                };
 
-                string iconClass = ViewBag.IsSuccess switch
-                {
-                    StatusTypes.Success => "fas fa-check",
-                    StatusTypes.Error => "fa-solid fa-x",
-                    _ => "test",
-                };
+            <!-- Parola -->
+            <div class="auth-form-group">
+                <label class="auth-label" for="password">Parola</label>
+                <div class="auth-input-wrapper">
+                    <input type="password" class="auth-input" id="password" name="password"
+                           placeholder="Parolanızı girin" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+
+            <!-- Forgot Password -->
+            <div class="auth-forgot">
+                <a asp-action="ForgotPassword">Şifrenizi mi unuttunuz?</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="auth-submit">
+                <i class="fas fa-sign-in-alt"></i> Giriş Yap
+            </button>
+
+            <!-- Alerts -->
+            @if (ViewBag.WrongPassword is not null)
+            {
+                <div class="auth-alert auth-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    @ViewBag.WrongPassword
+                </div>
+            }
+            else if (ViewBag.NullCheck is not null)
+            {
+                <div class="auth-alert auth-alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    @ViewBag.NullCheck
+                </div>
             }
 
+            @{
+                if (ViewBag.IsSuccess == StatusTypes.Success)
+                {
+                    <div class="auth-alert auth-alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        @ViewBag.Info @TempData["Info"]
+                    </div>
+                }
+                else if (ViewBag.IsSuccess == StatusTypes.Error)
+                {
+                    <div class="auth-alert auth-alert-error">
+                        <i class="fas fa-times-circle"></i>
+                        @ViewBag.Info @TempData["Info"]
+                    </div>
+                }
+            }
+        </form>
 
-            <div class="@cssClass">
-                <i class="@iconClass"></i>
-                @ViewBag.Info
-                @TempData["Info"]
-            </div>
+        <div class="auth-footer-link">
+            Henüz üye değil misiniz? <a asp-controller="Login" asp-action="Register">Kayıt Olun</a>
         </div>
     </div>
 </div>
-
-<script src="~/lib/popperjs/dist/umd/popper.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>

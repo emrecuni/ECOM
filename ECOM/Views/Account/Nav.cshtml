@@ -1,11 +1,16 @@
-﻿<nav @*class="menu-container"*@>
-    <h4 class="menu-title"><i class="fas fa-user-circle me-2"></i>Hesabım</h4>
-    <ul>
-        <li><a href="#user"><i class="bi bi-person-circle"></i> Kullanıcı Bilgilerim</a></li>
-        <li><a href="#order"><i class="bi bi-box-seam"></i> Siparişlerim</a></li>
-        <li><a href="#coupon"><i class="bi bi-ticket-detailed"></i> Kuponlarım</a></li>
-        <li><a href="#favorite"><i class="bi bi-heart"></i> Beğendiklerim</a></li>
-        @*<li><a href="#rating"><i class="bi bi-star"></i> Değerlendirmelerim</a></li>*@
-        <li><a asp-controller="Main" asp-action="Index"><i class="bi bi-door-closed"></i> Çıkış</a></li>
-    </ul>
+{{-- This partial is now embedded directly in Index.cshtml for better structure --}}
+{{-- Kept for backward compatibility --}}
+<nav>
+    <a asp-controller="Account" asp-action="Index" class="account-nav-item" data-tab="user">
+        <i class="fas fa-user"></i> Kullanıcı Bilgilerim
+    </a>
+    <a asp-controller="Account" asp-action="Order" class="account-nav-item" data-tab="order">
+        <i class="fas fa-box"></i> Siparişlerim
+    </a>
+    <a asp-controller="Account" asp-action="Coupon" class="account-nav-item" data-tab="coupon">
+        <i class="fas fa-gift"></i> Kuponlarım
+    </a>
+    <a asp-controller="Account" asp-action="Favorite" class="account-nav-item" data-tab="favorite">
+        <i class="fas fa-heart"></i> Beğendiklerim
+    </a>
 </nav>

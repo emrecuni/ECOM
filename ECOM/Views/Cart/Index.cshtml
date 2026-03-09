@@ -1,103 +1,142 @@
-﻿@model ECOM.Models.CartViewModel
+@model ECOM.Models.CartViewModel
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/cart.css">
+    <link rel="stylesheet" href="~/css/main.css">
+}
 
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
-@*<link rel="stylesheet" href="http://localhost:5045//lib/font-awesome/css/all.min.css">*@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="~/css/cart-header.css">
-<link rel="stylesheet" href="~/css/cart.css">
-
-<div class="container mt-4">
-    <div class="top d-flex align-items-center justify-content-between shadow-sm">
-        @await Html.PartialAsync("Cart-Header") <!--header-->
+<div class="container cart-page">
+    <!-- Cart Header Steps -->
+    <div class="cart-header-bar">
+        <div class="cart-steps">
+            <div class="cart-step active">
+                <span class="cart-step-num">1</span>
+                <span>Sepetim</span>
+            </div>
+            <div class="cart-step-line"></div>
+            <div class="cart-step">
+                <span class="cart-step-num">2</span>
+                <span>Adres</span>
+            </div>
+            <div class="cart-step-line"></div>
+            <div class="cart-step">
+                <span class="cart-step-num">3</span>
+                <span>Ödeme</span>
+            </div>
+        </div>
     </div>
 
     @if (Model.Carts is null || Model.Carts.Count == 0)
     {
-        <div class="empty-cart">
-            <!--Sepet boşsa çıkacak mesaj-->
-            <div class="message">
-                <img src="~/img/cart.gif" width="150" alt="cart" />
-                <h4>Sepetin şu an boş</h4>
-                <p>
-                    Sepetini e-com’un fırsatlarla dolu dünyasından doldurmak için <br />aşağıdaki ürünleri incelemeye başlayabilirsin.
-                </p>
-            </div>
-            <hr />
-            <!--beğendiklerim-->
-            <div class="suggestion">
-                <h4 class="suggestion-header">Beğendiklerim</h4>
-                @await Html.PartialAsync("Suggestion", Model.Favorites)
-            </div>
+        <!-- Empty Cart -->
+        <div class="empty-cart-wrapper">
+            <img src="~/img/cart.gif" alt="Boş Sepet">
+            <h4>Sepetin şu an boş</h4>
+            <p>Sepetini e-com'un fırsatlarla dolu dünyasından doldurmak için aşağıdaki ürünleri incelemeye başlayabilirsin.</p>
+            <a asp-controller="Main" asp-action="Index" class="btn-primary-custom" style="margin-top:24px;">
+                <i class="fas fa-arrow-left"></i> Alışverişe Devam Et
+            </a>
         </div>
+
+        @if (Model.Favorites is not null && Model.Favorites.Any())
+        {
+            <div class="suggestion-section">
+                <h3 class="suggestion-title">
+                    <i class="fas fa-heart" style="color:var(--danger); margin-right:8px;"></i>
+                    Beğendiklerim
+                </h3>
+                <div class="products-grid">
+                    @await Html.PartialAsync("Suggestion", Model.Favorites)
+                </div>
+            </div>
+        }
     }
     else
     {
-
-        <div class="nonemtpy-cart">
-
-            <div class="cart-sub-header">
-                <hr />
-                <span class="cart-text">Sepetim</span>
-                <span class="product-count">(2 Ürün)</span>
-            </div>
-        </div>
-        <!--kuponlar-->
-        <div class="coupons d-flex justify-content-between align-items-center col-9">
-            <a asp-controller="Account" asp-action="Index" asp-route-id="coupon" class="coupon">
+        <!-- Coupon Bar -->
+        <div class="coupons-bar">
+            <a asp-controller="Account" asp-action="Index" asp-route-id="coupon" class="coupon-link">
                 <i class="fas fa-gift"></i>
                 Kuponlarım
             </a>
-
-            <a href="#" class="add-coupon">
-                Kupon Kodu Ekle
-                <i class="fas fa-plus"></i>
+            <a href="#" class="add-coupon-btn">
+                Kupon Kodu Ekle <i class="fas fa-plus"></i>
             </a>
         </div>
-        <!--sepetim-->
-        <div class="my-cart">
-            <div class="orders col-9">
+
+        <!-- Cart Title -->
+        <div class="cart-title">
+            Sepetim
+            <span class="cart-count-badge">@Model.Carts.Count Ürün</span>
+        </div>
+
+        <!-- Cart Layout -->
+        <div class="cart-layout">
+            <!-- Orders -->
+            <div class="orders-col">
                 @foreach (var cart in Model.Carts.ToList())
                 {
                     @await Html.PartialAsync("Cart", cart)
                 }
             </div>
-            <!--Sipariş Özeti-->
-            <div class="cart-total col-3">
-                <!--col kısmına bir tekrar bak-->
-                @{
-                    decimal cartSummaryPrice = 0;
-                    int cartSummaryProductCount = 0;
 
-                    foreach (var cart in Model.Carts.ToList())
+            <!-- Cart Total -->
+            @{
+                decimal cartSummaryPrice = 0;
+                int cartSummaryProductCount = 0;
+                foreach (var cart in Model.Carts.ToList())
+                {
+                    if (cart.Enable == true)
                     {
-                        if (cart.Enable == true)
-                        {
-                            cartSummaryPrice += cart.TotalPrice;
-                            cartSummaryProductCount++;
-                        }
-
+                        cartSummaryPrice += cart.TotalPrice;
+                        cartSummaryProductCount++;
                     }
                 }
+            }
 
-                <h5>SEÇİLEN ÜRÜNLER (@cartSummaryProductCount)</h5>
-                <span><b>₺@cartSummaryPrice.ToString("F2")</b></span>
+            <div class="cart-total-panel">
+                <div class="cart-total-title">
+                    <i class="fas fa-receipt" style="color:var(--primary); margin-right:8px;"></i>
+                    Sipariş Özeti
+                </div>
+
+                <div class="cart-total-row">
+                    <span>Seçilen Ürünler (@cartSummaryProductCount)</span>
+                    <span>₺@cartSummaryPrice.ToString("F2")</span>
+                </div>
+                <div class="cart-total-row">
+                    <span>Kargo</span>
+                    <span class="cargo-free"><i class="fas fa-check"></i> Bedava</span>
+                </div>
+                <div class="cart-total-row grand-total">
+                    <span>Toplam</span>
+                    <span class="amount">₺@cartSummaryPrice.ToString("F2")</span>
+                </div>
+
                 <form asp-controller="Payment" asp-action="Index" method="post">
                     <input type="hidden" name="cart-total" value="@cartSummaryPrice" />
-                    <button type="submit" class="btn btn-warning"><b>Alışverişi Tamamla</b></button>
+                    <button type="submit" class="checkout-btn">
+                        <i class="fas fa-lock"></i>
+                        Alışverişi Tamamla
+                    </button>
                 </form>
-                <hr />
-                <div class="cart-summary">
-                    <div class="d-flex justify-content-between">Ürünler <span> ₺@cartSummaryPrice.ToString("F2")</span></div>
-                    <br />
-                    <div class="d-flex justify-content-between">Kargo <span> Bedava</span></div>
+
+                <div style="display:flex; align-items:center; gap:6px; color:var(--success); font-size:12.5px; font-weight:600; justify-content:center; margin-top:12px;">
+                    <i class="fas fa-shield-alt"></i> 256-bit SSL ile güvenli ödeme
                 </div>
             </div>
         </div>
-        <!--beğendiklerim-->
-        <div class="suggestion col-9">
-            <h4 class="suggestion-header">Beğendiklerim</h4>
-            @await Html.PartialAsync("Suggestion", Model.Favorites)
-        </div>
+
+        <!-- Favorites Suggestion -->
+        @if (Model.Favorites is not null && Model.Favorites.Any())
+        {
+            <div class="suggestion-section" style="max-width: calc(100% - 344px);">
+                <h3 class="suggestion-title">
+                    <i class="fas fa-heart" style="color:var(--danger); margin-right:8px;"></i>
+                    Beğendiklerim
+                </h3>
+                @await Html.PartialAsync("Suggestion", Model.Favorites)
+            </div>
+        }
     }
 </div>

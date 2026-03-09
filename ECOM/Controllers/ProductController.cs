@@ -24,7 +24,6 @@ namespace ECOM.Controllers
         {
             try
             {
-
                 var productViewModel = await _product.GetProductWithCommentsById(id);
 
                 if (productViewModel?.Product is null) // ürün bulunamazsa hata mesajı döndürsün

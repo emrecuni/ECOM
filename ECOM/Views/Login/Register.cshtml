@@ -1,92 +1,76 @@
-﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="~/css/login.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css">
+}
 
-<div class="container">
-    <div class="register-container">
-        <h3>Kayıt Olun</h3>
+<div class="auth-page">
+    <div class="auth-card">
+        <!-- Logo -->
+        <div class="auth-logo">
+            <a asp-controller="Main" asp-action="Index">
+                <span class="auth-logo-text">e-com</span>
+            </a>
+        </div>
 
-        <form action="Register" method="post">
-            <!-- Ad -->
-            <div class="mb-3">
-                <label for="name" class="form-label">Ad: </label>
-                <input type="text" class="form-control" id="name" name="name"
-                       placeholder="Adınızı Girin" required>
-            </div>
+        <h1 class="auth-title">Hesap Oluşturun</h1>
+        <p class="auth-subtitle">Binlerce ürüne hemen erişin</p>
 
-            <!-- Soyad -->
-            <div class="mb-3">
-                <label for="surname" class="form-label">Soyad: </label>
-                <input type="text" class="form-control" id="surname" name="surname"
-                       placeholder="Soyadınızı Girin" required>
-            </div>
-
-            <!-- E-Mail -->
-            <div class="mb-3">
-                <label for="email" class="form-label">E-Mail: </label>
-                <input type="email" class="form-control" id="email" name="email"
-                       placeholder="E-Mail Adresinizi Girin" required>
-            </div>
-
-            <!-- Parola -->
-            <div class="mb-3">
-                <label for="password" class="form-label">Parola: </label>
-                <input type="password" class="form-control" id="password" name="password"
-                       placeholder="Parolanızı Girin" required>
-            </div>
-
-            <!-- Telefon -->
-            <div class="mb-3">
-                <label for="phone" class="form-label">Telefon: </label>
-                <input type="tel" class="form-control" id="phone" name="phone"
-                       placeholder="Telefon Numaranızı Girin" required>
-            </div>
-
-            <!-- Cinsiyet -->
-            <div class="mb-3">
-                <label for="gender" class="form-label">Cinsiyet: </label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="male" value=true required>
-                    <label class="form-check-label" for="male">Erkek</label>
+        <form asp-action="Register" method="post">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="auth-form-group">
+                    <label class="auth-label">Ad</label>
+                    <div class="auth-input-wrapper">
+                        <input type="text" class="auth-input" name="name" placeholder="Adınız" required>
+                        <i class="fas fa-user"></i>
+                    </div>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="female" value=false required>
-                    <label class="form-check-label" for="female">Kadın</label>
+                <div class="auth-form-group">
+                    <label class="auth-label">Soyad</label>
+                    <div class="auth-input-wrapper">
+                        <input type="text" class="auth-input" name="surname" placeholder="Soyadınız" required>
+                        <i class="fas fa-user"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Doğum Tarihi -->
-            <div class="mb-3">
-                <label for="birthdate" class="form-label">Doğum Tarihi: </label>
-                <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+            <div class="auth-form-group">
+                <label class="auth-label">E-Posta Adresi</label>
+                <div class="auth-input-wrapper">
+                    <input type="email" class="auth-input" name="email" placeholder="ornek@email.com" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
             </div>
 
+            <div class="auth-form-group">
+                <label class="auth-label">Parola</label>
+                <div class="auth-input-wrapper">
+                    <input type="password" class="auth-input" name="password" placeholder="En az 8 karakter" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
 
-            <!-- Kayıt Ol Butonu -->
-            <button type="submit" class="btn btn-custom">Kayıt Ol</button>
+            <div class="auth-form-group">
+                <label class="auth-label">Parola Tekrar</label>
+                <div class="auth-input-wrapper">
+                    <input type="password" class="auth-input" name="passwordConfirm" placeholder="Parolanızı tekrar girin" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="auth-submit">
+                <i class="fas fa-user-plus"></i> Kayıt Ol
+            </button>
+
+            @if (ViewBag.Error is not null)
+            {
+                <div class="auth-alert auth-alert-error">
+                    <i class="fas fa-times-circle"></i>
+                    @ViewBag.Error
+                </div>
+            }
         </form>
-        
-        <!-- işlem sonucuna göre css class'ı atanır'-->
-        @{ 
-            var cssClass = ViewBag.IsSuccess switch
-            {
-                StatusTypes.Success => "bg-success info",
-                StatusTypes.Warning => "bg-warning info",
-                StatusTypes.Error => "bg-danger info text-white",
-                _ => string.Empty
-            };
 
-            var iconClass = ViewBag.IsSuccess switch
-            {
-                StatusTypes.Success => "fas fa-check",
-                StatusTypes.Warning => "fas fa-exclamation-circle",
-                StatusTypes.Error => "fa-solid fa-x",
-                _ => string.Empty,
-            };
-        }
-        <div class="@cssClass">
-            <i class="@iconClass"></i>
-            @ViewBag.Info
+        <div class="auth-footer-link">
+            Zaten hesabınız var mı? <a asp-action="Index">Giriş Yapın</a>
         </div>
     </div>
 </div>

@@ -1,18 +1,32 @@
-﻿@model IEnumerable<ECOM.Data.Product>
-<link rel="stylesheet" href="~/css/main.css">
+@model IEnumerable<ECOM.DTO.ProductDTO>
 
-<script src="~/js/fav-icon.js"></script>
+@section Styles {
+    <link rel="stylesheet" href="~/css/main.css">
+}
 
-<!-- Ürünler -->
-<div class="container mt-4">
-    <h3>Ürünler</h3>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-        @if (Model is not null)
-        {
-            foreach (var product in Model)
+<div class="container page-section">
+    <div class="section-header">
+        <h2 class="section-title">Tüm Ürünler</h2>
+        <span style="font-size:13px; color:var(--text-muted);">@(Model?.Count() ?? 0) ürün listeleniyor</span>
+    </div>
+
+    @if (Model is not null && Model.Any())
+    {
+        <div class="products-grid">
+            @foreach (var product in Model)
             {
                 @await Html.PartialAsync("Product", product)
             }
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-box-open" style="font-size:48px; color:var(--gray-300); display:block; margin-bottom:16px;"></i>
+            <h4>Ürün bulunamadı</h4>
+            <p>Aradığınız kriterlere uygun ürün henüz eklenmemiş.</p>
+        </div>
+    }
 </div>
+
+<script src="~/js/favorite.js"></script>

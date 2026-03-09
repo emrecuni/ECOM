@@ -1,0 +1,5 @@
+﻿* Swagger ekle projeye
+* Login doğrulama ekle 
+* Login(mvc)'de eklenecek claims'leri api'den dön
+* İşlemleri service dosyalarında yaptır
+* Product controller ekle

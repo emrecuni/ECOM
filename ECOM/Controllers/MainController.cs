@@ -1,8 +1,11 @@
 ﻿using ECOM.Data;
+using ECOM.DTO;
+using ECOM.Models;
 using ECOM.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ECOM.Controllers
@@ -10,10 +13,12 @@ namespace ECOM.Controllers
     public class MainController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger<MainController> _logger;
 
-        public MainController(DataContext context)
+        public MainController(DataContext context, ILogger<MainController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [Authorize]
@@ -26,14 +31,41 @@ namespace ECOM.Controllers
              */
 
             // veri tabanındaki bütün ürünleri çeker
+
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);   
+
+            // bütün ürünler çekilir
             var products = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.SupCategory)
                 .Include(p => p.SubCategory)
-                .Include(p => p.Seller)                
+                .Include(p => p.Seller)                 
                 .ToListAsync();
 
-            return View(products);
+            // kulanıcının favorilediği ürünlerin id'leri alınır
+            var favorites = await _context.Favorites
+                .Where(f => f.CustomerId == customerId)
+                .Select(f => f.ProductId)
+                .ToListAsync();
+
+            // bütün ürünler dto'ya aktarılır ve favori bilgisi eklenir
+            List<ProductDTO> productDTOs = [.. products.Select(p => new ProductDTO
+            {
+                ProductId = p.ProductId,
+                Name = p.Name,
+                Price = p.Price,
+                Score = p.Score,
+                ImagePath = p.ImagePath,
+                BrandName = p.Brand.Name,
+                SupCategory = p.SupCategory.Name,
+                SubCategory = p.SubCategory.Name,
+                SellerName = p.Seller.Name,
+                IsFavorite = favorites.Contains(p.ProductId)
+            })];
+
+
+
+            return View(productDTOs);
         }
 
         [Authorize]
@@ -107,6 +139,48 @@ namespace ECOM.Controllers
             {
                 NLogger.logger.Error($"SearchProductByName Error => {ex}");
                 return View("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Favorite (int id)
+        {
+            try
+            {
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                bool isFavorite;
+                var favorite = await _context.Favorites.FirstOrDefaultAsync(f => f.CustomerId == customerId && f.ProductId == id);
+
+                if(favorite is null) // favorilerde yoksa eklenir
+                {
+                    _context.Favorites.Add(favorite = new Favorites
+                    {
+                        CustomerId = customerId,
+                        ProductId = id,
+                        AdditionTime = DateTime.Now
+                    });
+                    isFavorite = true;
+                }
+                else // favorilerde varsa silinir
+                {
+                    _context.Favorites.Remove(favorite);
+                    isFavorite = false;
+                }
+                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                
+                return Json(new { isFavorite });
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = "Hesap bilgileri getirilirken bir hata oluştu.",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = $"Hata Kodu: {guid}"
+                };
+                _logger.LogError($"Main/Favorite Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
             }
         }
     }

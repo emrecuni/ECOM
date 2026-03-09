@@ -1,23 +1,53 @@
-﻿@{
+@{
     ViewData["Title"] = "Ödeme Hatası";
 }
 
-<div class="container mt-5">
-    <div class="alert alert-danger text-center" role="alert">
-        <h2>Ödeme Başarısız!</h2>
-        <p>Maalesef ödemeniz tamamlanamadı.</p>
-        <hr>
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-            <p><strong>Hata Mesajı:</strong> @ViewBag.ErrorMessage</p>
-        }
-        else
-        {
-            <p>Lütfen tekrar deneyiniz veya bizimle iletişime geçiniz.</p>
-        }
-    </div>
+@section Styles {
+    <link href="~/css/payment.css" rel="stylesheet" />
+    <link href="~/css/payment-header.css" rel="stylesheet" />
+}
 
-    <div class="text-center">
-        <a href="/Cart" class="btn btn-warning">Sepete Geri Dön</a>
+@await Html.PartialAsync("Payment-Header")
+
+<div class="container" style="padding: 48px 16px; max-width: 560px;">
+    <div class="payment-result-card">
+
+        <!-- Error Icon -->
+        <div class="result-icon-wrapper error">
+            <div class="result-icon-ring"></div>
+            <i class="fas fa-times"></i>
+        </div>
+
+        <h2 class="result-title">Ödeme Başarısız</h2>
+        <p class="result-subtitle">
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                @ViewBag.ErrorMessage
+            }
+            else
+            {
+                <text>Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyiniz veya bizimle iletişime geçiniz.</text>
+            }
+        </p>
+
+        <!-- Help Note -->
+        <div style="background:#FEF2F2; border:1px solid #FCA5A5; border-radius:var(--radius-md); padding:14px 16px; margin-bottom:24px; display:flex; gap:10px; align-items:flex-start; text-align:left;">
+            <i class="fas fa-info-circle" style="color:var(--danger); flex-shrink:0; margin-top:2px;"></i>
+            <p style="font-size:13px; color:#991B1B; margin:0; line-height:1.5;">
+                Kart bilgilerinizi kontrol edin veya farklı bir ödeme yöntemi deneyin. Sorun devam ederse destek ekibimizle iletişime geçin.
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="/Cart" class="pay-btn" style="text-decoration:none; text-align:center; background:linear-gradient(135deg,var(--danger),#C53030); box-shadow:0 4px 14px rgba(229,62,62,0.35);">
+                <i class="fas fa-redo"></i> Tekrar Dene
+            </a>
+            <a asp-controller="Main" asp-action="Index"
+               style="display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border:1.5px solid var(--gray-300); border-radius:var(--radius-md); font-size:14px; font-weight:600; color:var(--text-secondary); transition:var(--transition); text-decoration:none;">
+                <i class="fas fa-home"></i> Anasayfaya Dön
+            </a>
+        </div>
+
     </div>
 </div>

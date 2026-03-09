@@ -1,17 +1,48 @@
-﻿@{
+@{
     ViewData["Title"] = "Ödeme Başarılı";
 }
 
-<div class="container mt-5">
-    <div class="alert alert-success text-center" role="alert">
-        <h2>Ödeme Başarılı!</h2>
-        <p>Ödemeniz başarıyla alınmıştır. Teşekkür ederiz.</p>
-        <hr>
-        <p><strong>Ödeme ID:</strong> @ViewBag.PaymentId</p>
-        <p><strong>Ödenen Tutar:</strong> ₺@ViewBag.Price</p>
-    </div>
+@section Styles {
+    <link href="~/css/payment.css" rel="stylesheet" />
+    <link href="~/css/payment-header.css" rel="stylesheet" />
+}
 
-    <div class="text-center">
-        <a asp-controller="Main" asp-action="Index" class="btn btn-primary">Anasayfaya Dön</a>
+@await Html.PartialAsync("Payment-Header")
+
+<div class="container" style="padding: 48px 16px; max-width: 560px;">
+    <div class="payment-result-card">
+
+        <!-- Success Icon -->
+        <div class="result-icon-wrapper success">
+            <div class="result-icon-ring"></div>
+            <i class="fas fa-check"></i>
+        </div>
+
+        <h2 class="result-title">Ödeme Başarılı!</h2>
+        <p class="result-subtitle">Siparişiniz alındı. En kısa sürede hazırlanmaya başlanacak.</p>
+
+        <!-- Details -->
+        <div class="result-details">
+            <div class="result-detail-row">
+                <span class="result-detail-label"><i class="fas fa-hashtag"></i> Ödeme No</span>
+                <span class="result-detail-value">#@ViewBag.PaymentId</span>
+            </div>
+            <div class="result-detail-row">
+                <span class="result-detail-label"><i class="fas fa-lira-sign"></i> Ödenen Tutar</span>
+                <span class="result-detail-value" style="color:var(--primary); font-weight:700;">₺@ViewBag.Price</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a asp-controller="Account" asp-action="Index" asp-route-id="order" class="pay-btn" style="text-decoration:none; text-align:center;">
+                <i class="fas fa-box"></i> Siparişlerimi Görüntüle
+            </a>
+            <a asp-controller="Main" asp-action="Index"
+               style="display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border:1.5px solid var(--gray-300); border-radius:var(--radius-md); font-size:14px; font-weight:600; color:var(--text-secondary); transition:var(--transition); text-decoration:none;">
+                <i class="fas fa-arrow-left"></i> Alışverişe Devam Et
+            </a>
+        </div>
+
     </div>
 </div>

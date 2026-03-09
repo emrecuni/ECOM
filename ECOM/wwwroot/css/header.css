@@ -1,171 +1,314 @@
-﻿.top {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+/* ===== HEADER ===== */
+.site-header {
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--gray-200);
 }
 
-.search-bar input {
-    width: 250px;
-}
-
-.categories-container {
-    background-color: azure;
-    width: 100%; /* Tam genişlik */
-    padding: 10px 20px; /* Üst ve alt boşluk ekleyebilirsiniz */
-    box-sizing: border-box; /* Padding ve margin hesaplamaları içine dahil edilir */
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.categories-list-container {
-    width: 100%; /* Alt listeyi tüm genişlikte yaymak için */
-}
-
-.categories-container h4 {
-    margin-bottom: 10px; /* Başlık ile liste arasındaki boşluk */
-}
-
-.categories-container ul {
-    padding: 0;
-    margin: 0;
-}
-
-.categories-container li {
-    list-style: none;
-    display: inline-block;
-}
-
-.categories-container a {
-    text-decoration: none;
-    display: block;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.list-unstyled {
-    display: flex; /* Yatayda sıralama */
-    justify-content: space-between; /* Elemanlar arasındaki boşluğu eşitler */
-    width: 100%; /* Listeyi tam genişlikte yayar */
-    padding: 0; /* Varsayılan padding'i sıfırlayalım */
-}
-
-    .list-unstyled li {
-        flex: 1;
-        text-align: center;
-        padding: 15px 0; /* Yüksekliği artırmak için padding kullanabilirsiniz */
-        font-size: 18px; /* Yazı boyutunu da artırabilirsiniz */
-    }
-
-.me-4 {
-    margin-right: 16px; /* Liste öğeleri arasındaki boşluğu artırabilirsiniz */
-    background-color: bisque;
-    width: 190px;
-    border-radius: 5px;
-}
-
-.list-unstyled a {
-    text-decoration: none; /* Linklerin altını çizmesini kaldırır */
-    color: black; /* Bağlantı rengini ayarlayabilirsiniz */
-}
-
-    .list-unstyled a :hover {
-        background-color: cyan;
-        color: red; /* Hover efekti (isteğe bağlı) */
-        font-size: medium;
-    }
-
-.category {
-    background-color: blue;
-    color: red;
-}
-
-.logo {
-    margin-right: 20px; /* İsteğe bağlı, logo ile aradaki boşluğu artırmak için */
-}
-
-.search-bar {
-    flex-grow: 1; /* Arama çubuğunun daha geniş olmasını sağlar */
-    margin-right: 20px; /* Diğer div ile arasındaki boşluğu ayarlamak için */
+.header-top {
+    padding: 14px 0;
     display: flex;
-    align-items: center; /* Arama çubuğunun ortalanmasını sağlar */
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 }
 
-.account {
-    background-color: white;
-    border: 3px solid;
-    border-color: #AAAAAA;
+/* Logo */
+.header-logo {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
 }
 
-.cart {
-    background-color: #AAAAAA;
+.header-logo img {
+    height: 42px;
+    width: auto;
 }
 
-.account, .cart {
+.logo-text {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+/* Search Bar */
+.header-search {
+    flex: 1;
+    max-width: 560px;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--gray-100);
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.search-wrapper:focus-within {
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.search-wrapper input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 11px 18px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.search-wrapper input::placeholder {
+    color: var(--gray-500);
+}
+
+.search-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    border: none;
+    padding: 11px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-dark));
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Account Dropdown */
+.account-dropdown {
+    position: relative;
+}
+
+.account-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: var(--radius-md);
+    background: var(--gray-100);
+    border: 1.5px solid var(--gray-200);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
     font-weight: 500;
-    padding: 8px 12px;
-    margin-right: 16px; /* Liste öğeleri arasındaki boşluğu artırabilirsiniz */
-    width: 120px;
-    height: 50px;
-    border-radius: 5px;
-    text-align: center;
-    text-decoration: none;
-    margin-left: 20px; /* Hesap kısmı ile önceki eleman arasına boşluk ekler */
+    font-size: 14px;
 }
 
-    .account i, .cart i {
-        font-size: 1.5rem;
-    }
-
-.menu-container {
-    position: relative; /* Menüye konum vermek için */
-    display: inline-block; /* Menü öğesini satır içinde tutuyoruz */
+.account-btn:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
-/* Menü öğesinin üzerine gelindiğinde açılacak menü */
-.dropdown-menu {
-    display: none; /* Başlangıçta gizli */
-    position: absolute; /* Menü konumlandırması */
-    top: 100%; /* Menü öğesinin hemen altına yerleştiriyoruz */
-    left: 0;
-    background-color: #f8f9fa; /* Arka plan rengi */
-    border: 1px solid #ddd; /* Kenarlık */
-    padding: 10px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Gölgelendirme efekti */
-    z-index: 1;
-    border-radius: 5px;
+.account-btn .icon {
+    width: 30px;
+    height: 30px;
+    background: var(--primary-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 14px;
 }
 
-/* A etiketi */
-.menu-container a {
-    text-decoration: none;
-    display: inline-block;
-    color: white;
-    border-radius: 5px;
+.account-btn .chevron {
+    font-size: 10px;
+    color: var(--gray-500);
+    transition: var(--transition);
 }
 
-/* Menü açılınca hover efekti */
-.menu-container:hover .dropdown-menu {
-    display: block; /* Hover ile menüyü gösteriyoruz */
+.account-dropdown:hover .chevron {
+    transform: rotate(180deg);
 }
 
-/* Menü öğelerinin stilini ayarlıyoruz */
-.dropdown-menu a {
+.dropdown-menu-custom {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    min-width: 200px;
+    z-index: 1000;
+    overflow: hidden;
+    padding: 8px;
+    animation: dropdownFade 0.2s ease;
+}
+
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.account-dropdown:hover .dropdown-menu-custom {
     display: block;
-    padding: 8px 12px;
-    color: #333;
-    text-decoration: none;
-    border-radius: 3px;
 }
 
-    /* Menü öğesine hover efekti */
-    .dropdown-menu a:hover {
-        background-color: #007bff;
-        color: white;
-    }
+.dropdown-menu-custom a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: var(--transition);
+}
 
-.container {
-    border-radius: 15px;
+.dropdown-menu-custom a:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+
+.dropdown-menu-custom a i {
+    width: 16px;
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.dropdown-menu-custom a:hover i {
+    color: var(--primary);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 6px 0;
+}
+
+.dropdown-logout {
+    color: var(--danger) !important;
+}
+
+.dropdown-logout:hover {
+    background: #FFF5F5 !important;
+    color: var(--danger) !important;
+}
+
+.dropdown-logout i {
+    color: var(--danger) !important;
+}
+
+/* Cart Button */
+.cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.3);
+    position: relative;
+}
+
+.cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 16px rgba(255, 107, 0, 0.4);
+    color: var(--white);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--dark);
+    color: var(--white);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Categories Nav */
+.categories-nav {
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    padding: 0;
+}
+
+.categories-inner {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 6px 0;
+}
+
+.categories-inner::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition: var(--transition);
+    border: 1.5px solid transparent;
+}
+
+.cat-link:hover {
+    background: var(--primary-bg);
+    color: var(--primary);
+    border-color: rgba(255, 107, 0, 0.2);
+}
+
+.cat-link.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+.cat-link i {
+    font-size: 14px;
 }

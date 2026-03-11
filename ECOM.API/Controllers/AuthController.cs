@@ -51,5 +51,23 @@ namespace ECOM.API.Controllers
                 return Unauthorized(new { message = "Bir hata oluştu." });
             }
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequestDto model)
+        {
+            if (model is null || !ModelState.IsValid)
+                return BadRequest("Model is null");
+
+            var isExistsCustomer = await _authService.CheckExistsCustomer(model);
+
+            if(!isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
+                return BadRequest("Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.");
+
+            // doğrulama kodu gönder
+
+
+            return View();
+        }
     }
 }

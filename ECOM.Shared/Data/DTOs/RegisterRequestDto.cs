@@ -11,5 +11,6 @@ namespace ECOM.Shared.Data.DTOs
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public string RePassword { get; set; } = null!;
     }
 }

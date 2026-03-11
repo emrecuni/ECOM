@@ -1,4 +1,5 @@
 ﻿using ECOM.Api.Data.Entities;
+using ECOM.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Data
@@ -227,6 +228,20 @@ namespace ECOM.API.Data
                 .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<EmailVerification>(entity =>
+            {
+                entity.ToTable("EMAIL_VERIFICATION");
+
+                entity.HasKey(e => e.VerificationId);
+
+                entity.Property(e => e.VerificationId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(e => e.Email).HasColumnName("EMAIL").IsRequired();
+                entity.Property(e => e.CodeHash).HasColumnName("CODE_HASH").IsRequired();
+                entity.Property(e => e.ExpiredAt).HasColumnName("EXPIRED_AT").IsRequired();
+                entity.Property(e => e.IsUsed).HasColumnName("IS_USED").IsRequired(false);
+                entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+            });
+
             modelBuilder.Entity<Favorites>(entity =>
             {
                 entity.ToTable("FAVORITES");
@@ -416,6 +431,7 @@ namespace ECOM.API.Data
         public DbSet<Customers> Customers => Set<Customers>();
         public DbSet<DCoupon> DCoupons => Set<DCoupon>();
         public DbSet<District> Districts => Set<District>();
+        public DbSet<EmailVerification> Verifications => Set<EmailVerification>();
         public DbSet<Favorites> Favorites => Set<Favorites>();
         public DbSet<Log> Log => Set<Log>();
         public DbSet<Neighbourhood> Neighbourhoods => Set<Neighbourhood>();

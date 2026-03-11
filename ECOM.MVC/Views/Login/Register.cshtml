@@ -1,9 +1,17 @@
+@{
+    // Adım: "email" | "verify" | "complete"
+    string step = ViewBag.Step ?? "email";
+    string maskedEmail = ViewBag.MaskedEmail ?? "";
+    string tempEmail = ViewBag.TempEmail ?? "";
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/login.css">
 }
 
 <div class="auth-page">
-    <div class="auth-card">
+    <div class="auth-card" style="max-width:480px;">
+
         <!-- Logo -->
         <div class="auth-logo">
             <a asp-controller="Main" asp-action="Index">
@@ -11,74 +19,373 @@
             </a>
         </div>
 
-        <h1 class="auth-title">Hesap Oluşturun</h1>
-        <p class="auth-subtitle">Binlerce ürüne hemen erişin</p>
-
-        <form asp-action="Register" method="post">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div class="auth-form-group">
-                    <label class="auth-label">Ad</label>
-                    <div class="auth-input-wrapper">
-                        <input type="text" class="auth-input" name="name" placeholder="Adınız" required>
-                        <i class="fas fa-user"></i>
-                    </div>
+        <!-- ===== STEP INDICATOR ===== -->
+        <div class="register-steps">
+            <div class="reg-step @(step == "email" ? "active" : (step == "verify" || step == "complete" ? "done" : ""))">
+                <div class="reg-step-circle">
+                    @if (step == "verify" || step == "complete")
+                    {
+                        <i class="fas fa-check"></i>
+                    }
+                    else
+                    {
+                        <span>1</span>
+                    }
                 </div>
-                <div class="auth-form-group">
-                    <label class="auth-label">Soyad</label>
-                    <div class="auth-input-wrapper">
-                        <input type="text" class="auth-input" name="surname" placeholder="Soyadınız" required>
-                        <i class="fas fa-user"></i>
-                    </div>
-                </div>
+                <span class="reg-step-label">E-posta</span>
             </div>
+            <div class="reg-step-line @(step == "verify" || step == "complete" ? "done" : "")"></div>
+            <div class="reg-step @(step == "verify" ? "active" : (step == "complete" ? "done" : ""))">
+                <div class="reg-step-circle">
+                    @if (step == "complete")
+                    {
+                        <i class="fas fa-check"></i>
+                    }
+                    else
+                    {
+                        <span>2</span>
+                    }
+                </div>
+                <span class="reg-step-label">Doğrulama</span>
+            </div>
+            <div class="reg-step-line @(step == "complete" ? "done" : "")"></div>
+            <div class="reg-step @(step == "complete" ? "active" : "")">
+                <div class="reg-step-circle"><span>3</span></div>
+                <span class="reg-step-label">Bilgiler</span>
+            </div>
+        </div>
 
-            <div class="auth-form-group">
-                <label class="auth-label">E-Posta Adresi</label>
-                <div class="auth-input-wrapper">
-                    <input type="email" class="auth-input" name="email" placeholder="ornek@email.com" required>
+        <!-- ===== ADIM 1: E-POSTA ===== -->
+        @if (step == "email")
+        {
+            <div class="step-header">
+                <div class="step-icon-wrap">
                     <i class="fas fa-envelope"></i>
                 </div>
+                <h1 class="auth-title">Hesap Oluşturun</h1>
+                <p class="auth-subtitle">Başlamak için e-posta adresinizi girin. Doğrulama kodu göndereceğiz.</p>
             </div>
 
+            <form asp-action="RegisterEmail" method="post">
                 <div class="auth-form-group">
-                    <label class="auth-label">Telefon Numarası</label>
+                    <label class="auth-label">E-Posta Adresi</label>
                     <div class="auth-input-wrapper">
-                        <input type="tel" class="auth-input" name="phone" placeholder="5__ __ __ __" maxlength="10" required>
+                        <input type="email" class="auth-input" name="email"
+                               placeholder="ornek@email.com" required autofocus>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                @if (ViewBag.IsSuccess == StatusTypes.Error)
+                {
+                    <div class="auth-alert auth-alert-error">
+                        <i class="fas fa-times-circle"></i> @ViewBag.Info
+                    </div>
+                }
+
+                <button type="submit" class="auth-submit">
+                    Doğrulama Kodu Gönder <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer-link">
+                Zaten hesabınız var mı? <a asp-action="Index">Giriş Yapın</a>
+            </div>
+        }
+
+        <!-- ===== ADIM 2: DOĞRULAMA KODU ===== -->
+        @if (step == "verify")
+        {
+            <div class="step-header">
+                <div class="step-icon-wrap" style="background:#EFF6FF; color:#3B82F6;">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="auth-title">E-postanızı Doğrulayın</h1>
+                <p class="auth-subtitle">
+                    <b>@maskedEmail</b> adresine 6 haneli doğrulama kodu gönderdik.
+                </p>
+            </div>
+
+            <form asp-action="VerifyEmail" method="post">
+                <input type="hidden" name="email" value="@tempEmail" />
+
+                <!-- OTP Input -->
+                <div class="otp-wrapper">
+                    <div class="otp-inputs" id="otpInputs">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    </div>
+                    <input type="hidden" name="code" id="otpHidden">
+                </div>
+
+                @if (ViewBag.IsSuccess == StatusTypes.Error)
+                {
+                    <div class="auth-alert auth-alert-error">
+                        <i class="fas fa-times-circle"></i> @ViewBag.Info
+                    </div>
+                }
+
+                <!-- Countdown -->
+                <div class="otp-timer">
+                    <i class="fas fa-clock"></i>
+                    Kodun geçerlilik süresi: <span id="countdown" class="otp-countdown">03:00</span>
+                </div>
+
+                <button type="submit" class="auth-submit" id="verifyBtn">
+                    <i class="fas fa-check"></i> Doğrula
+                </button>
+            </form>
+
+            <!-- Resend -->
+            <div class="otp-resend">
+                Kod gelmedi mi?
+                <form asp-action="RegisterEmail" method="post" style="display:inline;">
+                    <input type="hidden" name="email" value="@tempEmail" />
+                    <button type="submit" class="resend-btn" id="resendBtn" disabled>
+                        Tekrar Gönder
+                    </button>
+                </form>
+            </div>
+
+            <div class="auth-footer-link">
+                <a asp-action="Register">
+                    <i class="fas fa-arrow-left" style="font-size:11px;"></i> Farklı e-posta kullan
+                </a>
+            </div>
+        }
+
+        <!-- ===== ADIM 3: BİLGİLERİ TAMAMLA ===== -->
+        @if (step == "complete")
+        {
+            <div class="step-header">
+                <div class="step-icon-wrap" style="background:#F0FDF4; color:#16A34A;">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h1 class="auth-title">Bilgilerinizi Tamamlayın</h1>
+                <p class="auth-subtitle">
+                    <i class="fas fa-check-circle" style="color:#16A34A;"></i>
+                    <b>@maskedEmail</b> doğrulandı.
+                </p>
+            </div>
+
+            <form asp-action="RegisterComplete" method="post">
+                <input type="hidden" name="email" value="@tempEmail" />
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="auth-form-group">
+                        <label class="auth-label">Ad</label>
+                        <div class="auth-input-wrapper">
+                            <input type="text" class="auth-input" name="name" placeholder="Adınız" required autofocus>
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="auth-form-group">
+                        <label class="auth-label">Soyad</label>
+                        <div class="auth-input-wrapper">
+                            <input type="text" class="auth-input" name="surname" placeholder="Soyadınız" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label">Parola</label>
+                    <div class="auth-input-wrapper">
+                        <input type="password" class="auth-input" name="password"
+                               placeholder="En az 8 karakter" required id="passwordInput">
+                        <i class="fas fa-lock" id="togglePassword" style="cursor:pointer; pointer-events:all;"></i>
+                    </div>
+                    <!-- Password Strength -->
+                    <div class="password-strength" id="strengthBar">
+                        <div class="strength-track">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-label" id="strengthLabel"></span>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label">Parola Tekrar</label>
+                    <div class="auth-input-wrapper">
+                        <input type="password" class="auth-input" name="passwordConfirm"
+                               placeholder="Parolanızı tekrar girin" required id="confirmInput">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="match-hint" id="matchHint"></div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label">Telefon</label>
+                    <div class="auth-input-wrapper">
+                        <input type="tel" class="auth-input" name="phone" placeholder="05XX XXX XX XX" required>
                         <i class="fas fa-phone"></i>
                     </div>
                 </div>
 
-            <div class="auth-form-group">
-                <label class="auth-label">Parola</label>
-                <div class="auth-input-wrapper">
-                    <input type="password" class="auth-input" name="password" placeholder="En az 8 karakter" required>
-                    <i class="fas fa-lock"></i>
+                <div class="auth-form-group">
+                    <label class="auth-label">Doğum Tarihi</label>
+                    <div class="auth-input-wrapper">
+                        <input type="date" class="auth-input" name="birthdate" required>
+                        <i class="fas fa-calendar"></i>
+                    </div>
                 </div>
-            </div>
 
-            <div class="auth-form-group">
-                <label class="auth-label">Parola Tekrar</label>
-                <div class="auth-input-wrapper">
-                    <input type="password" class="auth-input" name="passwordConfirm" placeholder="Parolanızı tekrar girin" required>
-                    <i class="fas fa-lock"></i>
+                <div class="auth-form-group">
+                    <label class="auth-label">Cinsiyet</label>
+                    <div style="display:flex; gap:10px; margin-top:6px;">
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="true" required>
+                            <i class="fas fa-mars"></i> Erkek
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="false" required>
+                            <i class="fas fa-venus"></i> Kadın
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit" class="auth-submit">
-                <i class="fas fa-user-plus"></i> Kayıt Ol
-            </button>
+                @if (ViewBag.IsSuccess == StatusTypes.Error)
+                {
+                    <div class="auth-alert auth-alert-error">
+                        <i class="fas fa-times-circle"></i> @ViewBag.Info
+                    </div>
+                }
 
-            @if (ViewBag.Error is not null)
-            {
-                <div class="auth-alert auth-alert-error">
-                    <i class="fas fa-times-circle"></i>
-                    @ViewBag.Error
-                </div>
-            }
-        </form>
+                <button type="submit" class="auth-submit">
+                    <i class="fas fa-user-plus"></i> Kaydı Tamamla
+                </button>
+            </form>
+        }
 
-        <div class="auth-footer-link">
-            Zaten hesabınız var mı? <a asp-action="Index">Giriş Yapın</a>
-        </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+// ===== OTP INPUT LOGIC =====
+const otpBoxes = document.querySelectorAll('.otp-box');
+const otpHidden = document.getElementById('otpHidden');
+
+if (otpBoxes.length) {
+    otpBoxes.forEach((box, i) => {
+        box.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/\D/g, '');
+            e.target.value = val;
+            if (val && i < otpBoxes.length - 1) otpBoxes[i + 1].focus();
+            syncOtp();
+        });
+
+        box.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !box.value && i > 0) {
+                otpBoxes[i - 1].focus();
+                otpBoxes[i - 1].value = '';
+                syncOtp();
+            }
+        });
+
+        box.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+            paste.split('').forEach((ch, idx) => {
+                if (otpBoxes[idx]) otpBoxes[idx].value = ch;
+            });
+            otpBoxes[Math.min(paste.length, otpBoxes.length - 1)].focus();
+            syncOtp();
+        });
+    });
+
+    function syncOtp() {
+        otpHidden.value = Array.from(otpBoxes).map(b => b.value).join('');
+    }
+
+    otpBoxes[0]?.focus();
+}
+
+// ===== COUNTDOWN TIMER =====
+const countdownEl = document.getElementById('countdown');
+const resendBtn = document.getElementById('resendBtn');
+
+if (countdownEl) {
+    let seconds = 180;
+    const timer = setInterval(() => {
+        seconds--;
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        countdownEl.textContent = `${m}:${s}`;
+
+        if (seconds <= 30) countdownEl.style.color = 'var(--danger)';
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            countdownEl.textContent = 'Süresi doldu';
+            if (resendBtn) {
+                resendBtn.disabled = false;
+                resendBtn.style.opacity = '1';
+            }
+        }
+    }, 1000);
+}
+
+// ===== PASSWORD STRENGTH =====
+const passwordInput = document.getElementById('passwordInput');
+const confirmInput = document.getElementById('confirmInput');
+const strengthFill = document.getElementById('strengthFill');
+const strengthLabel = document.getElementById('strengthLabel');
+const matchHint = document.getElementById('matchHint');
+const togglePassword = document.getElementById('togglePassword');
+
+if (passwordInput) {
+    passwordInput.addEventListener('input', function () {
+        const val = this.value;
+        let score = 0;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const levels = [
+            { label: '', color: 'transparent', width: '0%' },
+            { label: 'Çok Zayıf', color: '#EF4444', width: '25%' },
+            { label: 'Zayıf', color: '#F97316', width: '50%' },
+            { label: 'İyi', color: '#EAB308', width: '75%' },
+            { label: 'Güçlü', color: '#22C55E', width: '100%' },
+        ];
+
+        const level = levels[score] || levels[0];
+        strengthFill.style.width = level.width;
+        strengthFill.style.background = level.color;
+        strengthLabel.textContent = level.label;
+        strengthLabel.style.color = level.color;
+    });
+
+    confirmInput?.addEventListener('input', function () {
+        if (!this.value) { matchHint.textContent = ''; return; }
+        if (this.value === passwordInput.value) {
+            matchHint.textContent = '✓ Parolalar eşleşiyor';
+            matchHint.style.color = '#22C55E';
+        } else {
+            matchHint.textContent = '✗ Parolalar eşleşmiyor';
+            matchHint.style.color = '#EF4444';
+        }
+    });
+
+    togglePassword?.addEventListener('click', function () {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        this.className = type === 'password' ? 'fas fa-lock' : 'fas fa-lock-open';
+    });
+}
+
+// ===== RADIO OPTION TOGGLE =====
+document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+        document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+        this.closest('.radio-option').classList.add('selected');
+    });
+});
+</script>
+}

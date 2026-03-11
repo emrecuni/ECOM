@@ -14,6 +14,7 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 //builder.Services.AddScoped<Smtp_Sender>();
 builder.Services.AddScoped<ISmtp_Sender, Smtp_Sender>();
+builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<EmailSettings>();
 builder.Services.AddScoped<ProductDataProcess>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

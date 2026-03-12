@@ -238,8 +238,8 @@ namespace ECOM.API.Data
                 entity.Property(e => e.Email).HasColumnName("EMAIL").IsRequired();
                 entity.Property(e => e.CodeHash).HasColumnName("CODE_HASH").IsRequired();
                 entity.Property(e => e.ExpiredAt).HasColumnName("EXPIRED_AT").IsRequired();
-                entity.Property(e => e.IsUsed).HasColumnName("IS_USED").IsRequired(false);
-                entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+                entity.Property(e => e.IsUsed).HasColumnName("IS_USED").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT").IsRequired();
             });
 
             modelBuilder.Entity<Favorites>(entity =>

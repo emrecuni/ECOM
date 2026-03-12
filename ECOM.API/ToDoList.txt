@@ -3,5 +3,5 @@
 * Login(mvc)'de eklenecek claims'leri api'den dön
 * İşlemleri service dosyalarında yaptır
 * Product controller ekle
-* Email verification tablosunun migration'ını oluştur
+X Email verification tablosunun migration'ını oluştur X
 * Email verification işlemini yaptır

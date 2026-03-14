@@ -32,7 +32,8 @@ namespace ECOM.Controllers
 
             // veri tabanındaki bütün ürünleri çeker
 
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);   
+            //int customerId = 1;
+            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             // bütün ürünler çekilir
             var products = await _context.Products

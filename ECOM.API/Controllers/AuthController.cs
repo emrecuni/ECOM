@@ -28,6 +28,7 @@ namespace ECOM.API.Controllers
         {
             try
             {
+                Console.WriteLine($"Login attempt with Email: {model.Email}");
                 if (model is null)
                     return Unauthorized(new { message = "Geçersiz model." });
 

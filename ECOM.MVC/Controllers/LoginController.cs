@@ -41,6 +41,7 @@ namespace ECOM.MVC.Controllers
             {
                 if (model.Email is not null && model.Password is not null)
                 {
+                    _httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
 
                     var response = await _httpClient.PostAsJsonAsync("api/auth/login", new
                     {

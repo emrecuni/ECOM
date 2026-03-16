@@ -6,7 +6,7 @@ namespace ECOM.Api.Data.Entities
     public class Brand
     {
         [Key]
-        public int BrandID { get; set; }
+        public int BrandId { get; set; }
         public string? Name { get; set; }
         public DateTime? AdditionTime { get; set; }
 

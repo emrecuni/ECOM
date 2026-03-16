@@ -4,6 +4,7 @@ using ECOM.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOM.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20260316121909_ProductSeedDataAdded")]
+    partial class ProductSeedDataAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,68 +115,6 @@ namespace ECOM.API.Migrations
                     b.HasIndex("ReceiverId");
 
                     b.ToTable("ADDRESSES", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            AddressId = 1,
-                            AdditionTime = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Address = "Moda Cad. No:12 D:3",
-                            AddressName = "Ev",
-                            CityId = 1,
-                            CustomerId = 1,
-                            DistrictId = 1,
-                            NeighbourhoodId = 1,
-                            ReceiverId = 1
-                        },
-                        new
-                        {
-                            AddressId = 2,
-                            AdditionTime = new DateTime(2024, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Address = "Levent Mah. Büyükdere Cad. No:45 Kat:7",
-                            AddressName = "İş yeri",
-                            CityId = 1,
-                            CustomerId = 1,
-                            DistrictId = 2,
-                            NeighbourhoodId = 3,
-                            ReceiverId = 1
-                        },
-                        new
-                        {
-                            AddressId = 3,
-                            AdditionTime = new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Address = "Fenerbahçe Mah. Bağdat Cad. No:78",
-                            AddressName = "Ev",
-                            CityId = 1,
-                            CustomerId = 2,
-                            DistrictId = 1,
-                            NeighbourhoodId = 2,
-                            ReceiverId = 2
-                        },
-                        new
-                        {
-                            AddressId = 4,
-                            AdditionTime = new DateTime(2024, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Address = "Etiler Mah. Nisbetiye Cad. No:5 D:8",
-                            AddressName = "Annem",
-                            CityId = 1,
-                            CustomerId = 2,
-                            DistrictId = 2,
-                            NeighbourhoodId = 4,
-                            ReceiverId = 3
-                        },
-                        new
-                        {
-                            AddressId = 5,
-                            AdditionTime = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Address = "Kızılay Mah. Atatürk Bulvarı No:101 D:2",
-                            AddressName = "Ev",
-                            CityId = 2,
-                            CustomerId = 3,
-                            DistrictId = 4,
-                            NeighbourhoodId = 5,
-                            ReceiverId = 3
-                        });
                 });
 
             modelBuilder.Entity("ECOM.Api.Data.Entities.Brand", b =>
@@ -202,31 +143,26 @@ namespace ECOM.API.Migrations
                         new
                         {
                             BrandId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Samsung"
                         },
                         new
                         {
                             BrandId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Apple"
                         },
                         new
                         {
                             BrandId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sony"
                         },
                         new
                         {
                             BrandId = 4,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "LG"
                         },
                         new
                         {
                             BrandId = 5,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Xiaomi"
                         });
                 });
@@ -338,23 +274,6 @@ namespace ECOM.API.Migrations
                     b.HasKey("CityId");
 
                     b.ToTable("CITY", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            CityId = 1,
-                            Name = "İstanbul"
-                        },
-                        new
-                        {
-                            CityId = 2,
-                            Name = "Ankara"
-                        },
-                        new
-                        {
-                            CityId = 3,
-                            Name = "İzmir"
-                        });
                 });
 
             modelBuilder.Entity("ECOM.Api.Data.Entities.Comments", b =>
@@ -504,38 +423,6 @@ namespace ECOM.API.Migrations
                     b.HasIndex("CityId");
 
                     b.ToTable("DISTRICT", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            DistrictId = 1,
-                            CityId = 1,
-                            Name = "Kadıköy"
-                        },
-                        new
-                        {
-                            DistrictId = 2,
-                            CityId = 1,
-                            Name = "Beşiktaş"
-                        },
-                        new
-                        {
-                            DistrictId = 3,
-                            CityId = 1,
-                            Name = "Üsküdar"
-                        },
-                        new
-                        {
-                            DistrictId = 4,
-                            CityId = 2,
-                            Name = "Çankaya"
-                        },
-                        new
-                        {
-                            DistrictId = 5,
-                            CityId = 3,
-                            Name = "Konak"
-                        });
                 });
 
             modelBuilder.Entity("ECOM.Api.Data.Entities.Favorites", b =>
@@ -611,8 +498,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NeighbourhoodId"));
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int")
+                        .HasColumnName("CITY_ID");
 
                     b.Property<int>("DistrictId")
                         .HasColumnType("int")
@@ -629,38 +517,6 @@ namespace ECOM.API.Migrations
                     b.HasIndex("DistrictId");
 
                     b.ToTable("NEIGHBOURHOODS", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            NeighbourhoodId = 1,
-                            DistrictId = 1,
-                            Name = "Moda"
-                        },
-                        new
-                        {
-                            NeighbourhoodId = 2,
-                            DistrictId = 1,
-                            Name = "Göztepe"
-                        },
-                        new
-                        {
-                            NeighbourhoodId = 3,
-                            DistrictId = 2,
-                            Name = "Levent"
-                        },
-                        new
-                        {
-                            NeighbourhoodId = 4,
-                            DistrictId = 2,
-                            Name = "Etiler"
-                        },
-                        new
-                        {
-                            NeighbourhoodId = 5,
-                            DistrictId = 4,
-                            Name = "Kızılay"
-                        });
                 });
 
             modelBuilder.Entity("ECOM.Api.Data.Entities.OrderHistory", b =>
@@ -956,42 +812,36 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CategoryId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Elektronik",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Telefon",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bilgisayar",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 4,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Televizyon",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 5,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Ses Sistemleri",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 6,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Küçük Ev Aletleri",
                             Type = false
                         });
@@ -1052,19 +902,16 @@ namespace ECOM.API.Migrations
                         new
                         {
                             SellerId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "TechStore"
                         },
                         new
                         {
                             SellerId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "ElektroMarket"
                         },
                         new
                         {
                             SellerId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "DigiShop"
                         });
                 });
@@ -1227,15 +1074,19 @@ namespace ECOM.API.Migrations
 
             modelBuilder.Entity("ECOM.Api.Data.Entities.Neighbourhood", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.City", null)
+                    b.HasOne("ECOM.Api.Data.Entities.City", "City")
                         .WithMany("Neighbourhoods")
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ECOM.Api.Data.Entities.District", "District")
                         .WithMany("Neighbourhoods")
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("City");
 
                     b.Navigation("District");
                 });

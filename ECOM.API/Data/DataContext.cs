@@ -1,4 +1,5 @@
-﻿using ECOM.Api.Data.Entities;
+﻿using System.Reflection;
+using ECOM.Api.Data.Entities;
 using ECOM.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,9 +67,9 @@ namespace ECOM.API.Data
             {
                 entity.ToTable("BRANDS");
 
-                entity.HasKey(b => b.BrandID);
+                entity.HasKey(b => b.BrandId);
 
-                entity.Property(b => b.BrandID).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(b => b.BrandId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(b => b.Name).HasColumnName("NAME").IsRequired();
                 entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
@@ -287,15 +288,8 @@ namespace ECOM.API.Data
                 entity.HasKey(n => n.NeighbourhoodId);
 
                 entity.Property(n => n.NeighbourhoodId).HasColumnName("ID").ValueGeneratedOnAdd();
-                entity.Property(n => n.CityId).HasColumnName("CITY_ID").IsRequired();
                 entity.Property(n => n.DistrictId).HasColumnName("DISTRICT_ID").IsRequired();
                 entity.Property(n => n.Name).HasColumnName("NAME").IsRequired(false);
-
-                // city relation 
-                entity.HasOne(n => n.City)
-                .WithMany(c => c.Neighbourhoods)
-                .HasForeignKey(n => n.CityId)
-                .OnDelete(DeleteBehavior.Restrict);
 
                 // district relation
                 entity.HasOne(n => n.District)
@@ -420,6 +414,8 @@ namespace ECOM.API.Data
                 entity.Property(s => s.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(s => s.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
             });
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // seed dataları db'ye yazar
         }
 
         public DbSet<Addresses> Addresses => Set<Addresses>();

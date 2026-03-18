@@ -11,6 +11,6 @@ namespace ECOM.Shared.Data.DTOs
         public List<string>? Recipients { get; set; }
         public string? Subject { get; set; }
         public List<Attachment>? Attachments { get; set; }
-
+        public string? Body { get; set; }
     }
 }

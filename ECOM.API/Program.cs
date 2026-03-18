@@ -1,4 +1,6 @@
+using System.Net.Mail;
 using System.Text;
+using System.Text.Json.Serialization;
 using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.API.Infrastructure.Services;
@@ -12,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    }); 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 //builder.Services.AddEndpointsApiExplorer();
@@ -56,6 +62,21 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISmtpService, SmptService>();
+builder.Services.AddScoped<SmtpClient>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var smtpClient = new SmtpClient
+    {
+        Host = config["Smtp:Host"]!,
+        Port = int.Parse(config["Smtp:Port"] ?? "25"),
+        EnableSsl = bool.Parse(config["Smtp:EnableSsl"] ?? "false"),
+        Credentials = new System.Net.NetworkCredential(
+            config["Smtp:SenderMail"],
+            config["Smtp:Password"])
+    };
+    return smtpClient;
+});
 
 var app = builder.Build();
 

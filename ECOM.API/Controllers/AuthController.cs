@@ -13,12 +13,21 @@ namespace ECOM.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IJwtService _jwtService;
+        private readonly ISmtpService _smtpService;
+        private readonly IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService, IJwtService jwtService, ILogger<AuthController> logger)
+        public AuthController(
+            IAuthService authService,
+            IJwtService jwtService,
+            ISmtpService smtpService,
+            IConfiguration config,
+            ILogger<AuthController> logger)
         {
             _authService = authService;
             _jwtService = jwtService;
+            _smtpService = smtpService;
+            _config = config;
             _logger = logger;
         }
 
@@ -60,15 +69,36 @@ namespace ECOM.API.Controllers
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
 
-            var isExistsCustomer = await _authService.CheckExistsCustomer(model);
+            Response<SmtpResponseDto> response;
 
-            if(!isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
-                return BadRequest("Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.");
+            Console.WriteLine($"Auth/Register ==> Register Metodu çalıştı.");
+            var isExistsCustomer = await _authService.CheckExistsCustomer(model);
+            Console.WriteLine($"Auth/Register ==> {model.Email} ile {(isExistsCustomer ?  """kayıt zaten var""": """kayıt bulunamadı. Doğrulama kodu gönderiliyor""")}");
+            if (isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
+                return BadRequest(response = new()
+                {
+                    Message = "Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.",
+                    Status = Status.Error
+                });
 
             // doğrulama kodu gönder
+            SmtpRequestDto request = new()
+            {
+                From = _config["Smtp:SenderMail"],
+                Recipients = new List<string>
+                {
+                    model.Email
+                },
+                Subject = "ECOM Doğrulama Kodu",
+                Body = "Ecom Kayıt Doğrulama Kodunuz: \n\n123456",                
+            };
 
+            Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
+            response = await _smtpService.SendEmailAsync(request);
+             
 
-            return View();
+            Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""": """mail gönderimi başarısız""")}");
+            return Ok(response);
         }
     }
 }

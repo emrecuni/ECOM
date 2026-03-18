@@ -44,9 +44,9 @@ namespace ECOM.API.Infrastructure.Services
         }
 
         // email veya telefon numarası ile müşteri var mı kontrol eder, varsa true döner, yoksa false döner
-        public Task<bool> CheckExistsCustomer(RegisterRequestDto model)
+        public async Task<bool> CheckExistsCustomer(RegisterRequestDto model)
         {
-            var isExistsCustomer = _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone);
+            var isExistsCustomer = await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone);
 
             return isExistsCustomer;
         }

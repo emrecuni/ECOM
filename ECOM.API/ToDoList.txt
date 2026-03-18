@@ -7,3 +7,4 @@ X Email verification tablosunun migration'ını oluştur X
 * Email verification işlemini yaptır
 * iyzico ödemeleri için api yaz
 * iyzico'da 3d ayarını kurcala Firma ayarları -> ödeme bazında 3d secure ayarları
+* Neighborhood tablosundan city kolonunu kaldır

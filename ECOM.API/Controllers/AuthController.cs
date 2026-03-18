@@ -93,9 +93,12 @@ namespace ECOM.API.Controllers
                 Body = "Ecom Kayıt Doğrulama Kodunuz: \n\n123456",                
             };
 
+            // otp generater yaz
+
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _smtpService.SendEmailAsync(request);
              
+            //gönderilen otp'yi db'ye yaz
 
             Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""": """mail gönderimi başarısız""")}");
             return Ok(response);

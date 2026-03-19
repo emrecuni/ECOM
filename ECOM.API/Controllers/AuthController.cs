@@ -1,5 +1,7 @@
-﻿using ECOM.Shared.Data.DTOs;
+﻿using System.Security.Cryptography;
+using System.Text;
 using ECOM.API.Infrastructure.Interfaces;
+using ECOM.Shared.Data.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -69,19 +71,22 @@ namespace ECOM.API.Controllers
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
 
-            Response<SmtpResponseDto> response;
+            Response<SmtpResponseDto> response = new();
 
-            Console.WriteLine($"Auth/Register ==> Register Metodu çalıştı.");
+            #region Kullanıcı var mı kontrolü
             var isExistsCustomer = await _authService.CheckExistsCustomer(model);
-            Console.WriteLine($"Auth/Register ==> {model.Email} ile {(isExistsCustomer ?  """kayıt zaten var""": """kayıt bulunamadı. Doğrulama kodu gönderiliyor""")}");
+
             if (isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
                 return BadRequest(response = new()
                 {
                     Message = "Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.",
                     Status = Status.Error
                 });
+            #endregion
 
-            // doğrulama kodu gönder
+            #region OTP oluşturma ve gönderme
+            string otpCode = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6"); // 6 hane, başına 0 ekler
+            Console.WriteLine($"Auth/Register ==> otpCode: {otpCode}");
             SmtpRequestDto request = new()
             {
                 From = _config["Smtp:SenderMail"],
@@ -90,17 +95,17 @@ namespace ECOM.API.Controllers
                     model.Email
                 },
                 Subject = "ECOM Doğrulama Kodu",
-                Body = "Ecom Kayıt Doğrulama Kodunuz: \n\n123456",                
+                Body = System.IO.File.ReadAllText("wwwroot/StaticFiles/otp.html")
+                         .Replace("{{OTP_CODE}}", otpCode),
+                IsBodyHtml = true
             };
-
-            // otp generater yaz
 
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _smtpService.SendEmailAsync(request);
-             
+            #endregion
             //gönderilen otp'yi db'ye yaz
 
-            Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""": """mail gönderimi başarısız""")}");
+            Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return Ok(response);
         }
     }

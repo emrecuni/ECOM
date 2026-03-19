@@ -12,5 +12,6 @@ namespace ECOM.Shared.Data.DTOs
         public string? Subject { get; set; }
         public List<Attachment>? Attachments { get; set; }
         public string? Body { get; set; }
+        public bool IsBodyHtml { get; set; }
     }
 }

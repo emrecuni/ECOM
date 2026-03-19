@@ -24,7 +24,8 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     From = new MailAddress(model.From ?? string.Empty),
                     Subject = model.Subject ?? string.Empty,
-                    Body = model.Body ?? string.Empty
+                    Body = model.Body ?? string.Empty,
+                    IsBodyHtml = model.IsBodyHtml
                 };
                 if (model.Recipients != null)
                 {

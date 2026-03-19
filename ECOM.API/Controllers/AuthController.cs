@@ -103,7 +103,17 @@ namespace ECOM.API.Controllers
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _smtpService.SendEmailAsync(request);
             #endregion
-            //gönderilen otp'yi db'ye yaz
+            
+            #region gönderilen otp kodunu db'ye yazar
+            if(response.Status == Status.Success)
+            {
+                SaveOtpRequestDto modelOtp = new();
+
+                await _authService.SaveOtpCode(modelOtp);
+            }
+
+
+            #endregion
 
             Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return Ok(response);

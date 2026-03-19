@@ -240,6 +240,8 @@ namespace ECOM.API.Data
                 entity.Property(e => e.CodeHash).HasColumnName("CODE_HASH").IsRequired();
                 entity.Property(e => e.ExpiredAt).HasColumnName("EXPIRED_AT").IsRequired();
                 entity.Property(e => e.IsUsed).HasColumnName("IS_USED").IsRequired();
+                entity.Property(e => e.AttemptCount).HasColumnName("ATTEMPT_COUNT").IsRequired();
+                entity.Property(e => e.Purpose).HasColumnName("PURPOSE").IsRequired();
                 entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT").IsRequired();
             });
 

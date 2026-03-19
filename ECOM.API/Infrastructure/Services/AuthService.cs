@@ -10,11 +10,13 @@ namespace ECOM.API.Infrastructure.Services
     public class AuthService : IAuthService
     {
         private readonly DataContext _context;
+        private readonly ISmtpService _smtpService;
         private readonly ILogger<AuthService> _logger;
 
-        public AuthService(DataContext context, ILogger<AuthService> logger)
+        public AuthService(DataContext context, ISmtpService smtpService, ILogger<AuthService> logger)
         {
             _context = context;
+            _smtpService = smtpService;
             _logger = logger;
         }
 
@@ -51,7 +53,12 @@ namespace ECOM.API.Infrastructure.Services
             return isExistsCustomer;
         }
 
-        public Task SendVerifyEmail(RegisterRequestDto model)
+        public async Task<Response<SmtpResponseDto>> SendVerifyEmail(SmtpRequestDto model)
+        {
+            return await _smtpService.SendEmailAsync(model);
+        }
+
+        public Task SaveOtpCode(SaveOtpRequestDto model)
         {
             throw new NotImplementedException();
         }

@@ -59,7 +59,7 @@ namespace ECOM.API.Infrastructure.Services
             return await _smtpService.SendEmailAsync(model);
         }
 
-        public async Task SaveOtpCode(SaveOtpRequestDto model)
+        public async Task<bool> SaveOtpCode(SaveOtpRequestDto model)
         {
             try
             {
@@ -67,22 +67,29 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     Email = model.Email,
                     CodeHash = model.CodeHash,
-                    ExpiredAt = model.ExpiredAt,
-                    IsUsed = model.IsUsed,
-                    AttemptCount = model.AttemptCount,
+                    ExpiredAt = DateTime.UtcNow.AddMinutes(3),
+                    IsUsed = false,
+                    CanUsed = true,
                     Purpose = model.Purpose,
-                    CreatedAt = model.CreatedAt
+                    CreatedAt = DateTime.UtcNow
                 };
 
-                var deadOtp = await _context.Verifications.AllAsync(v => v.Email == otpEntity.Email &&
+                // Eski OTP'leri temizle
+                await _context.Verifications.Where(v => v.Email == otpEntity.Email &&
                    v.Purpose == otpEntity.Purpose &&
-                   v.ExpiredAt < DateTime.UtcNow
+                   (v.ExpiredAt < DateTime.UtcNow ||
+                    v.AttemptCount >= 3 ||
+                    v.CanUsed == true))
+                   .ExecuteDeleteAsync();
 
-                   );
+                await _context.Verifications.AddAsync(otpEntity); // db'ye yeni OTP kaydı ekle
+                await _context.SaveChangesAsync(); // değişiklikleri kaydet
+                return true;
             }
             catch (Exception ex)
             {
-
+                _logger.LogError($"AuthService/SaveOtpCode ==> Error: {ex}");
+                return false;
             }
         }
     }

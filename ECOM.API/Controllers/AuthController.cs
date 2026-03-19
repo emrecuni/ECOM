@@ -74,16 +74,31 @@ namespace ECOM.API.Controllers
             var isExistsCustomer = await _authService.CheckExistsCustomer(model);
 
             if (isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
-                return BadRequest(response = new()
+                return Ok(response = new()
                 {
                     Message = "Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.",
-                    Status = Status.Error
+                    Status = Status.Default
                 });
             #endregion
 
-            #region OTP oluşturma ve gönderme
+            #region OTP oluşturma, db'ye yazma ve gönderme
             string otpCode = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6"); // 6 hane, başına 0 ekler
             Console.WriteLine($"Auth/Register ==> otpCode: {otpCode}");
+
+            SaveOtpRequestDto modelOtp = new()
+            {
+                Email = model.Email,
+                Purpose = OtpPurpose.Register,
+                CodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(otpCode))) // otp kodunu hash'leyerek db'ye kaydederiz, böylece güvenliği artırırız
+            };
+
+            if(await _authService.SaveOtpCode(modelOtp) == false) // db'ye yazılamazsa otp'yi göndermez
+                return Ok(response = new()
+                {
+                    Message = "OTP kodu oluşturulamadı. Lütfen tekrar deneyiniz.",
+                    Status = Status.Error,
+                });
+            
             SmtpRequestDto request = new()
             {
                 From = _config["Smtp:SenderMail"],
@@ -100,17 +115,7 @@ namespace ECOM.API.Controllers
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _authService.SendVerifyEmail(request);
             #endregion
-            
-            #region gönderilen otp kodunu db'ye yazar
-            if(response.Status == Status.Success)
-            {
-                SaveOtpRequestDto modelOtp = new();
-
-                await _authService.SaveOtpCode(modelOtp);
-            }
-
-
-            #endregion
+                        
 
             Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return Ok(response);

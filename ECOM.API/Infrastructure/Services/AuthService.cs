@@ -102,6 +102,8 @@ namespace ECOM.API.Infrastructure.Services
             Response<OtpResponseDto> response = new();
             try
             {
+                //burada hata var email ve purpose değerlerini kontrol ettir
+
                 // db'den email ve amaca göre OTP kaydını getir
                 var otpCode = await _context.Verifications.FirstOrDefaultAsync(v => v.Email == model.Email &&
                    v.Purpose == model.Purpose);
@@ -109,7 +111,7 @@ namespace ECOM.API.Infrastructure.Services
                 // ölü kodları hariç bırak
                 if(otpCode is null || otpCode.AttemptCount >= 3 || otpCode.ExpiredAt < DateTime.Now || otpCode.CanUsed == false)
                 {
-                    response.Status = Status.Default;
+                    response.Status = Status.Failed;
                     response.Message = "OTP kodunuz geçersiz veya süresi dolmuş olabilir. Lütfen yeni bir kod talep edin.";
                     return response;
                 }
@@ -122,8 +124,14 @@ namespace ECOM.API.Infrastructure.Services
                     // yanlış kod denemesi
                     otpCode.AttemptCount += 1; // deneme sayısını artır
                     await _context.SaveChangesAsync(); // değişiklikleri kaydet
-                    response.Status = Status.Default;
-                    response.Message = $"OTP kodunuz yanlış. Kalan deneme hakkınız: {3 - otpCode.AttemptCount}";                    
+                    response.Status = Status.Failed;
+                    response.Message = $"OTP kodunuz yanlış. Kalan deneme hakkınız: {3 - otpCode.AttemptCount}";
+                    response.Result = new OtpResponseDto
+                    {
+                        Email = otpCode.Email,
+                        AttemptCount = otpCode.AttemptCount,
+                        Purpose = otpCode.Purpose
+                    };
                 }
                 else
                 {

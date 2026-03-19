@@ -8,6 +8,7 @@ namespace ECOM.Shared.Data.DTOs
     {
         Error = -1,
         Default = 0,    
-        Success = 1
+        Success = 1,
+        Failed = 2
     }
 }

@@ -6,8 +6,8 @@ namespace ECOM.Shared.Data.DTOs
 {
     public enum OtpPurpose
     {
-        Register,
-        ForgotPassword,
-        ChangeEmail
+        Register = 0,
+        ForgotPassword = 1,
+        ChangeEmail = 2
     }
 }

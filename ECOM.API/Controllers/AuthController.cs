@@ -122,13 +122,13 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("checkotp")]
-        public IActionResult CheckOtp(OtpRequestDto model)
+        public async Task<IActionResult> CheckOtp(OtpRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
 
             // OTP doğrulama yapılır. 
-            var response = _authService.CheckOtpInDb(model);
+            var response = await _authService.CheckOtpInDb(model);
 
             return Ok(response);
         }

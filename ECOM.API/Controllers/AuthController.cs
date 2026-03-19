@@ -51,7 +51,7 @@ namespace ECOM.API.Controllers
                 {
                     Token = token,
                     Name = customer.Name,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(60)
+                    ExpiresAt = DateTime.Now.AddMinutes(60)
                 });
             }
             catch (Exception ex)
@@ -62,8 +62,8 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterRequestDto model)
+        [HttpPost("sendotp")]
+        public async Task<IActionResult> SendOtp(RegisterRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
@@ -85,7 +85,7 @@ namespace ECOM.API.Controllers
             string otpCode = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6"); // 6 hane, başına 0 ekler
             Console.WriteLine($"Auth/Register ==> otpCode: {otpCode}");
 
-            SaveOtpRequestDto modelOtp = new()
+            OtpRequestDto modelOtp = new()
             {
                 Email = model.Email,
                 Purpose = OtpPurpose.Register,
@@ -115,9 +115,21 @@ namespace ECOM.API.Controllers
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _authService.SendVerifyEmail(request);
             #endregion
-                        
-
+                       
             Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("checkotp")]
+        public IActionResult CheckOtp(OtpRequestDto model)
+        {
+            if (model is null || !ModelState.IsValid)
+                return BadRequest("Model is null");
+
+            // OTP doğrulama yapılır. 
+            var response = _authService.CheckOtpInDb(model);
+
             return Ok(response);
         }
     }

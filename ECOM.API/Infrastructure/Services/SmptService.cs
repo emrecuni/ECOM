@@ -19,25 +19,27 @@ namespace ECOM.API.Infrastructure.Services
         {
             var response = new Response<SmtpResponseDto>();
             try
-            {
-                var mailMessage = new MailMessage
+            {                
+                var mailMessage = new MailMessage // mesaj nesnesi oluşturulur
                 {
                     From = new MailAddress(model.From ?? string.Empty),
                     Subject = model.Subject ?? string.Empty,
                     Body = model.Body ?? string.Empty,
                     IsBodyHtml = model.IsBodyHtml
                 };
-                if (model.Recipients != null)
+                if (model.Recipients != null) // alıcılar eklenir
                 {
                     foreach (var recipient in model.Recipients)
                         mailMessage.To.Add(recipient);
                 }
-                if (model.Attachments != null)
+                if (model.Attachments != null) // varsa ekler eklenir
                 {
                     foreach (var attachment in model.Attachments)
                         mailMessage.Attachments.Add(attachment);
                 }
-                await _smtpClient.SendMailAsync(mailMessage);
+
+                await _smtpClient.SendMailAsync(mailMessage); // mail gönderilir
+
                 response.Result = new SmtpResponseDto
                 {
                     TotalSendedMailCount = 1,

@@ -4,11 +4,10 @@ using System.Text;
 
 namespace ECOM.Shared.Data.DTOs
 {
-    public class SaveOtpRequestDto
+    public class OtpRequestDto
     {
         public string Email { get; set; } = null!;
         public string CodeHash { get; set; } = null!;
-        public string Salt { get; set; } = null!;
         public OtpPurpose Purpose { get; set; }
     }
 }

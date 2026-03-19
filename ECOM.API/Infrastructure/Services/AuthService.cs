@@ -1,4 +1,6 @@
-﻿using ECOM.Api.Data.Entities;
+﻿using System.Security.Cryptography;
+using System.Text;
+using ECOM.Api.Data.Entities;
 using ECOM.API.Data;
 using ECOM.API.Data.Entities;
 using ECOM.API.Helpers;
@@ -35,7 +37,7 @@ namespace ECOM.API.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"LoginService/LoginAsync Error => {ex}");
+                _logger.LogError($"AuthService/LoginAsync Error => {ex}");
                 return null;
             }
         }
@@ -54,12 +56,14 @@ namespace ECOM.API.Infrastructure.Services
             return isExistsCustomer;
         }
 
+        // doğrulama kodunu email ile gönderir
         public async Task<Response<SmtpResponseDto>> SendVerifyEmail(SmtpRequestDto model)
         {
             return await _smtpService.SendEmailAsync(model);
         }
 
-        public async Task<bool> SaveOtpCode(SaveOtpRequestDto model)
+        // doğrulama kodunu veritabanına kaydeder, eski kodları temizler
+        public async Task<bool> SaveOtpCode(OtpRequestDto model)
         {
             try
             {
@@ -67,17 +71,17 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     Email = model.Email,
                     CodeHash = model.CodeHash,
-                    ExpiredAt = DateTime.UtcNow.AddMinutes(3),
+                    ExpiredAt = DateTime.Now.AddMinutes(3),
                     IsUsed = false,
                     CanUsed = true,
                     Purpose = model.Purpose,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 };
 
                 // Eski OTP'leri temizle
                 await _context.Verifications.Where(v => v.Email == otpEntity.Email &&
                    v.Purpose == otpEntity.Purpose &&
-                   (v.ExpiredAt < DateTime.UtcNow ||
+                   (v.ExpiredAt < DateTime.Now ||
                     v.AttemptCount >= 3 ||
                     v.CanUsed == true))
                    .ExecuteDeleteAsync();
@@ -91,6 +95,49 @@ namespace ECOM.API.Infrastructure.Services
                 _logger.LogError($"AuthService/SaveOtpCode ==> Error: {ex}");
                 return false;
             }
+        }
+
+        public async Task<Response<OtpResponseDto>> CheckOtpInDb(OtpRequestDto model)
+        {
+            Response<OtpResponseDto> response = new();
+            try
+            {
+                // db'den email ve amaca göre OTP kaydını getir
+                var otpCode = await _context.Verifications.FirstOrDefaultAsync(v => v.Email == model.Email &&
+                   v.Purpose == model.Purpose);
+
+                // ölü kodları hariç bırak
+                if(otpCode is null || otpCode.AttemptCount >= 3 || otpCode.ExpiredAt < DateTime.Now || otpCode.CanUsed == false)
+                {
+                    response.Status = Status.Default;
+                    response.Message = "OTP kodunuz geçersiz veya süresi dolmuş olabilir. Lütfen yeni bir kod talep edin.";
+                    return response;
+                }
+
+                // kullanıcının girdiği kodun hash'ini al
+                var otpCodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.CodeHash)));
+
+                if(otpCode.CodeHash != otpCodeHash)
+                {
+                    // yanlış kod denemesi
+                    otpCode.AttemptCount += 1; // deneme sayısını artır
+                    await _context.SaveChangesAsync(); // değişiklikleri kaydet
+                    response.Status = Status.Default;
+                    response.Message = $"OTP kodunuz yanlış. Kalan deneme hakkınız: {3 - otpCode.AttemptCount}";                    
+                }
+                else
+                {
+                    response.Status = Status.Success;
+                    response.Message = "OTP doğrulaması başarılı.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AuthService/CheckOtpInDb ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

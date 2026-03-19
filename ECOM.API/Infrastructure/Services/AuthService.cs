@@ -1,5 +1,6 @@
 ﻿using ECOM.Api.Data.Entities;
 using ECOM.API.Data;
+using ECOM.API.Data.Entities;
 using ECOM.API.Helpers;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
@@ -23,20 +24,20 @@ namespace ECOM.API.Infrastructure.Services
         // email/telefon ve parola doğrulaması yapar, doğrulama başarılı ise müşteri bilgilerini döner, başarısız ise null döner // email/telefon ve parola doğrulaması yapar, doğrulama başarılı ise müşteri bilgilerini döner, başarısız ise null döner // email/telefon ve parola doğrulaması yapar, doğrulama başarılı ise müşteri bilgilerini döner, başarısız ise null döner // email/telefon ve parola doğrulaması yapar, doğrulama başarılı ise müşteri bilgilerini döner, başarısız ise null döner // email/telefon ve parola doğrulaması yapar, doğrulama başarılı ise müşteri bilgilerini döner, başarısız ise null döner
         public async Task<Customers?> ValidateUser(LoginRequestDto model)
         {
-			try
-			{
+            try
+            {
                 var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email || c.Phone == model.Email);
 
-                if(customer is  null || !EncryptionHelper.VerifyPassword(model.Password, customer.Password!))
+                if (customer is null || !EncryptionHelper.VerifyPassword(model.Password, customer.Password!))
                     return null;
-                
+
                 return customer;
-			}
-			catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
                 _logger.LogError($"LoginService/LoginAsync Error => {ex}");
                 return null;
-			}
+            }
         }
 
         // kullanıcı kaydını yapar
@@ -58,9 +59,31 @@ namespace ECOM.API.Infrastructure.Services
             return await _smtpService.SendEmailAsync(model);
         }
 
-        public Task SaveOtpCode(SaveOtpRequestDto model)
+        public async Task SaveOtpCode(SaveOtpRequestDto model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                EmailVerification otpEntity = new EmailVerification
+                {
+                    Email = model.Email,
+                    CodeHash = model.CodeHash,
+                    ExpiredAt = model.ExpiredAt,
+                    IsUsed = model.IsUsed,
+                    AttemptCount = model.AttemptCount,
+                    Purpose = model.Purpose,
+                    CreatedAt = model.CreatedAt
+                };
+
+                var deadOtp = await _context.Verifications.AllAsync(v => v.Email == otpEntity.Email &&
+                   v.Purpose == otpEntity.Purpose &&
+                   v.ExpiredAt < DateTime.UtcNow
+
+                   );
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

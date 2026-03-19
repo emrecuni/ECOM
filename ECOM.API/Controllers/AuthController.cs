@@ -15,20 +15,17 @@ namespace ECOM.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IJwtService _jwtService;
-        private readonly ISmtpService _smtpService;
         private readonly IConfiguration _config;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(
             IAuthService authService,
             IJwtService jwtService,
-            ISmtpService smtpService,
             IConfiguration config,
             ILogger<AuthController> logger)
         {
             _authService = authService;
             _jwtService = jwtService;
-            _smtpService = smtpService;
             _config = config;
             _logger = logger;
         }
@@ -101,7 +98,7 @@ namespace ECOM.API.Controllers
             };
 
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
-            response = await _smtpService.SendEmailAsync(request);
+            response = await _authService.SendVerifyEmail(request);
             #endregion
             
             #region gönderilen otp kodunu db'ye yazar

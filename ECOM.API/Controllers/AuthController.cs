@@ -114,8 +114,9 @@ namespace ECOM.API.Controllers
 
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _authService.SendVerifyEmail(request);
+            response.Message = $"OTP Code: {otpCode}";
             #endregion
-                       
+
             Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return Ok(response);
         }

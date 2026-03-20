@@ -119,7 +119,7 @@ namespace ECOM.API.Infrastructure.Services
                 // kullanıcının girdiği kodun hash'ini al
                 var otpCodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.CodeHash)));
 
-                if(otpCode.CodeHash != otpCodeHash)
+                if(otpCode.CodeHash != otpCodeHash) // girilen kodun hash'i veritabanındaki hash ile eşleşmiyor, yanlış kod denemesi
                 {
                     // yanlış kod denemesi
                     otpCode.AttemptCount += 1; // deneme sayısını artır
@@ -133,8 +133,19 @@ namespace ECOM.API.Infrastructure.Services
                         Purpose = otpCode.Purpose
                     };
                 }
-                else
+                else // doğru kod girilmişse
                 {
+                    otpCode.IsUsed = true; // kodun kullanıldığını işaretle
+                    otpCode.CanUsed = false; // kodun tekrar kullanılmasını engelle
+
+                    await _context.SaveChangesAsync(); // değişiklikleri kaydet
+
+                    response.Result = new OtpResponseDto
+                    {
+                        Email = otpCode.Email,
+                        AttemptCount = otpCode.AttemptCount,
+                        Purpose = otpCode.Purpose
+                    };
                     response.Status = Status.Success;
                     response.Message = "OTP doğrulaması başarılı.";
                 }

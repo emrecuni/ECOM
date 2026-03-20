@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using ECOM.Api.Data.Entities;
+using ECOM.Shared.Data.Entities;
 
 namespace ECOM.API.Infrastructure.Interfaces
 {

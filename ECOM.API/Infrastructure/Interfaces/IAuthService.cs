@@ -1,5 +1,5 @@
 ﻿using ECOM.Shared.Data.DTOs;
-using ECOM.Api.Data.Entities;
+using ECOM.Shared.Data.Entities;
 
 namespace ECOM.API.Infrastructure.Interfaces
 {
@@ -9,7 +9,7 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<bool> CheckExistsCustomer(RegisterRequestDto model);
         public Task<Response<SmtpResponseDto>> SendVerifyEmail(SmtpRequestDto model);
         public Task<bool> SaveOtpCode(OtpRequestDto model);
-        public Task<Customers> Register(RegisterRequestDto model);
+        public Task<Response<RegisterResponseDto>> Register(RegisterRequestDto model);
         public Task<Response<OtpResponseDto>> CheckOtpInDb(OtpRequestDto model);
     }
 }

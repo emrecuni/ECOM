@@ -12,5 +12,7 @@ namespace ECOM.Shared.Data.DTOs
         public string Phone { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string RePassword { get; set; } = null!;
+        public bool Gender { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
-using ECOM.Api.Data.Entities;
-using ECOM.API.Data.Entities;
+using ECOM.Shared.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Data

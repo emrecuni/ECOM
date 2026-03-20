@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ECOM.Api.Data.Entities;
+using ECOM.Shared.Data.Entities;
 using ECOM.API.Infrastructure.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 

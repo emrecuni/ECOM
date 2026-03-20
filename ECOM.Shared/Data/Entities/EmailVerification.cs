@@ -1,6 +1,6 @@
 ﻿using ECOM.Shared.Data.DTOs;
 
-namespace ECOM.API.Data.Entities
+namespace ECOM.Shared.Data.Entities
 {
     public class EmailVerification
     {

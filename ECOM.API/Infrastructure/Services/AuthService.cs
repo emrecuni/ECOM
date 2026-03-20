@@ -1,11 +1,10 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using ECOM.Api.Data.Entities;
 using ECOM.API.Data;
-using ECOM.API.Data.Entities;
 using ECOM.API.Helpers;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Infrastructure.Services
@@ -43,17 +42,66 @@ namespace ECOM.API.Infrastructure.Services
         }
 
         // kullanıcı kaydını yapar
-        public Task<Customers> Register(RegisterRequestDto model)
+        public async Task<Response<RegisterResponseDto>> Register(RegisterRequestDto model)
         {
-            throw new NotImplementedException();
+            Response<RegisterResponseDto> response = new();
+            try
+            {
+                if (await CheckExistsCustomer(model)) // email veya telefon numarası zaten kayıtlı mı kontrol et
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Bu email veya telefon numarası zaten kayıtlı. Lütfen farklı bir email veya telefon numarası deneyin.";
+                    return response;
+                }
+
+                if (model.Password != model.RePassword) // parola ve tekrar parola eşleşiyor mu kontrol et
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Parolalar eşleşmiyor. Lütfen parolalarınızı kontrol edin.";
+                    return response;
+                }
+
+                Customers customerEntity = new() // gelen model verilerini Customers entity'sine dönüştür
+                {
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Password = EncryptionHelper.HashPassword(model.Password),
+                    Gender = model.Gender,
+                    BirthDate = model.BirthDate,
+                    IsCustomer = true,
+                    AdditionTime = DateTime.Now
+                };
+
+                await _context.AddAsync(customerEntity); // yeni müşteri kaydını veritabanına ekle
+                await _context.SaveChangesAsync(); // değişiklikleri kaydet
+
+                response.Message = "Kayıt başarılı. Giriş yapabilirsiniz.";
+                response.Status = Status.Success;
+                response.Result = new RegisterResponseDto
+                {
+                    CustomerId = customerEntity.CustomerId,
+                    Name = customerEntity.Name,
+                    Surname = customerEntity.Surname,
+                    Email = customerEntity.Email,
+                    Phone = customerEntity.Phone,
+                    AdditionTime = customerEntity.AdditionTime
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AuthService/Register ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = $"Kayıt Sırasında Bir Hata Oluştu. ==> {ex}";
+            }
+            return response;
         }
 
         // email veya telefon numarası ile müşteri var mı kontrol eder, varsa true döner, yoksa false döner
         public async Task<bool> CheckExistsCustomer(RegisterRequestDto model)
         {
-            var isExistsCustomer = await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone);
-
-            return isExistsCustomer;
+            return await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone); ;
         }
 
         // doğrulama kodunu email ile gönderir
@@ -102,14 +150,12 @@ namespace ECOM.API.Infrastructure.Services
             Response<OtpResponseDto> response = new();
             try
             {
-                //burada hata var email ve purpose değerlerini kontrol ettir
-
                 // db'den email ve amaca göre OTP kaydını getir
                 var otpCode = await _context.Verifications.FirstOrDefaultAsync(v => v.Email == model.Email &&
                    v.Purpose == model.Purpose);
 
                 // ölü kodları hariç bırak
-                if(otpCode is null || otpCode.AttemptCount >= 3 || otpCode.ExpiredAt < DateTime.Now || otpCode.CanUsed == false)
+                if (otpCode is null || otpCode.AttemptCount >= 3 || otpCode.ExpiredAt < DateTime.Now || otpCode.CanUsed == false)
                 {
                     response.Status = Status.Failed;
                     response.Message = "OTP kodunuz geçersiz veya süresi dolmuş olabilir. Lütfen yeni bir kod talep edin.";
@@ -119,7 +165,7 @@ namespace ECOM.API.Infrastructure.Services
                 // kullanıcının girdiği kodun hash'ini al
                 var otpCodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.CodeHash)));
 
-                if(otpCode.CodeHash != otpCodeHash) // girilen kodun hash'i veritabanındaki hash ile eşleşmiyor, yanlış kod denemesi
+                if (otpCode.CodeHash != otpCodeHash) // girilen kodun hash'i veritabanındaki hash ile eşleşmiyor, yanlış kod denemesi
                 {
                     // yanlış kod denemesi
                     otpCode.AttemptCount += 1; // deneme sayısını artır

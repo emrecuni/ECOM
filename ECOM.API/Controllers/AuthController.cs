@@ -2,6 +2,7 @@
 using System.Text;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -131,6 +132,20 @@ namespace ECOM.API.Controllers
             // OTP doğrulama yapılır. 
             var response = await _authService.CheckOtpInDb(model);
 
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterRequestDto model)
+        {
+            if(model is null || !ModelState.IsValid)
+                return BadRequest("Model is null");
+
+            Response<RegisterResponseDto> response = new();
+
+            response = await _authService.Register(model);
+                
             return Ok(response);
         }
     }

@@ -1,12 +1,12 @@
 ﻿* Swagger ekle projeye
-* Login doğrulama ekle 
+X Login doğrulama ekle X
 * Login(mvc)'de eklenecek claims'leri api'den dön
-* İşlemleri service dosyalarında yaptır
+X İşlemleri service dosyalarında yaptır X
 * Product controller ekle
 X Email verification tablosunun migration'ını oluştur X
 * Email verification işlemini yaptır
 * iyzico ödemeleri için api yaz
 * iyzico'da 3d ayarını kurcala Firma ayarları -> ödeme bazında 3d secure ayarları
 * Neighborhood tablosundan city kolonunu kaldır
-* Doğrulama kodu generater yaz
+X Doğrulama kodu generater yaz X
 X Gönderilen otp kodunu sendotp response'ta dön X

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ECOM.Api.Data.Entities
+namespace ECOM.Shared.Data.Entities
 {
     public class Cart
     {

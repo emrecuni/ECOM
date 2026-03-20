@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" version="29.6.4">
+  <diagram name="Sayfa-1" id="5gHUz6cfZy_O4cy2uxxy">
+    <mxGraphModel dx="1426" dy="777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-4" edge="1" parent="1" source="uaZCH_VjPURGeVzxjbtY-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="uaZCH_VjPURGeVzxjbtY-3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Başla" vertex="1">
+          <mxGeometry height="80" width="120" x="280" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;b&gt;&lt;i&gt;&lt;font style=&quot;font-size: 25px;&quot;&gt;Register&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="310" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-6" edge="1" parent="1" source="uaZCH_VjPURGeVzxjbtY-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="uaZCH_VjPURGeVzxjbtY-5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-3" parent="1" style="whiteSpace=wrap;html=1;" value="Kullanıcıdan e-mail bilgisi alınır ve SendOtp metoduna istek atılır." vertex="1">
+          <mxGeometry height="90" width="206" x="237" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-10" edge="1" parent="1" source="uaZCH_VjPURGeVzxjbtY-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="uaZCH_VjPURGeVzxjbtY-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-5" parent="1" style="whiteSpace=wrap;html=1;" value="Kullanıcıdan otp kodu alınır ve kontrol etmek için CheckOtp metoduna istek atılır." vertex="1">
+          <mxGeometry height="90" width="206" x="237" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-7" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;1. Girilen e-mail sistemde kayıtlı mı diye kontrol edilir.&lt;/span&gt;&lt;/h1&gt;&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;2. Kayıtlı değilse otp kodu oluşturulur ve hashlenerek db&#39;ye yazılır.&lt;/span&gt;&lt;/h1&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;3. Db&#39;ye yazılan kod kullanıcıya mail olarak gönderilir.&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="360" x="460" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-8" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;1. Db&#39;den email ve otp tipi eşleşen kayıt çekilir.&lt;/span&gt;&lt;/h1&gt;&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;2. Otp kodunun kullanılabilir olup olmadığı kontrol edilir&lt;/span&gt;&lt;/h1&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;3. Girilen kod ile db&#39;deki kod karşılaştırılır.&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;4. Hatalı kod girildiyse db&#39;de deneme sayısı 1 arttırılır.&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;5. Kodlar eşleşirse db&#39;deki kayıt kullanılamaz yapılır.(silinecek)&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="195" width="350" x="460" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-13" edge="1" parent="1" source="uaZCH_VjPURGeVzxjbtY-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="uaZCH_VjPURGeVzxjbtY-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-9" parent="1" style="whiteSpace=wrap;html=1;" value="OTP doğrulaması yapıldıktan sonra kullanıcıdan diğer kişisel bilgiler alınır ve Register metoduna istek atılır." vertex="1">
+          <mxGeometry height="85" width="200" x="240" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-11" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;1. Kullanıcın girdiği e-mail ve telefon ile eşleşen kayıt var mı kontrol edilir.&lt;/span&gt;&lt;/h1&gt;&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;2. Eğer kayıt yoksa kullanıcın girdiği parolalar eşleşiyor mu diye kontrol edilir.&lt;/span&gt;&lt;/h1&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;3. Parolalar eşleşiyorsa db&#39;ye kayıt eklenir.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="195" width="350" x="460" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="uaZCH_VjPURGeVzxjbtY-12" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Bitiş" vertex="1">
+          <mxGeometry height="80" width="120" x="280" y="750" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

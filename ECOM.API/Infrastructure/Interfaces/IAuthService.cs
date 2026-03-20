@@ -6,7 +6,7 @@ namespace ECOM.API.Infrastructure.Interfaces
     public interface IAuthService
     {
         public Task<Customers?> ValidateUser(LoginRequestDto model);
-        public Task<bool> CheckExistsCustomer(RegisterRequestDto model);
+        public Task<bool> CheckExistsCustomer(CheckCustomerDto model);
         public Task<Response<SmtpResponseDto>> SendVerifyEmail(SmtpRequestDto model);
         public Task<bool> SaveOtpCode(OtpRequestDto model);
         public Task<Response<RegisterResponseDto>> Register(RegisterRequestDto model);

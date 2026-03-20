@@ -72,6 +72,12 @@ namespace ECOM.API.Controllers
             Response<SmtpResponseDto> response = new();
 
             #region Kullanıcı var mı kontrolü
+            CheckCustomerDto checkCustomerModel = new()
+            {
+                Email = model.Email,
+                Phone = model.Phone
+            };
+
             var isExistsCustomer = await _authService.CheckExistsCustomer(model);
 
             if (isExistsCustomer) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
@@ -93,7 +99,7 @@ namespace ECOM.API.Controllers
                 CodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(otpCode))) // otp kodunu hash'leyerek db'ye kaydederiz, böylece güvenliği artırırız
             };
 
-            if(await _authService.SaveOtpCode(modelOtp) == false) // db'ye yazılamazsa otp'yi göndermez
+            if(!await _authService.SaveOtpCode(modelOtp) ) // db'ye yazılamazsa otp'yi göndermez
                 return Ok(response = new()
                 {
                     Message = "OTP kodu oluşturulamadı. Lütfen tekrar deneyiniz.",
@@ -147,6 +153,30 @@ namespace ECOM.API.Controllers
             response = await _authService.Register(model);
                 
             return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("forgotpassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDto model)
+        {
+            if(model is null || !ModelState.IsValid)
+                return BadRequest("Model is null");
+
+            //Response<regi>
+
+            #region girilen email ile kayıtlı bir müşteri var mı kontrolü
+
+            var isExistsCustomer = await _authService.CheckExistsCustomer(model);
+
+            if(!isExistsCustomer)
+            {
+
+            }
+
+            #endregion
+
+
+            return Ok();
         }
     }
 }

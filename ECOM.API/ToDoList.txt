@@ -10,3 +10,4 @@ X Email verification tablosunun migration'ını oluştur X
 * Neighborhood tablosundan city kolonunu kaldır
 X Doğrulama kodu generater yaz X
 X Gönderilen otp kodunu sendotp response'ta dön X
+* Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım

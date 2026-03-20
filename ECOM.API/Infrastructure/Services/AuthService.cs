@@ -47,7 +47,13 @@ namespace ECOM.API.Infrastructure.Services
             Response<RegisterResponseDto> response = new();
             try
             {
-                if (await CheckExistsCustomer(model)) // email veya telefon numarası zaten kayıtlı mı kontrol et
+                CheckCustomerDto checkCustomerModel = new()
+                {
+                    Email = model.Email,
+                    Phone = model.Phone
+                };
+
+                if (await CheckExistsCustomer(checkCustomerModel)) // email veya telefon numarası zaten kayıtlı mı kontrol et
                 {
                     response.Status = Status.Failed;
                     response.Message = "Bu email veya telefon numarası zaten kayıtlı. Lütfen farklı bir email veya telefon numarası deneyin.";
@@ -99,7 +105,7 @@ namespace ECOM.API.Infrastructure.Services
         }
 
         // email veya telefon numarası ile müşteri var mı kontrol eder, varsa true döner, yoksa false döner
-        public async Task<bool> CheckExistsCustomer(RegisterRequestDto model)
+        public async Task<bool> CheckExistsCustomer(CheckCustomerDto model)
         {
             return await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone); ;
         }
@@ -118,7 +124,7 @@ namespace ECOM.API.Infrastructure.Services
                 EmailVerification otpEntity = new EmailVerification
                 {
                     Email = model.Email,
-                    CodeHash = model.CodeHash,
+                    CodeHash = model.CodeHash!,
                     ExpiredAt = DateTime.Now.AddMinutes(3),
                     IsUsed = false,
                     CanUsed = true,
@@ -163,7 +169,7 @@ namespace ECOM.API.Infrastructure.Services
                 }
 
                 // kullanıcının girdiği kodun hash'ini al
-                var otpCodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.CodeHash)));
+                var otpCodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(model.CodeHash!)));
 
                 if (otpCode.CodeHash != otpCodeHash) // girilen kodun hash'i veritabanındaki hash ile eşleşmiyor, yanlış kod denemesi
                 {

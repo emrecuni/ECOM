@@ -210,5 +210,62 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
+
+        public async Task<Response<ForgotPasswordResponseDto>> ForgotPassword(ForgotPasswordRequestDto model)
+        {
+            Response<ForgotPasswordResponseDto> response = new();
+            try
+            {
+                CheckCustomerDto checkCustomerModel = new()
+                {
+                    Email = model.Email
+                };
+
+                if (!await CheckExistsCustomer(checkCustomerModel)) // email numarası kayıtlı mı kontrol et
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Bu email veya telefon kayıtlı değil. Lütfen farklı bir email veya telefon numarası deneyin.";
+                    return response;
+                }
+
+                if (model.Password != model.RePassword) // parola ve tekrar parola eşleşiyor mu kontrol et
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Parolalar eşleşmiyor. Lütfen parolalarınızı kontrol edin.";
+                    return response;
+                }
+                
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email); // parolası güncellenecek müşteriyi email ile bulur
+
+                if(customer!.Password == EncryptionHelper.HashPassword(model.Password)) // yeni parolanın eski parolayla aynı olup olmadığını kontrol eder
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Yeni parola eski parolanızla aynı olamaz. Lütfen farklı bir parola deneyin.";
+                    return response;
+                }
+
+                customer!.Password = EncryptionHelper.HashPassword(model.Password); // yeni parolayı hash'leyerek müşterinin parolasını günceller
+                await _context.SaveChangesAsync(); // değişiklikleri kaydeder
+
+                response.Status = Status.Success;
+                response.Message = "Parola başarıyla güncellendi. Giriş yapabilirsiniz.";
+                response.Result = new ForgotPasswordResponseDto
+                {
+                    CustomerId = customer.CustomerId,
+                    Email = customer.Email,
+                    Name = customer.Name,
+                    Surname = customer.Surname
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AuthService/ForgotPassword ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = $"Şifremi Unuttum Sırasında Bir Hata Oluştu. ==> {ex}";
+            }
+            return response;
+        }
     }
 }

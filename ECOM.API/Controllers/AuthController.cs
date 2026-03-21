@@ -135,8 +135,6 @@ namespace ECOM.API.Controllers
                 IsBodyHtml = true
             };
 
-            /////////////////////////////////////////////// burayı test et
-
             Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
             response = await _authService.SendVerifyEmail(request);
             response.Message = $"OTP Code: {otpCode}";
@@ -180,26 +178,11 @@ namespace ECOM.API.Controllers
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
 
-            //Response<regi>
+            Response<ForgotPasswordResponseDto> response = new();
 
-            #region girilen email ile kayıtlı bir müşteri var mı kontrolü
+            response = await _authService.ForgotPassword(model);
 
-            CheckCustomerDto checkCustomerModel = new()
-            {
-                Email = model.Email
-            };
-
-            var isExistsCustomer = await _authService.CheckExistsCustomer(checkCustomerModel);
-
-            if (!isExistsCustomer)
-            {
-
-            }
-
-            #endregion
-
-
-            return Ok();
+            return Ok(response);
         }
     }
 }

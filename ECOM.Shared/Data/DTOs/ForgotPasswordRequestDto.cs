@@ -6,7 +6,8 @@ namespace ECOM.Shared.Data.DTOs
 {
     public class ForgotPasswordRequestDto
     {
-        public string? Email { get; set; }
-        public string? OtpCode { get; set; }
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string RePassword { get; set; } = null!;
     }
 }

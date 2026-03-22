@@ -24,9 +24,41 @@ namespace ECOM.API.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<DetailProductDto>> GetProductDetails(int productId)
+        public async Task<Response<DetailProductDto>> GetProductDetails(int productId)
         {
-            throw new NotImplementedException();
+            Response<DetailProductDto> response = new();
+            try
+            {
+                var product = await _context.Products
+                    .Where(p => p.ProductId == productId)
+                    .Select(p => new DetailProductDto
+                    {
+                        ProductId = p.ProductId,
+                        BrandId = p.BrandId,
+                        SupCategoryId = p.SupCategoryId,
+                        SubCategoryId = p.SubCategoryId,
+                        SellerId = p.SellerId,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Score = p.Score,
+                        ImagePath = p.ImagePath,
+                        BrandName = p.Brand.Name,
+                        SellerName = p.Seller.Name
+                    })
+                    .FirstOrDefaultAsync();
+
+                response.Status = product is null ? Status.Success : Status.Failed;
+                response.Message = product is null ? "Ürün bulunamadı." : "Ürün başarıyla getirildi.";
+                response.Result = product;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/GetProductDetails ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<Response<List<BasicProductDto>>> GetProducts(int customerId)
@@ -56,12 +88,12 @@ namespace ECOM.API.Infrastructure.Services
                     IsFavorite = favorites.Contains(p.ProductId) // ürün favoriler arasında mı kontrolü
                 })];
 
-                response.Status = Status.Success;
+                response.Status = response.Result.Count > 0 ? Status.Success : Status.Failed;
                 response.Message = response.Result.Count > 0 ? "Ürünler başarıyla getirildi." : "Ürün bulunmadı.";
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ProductService/GetProducts => Error: {ex} ");
+                _logger.LogError($"ProductService/GetProducts ==> Error: {ex} ");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

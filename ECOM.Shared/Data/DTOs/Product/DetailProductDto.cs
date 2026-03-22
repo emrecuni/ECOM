@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ECOM.Shared.Data.Entities;
 
 namespace ECOM.Shared.Data.DTOs.Product
 {
@@ -19,6 +20,7 @@ namespace ECOM.Shared.Data.DTOs.Product
 
         public string? BrandName { get; set; }
         public string? SellerName { get; set; }
+        public List<CommentsDto> Comments { get; set; } = new();
 
     }
 }

@@ -70,7 +70,16 @@ namespace ECOM.API.Infrastructure.Services
                         Score = p.Score,
                         ImagePath = p.ImagePath,
                         BrandName = p.Brand.Name,
-                        SellerName = p.Seller.Name
+                        SellerName = p.Seller.Name,
+                        Comments = p.Comments.Select(c => new CommentsDto
+                        {
+                            CommentId = c.CommentId,
+                            CustomerName = c.Customer.Name,
+                            CustomerSurname = c.Customer.Surname,
+                            Score = c.Score,
+                            ImagePath = c.ImagePath,
+                            Comment = c.Comment
+                        }).ToList()
                     })
                     .FirstOrDefaultAsync();
 

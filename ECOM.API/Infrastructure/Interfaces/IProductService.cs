@@ -7,6 +7,6 @@ namespace ECOM.API.Infrastructure.Interfaces
     {
         public Task<Response<List<BasicProductDto>>> GetProducts(int customerId);
         public Task<Response<DetailProductDto>> GetProductDetails(int productId);
-        public Task<Response<BasicProductDto>> GetFavoriteProducts(int customerId);
+        public Task<Response<List<BasicProductDto>>> GetFavoriteProducts(int customerId);
     }
 }

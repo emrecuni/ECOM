@@ -19,9 +19,35 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
-        public Task<Response<BasicProductDto>> GetFavoriteProducts(int customerId)
+        public async Task<Response<List<BasicProductDto>>> GetFavoriteProducts(int customerId)
         {
-            throw new NotImplementedException();
+            Response<List<BasicProductDto>> response = new();
+            try
+            {
+                var favoriteProducts = await _context.Favorites
+                    .Where(f => f.CustomerId == customerId)
+                    .Select(f => new BasicProductDto
+                    {
+                        ProductId = f.Product.ProductId,
+                        Name = f.Product.Name,
+                        Price = f.Product.Price,
+                        Score = f.Product.Score,
+                        ImagePath = f.Product.ImagePath,
+                        IsFavorite = true
+                    })
+                    .ToListAsync();
+
+                response.Result = favoriteProducts;
+                response.Status = favoriteProducts.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = favoriteProducts.Count > 0 ? "Favori ürünler başarıyla getirildi." : "Favori ürün bulunamadı.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/GetFavoriteProducts ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<Response<DetailProductDto>> GetProductDetails(int productId)

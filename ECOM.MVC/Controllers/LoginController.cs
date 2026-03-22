@@ -6,7 +6,8 @@ using ECOM.DTO;
 using ECOM.Interface;
 using ECOM.Models;
 using ECOM.Services;
-using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Auth;
+
 //using Iyzipay;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -4,7 +4,10 @@ using ECOM.API.Data;
 using ECOM.API.Helpers;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.DTOs.Smtp;
 using ECOM.Shared.Data.Entities;
+using ECOM.Shared.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Infrastructure.Services

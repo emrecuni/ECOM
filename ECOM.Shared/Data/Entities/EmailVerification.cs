@@ -1,4 +1,4 @@
-﻿using ECOM.Shared.Data.DTOs;
+﻿using ECOM.Shared.Data.Enums;
 
 namespace ECOM.Shared.Data.Entities
 {

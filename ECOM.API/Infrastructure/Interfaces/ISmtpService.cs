@@ -1,4 +1,5 @@
 ﻿using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Smtp;
 
 namespace ECOM.API.Infrastructure.Interfaces
 {

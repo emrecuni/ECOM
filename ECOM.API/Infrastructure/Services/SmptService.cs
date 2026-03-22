@@ -1,6 +1,8 @@
 ﻿using System.Net.Mail;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Smtp;
+using ECOM.Shared.Data.Enums;
 
 namespace ECOM.API.Infrastructure.Services
 {

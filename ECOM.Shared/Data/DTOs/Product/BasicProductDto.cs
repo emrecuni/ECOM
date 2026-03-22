@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ECOM.Shared.Data.Entities;
 
-namespace ECOM.Shared.Data.DTOs
+namespace ECOM.Shared.Data.DTOs.Product
 {
     public class BasicProductDto
     {
@@ -12,6 +12,6 @@ namespace ECOM.Shared.Data.DTOs
         public decimal? Price { get; set; }
         public float? Score { get; set; }
         public string? ImagePath { get; set; }
-        public ICollection<Favorites> Favorites { get; set; } = [];
+        public bool IsFavorite { get; set; }
     }
 }

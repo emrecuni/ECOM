@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ECOM.Shared.Data.Enums;
 
 namespace ECOM.Shared.Data.DTOs
 {

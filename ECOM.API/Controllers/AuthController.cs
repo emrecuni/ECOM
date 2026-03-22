@@ -2,7 +2,10 @@
 using System.Text;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.DTOs.Smtp;
 using ECOM.Shared.Data.Entities;
+using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

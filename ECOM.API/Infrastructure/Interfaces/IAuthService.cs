@@ -1,4 +1,6 @@
 ﻿using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.DTOs.Smtp;
 using ECOM.Shared.Data.Entities;
 
 namespace ECOM.API.Infrastructure.Interfaces

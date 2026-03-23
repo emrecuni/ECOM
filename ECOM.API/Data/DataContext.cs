@@ -354,7 +354,7 @@ namespace ECOM.API.Data
                 entity.Property(p => p.Description).HasColumnName("DESCRIPTION").IsRequired(false);
                 entity.Property(p => p.SupCategoryId).HasColumnName("SUP_CATEGORY_ID").IsRequired();
                 entity.Property(p => p.SubCategoryId).HasColumnName("SUB_CATEGORY_ID").IsRequired();
-                entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired(false);
+                entity.Property(p => p.Price).HasColumnName("PRICE").IsRequired();
                 entity.Property(p => p.SellerId).HasColumnName("SELLER_ID").IsRequired();
                 entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(p => p.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);

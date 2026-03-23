@@ -2,7 +2,7 @@
 X Login doğrulama ekle X
 * Login(mvc)'de eklenecek claims'leri api'den dön
 X İşlemleri service dosyalarında yaptır X
-* Product controller ekle
+X Product controller ekle X
 X Email verification tablosunun migration'ını oluştur X
 X Email verification işlemini yaptır X
 * iyzico ödemeleri için api yaz
@@ -10,4 +10,18 @@ X Email verification işlemini yaptır X
 * Neighborhood tablosundan city kolonunu kaldır
 X Doğrulama kodu generater yaz X
 X Gönderilen otp kodunu sendotp response'ta dön X
-* Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım
+X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım X
+* Sepete ekleme metodunu yaz // product
+* Yorum yapma metodunu yaz // product
+* Ürün arama metodunu yaz // ad ile // product
+* Ürün arama metodunu yaz // kategori ile // product
+* Favoriye ekleme metodunu yaz // product
+* Bilgi güncelleme metodunu yaz // customer
+* Ödeme metodunu yaz // payment
+* Siparişler metodunu yaz // customer
+* Adres gibi yardımcı işlemler için controller yaz // address
+* Kuponları listeleme metodunu yaz // customer
+* Fiyat karşılaştırma işlemini private bir metod ile yap
+
+
+!!! sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız.

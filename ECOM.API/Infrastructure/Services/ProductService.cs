@@ -19,6 +19,108 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
+        public async Task<Response<int>> AddCart(AddCartRequestDto model)
+        {
+            Response<int> response = new();
+            try
+            {
+                #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
+                // ürünün db'deki fiyatını alır,
+                var product = await _context.Products
+                    .Select(p => new { p.ProductId, p.Price })
+                    .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
+                
+                if(product is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün bulunamadı.";
+                    return response;
+                }
+                
+                if(model.Price != product.Price)
+                {
+                    _logger.LogWarning($"ProductService/AddCart ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
+
+                    // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
+                    var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100; 
+                    if (priceDiff > 10)
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
+                        response.Result = model.ProductId; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
+
+                        return response;
+                    }
+                    model.Price = product.Price; // db'deki fiyatı kullan
+                }
+                #endregion
+
+                var cartItem = new Cart
+                {
+                    CustomerId = model.CustomerId,
+                    ProductId = model.ProductId,
+                    SellerId = model.SellerId,
+                    Piece = model.Piece,
+                    TotalPrice = model.Price * model.Piece,
+                    Enable = model.Enable,
+                    AdditionTime = DateTime.Now
+                };
+
+                await _context.Carts.AddAsync(cartItem); // ürün sepete eklenir
+                await _context.SaveChangesAsync(); // değişiklikler kaydedilir
+
+                response.Status = Status.Success;
+                response.Message = "Ürün sepete başarıyla eklendi.";
+                response.Result = model.ProductId; // eklenen ürünün id'si döndürülür
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/AddCart ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<int>> EditCart(EditCartRequestDto model)
+        {
+            Response<int> response = new();
+            try
+            {
+                // burada direkt cart id'sini gönderebilirsen onun üzerinden al
+                var cartItem = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId &&
+                    c.ProductId == model.ProductId &&
+                    c.SellerId == model.SellerId);
+
+                if (cartItem is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Sepet ürünü bulunamadı.";
+                    return response;
+                }
+
+                cartItem.Piece = model.Piece;
+                //cartItem.pr
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/RemoveCart ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public Task<Response<CartResponseDto>> GetCart(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<int>> AddFavorite()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Response<List<BasicProductResponseDto>>> GetFavoriteProducts(int customerId)
         {
             Response<List<BasicProductResponseDto>> response = new();

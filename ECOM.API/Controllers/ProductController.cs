@@ -1,4 +1,5 @@
 ﻿using ECOM.API.Infrastructure.Interfaces;
+using ECOM.Shared.Data.DTOs.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,14 +28,19 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("getproductdetails")]
-        public async Task<IActionResult> GetProductDetails(int productId, int? customerId)
+        public async Task<IActionResult> GetProductDetails([FromQuery] DetailProductRequestDto model)
         {
-            var response = await _productService.GetProductDetails(productId,customerId);
+            if(model is null || !ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
+
+            var response = await _productService.GetProductDetails(model);
             return Ok(response);
         }
 
         [HttpGet("getfavoriteproducts")]
-        public async Task<IActionResult> GetFavoriteProducts(int customerId)
+        public async Task<IActionResult> GetFavoriteProducts([FromQuery] int customerId)
         {
             var response = await _productService.GetFavoriteProducts(customerId);
             return Ok(response);

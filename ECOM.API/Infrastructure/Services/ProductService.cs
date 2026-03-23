@@ -61,16 +61,18 @@ namespace ECOM.API.Infrastructure.Services
                     {
                         ProductId = p.ProductId,
                         BrandId = p.BrandId,
+                        BrandName = p.Brand.Name,
                         SupCategoryId = p.SupCategoryId,
+                        SupCategory = p.SupCategory.Name,
                         SubCategoryId = p.SubCategoryId,
+                        SubCategory = p.SubCategory.Name,
                         SellerId = p.SellerId,
+                        SellerName = p.Seller.Name,
                         Name = p.Name,
                         Description = p.Description,
                         Price = p.Price,
                         Score = p.Score,
                         ImagePath = p.ImagePath,
-                        BrandName = p.Brand.Name,
-                        SellerName = p.Seller.Name,
                         Comments = p.Comments.Select(c => new CommentsDto
                         {
                             CommentId = c.CommentId,
@@ -83,8 +85,8 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .FirstOrDefaultAsync();
 
-                response.Status = product is null ? Status.Success : Status.Failed;
-                response.Message = product is null ? "Ürün bulunamadı." : "Ürün başarıyla getirildi.";
+                response.Status = product is not null ? Status.Success : Status.Failed;
+                response.Message = product is not null ?  "Ürün başarıyla getirildi." : "Ürün bulunamadı.";
                 response.Result = product;
             }
             catch (Exception ex)

@@ -18,7 +18,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("getproducts")]
+        [HttpGet("getproducts")]
         public async Task<IActionResult> GetProducts([FromQuery] int? customerId)
         {
             var response = await _productService.GetProducts(customerId);
@@ -26,14 +26,14 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("getproductsdetails")]
+        [HttpGet("getproductdetails")]
         public async Task<IActionResult> GetProductDetails(int productId)
         {
             var response = await _productService.GetProductDetails(productId);
             return Ok(response);
         }
 
-        [HttpPost("getfavoriteproducts")]
+        [HttpGet("getfavoriteproducts")]
         public async Task<IActionResult> GetFavoriteProducts(int customerId)
         {
             var response = await _productService.GetFavoriteProducts(customerId);

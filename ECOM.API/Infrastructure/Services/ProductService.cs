@@ -19,14 +19,14 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<Response<List<BasicProductDto>>> GetFavoriteProducts(int customerId)
+        public async Task<Response<List<BasicProductResponseDto>>> GetFavoriteProducts(int customerId)
         {
-            Response<List<BasicProductDto>> response = new();
+            Response<List<BasicProductResponseDto>> response = new();
             try
             {
                 var favoriteProducts = await _context.Favorites
                     .Where(f => f.CustomerId == customerId)
-                    .Select(f => new BasicProductDto
+                    .Select(f => new BasicProductResponseDto
                     {
                         ProductId = f.Product.ProductId,
                         Name = f.Product.Name,
@@ -50,14 +50,14 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<DetailProductDto>> GetProductDetails(int productId, int? customerId)
+        public async Task<Response<DetailProductResponseDto>> GetProductDetails(DetailProductRequestDto model)
         {
-            Response<DetailProductDto> response = new();
+            Response<DetailProductResponseDto> response = new();
             try
             {
                 var product = await _context.Products
-                    .Where(p => p.ProductId == productId)
-                    .Select(p => new DetailProductDto
+                    .Where(p => p.ProductId == model.ProductId)
+                    .Select(p => new DetailProductResponseDto
                     {
                         ProductId = p.ProductId,
                         BrandId = p.BrandId,
@@ -85,8 +85,8 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .FirstOrDefaultAsync();
 
-                if (product is not null && customerId.HasValue)
-                    product.IsFavorite = await _context.Favorites.AnyAsync(f => f.CustomerId == customerId && f.ProductId == productId); // favori kontrolü
+                if (product is not null && model.CustomerId.HasValue)
+                    product.IsFavorite = await _context.Favorites.AnyAsync(f => f.CustomerId == model.CustomerId && f.ProductId == model.ProductId); // favori kontrolü
 
                 response.Status = product is not null ? Status.Success : Status.Failed;
                 response.Message = product is not null ? "Ürün başarıyla getirildi." : "Ürün bulunamadı.";
@@ -101,9 +101,9 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<List<BasicProductDto>>> GetProducts(int? customerId)
+        public async Task<Response<List<BasicProductResponseDto>>> GetProducts(int? customerId)
         {
-            Response<List<BasicProductDto>> response = new();
+            Response<List<BasicProductResponseDto>> response = new();
             try
             {
                 // db'den 20 ürün çeker
@@ -118,7 +118,7 @@ namespace ECOM.API.Infrastructure.Services
                     .Select(f => f.ProductId)
                     .ToListAsync();
 
-                response.Result = [.. products.Select(p => new BasicProductDto
+                response.Result = [.. products.Select(p => new BasicProductResponseDto
                 {
                     ProductId = p.ProductId,
                     Name = p.Name,

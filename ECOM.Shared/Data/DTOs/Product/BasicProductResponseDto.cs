@@ -5,7 +5,7 @@ using ECOM.Shared.Data.Entities;
 
 namespace ECOM.Shared.Data.DTOs.Product
 {
-    public class BasicProductDto
+    public class BasicProductResponseDto
     {
         public int ProductId { get; set; }
         public string? Name { get; set; }

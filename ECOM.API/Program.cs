@@ -5,6 +5,7 @@ using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.API.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -63,6 +64,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISmtpService, SmptService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<SmtpClient>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
@@ -77,8 +79,22 @@ builder.Services.AddScoped<SmtpClient>(provider =>
     };
     return smtpClient;
 });
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build(); // varsayılan: her şey kapalı
+//});
 
 var app = builder.Build();
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Path: {context.Request.Path}");
+    Console.WriteLine($"Auth Header: {context.Request.Headers["Authorization"]}");
+    await next();
+    Console.WriteLine($"Response: {context.Response.StatusCode}");
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -88,14 +104,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(); // https://localhost:{PORT}/scalar/v1
 }
-
-app.Use(async (context, next) =>
-{
-    Console.WriteLine($"Path: {context.Request.Path}");
-    Console.WriteLine($"Auth Header: {context.Request.Headers["Authorization"]}");
-    await next();
-    Console.WriteLine($"Response: {context.Response.StatusCode}");
-});
 
 app.UseRouting();
 app.UseHttpsRedirection();

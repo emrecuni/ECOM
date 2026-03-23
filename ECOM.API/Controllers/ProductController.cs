@@ -1,4 +1,5 @@
 ﻿using ECOM.API.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECOM.API.Controllers
@@ -10,16 +11,33 @@ namespace ECOM.API.Controllers
         private readonly IProductService _productService;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductService productService,ILogger<ProductController> logger)
+        public ProductController(IProductService productService, ILogger<ProductController> logger)
         {
             _productService = productService;
             _logger = logger;
         }
 
-
-        public IActionResult Index()
+        [AllowAnonymous]
+        [HttpPost("getproducts")]
+        public async Task<IActionResult> GetProducts([FromQuery] int? customerId)
         {
-            return View();
+            var response = await _productService.GetProducts(customerId);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("getproductsdetails")]
+        public async Task<IActionResult> GetProductDetails(int productId)
+        {
+            var response = await _productService.GetProductDetails(productId);
+            return Ok(response);
+        }
+
+        [HttpPost("getfavoriteproducts")]
+        public async Task<IActionResult> GetFavoriteProducts(int customerId)
+        {
+            var response = await _productService.GetFavoriteProducts(customerId);
+            return Ok(response);
         }
     }
 }

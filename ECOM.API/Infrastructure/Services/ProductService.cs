@@ -96,7 +96,7 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<List<BasicProductDto>>> GetProducts(int customerId)
+        public async Task<Response<List<BasicProductDto>>> GetProducts(int? customerId)
         {
             Response<List<BasicProductDto>> response = new();
             try

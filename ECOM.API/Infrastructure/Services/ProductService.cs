@@ -50,7 +50,7 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<DetailProductDto>> GetProductDetails(int productId)
+        public async Task<Response<DetailProductDto>> GetProductDetails(int productId, int? customerId)
         {
             Response<DetailProductDto> response = new();
             try
@@ -85,8 +85,11 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .FirstOrDefaultAsync();
 
+                if (product is not null && customerId.HasValue)
+                    product.IsFavorite = await _context.Favorites.AnyAsync(f => f.CustomerId == customerId && f.ProductId == productId); // favori kontrolü
+
                 response.Status = product is not null ? Status.Success : Status.Failed;
-                response.Message = product is not null ?  "Ürün başarıyla getirildi." : "Ürün bulunamadı.";
+                response.Message = product is not null ? "Ürün başarıyla getirildi." : "Ürün bulunamadı.";
                 response.Result = product;
             }
             catch (Exception ex)

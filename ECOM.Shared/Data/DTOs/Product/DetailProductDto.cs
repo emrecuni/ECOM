@@ -21,6 +21,7 @@ namespace ECOM.Shared.Data.DTOs.Product
         public decimal? Price { get; set; }
         public float? Score { get; set; }
         public string? ImagePath { get; set; }
+        public bool IsFavorite { get; set; }
         public List<CommentsDto> Comments { get; set; } = new();
 
     }

@@ -27,9 +27,9 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("getproductdetails")]
-        public async Task<IActionResult> GetProductDetails(int productId)
+        public async Task<IActionResult> GetProductDetails(int productId, int? customerId)
         {
-            var response = await _productService.GetProductDetails(productId);
+            var response = await _productService.GetProductDetails(productId,customerId);
             return Ok(response);
         }
 

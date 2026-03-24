@@ -25,34 +25,16 @@ namespace ECOM.API.Infrastructure.Services
             try
             {
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
-                // ürünün db'deki fiyatını alır,
-                var product = await _context.Products
-                    .Select(p => new { p.ProductId, p.Price })
-                    .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
-                
-                if(product is null)
+                CheckPriceDiffDto priceDiffModel = new()
                 {
-                    response.Status = Status.Failed;
-                    response.Message = "Ürün bulunamadı.";
-                    return response;
-                }
+                    ProductId = model.ProductId,
+                    Price = model.Price
+                };
+
+                response = await CheckPriceDiff(priceDiffModel);
+                if(response.Status != Status.Success)
+                    return response; // fiyat farkı büyükse işlemi durdur
                 
-                if(model.Price != product.Price)
-                {
-                    _logger.LogWarning($"ProductService/AddCart ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
-
-                    // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
-                    var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100; 
-                    if (priceDiff > 10)
-                    {
-                        response.Status = Status.Failed;
-                        response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
-                        response.Result = model.ProductId; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
-
-                        return response;
-                    }
-                    model.Price = product.Price; // db'deki fiyatı kullan
-                }
                 #endregion
 
                 var cartItem = new Cart
@@ -99,8 +81,30 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
+                // fiyat karşılaştırma yapmak gerekirse request'e price değerini ekle
+                //#region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
+                //CheckPriceDiffDto priceDiffModel = new()
+                //{
+                //    ProductId = model.ProductId,
+                //    Price = model.Price
+                //};
+
+                //response = await CheckPriceDiff(priceDiffModel);
+                //if (response.Status != Status.Success)
+                //    return response; // fiyat farkı büyükse işlemi durdur
+
+                //#endregion
+
+
+                /*
+                 * fiyat karşılaştırma yap ve fiyatı ona göre güncelle
+                 */
+
                 cartItem.Piece = model.Piece;
+                cartItem.Enable = model.Enable;
                 //cartItem.pr
+
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -236,6 +240,51 @@ namespace ECOM.API.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError($"ProductService/GetProducts ==> Error: {ex} ");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        private async Task<Response<int>> CheckPriceDiff(CheckPriceDiffDto model)
+        {
+            Response<int> response = new();
+            try
+            {
+                // ürünün db'deki fiyatını alır,
+                var product = await _context.Products
+                    .Select(p => new { p.ProductId, p.Price })
+                    .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
+
+                if (product is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün bulunamadı.";
+                    return response;
+                }
+
+                if (model.Price != product.Price)
+                {
+                    _logger.LogWarning($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
+
+                    // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
+                    var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100;
+                    if (priceDiff > 10)
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
+                        response.Result = model.ProductId; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
+
+                        return response;
+                    }
+                    response.Result = model.ProductId; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
+                    response.Status = Status.Success;
+                    response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

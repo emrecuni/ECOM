@@ -22,6 +22,6 @@ X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım 
 * Adres gibi yardımcı işlemler için controller yaz // address
 * Kuponları listeleme metodunu yaz // customer
 * Fiyat karşılaştırma işlemini private bir metod ile yap
-
+* Cart'a güncelleme saati ekle 
 
 !!! sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız.

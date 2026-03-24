@@ -45,5 +45,12 @@ namespace ECOM.API.Controllers
             var response = await _productService.GetFavoriteProducts(customerId);
             return Ok(response);
         }
+
+        [HttpGet("getcart")]
+        public async Task<IActionResult> GetCart([FromQuery] int customerId)
+        {
+            var response = await _productService.GetCart(customerId);
+            return Ok(response);
+        }
     }
 }

@@ -102,9 +102,9 @@ namespace ECOM.API.Data
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(c => c.SellerId).HasColumnName("SELLER_ID").IsRequired();
                 entity.Property(c => c.DCouponId).HasColumnName("DCOUPON_ID").IsRequired(false);
-                entity.Property(c => c.Piece).HasColumnName("PIECE").IsRequired(false);
+                entity.Property(c => c.Piece).HasColumnName("PIECE").IsRequired();
                 entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
-                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired(false);
+                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired();
                 entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
 
                 // product relation

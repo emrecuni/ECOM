@@ -11,9 +11,9 @@ namespace ECOM.Shared.Data.Entities
         public int CustomerId { get; set; }
         public int SellerId { get; set; }
         public int? DCouponId { get; set; }
-        public int? Piece { get; set; }
+        public int Piece { get; set; }
         public decimal TotalPrice { get; set; }
-        public bool? Enable { get; set; }
+        public bool Enable { get; set; }
         public DateTime? AdditionTime { get; set; }
 
         // navigation property

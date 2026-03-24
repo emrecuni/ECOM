@@ -115,9 +115,51 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public Task<Response<CartResponseDto>> GetCart(int customerId)
+        public async Task<Response<CartResponseDto>> GetCart(int customerId)
         {
-            throw new NotImplementedException();
+            Response<CartResponseDto> response = new();
+            try
+            {
+                // kullanıcın sepetteki bütün ürünleri çekilir
+                var cartItems = await _context.Carts
+                    .Where(c => c.CustomerId == customerId)
+                    .Select(c => new ProductOfCartDto
+                    {
+                        Id = c.ProductId,
+                        Name = c.Product.Name,
+                        Price = c.TotalPrice,
+                        Piece = c.Piece,                        
+                        ImagePath = c.Product.ImagePath,
+                        Enable = c.Enable,
+                        SellerId = c.SellerId,
+                        SellerName = c.Seller.Name
+                    })
+                    .ToListAsync();
+
+                if(cartItems is null || cartItems.Count == 0) // sepet boşsa
+                {
+                    response.Status= Status.Failed;
+                    response.Message = "Sepette ürün bulunamadı.";
+                    return response;
+                }
+
+                response.Result = new CartResponseDto
+                {
+                    Products = cartItems,
+                    TotalPiece = cartItems.Where(c => c.Enable).Count(), // sadece aktif olan ürünlerin adedi alınır
+                    TotalPrice = cartItems.Where(c => c.Enable).Sum(c => c.Price) // sadece aktif olan ürünlerin fiyatları alınır
+                };
+                
+                response.Status = Status.Success;
+                response.Message = "Sepetteki ürünler başarıyla getirildi.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/GetCart ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public Task<Response<int>> AddFavorite()

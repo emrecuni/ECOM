@@ -46,6 +46,7 @@ namespace ECOM.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("getcart")]
         public async Task<IActionResult> GetCart([FromQuery] int customerId)
         {

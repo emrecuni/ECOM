@@ -19,7 +19,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getproducts")]
+        [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts([FromQuery] int? customerId)
         {
             var response = await _productService.GetProducts(customerId);
@@ -27,7 +27,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getproductdetails")]
+        [HttpGet("GetProductDetails")]
         public async Task<IActionResult> GetProductDetails([FromQuery] DetailProductRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
@@ -39,7 +39,7 @@ namespace ECOM.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("getfavoriteproducts")]
+        [HttpGet("GetFavoriteProducts")]
         public async Task<IActionResult> GetFavoriteProducts([FromQuery] int customerId)
         {
             var response = await _productService.GetFavoriteProducts(customerId);
@@ -47,7 +47,7 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("getcart")]
+        [HttpGet("GetCart")]
         public async Task<IActionResult> GetCart([FromQuery] int customerId)
         {
             var response = await _productService.GetCart(customerId);
@@ -55,7 +55,7 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("addcart")]
+        [HttpPost("AddCart")]
         public async Task<IActionResult> AddCart([FromBody] AddCartRequestDto model)
         {
             Console.WriteLine("ProductController/AddCart ==> Metodu çalışmaya başladı");
@@ -64,7 +64,7 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPatch("editcart")]
+        [HttpPatch("EditCart")]
         public async Task<IActionResult> EditCart([FromBody] EditCartRequestDto model)
         {
             var response = await _productService.EditCart(model);
@@ -72,10 +72,10 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("addfavorite")]
-        public async Task<IActionResult> AddFavorite([FromBody] int customerId, int productId)
+        [HttpPost("AddFavorite")]
+        public async Task<IActionResult> AddFavorite([FromBody] AddFavoriteRequestDto model)
         {
-            var response = await _productService.AddFavorite(customerId, productId);
+            var response = await _productService.AddFavorite(model);
             return Ok(response);
         }
     }

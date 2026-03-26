@@ -175,28 +175,39 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<string>> AddFavorite(int customerId, int productId)
+        public async Task<Response<string>> AddFavorite(AddFavoriteRequestDto model)
         {
             Response<string> response = new();
             try
             {
-                if(!await _context.Customers.AnyAsync(c => c.CustomerId == customerId))
+                // gönderilen id'ye ait kullanıcı var mı kontrol eder
+                if(!await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Müşteri Bulunamadı.";
                     return response;
                 }
-                if(!await _context.Products.AnyAsync(p => p.ProductId == productId))
+
+                // gönderilen id'ye ait ürün var mı kontrol eder
+                if (!await _context.Products.AnyAsync(p => p.ProductId == model.ProductId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Ürün Bulunamadı.";
                     return response;
                 }
 
+                // gönderilen customerid ve productid ile favori kaydı var mı kontrol eder
+                if (await _context.Favorites.AnyAsync(f => f.CustomerId == model.CustomerId && f.ProductId == model.ProductId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün Zaten Favorilerde Kayıtlı.";
+                    return response;
+                }
+
                 var favorite = new Favorites
                 {
-                    CustomerId = customerId,
-                    ProductId = productId,
+                    CustomerId = model.CustomerId,
+                    ProductId = model.ProductId,
                     AdditionTime = DateTime.Now
                 };
 
@@ -205,7 +216,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 response.Message = "Ürün Favoriye Eklendi.";
                 response.Status = Status.Success;
-                response.Result = $"ProductId: {productId}";
+                response.Result = $"ProductId: {model.ProductId}";
             }
             catch (Exception ex)
             {

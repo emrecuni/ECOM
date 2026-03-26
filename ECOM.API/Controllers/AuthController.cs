@@ -35,8 +35,8 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequestDto model)
+        [HttpPost("Token")]
+        public async Task<IActionResult> Token(LoginRequestDto model)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("sendotp")]
+        [HttpPost("SendOTP")]
         public async Task<IActionResult> SendOtp(OtpRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
@@ -148,7 +148,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("checkotp")]
+        [HttpPost("CheckOTP")]
         public async Task<IActionResult> CheckOtp(OtpRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
@@ -161,7 +161,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
@@ -175,7 +175,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("forgotpassword")]
+        [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDto model)
         {
             if (model is null || !ModelState.IsValid)

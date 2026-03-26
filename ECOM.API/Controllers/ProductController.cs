@@ -30,7 +30,7 @@ namespace ECOM.API.Controllers
         [HttpGet("getproductdetails")]
         public async Task<IActionResult> GetProductDetails([FromQuery] DetailProductRequestDto model)
         {
-            if(model is null || !ModelState.IsValid)
+            if (model is null || !ModelState.IsValid)
             {
                 return BadRequest("Invalid request data.");
             }
@@ -59,7 +59,7 @@ namespace ECOM.API.Controllers
         public async Task<IActionResult> AddCart([FromBody] AddCartRequestDto model)
         {
             Console.WriteLine("ProductController/AddCart ==> Metodu çalışmaya başladı");
-            var response  = await _productService.AddCart(model);
+            var response = await _productService.AddCart(model);
             return Ok(response);
         }
 
@@ -68,6 +68,14 @@ namespace ECOM.API.Controllers
         public async Task<IActionResult> EditCart([FromBody] EditCartRequestDto model)
         {
             var response = await _productService.EditCart(model);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("addfavorite")]
+        public async Task<IActionResult> AddFavorite(int customerId, int productId)
+        {
+            var response = await _productService.AddFavorite(customerId, productId);
             return Ok(response);
         }
     }

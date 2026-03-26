@@ -175,9 +175,45 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public Task<Response<int>> AddFavorite()
+        public async Task<Response<string>> AddFavorite(int customerId, int productId)
         {
-            throw new NotImplementedException();
+            Response<string> response = new();
+            try
+            {
+                if(!await _context.Customers.AnyAsync(c => c.CustomerId == customerId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri Bulunamadı.";
+                    return response;
+                }
+                if(!await _context.Products.AnyAsync(p => p.ProductId == productId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün Bulunamadı.";
+                    return response;
+                }
+
+                var favorite = new Favorites
+                {
+                    CustomerId = customerId,
+                    ProductId = productId,
+                    AdditionTime = DateTime.Now
+                };
+
+                await _context.AddAsync(favorite); // favorilere eklenir
+                await _context.SaveChangesAsync(); // değişiklikler kaydedilir
+
+                response.Message = "Ürün Favoriye Eklendi.";
+                response.Status = Status.Success;
+                response.Result = $"ProductId: {productId}";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/AddFavorite ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<Response<List<BasicProductResponseDto>>> GetFavoriteProducts(int customerId)

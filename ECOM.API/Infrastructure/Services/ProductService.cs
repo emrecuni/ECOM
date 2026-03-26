@@ -148,7 +148,7 @@ namespace ECOM.API.Infrastructure.Services
                 response.Result = new CartResponseDto
                 {
                     Products = cartItems,
-                    TotalPiece = cartItems.Where(c => c.Enable).Count(), // sadece aktif olan ürünlerin adedi alınır
+                    TotalPiece = cartItems.Where(c => c.Enable).Sum(c => c.Piece), // sadece aktif olan ürünlerin adedi alınır
                     TotalPrice = cartItems.Where(c => c.Enable).Sum(c => c.Price) // sadece aktif olan ürünlerin fiyatları alınır
                 };
                 

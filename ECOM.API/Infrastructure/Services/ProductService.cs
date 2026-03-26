@@ -24,6 +24,7 @@ namespace ECOM.API.Infrastructure.Services
             Response<int> response = new();
             try
             {
+                Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
                 CheckPriceDiffDto priceDiffModel = new()
                 {
@@ -31,6 +32,7 @@ namespace ECOM.API.Infrastructure.Services
                     Price = model.Price
                 };
 
+               
                 response = await CheckPriceDiff(priceDiffModel);
                 if(response.Status != Status.Success)
                     return response; // fiyat farkı büyükse işlemi durdur
@@ -293,6 +295,7 @@ namespace ECOM.API.Infrastructure.Services
             Response<int> response = new();
             try
             {
+                Console.WriteLine("ProductService/CheckPriceDiff ==> Metodu çalışmaya başladı");
                 // ürünün db'deki fiyatını alır,
                 var product = await _context.Products
                     .Select(p => new { p.ProductId, p.Price })
@@ -300,6 +303,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 if (product is null)
                 {
+                    Console.WriteLine($"ProductService/CheckPriceDiff ==> product is null {model.ProductId}");
                     response.Status = Status.Failed;
                     response.Message = "Ürün bulunamadı.";
                     return response;
@@ -307,6 +311,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 if (model.Price != product.Price)
                 {
+                    Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: model.Price:{model.Price} - product.Price:{product.Price}");
                     _logger.LogWarning($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
 
                     // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
@@ -319,13 +324,15 @@ namespace ECOM.API.Infrastructure.Services
 
                         return response;
                     }
-                    response.Result = model.ProductId; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
-                    response.Status = Status.Success;
-                    response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
-                }
+                    }
+                response.Result = model.ProductId; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
+                response.Status = Status.Success;
+                response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
+                Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az model.Price:{model.Price} - product.Price:{product.Price}");
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;

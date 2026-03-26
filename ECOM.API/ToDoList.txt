@@ -23,5 +23,7 @@ X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım 
 * Kuponları listeleme metodunu yaz // customer
 * Fiyat karşılaştırma işlemini private bir metod ile yap
 * Cart'a güncelleme saati ekle 
+* Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et
+
 
 !!! sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız.

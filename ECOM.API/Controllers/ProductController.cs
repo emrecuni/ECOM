@@ -73,9 +73,17 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPost("AddFavorite")]
-        public async Task<IActionResult> AddFavorite([FromBody] AddFavoriteRequestDto model)
+        public async Task<IActionResult> AddFavorite([FromBody] FavoriteRequestDto model)
         {
             var response = await _productService.AddFavorite(model);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpDelete("RemoveFavorite")]
+        public async Task<IActionResult> RemoveFavorite([FromBody] FavoriteRequestDto model)
+        {
+            var response = await _productService.RemoveFavorite(model);
             return Ok(response);
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ECOM.Shared.Data.DTOs.Product
 {
-    public class AddFavoriteRequestDto
+    public class FavoriteRequestDto
     {
         public int CustomerId { get; set; }
         public int ProductId { get; set; }

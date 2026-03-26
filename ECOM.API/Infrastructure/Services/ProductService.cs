@@ -175,13 +175,13 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<string>> AddFavorite(AddFavoriteRequestDto model)
+        public async Task<Response<string>> AddFavorite(FavoriteRequestDto model)
         {
             Response<string> response = new();
             try
             {
                 // gönderilen id'ye ait kullanıcı var mı kontrol eder
-                if(!await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId))
+                if (!await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Müşteri Bulunamadı.";
@@ -221,6 +221,52 @@ namespace ECOM.API.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError($"ProductService/AddFavorite ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<string>> RemoveFavorite(FavoriteRequestDto model)
+        {
+            Response<string> response = new();
+            try
+            {
+                // gönderilen id'ye ait kullanıcı var mı kontrol eder
+                if (!await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri Bulunamadı.";
+                    return response;
+                }
+
+                // gönderilen id'ye ait ürün var mı kontrol eder
+                if (!await _context.Products.AnyAsync(p => p.ProductId == model.ProductId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün Bulunamadı.";
+                    return response;
+                }
+                             
+                var deleted = await _context.Favorites
+                    .Where(f => f.CustomerId == model.CustomerId && f.ProductId == model.ProductId)
+                    .ExecuteDeleteAsync();
+
+                // silinen kayıt yoksa favori bulunamamıştır
+                if (deleted == 0)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün Favorilerde Kayıt Değil.";
+                    return response;
+                }
+
+                response.Status = Status.Success;
+                response.Message = "Ürün Favoriden Başarıyla Kaldırıldı.";
+                response.Result = $"ProductId: {model.ProductId}";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/RemoveFavorite ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

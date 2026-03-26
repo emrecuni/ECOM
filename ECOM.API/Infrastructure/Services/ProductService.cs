@@ -32,11 +32,11 @@ namespace ECOM.API.Infrastructure.Services
                     Price = model.Price
                 };
 
-               
+
                 response = await CheckPriceDiff(priceDiffModel);
-                if(response.Status != Status.Success)
+                if (response.Status != Status.Success)
                     return response; // fiyat farkı büyükse işlemi durdur
-                
+
                 #endregion
 
                 var cartItem = new Cart
@@ -102,11 +102,22 @@ namespace ECOM.API.Infrastructure.Services
                  * fiyat karşılaştırma yap ve fiyatı ona göre güncelle
                  */
 
+                var price = await _context.Products
+                    .AsNoTracking()
+                    .Where(p => p.ProductId == model.ProductId)
+                    .Select(p => p.Price)
+                    .FirstOrDefaultAsync();
+
                 cartItem.Piece = model.Piece;
                 cartItem.Enable = model.Enable;
-                //cartItem.pr
+                cartItem.TotalPrice = price * model.Piece;
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // değişiklikler kaydedilir
+
+                Console.WriteLine("ProductService/EditCart ==> Sepet güncellendi db'ye yazıldı");
+                response.Status = Status.Success;
+                response.Message = "Sepet Başarıyla Güncellendi.";
+                response.Result = cartItem.CartId;
             }
             catch (Exception ex)
             {
@@ -130,7 +141,7 @@ namespace ECOM.API.Infrastructure.Services
                         Id = c.ProductId,
                         Name = c.Product.Name,
                         Price = c.TotalPrice,
-                        Piece = c.Piece,                        
+                        Piece = c.Piece,
                         ImagePath = c.Product.ImagePath,
                         Enable = c.Enable,
                         SellerId = c.SellerId,
@@ -138,9 +149,9 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .ToListAsync();
 
-                if(cartItems is null || cartItems.Count == 0) // sepet boşsa
+                if (cartItems is null || cartItems.Count == 0) // sepet boşsa
                 {
-                    response.Status= Status.Failed;
+                    response.Status = Status.Failed;
                     response.Message = "Sepette ürün bulunamadı.";
                     return response;
                 }
@@ -151,7 +162,7 @@ namespace ECOM.API.Infrastructure.Services
                     TotalPiece = cartItems.Where(c => c.Enable).Sum(c => c.Piece), // sadece aktif olan ürünlerin adedi alınır
                     TotalPrice = cartItems.Where(c => c.Enable).Sum(c => c.Price) // sadece aktif olan ürünlerin fiyatları alınır
                 };
-                
+
                 response.Status = Status.Success;
                 response.Message = "Sepetteki ürünler başarıyla getirildi.";
             }
@@ -324,7 +335,7 @@ namespace ECOM.API.Infrastructure.Services
 
                         return response;
                     }
-                    }
+                }
                 response.Result = model.ProductId; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
                 response.Status = Status.Success;
                 response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";

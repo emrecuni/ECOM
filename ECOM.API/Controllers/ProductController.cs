@@ -62,5 +62,13 @@ namespace ECOM.API.Controllers
             var response  = await _productService.AddCart(model);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpPut("editcart")]
+        public async Task<IActionResult> EditCart(EditCartRequestDto model)
+        {
+            var response = await _productService.EditCart(model);
+            return Ok(response);
+        }
     }
 }

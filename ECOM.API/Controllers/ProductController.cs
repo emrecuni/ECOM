@@ -73,7 +73,7 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPost("addfavorite")]
-        public async Task<IActionResult> AddFavorite(int customerId, int productId)
+        public async Task<IActionResult> AddFavorite([FromBody] int customerId, int productId)
         {
             var response = await _productService.AddFavorite(customerId, productId);
             return Ok(response);

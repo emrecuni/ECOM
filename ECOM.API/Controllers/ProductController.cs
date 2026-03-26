@@ -39,6 +39,7 @@ namespace ECOM.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("GetFavoriteProducts")]
         public async Task<IActionResult> GetFavoriteProducts([FromQuery] int customerId)
         {

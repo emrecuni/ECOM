@@ -56,7 +56,7 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPost("addcart")]
-        public async Task<IActionResult> AddCart(AddCartRequestDto model)
+        public async Task<IActionResult> AddCart([FromBody] AddCartRequestDto model)
         {
             Console.WriteLine("ProductController/AddCart ==> Metodu çalışmaya başladı");
             var response  = await _productService.AddCart(model);
@@ -64,8 +64,8 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPut("editcart")]
-        public async Task<IActionResult> EditCart(EditCartRequestDto model)
+        [HttpPatch("editcart")]
+        public async Task<IActionResult> EditCart([FromBody] EditCartRequestDto model)
         {
             var response = await _productService.EditCart(model);
             return Ok(response);

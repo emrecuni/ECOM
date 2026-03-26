@@ -19,9 +19,9 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<Response<int>> AddCart(AddCartRequestDto model)
+        public async Task<Response<string>> AddCart(AddCartRequestDto model)
         {
-            Response<int> response = new();
+            Response<string> response = new();
             try
             {
                 Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
@@ -55,7 +55,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 response.Status = Status.Success;
                 response.Message = "Ürün sepete başarıyla eklendi.";
-                response.Result = model.ProductId; // eklenen ürünün id'si döndürülür
+                response.Result = $"ProductId: {model.ProductId}"; // eklenen ürünün id'si döndürülür
             }
             catch (Exception ex)
             {
@@ -66,9 +66,9 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<int>> EditCart(EditCartRequestDto model)
+        public async Task<Response<string>> EditCart(EditCartRequestDto model)
         {
-            Response<int> response = new();
+            Response<string> response = new();
             try
             {
                 // burada direkt cart id'sini gönderebilirsen onun üzerinden al
@@ -117,7 +117,7 @@ namespace ECOM.API.Infrastructure.Services
                 Console.WriteLine("ProductService/EditCart ==> Sepet güncellendi db'ye yazıldı");
                 response.Status = Status.Success;
                 response.Message = "Sepet Başarıyla Güncellendi.";
-                response.Result = cartItem.CartId;
+                response.Result = $"CartId: {cartItem.CartId}";
             }
             catch (Exception ex)
             {
@@ -301,9 +301,9 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        private async Task<Response<int>> CheckPriceDiff(CheckPriceDiffDto model)
+        private async Task<Response<string>> CheckPriceDiff(CheckPriceDiffDto model)
         {
-            Response<int> response = new();
+            Response<string> response = new();
             try
             {
                 Console.WriteLine("ProductService/CheckPriceDiff ==> Metodu çalışmaya başladı");
@@ -331,12 +331,12 @@ namespace ECOM.API.Infrastructure.Services
                     {
                         response.Status = Status.Failed;
                         response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
-                        response.Result = model.ProductId; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
+                        response.Result = $"ProductId: {model.ProductId}"; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
 
                         return response;
                     }
                 }
-                response.Result = model.ProductId; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
+                response.Result = $"ProductId: {model.ProductId}"; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
                 response.Status = Status.Success;
                 response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
                 Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az model.Price:{model.Price} - product.Price:{product.Price}");

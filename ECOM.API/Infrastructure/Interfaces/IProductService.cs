@@ -8,8 +8,8 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<List<BasicProductResponseDto>>> GetProducts(int? customerId);
         public Task<Response<DetailProductResponseDto>> GetProductDetails(DetailProductRequestDto model);
         public Task<Response<List<BasicProductResponseDto>>> GetFavoriteProducts(int customerId);
-        public Task<Response<int>> AddCart(AddCartRequestDto model);
-        public Task<Response<int>> EditCart(EditCartRequestDto model);
+        public Task<Response<string>> AddCart(AddCartRequestDto model);
+        public Task<Response<string>> EditCart(EditCartRequestDto model);
         public Task<Response<CartResponseDto>> GetCart(int customerId);
         public Task<Response<int>> AddFavorite();
     }

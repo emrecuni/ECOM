@@ -26,16 +26,31 @@ namespace ECOM.API.Infrastructure.Services
             {
                 Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
+                
                 CheckPriceDiffDto priceDiffModel = new()
                 {
                     ProductId = model.ProductId,
                     Price = model.Price
                 };
 
-
                 response = await CheckPriceDiff(priceDiffModel);
                 if (response.Status != Status.Success)
                     return response; // fiyat farkı büyükse işlemi durdur
+               
+                #endregion
+
+                #region Sepete eklenecek ürün satıcıda mevcut mu
+
+                var isExistsInSeller = await _context.Products
+                    .AnyAsync(p => p.ProductId == model.ProductId && p.SellerId == model.SellerId);
+
+                if (!isExistsInSeller)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Sepete eklenmek ürün satıcıda mevcut değil.";
+                    response.Result = $"ProductId: {model.ProductId}";
+                    return response;
+                }
 
                 #endregion
 

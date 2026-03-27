@@ -23,7 +23,7 @@ X Favoriye ekleme metodunu yaz // product X
 * Kuponları listeleme metodunu yaz // customer
 X Fiyat karşılaştırma işlemini private bir metod ile yap X
 X Cart'a güncelleme saati ekle X
-* Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et
+X Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et X
 
 
 !!! sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız.

@@ -30,10 +30,8 @@ namespace ECOM.API.Controllers
         [HttpGet("GetProductDetails")]
         public async Task<IActionResult> GetProductDetails([FromQuery] DetailProductRequestDto model)
         {
-            if (model is null || !ModelState.IsValid)
-            {
-                return BadRequest("Invalid request data.");
-            }
+            if (model is null || !ModelState.IsValid)            
+                return BadRequest(ModelState);            
 
             var response = await _productService.GetProductDetails(model);
             return Ok(response);
@@ -59,7 +57,9 @@ namespace ECOM.API.Controllers
         [HttpPost("AddCart")]
         public async Task<IActionResult> AddCart([FromBody] AddCartRequestDto model)
         {
-            Console.WriteLine("ProductController/AddCart ==> Metodu çalışmaya başladı");
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
             var response = await _productService.AddCart(model);
             return Ok(response);
         }
@@ -68,6 +68,9 @@ namespace ECOM.API.Controllers
         [HttpPatch("EditCart")]
         public async Task<IActionResult> EditCart([FromBody] EditCartRequestDto model)
         {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
             var response = await _productService.EditCart(model);
             return Ok(response);
         }
@@ -76,6 +79,9 @@ namespace ECOM.API.Controllers
         [HttpPost("AddFavorite")]
         public async Task<IActionResult> AddFavorite([FromBody] FavoriteRequestDto model)
         {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
             var response = await _productService.AddFavorite(model);
             return Ok(response);
         }
@@ -84,7 +90,21 @@ namespace ECOM.API.Controllers
         [HttpDelete("RemoveFavorite")]
         public async Task<IActionResult> RemoveFavorite([FromBody] FavoriteRequestDto model)
         {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
             var response = await _productService.RemoveFavorite(model);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("AddComment")]
+        public async Task<IActionResult> AddComment(AddCommentRequestDto model)
+        {
+            if(!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
+            var response = await _productService.AddComment(model);
             return Ok(response);
         }
     }

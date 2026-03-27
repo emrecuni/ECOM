@@ -10,7 +10,7 @@ namespace ECOM.Shared.Data.Entities
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public string? Comment { get; set; }
-        public int? Score { get; set; }
+        public int Score { get; set; }
         public string? ImagePath { get; set; }
         public DateTime? CreatedAt { get; set; }
 

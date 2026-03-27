@@ -154,7 +154,7 @@ namespace ECOM.API.Data
                 entity.Property(c => c.ProductId).HasColumnName("PRODUCT_ID").IsRequired(true);
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired(true);
                 entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
-                entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired(false);
+                entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired(true);
                 entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
                 entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
 

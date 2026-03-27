@@ -41,10 +41,8 @@ namespace ECOM.API.Infrastructure.Services
 
                 #region Sepete eklenecek ürün satıcıda mevcut mu
 
-                var isExistsInSeller = await _context.Products
-                    .AnyAsync(p => p.ProductId == model.ProductId && p.SellerId == model.SellerId);
-
-                if (!isExistsInSeller)
+                if (!await _context.Products
+                    .AnyAsync(p => p.ProductId == model.ProductId && p.SellerId == model.SellerId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Sepete eklenmek ürün satıcıda mevcut değil.";
@@ -456,6 +454,73 @@ namespace ECOM.API.Infrastructure.Services
                 _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<string>> AddComment(AddCommentRequestDto model)
+        {
+            Response<string> response = new();
+            response.Result = $"ProductId: {model.ProductId}";
+            try
+            {
+                // müşteri var mı yok mu diye kontrol edilir
+                if (!await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri bulunamadı.";
+                    
+                    return response;
+                }
+
+                // ürün var mı yok mu diye kontrol edilir
+                if(!await _context.Products.AnyAsync(p => p.ProductId == model.ProductId)) 
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün bulunamadı.";
+
+                    return response;
+                }
+
+                // score olarak 1-5 arası değer mi gönderildiği kontrol edilir
+                if (model.Score < 1 || model.Score > 5)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Score 1-5 arasında olmalıdır.";
+
+                    return response;
+                }
+
+                // müşterinin ürünü daha öncesinde satın alıp almadığı kontrol edilir
+                if(! await _context.OrderHistory.AnyAsync(o => o.ProductId == model.ProductId && o.CustomerId == model.CustomerId))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Yorum yapabilmek için ürünü satın almış olmalısınız.";
+
+                    return response;
+                }
+
+                var comment = new Comments
+                {
+                    CustomerId = model.CustomerId,
+                    ProductId = model.ProductId,
+                    Comment = model.Comment,
+                    Score = model.Score,
+                    ImagePath = model.ImagePath,
+                    CreatedAt = DateTime.Now
+                };
+
+                await _context.Comments.AddAsync(comment); // yorum tabloya eklenir
+                await _context.SaveChangesAsync(); // değişiklikler kaydedilir
+
+                response.Status = Status.Success;
+                response.Message = "Yorum başarıyla eklendi.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/AddComment ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;                
             }
             return response;
         }

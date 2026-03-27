@@ -13,5 +13,6 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<CartResponseDto>> GetCart(int customerId);
         public Task<Response<string>> AddFavorite(FavoriteRequestDto model);
         public Task<Response<string>> RemoveFavorite(FavoriteRequestDto model);
+        public Task<Response<string>> AddComment(AddCommentRequestDto model);
     }
 }

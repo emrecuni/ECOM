@@ -11,18 +11,18 @@ X Email verification işlemini yaptır X
 X Doğrulama kodu generater yaz X
 X Gönderilen otp kodunu sendotp response'ta dön X
 X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım X
-* Sepete ekleme metodunu yaz // product
+X Sepete ekleme metodunu yaz // product X
 * Yorum yapma metodunu yaz // product
 * Ürün arama metodunu yaz // ad ile // product
 * Ürün arama metodunu yaz // kategori ile // product
-* Favoriye ekleme metodunu yaz // product
+X Favoriye ekleme metodunu yaz // product X
 * Bilgi güncelleme metodunu yaz // customer
 * Ödeme metodunu yaz // payment
 * Siparişler metodunu yaz // customer
 * Adres gibi yardımcı işlemler için controller yaz // address
 * Kuponları listeleme metodunu yaz // customer
-* Fiyat karşılaştırma işlemini private bir metod ile yap
-* Cart'a güncelleme saati ekle 
+X Fiyat karşılaştırma işlemini private bir metod ile yap X
+X Cart'a güncelleme saati ekle X
 * Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et
 
 

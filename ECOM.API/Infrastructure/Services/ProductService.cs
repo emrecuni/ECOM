@@ -111,6 +111,7 @@ namespace ECOM.API.Infrastructure.Services
                 cartItem.Piece = model.Piece;
                 cartItem.Enable = model.Enable;
                 cartItem.TotalPrice = price * model.Piece;
+                cartItem.UpdatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync(); // değişiklikler kaydedilir
 

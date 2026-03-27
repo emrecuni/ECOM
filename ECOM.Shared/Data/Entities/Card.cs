@@ -11,7 +11,7 @@ namespace ECOM.Shared.Data.Entities
         public string? CardNo { get; set; }
         public string? ExpirationDate { get; set; }
         public string? CVV { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         //navigation property
         public Customers Customer { get; set; } = null!;

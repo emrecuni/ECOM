@@ -21,7 +21,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 54999.99m,
                     Score = 4.8f,
                     ImagePath = "/images/products/iphone15pro.jpg",
-                    AdditionTime = new DateTime(2024, 9, 15)
+                    CreatedAt = new DateTime(2024, 9, 15)
                 },
                 new Product
                 {
@@ -35,7 +35,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 49999.99m,
                     Score = 4.7f,
                     ImagePath = "/images/products/s24ultra.jpg",
-                    AdditionTime = new DateTime(2024, 1, 20)
+                    CreatedAt = new DateTime(2024, 1, 20)
                 },
                 new Product
                 {
@@ -49,7 +49,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 24999.99m,
                     Score = 4.5f,
                     ImagePath = "/images/products/xiaomi14tpro.jpg",
-                    AdditionTime = new DateTime(2024, 10, 3)
+                    CreatedAt = new DateTime(2024, 10, 3)
                 },
                 new Product
                 {
@@ -63,7 +63,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 44999.99m,
                     Score = 4.9f,
                     ImagePath = "/images/products/macbookairm3.jpg",
-                    AdditionTime = new DateTime(2024, 3, 8)
+                    CreatedAt = new DateTime(2024, 3, 8)
                 },
                 new Product
                 {
@@ -77,7 +77,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 38999.99m,
                     Score = 4.4f,
                     ImagePath = "/images/products/galaxybook4pro.jpg",
-                    AdditionTime = new DateTime(2024, 4, 12)
+                    CreatedAt = new DateTime(2024, 4, 12)
                 },
                 new Product
                 {
@@ -91,7 +91,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 34999.99m,
                     Score = 4.6f,
                     ImagePath = "/images/products/samsungneqled65.jpg",
-                    AdditionTime = new DateTime(2024, 2, 18)
+                    CreatedAt = new DateTime(2024, 2, 18)
                 },
                 new Product
                 {
@@ -105,7 +105,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 29999.99m,
                     Score = 4.8f,
                     ImagePath = "/images/products/lgoled c4.jpg",
-                    AdditionTime = new DateTime(2024, 5, 22)
+                    CreatedAt = new DateTime(2024, 5, 22)
                 },
                 new Product
                 {
@@ -119,7 +119,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 9999.99m,
                     Score = 4.9f,
                     ImagePath = "/images/products/sonywh1000xm5.jpg",
-                    AdditionTime = new DateTime(2023, 11, 5)
+                    CreatedAt = new DateTime(2023, 11, 5)
                 },
                 new Product
                 {
@@ -133,7 +133,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 8499.99m,
                     Score = 4.7f,
                     ImagePath = "/images/products/airpodspro2.jpg",
-                    AdditionTime = new DateTime(2023, 9, 23)
+                    CreatedAt = new DateTime(2023, 9, 23)
                 },
                 new Product
                 {
@@ -147,7 +147,7 @@ namespace ECOM.API.Data.SeedData
                     Price = 3499.99m,
                     Score = 4.3f,
                     ImagePath = "/images/products/xiaomipurifier4pro.jpg",
-                    AdditionTime = new DateTime(2024, 6, 30)
+                    CreatedAt = new DateTime(2024, 6, 30)
                 }
             );
         }

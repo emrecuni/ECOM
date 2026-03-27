@@ -80,7 +80,7 @@ namespace ECOM.API.Infrastructure.Services
                     Gender = model.Gender,
                     BirthDate = model.BirthDate,
                     IsCustomer = true,
-                    AdditionTime = DateTime.Now
+                    CreatedAt = DateTime.Now
                 };
 
                 await _context.AddAsync(customerEntity); // yeni müşteri kaydını veritabanına ekle
@@ -95,7 +95,7 @@ namespace ECOM.API.Infrastructure.Services
                     Surname = customerEntity.Surname,
                     Email = customerEntity.Email,
                     Phone = customerEntity.Phone,
-                    AdditionTime = customerEntity.AdditionTime
+                    AdditionTime = customerEntity.CreatedAt
                 };
             }
             catch (Exception ex)

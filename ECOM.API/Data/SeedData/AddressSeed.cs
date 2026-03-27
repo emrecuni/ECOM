@@ -19,7 +19,7 @@ namespace ECOM.API.Data.SeedData
                     DistrictId = 1,
                     NeighbourhoodId = 1,
                     ReceiverId = 1,         // müşteri kendisi teslim alıyor
-                    AdditionTime = new DateTime(2024, 1, 10)
+                    CreatedAt = new DateTime(2024, 1, 10)
                 },
                 new Addresses
                 {
@@ -31,7 +31,7 @@ namespace ECOM.API.Data.SeedData
                     DistrictId = 2,
                     NeighbourhoodId = 3,
                     ReceiverId = 1,
-                    AdditionTime = new DateTime(2024, 2, 5)
+                    CreatedAt = new DateTime(2024, 2, 5)
                 },
                 new Addresses
                 {
@@ -43,7 +43,7 @@ namespace ECOM.API.Data.SeedData
                     DistrictId = 1,
                     NeighbourhoodId = 2,
                     ReceiverId = 2,
-                    AdditionTime = new DateTime(2024, 3, 18)
+                    CreatedAt = new DateTime(2024, 3, 18)
                 },
                 new Addresses
                 {
@@ -55,7 +55,7 @@ namespace ECOM.API.Data.SeedData
                     DistrictId = 2,
                     NeighbourhoodId = 4,
                     ReceiverId = 3,         // CustomerId=3 olan kişi teslim alacak
-                    AdditionTime = new DateTime(2024, 4, 22)
+                    CreatedAt = new DateTime(2024, 4, 22)
                 },
                 new Addresses
                 {
@@ -67,7 +67,7 @@ namespace ECOM.API.Data.SeedData
                     DistrictId = 4,
                     NeighbourhoodId = 5,
                     ReceiverId = 3,
-                    AdditionTime = new DateTime(2024, 5, 30)
+                    CreatedAt = new DateTime(2024, 5, 30)
                 }
             );
         }

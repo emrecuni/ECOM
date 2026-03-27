@@ -12,6 +12,7 @@ namespace ECOM.Shared.Data.Entities
         public string? Comment { get; set; }
         public int? Score { get; set; }
         public string? ImagePath { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // navigation property
         public Product Product { get; set; } = null!;

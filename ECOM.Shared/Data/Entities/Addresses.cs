@@ -14,7 +14,8 @@ namespace ECOM.Shared.Data.Entities
         public int DistrictId { get; set; }
         public int NeighbourhoodId { get; set; }
         public int ReceiverId { get; set; } // customer'da kayıtlı değilse kayıt et
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         
         // navigation property
         public Customers Receiver { get; set; } = null!;

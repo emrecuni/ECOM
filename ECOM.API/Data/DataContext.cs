@@ -29,7 +29,8 @@ namespace ECOM.API.Data
                 entity.Property(a => a.DistrictId).HasColumnName("DISTRICT_ID").IsRequired();
                 entity.Property(a => a.NeighbourhoodId).HasColumnName("NEIGHBOURHOOD_ID").IsRequired();
                 entity.Property(a => a.ReceiverId).HasColumnName("RECEIVER_ID").IsRequired();
-                entity.Property(a => a.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(a => a.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+                entity.Property(a => a.UpdatedAt).HasColumnName("UPDATED_AT").IsRequired(false);
 
                 //customer relation
                 entity.HasOne(a => a.Customer)
@@ -70,7 +71,7 @@ namespace ECOM.API.Data
 
                 entity.Property(b => b.BrandId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(b => b.Name).HasColumnName("NAME").IsRequired();
-                entity.Property(b => b.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(b => b.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
             });
 
             modelBuilder.Entity<Card>(entity =>
@@ -83,7 +84,7 @@ namespace ECOM.API.Data
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(c => c.CardNo).HasColumnName("CARD_NO").IsRequired();
                 entity.Property(c => c.CVV).HasColumnName("CVV").IsRequired();
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
 
                 entity.HasOne(cc => cc.Customer)
                 .WithMany(c => c.Cards)
@@ -105,7 +106,8 @@ namespace ECOM.API.Data
                 entity.Property(c => c.Piece).HasColumnName("PIECE").IsRequired();
                 entity.Property(c => c.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
                 entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired();
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+                entity.Property(c => c.UpdatedAt).HasColumnName("UPDATED_AT").IsRequired(false);
 
                 // product relation
                 entity.HasOne(c => c.Product)
@@ -154,6 +156,7 @@ namespace ECOM.API.Data
                 entity.Property(c => c.Comment).HasColumnName("COMMENT").IsRequired(false);
                 entity.Property(c => c.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(c => c.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
+                entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
 
                 // product relation
                 entity.HasOne(c => c.Product)
@@ -183,7 +186,8 @@ namespace ECOM.API.Data
                 entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired();
                 entity.Property(c => c.IsCustomer).HasColumnName("IS_CUSTOMER").IsRequired(false);
                 entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
-                entity.Property(c => c.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+                entity.Property(c => c.UpdatedAt).HasColumnName("UPDATED_AT").IsRequired(false);
             });
 
             modelBuilder.Entity<DCoupon>(entity =>
@@ -254,7 +258,7 @@ namespace ECOM.API.Data
                 entity.Property(f => f.FavoriteId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(f => f.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
                 entity.Property(f => f.ProductId).HasColumnName("PRODUCT_ID").IsRequired();
-                entity.Property(f => f.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(f => f.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
 
                 // customer relation
                 entity.HasOne(f => f.Customer)
@@ -358,7 +362,7 @@ namespace ECOM.API.Data
                 entity.Property(p => p.SellerId).HasColumnName("SELLER_ID").IsRequired();
                 entity.Property(p => p.Score).HasColumnName("SCORE").IsRequired(false);
                 entity.Property(p => p.ImagePath).HasColumnName("IMAGE_PATH").IsRequired(false);
-                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(p => p.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
 
                 entity.HasOne(p => p.Brand)
                 .WithMany(b => b.Products)
@@ -390,7 +394,7 @@ namespace ECOM.API.Data
                 entity.Property(p => p.CategoryId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(p => p.Name).HasColumnName("NAME").IsRequired();
                 entity.Property(p => p.Type).HasColumnName("TYPE").IsRequired();
-                entity.Property(p => p.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(p => p.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
             });
 
             modelBuilder.Entity<SCoupon>(entity =>
@@ -414,7 +418,7 @@ namespace ECOM.API.Data
                 entity.Property(s => s.SellerId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(s => s.Name).HasColumnName("NAME").IsRequired(false);
                 entity.Property(s => s.Score).HasColumnName("SCORE").IsRequired(false);
-                entity.Property(s => s.AdditionTime).HasColumnName("ADDITION_TIME").IsRequired(false);
+                entity.Property(s => s.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
             });
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // seed dataları db'ye yazar

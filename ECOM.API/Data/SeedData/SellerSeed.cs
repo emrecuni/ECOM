@@ -9,9 +9,9 @@ namespace ECOM.API.Data.SeedData
         public void Configure(EntityTypeBuilder<Seller> builder)
         {
             builder.HasData(
-                new Seller { SellerId = 1, Name = "TechStore", AdditionTime = new DateTime(2023,5,5) },
-                new Seller { SellerId = 2, Name = "ElektroMarket", AdditionTime = new DateTime(2023, 5, 5) },
-                new Seller { SellerId = 3, Name = "DigiShop", AdditionTime = new DateTime(2023, 5, 5) }
+                new Seller { SellerId = 1, Name = "TechStore", CreatedAt = new DateTime(2023,5,5) },
+                new Seller { SellerId = 2, Name = "ElektroMarket", CreatedAt = new DateTime(2023, 5, 5) },
+                new Seller { SellerId = 3, Name = "DigiShop", CreatedAt = new DateTime(2023, 5, 5) }
             );
         }
     }

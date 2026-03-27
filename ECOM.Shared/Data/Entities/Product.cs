@@ -16,7 +16,7 @@ namespace ECOM.Shared.Data.Entities
         public decimal Price { get; set; }
         public float? Score { get; set; }
         public string? ImagePath { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         //navigation property
         public Brand Brand { get; set; } = null!;

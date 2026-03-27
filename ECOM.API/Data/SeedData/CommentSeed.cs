@@ -15,7 +15,8 @@ namespace ECOM.API.Data.SeedData
                     ProductId = 1,
                     CustomerId = 1,
                     Comment = "Great product! Highly recommend.",
-                    Score = 5
+                    Score = 5,
+                    CreatedAt = new DateTime(2026, 1, 15)
                 },
                 new Comments
                 {
@@ -23,7 +24,8 @@ namespace ECOM.API.Data.SeedData
                     ProductId = 1,
                     CustomerId = 2,
                     Comment = "Not bad! Recommend.",
-                    Score = 3
+                    Score = 3,
+                    CreatedAt = new DateTime(2026, 2, 15)
                 },
                 new Comments
                 {
@@ -31,7 +33,8 @@ namespace ECOM.API.Data.SeedData
                     ProductId = 1,
                     CustomerId = 4,
                     Comment = "Wonderful! Highly recommend.",
-                    Score = 5
+                    Score = 5,
+                    CreatedAt = new DateTime(2026, 3, 15)
                 },
                 new Comments
                 {
@@ -39,7 +42,8 @@ namespace ECOM.API.Data.SeedData
                     ProductId = 3,
                     CustomerId = 3,
                     Comment = "Recommend.",
-                    Score = 4
+                    Score = 4,
+                    CreatedAt = new DateTime(2026, 2, 25)
                 }
             );
         }

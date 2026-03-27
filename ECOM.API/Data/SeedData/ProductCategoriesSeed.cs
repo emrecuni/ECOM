@@ -9,12 +9,12 @@ namespace ECOM.API.Data.SeedData
         public void Configure(EntityTypeBuilder<ProductCategories> builder)
         {
             builder.HasData(
-                new ProductCategories { CategoryId = 1, Name = "Elektronik", AdditionTime = new DateTime(2023, 5, 5) },         // SupCategory
-                new ProductCategories { CategoryId = 2, Name = "Telefon", AdditionTime = new DateTime(2023, 5, 5) },            // SubCategory
-                new ProductCategories { CategoryId = 3, Name = "Bilgisayar", AdditionTime = new DateTime(2023, 5, 5) },         // SubCategory
-                new ProductCategories { CategoryId = 4, Name = "Televizyon", AdditionTime = new DateTime(2023, 5, 5) },         // SubCategory
-                new ProductCategories { CategoryId = 5, Name = "Ses Sistemleri", AdditionTime = new DateTime(2023, 5, 5) },     // SubCategory
-                new ProductCategories { CategoryId = 6, Name = "Küçük Ev Aletleri", AdditionTime = new DateTime(2023, 5, 5) }   // SubCategory
+                new ProductCategories { CategoryId = 1, Name = "Elektronik", CreatedAt = new DateTime(2023, 5, 5) },         // SupCategory
+                new ProductCategories { CategoryId = 2, Name = "Telefon", CreatedAt = new DateTime(2023, 5, 5) },            // SubCategory
+                new ProductCategories { CategoryId = 3, Name = "Bilgisayar", CreatedAt = new DateTime(2023, 5, 5) },         // SubCategory
+                new ProductCategories { CategoryId = 4, Name = "Televizyon", CreatedAt = new DateTime(2023, 5, 5) },         // SubCategory
+                new ProductCategories { CategoryId = 5, Name = "Ses Sistemleri", CreatedAt = new DateTime(2023, 5, 5) },     // SubCategory
+                new ProductCategories { CategoryId = 6, Name = "Küçük Ev Aletleri", CreatedAt = new DateTime(2023, 5, 5) }   // SubCategory
             );
         }
     }

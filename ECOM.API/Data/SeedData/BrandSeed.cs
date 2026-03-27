@@ -9,11 +9,11 @@ namespace ECOM.API.Data.SeedData
         public void Configure(EntityTypeBuilder<Brand> builder)
         {
             builder.HasData(
-                new Brand { BrandId = 1, Name = "Samsung", AdditionTime = new DateTime(2023, 5, 5) },
-                new Brand { BrandId = 2, Name = "Apple", AdditionTime = new DateTime(2023, 5, 5) },
-                new Brand { BrandId = 3, Name = "Sony", AdditionTime = new DateTime(2023, 5, 5) },
-                new Brand { BrandId = 4, Name = "LG", AdditionTime = new DateTime(2023, 5, 5) },
-                new Brand { BrandId = 5, Name = "Xiaomi", AdditionTime = new DateTime(2023, 5, 5) }
+                new Brand { BrandId = 1, Name = "Samsung", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 2, Name = "Apple", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 3, Name = "Sony", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 4, Name = "LG", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 5, Name = "Xiaomi", CreatedAt = new DateTime(2023, 5, 5) }
             );
         }
     }

@@ -14,28 +14,28 @@ namespace ECOM.API.Data.SeedData
                     FavoriteId = 1,
                     CustomerId = 1,
                     ProductId = 1,
-                    AdditionTime = new DateTime(2024, 9, 15)
+                    CreatedAt = new DateTime(2024, 9, 15)
                 },
                 new Favorites
                 {
                     FavoriteId = 2,
                     CustomerId = 1,
                     ProductId = 2,
-                    AdditionTime = new DateTime(2024, 9, 15)
+                    CreatedAt = new DateTime(2024, 9, 15)
                 },
                 new Favorites
                 {
                     FavoriteId = 3,
                     CustomerId = 2,
                     ProductId = 3,
-                    AdditionTime = new DateTime(2024, 9, 15)
+                    CreatedAt = new DateTime(2024, 9, 15)
                 },
                 new Favorites
                 {
                     FavoriteId = 4,
                     CustomerId = 1,
                     ProductId = 4,
-                    AdditionTime = new DateTime(2024, 9, 15)
+                    CreatedAt = new DateTime(2024, 9, 15)
                 }
             );
         }

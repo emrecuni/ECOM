@@ -47,7 +47,7 @@ namespace ECOM.API.Infrastructure.Services
                     Piece = model.Piece,
                     TotalPrice = model.Price * model.Piece,
                     Enable = model.Enable,
-                    AdditionTime = DateTime.Now
+                    CreatedAt = DateTime.Now
                 };
 
                 await _context.Carts.AddAsync(cartItem); // ürün sepete eklenir
@@ -208,7 +208,7 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     CustomerId = model.CustomerId,
                     ProductId = model.ProductId,
-                    AdditionTime = DateTime.Now
+                    CreatedAt = DateTime.Now
                 };
 
                 await _context.AddAsync(favorite); // favorilere eklenir

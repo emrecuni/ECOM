@@ -18,7 +18,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 1,
                     TotalPrice = 54999.99m,
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 1)
+                    CreatedAt = new DateTime(2024, 11, 1)
                 },
                 new Cart
                 {
@@ -29,7 +29,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 1,
                     TotalPrice = 24999.99m,
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 1)
+                    CreatedAt = new DateTime(2024, 11, 1)
                 },
                 new Cart
                 {
@@ -40,7 +40,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 2,
                     TotalPrice = 19999.98m,    // 9999.99 * 2
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 3)
+                    CreatedAt = new DateTime(2024, 11, 3)
                 },
                 new Cart
                 {
@@ -51,7 +51,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 1,
                     TotalPrice = 40499.99m,    // indirimli fiyat
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 5)
+                    CreatedAt = new DateTime(2024, 11, 5)
                 },
                 new Cart
                 {
@@ -62,7 +62,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 1,
                     TotalPrice = 29999.99m,
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 6)
+                    CreatedAt = new DateTime(2024, 11, 6)
                 },
                 new Cart
                 {
@@ -73,7 +73,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 3,
                     TotalPrice = 25499.97m,    // 8499.99 * 3
                     Enable = true,
-                    AdditionTime = new DateTime(2024, 11, 6)
+                    CreatedAt = new DateTime(2024, 11, 6)
                 },
                 new Cart
                 {
@@ -84,7 +84,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 1,
                     TotalPrice = 49999.99m,
                     Enable = false,      // sepetten kaldırılmış
-                    AdditionTime = new DateTime(2024, 10, 28)
+                    CreatedAt = new DateTime(2024, 10, 28)
                 },
                 new Cart
                 {
@@ -95,7 +95,7 @@ namespace ECOM.API.Data.SeedData
                     Piece = 2,
                     TotalPrice = 6299.98m,     // indirimli fiyat
                     Enable = false,      // sepetten kaldırılmış
-                    AdditionTime = new DateTime(2024, 10, 30)
+                    CreatedAt = new DateTime(2024, 10, 30)
                 }
             );
         }

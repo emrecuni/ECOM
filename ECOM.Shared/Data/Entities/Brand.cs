@@ -8,7 +8,7 @@ namespace ECOM.Shared.Data.Entities
         [Key]
         public int BrandId { get; set; }
         public string? Name { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // reverse navigation property
         public ICollection<Product> Products { get; set; } = [];

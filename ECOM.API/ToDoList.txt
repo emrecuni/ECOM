@@ -1,4 +1,4 @@
-﻿* Swagger ekle projeye
+﻿X Swagger ekle projeye X
 X Login doğrulama ekle X
 * Login(mvc)'de eklenecek claims'leri api'den dön
 X İşlemleri service dosyalarında yaptır X

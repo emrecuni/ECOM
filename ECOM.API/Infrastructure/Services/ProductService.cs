@@ -1,9 +1,11 @@
-﻿using ECOM.API.Data;
+﻿using System.Linq.Expressions;
+using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Product;
 using ECOM.Shared.Data.Entities;
 using ECOM.Shared.Data.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Infrastructure.Services
@@ -292,9 +294,8 @@ namespace ECOM.API.Infrastructure.Services
             Response<List<BasicProductResponseDto>> response = new();
             try
             {
-                var favoriteProducts = await _context.Favorites
-                    .Where(f => f.CustomerId == customerId)
-                    .Select(f => new BasicProductResponseDto
+                var favoriteProducts = await GetFavorites(customerId,
+                    f => new BasicProductResponseDto
                     {
                         ProductId = f.Product.ProductId,
                         Name = f.Product.Name,
@@ -302,12 +303,11 @@ namespace ECOM.API.Infrastructure.Services
                         Score = f.Product.Score,
                         ImagePath = f.Product.ImagePath,
                         IsFavorite = true
-                    })
-                    .ToListAsync();
+                    });
 
                 response.Result = favoriteProducts;
                 response.Status = favoriteProducts.Count > 0 ? Status.Success : Status.Failed;
-                response.Message = favoriteProducts.Count > 0 ? "Favori ürünler başarıyla getirildi." : "Favori ürün bulunamadı.";
+                response.Message = favoriteProducts.Count > 0 ? $"{customerId} Id'li müşterinin favori ürünleri başarıyla getirildi." : $"{customerId} Id'li müşterinin favori ürün bulunamadı.";
             }
             catch (Exception ex)
             {
@@ -353,7 +353,7 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .FirstOrDefaultAsync();
 
-                if (product is not null && model.CustomerId.HasValue)
+                if (product is not null /*&& model.CustomerId.HasValue*/)
                     product.IsFavorite = await _context.Favorites.AnyAsync(f => f.CustomerId == model.CustomerId && f.ProductId == model.ProductId); // favori kontrolü
 
                 response.Status = product is not null ? Status.Success : Status.Failed;
@@ -369,7 +369,7 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<List<BasicProductResponseDto>>> GetProducts(int? customerId)
+        public async Task<Response<List<BasicProductResponseDto>>> GetProducts(int customerId)
         {
             Response<List<BasicProductResponseDto>> response = new();
             try
@@ -381,10 +381,7 @@ namespace ECOM.API.Infrastructure.Services
                     .ToListAsync();
 
                 // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
-                var favorites = await _context.Favorites
-                    .Where(f => f.CustomerId == customerId)
-                    .Select(f => f.ProductId)
-                    .ToListAsync();
+                var favorites = await GetFavorites(customerId, f => f.ProductId);
 
                 response.Result = [.. products.Select(p => new BasicProductResponseDto
                 {
@@ -402,56 +399,6 @@ namespace ECOM.API.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError($"ProductService/GetProducts ==> Error: {ex} ");
-                response.Status = Status.Error;
-                response.Message = ex.Message;
-            }
-            return response;
-        }
-
-        private async Task<Response<string>> CheckPriceDiff(CheckPriceDiffDto model)
-        {
-            Response<string> response = new();
-            try
-            {
-                Console.WriteLine("ProductService/CheckPriceDiff ==> Metodu çalışmaya başladı");
-                // ürünün db'deki fiyatını alır,
-                var product = await _context.Products
-                    .Select(p => new { p.ProductId, p.Price })
-                    .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
-
-                if (product is null)
-                {
-                    Console.WriteLine($"ProductService/CheckPriceDiff ==> product is null {model.ProductId}");
-                    response.Status = Status.Failed;
-                    response.Message = "Ürün bulunamadı.";
-                    return response;
-                }
-
-                if (model.Price != product.Price)
-                {
-                    Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: model.Price:{model.Price} - product.Price:{product.Price}");
-                    _logger.LogWarning($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
-
-                    // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
-                    var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100;
-                    if (priceDiff > 10)
-                    {
-                        response.Status = Status.Failed;
-                        response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
-                        response.Result = $"ProductId: {model.ProductId}"; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
-
-                        return response;
-                    }
-                }
-                response.Result = $"ProductId: {model.ProductId}"; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
-                response.Status = Status.Success;
-                response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
-                Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az model.Price:{model.Price} - product.Price:{product.Price}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ProductService/CheckPriceDiff ==> Error: {ex}");
-                _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }
@@ -538,10 +485,7 @@ namespace ECOM.API.Infrastructure.Services
                     .ToListAsync();
 
                 // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
-                var favorites = await _context.Favorites
-                    .Where(f => f.CustomerId == model.CustomerId)
-                    .Select(f => f.ProductId)
-                    .ToListAsync();
+                var favorites = await GetFavorites(model.CustomerId, f => f.ProductId);
 
                 response.Result = [.. products.Select(p => new BasicProductResponseDto
                 {
@@ -576,10 +520,7 @@ namespace ECOM.API.Infrastructure.Services
                     .ToListAsync();
 
                 // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
-                var favorites = await _context.Favorites
-                    .Where(f => f.CustomerId == model.CustomerId)
-                    .Select(f => f.ProductId)
-                    .ToListAsync();
+                var favorites = await GetFavorites(model.CustomerId, f => f.ProductId);
 
                 response.Result = [.. products.Select(p => new BasicProductResponseDto
                 {
@@ -601,5 +542,73 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
+
+        private async Task<Response<string>> CheckPriceDiff(CheckPriceDiffDto model)
+        {
+            Response<string> response = new();
+            try
+            {
+                Console.WriteLine("ProductService/CheckPriceDiff ==> Metodu çalışmaya başladı");
+                // ürünün db'deki fiyatını alır,
+                var product = await _context.Products
+                    .Select(p => new { p.ProductId, p.Price })
+                    .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
+
+                if (product is null)
+                {
+                    Console.WriteLine($"ProductService/CheckPriceDiff ==> product is null {model.ProductId}");
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün bulunamadı.";
+                    return response;
+                }
+
+                if (model.Price != product.Price)
+                {
+                    Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: model.Price:{model.Price} - product.Price:{product.Price}");
+                    _logger.LogWarning($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı: Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}");
+
+                    // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
+                    var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100;
+                    if (priceDiff > 10)
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";
+                        response.Result = $"ProductId: {model.ProductId}"; // ürün id'si döndürülür, böylece kullanıcı hangi ürünün fiyatında sorun olduğunu görebilir
+
+                        return response;
+                    }
+                }
+                response.Result = $"ProductId: {model.ProductId}"; // fiyat farkı yüzde 10'dan az ise gönderilen fiyatı kullan
+                response.Status = Status.Success;
+                response.Message = "Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az olduğu için gönderilen fiyat kullanıldı.";
+                Console.WriteLine($"ProductService/CheckPriceDiff ==> Fiyat uyuşmazlığı tespit edildi ancak fark yüzde 10'dan az model.Price:{model.Price} - product.Price:{product.Price}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ProductService/CheckPriceDiff ==> Error: {ex}");
+                _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        private async Task<List<TResult>> GetFavorites<TResult>(int customerId, Expression<Func<Favorites, TResult>> selector)
+        {
+            try
+            {
+                // db'den kullanıcın favorilere attığı ürünlerin selector'da gönderilen değerlerini çeker
+                return await _context.Favorites
+                    .Where(f => f.CustomerId == customerId)
+                    .Select(selector)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/GetFavorites ==> Error: {ex}");
+                return new List<TResult>();
+            }
+        }
+
     }
 }

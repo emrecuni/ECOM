@@ -30,8 +30,8 @@ namespace ECOM.API.Controllers
         [HttpGet("GetProductDetails")]
         public async Task<IActionResult> GetProductDetails([FromQuery] DetailProductRequestDto model)
         {
-            if (model is null || !ModelState.IsValid)            
-                return BadRequest(ModelState);            
+            if (model is null || !ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var response = await _productService.GetProductDetails(model);
             return Ok(response);
@@ -101,10 +101,21 @@ namespace ECOM.API.Controllers
         [HttpPost("AddComment")]
         public async Task<IActionResult> AddComment(AddCommentRequestDto model)
         {
-            if(!ModelState.IsValid || model is null)
+            if (!ModelState.IsValid || model is null)
                 return BadRequest(ModelState);
 
             var response = await _productService.AddComment(model);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("SearchProductsByWithName")]
+        public async Task<IActionResult> SearchProductsByWithName([FromBody] SearchProductRequestDto model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
+            var response = await _productService.SearchProductsByWithName(model);
             return Ok(response);
         }
     }

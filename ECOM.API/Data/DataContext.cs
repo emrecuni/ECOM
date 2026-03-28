@@ -352,6 +352,9 @@ namespace ECOM.API.Data
 
                 entity.HasKey(p => p.ProductId);
 
+                entity.HasIndex(p => p.Name);
+                entity.HasIndex(p => p.Description);
+
                 entity.Property(p => p.ProductId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(p => p.Name).HasColumnName("NAME").IsRequired();
                 entity.Property(p => p.BrandId).HasColumnName("BRAND_ID").IsRequired();

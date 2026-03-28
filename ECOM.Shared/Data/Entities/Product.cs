@@ -11,7 +11,7 @@ namespace ECOM.Shared.Data.Entities
         public int SupCategoryId { get; set; }
         public int SubCategoryId { get; set; }
         public int SellerId { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public float? Score { get; set; }

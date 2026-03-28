@@ -26,7 +26,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
-                
+
                 CheckPriceDiffDto priceDiffModel = new()
                 {
                     ProductId = model.ProductId,
@@ -36,7 +36,7 @@ namespace ECOM.API.Infrastructure.Services
                 response = await CheckPriceDiff(priceDiffModel);
                 if (response.Status != Status.Success)
                     return response; // fiyat farkı büyükse işlemi durdur
-               
+
                 #endregion
 
                 #region Sepete eklenecek ürün satıcıda mevcut mu
@@ -261,7 +261,7 @@ namespace ECOM.API.Infrastructure.Services
                     response.Message = "Ürün Bulunamadı.";
                     return response;
                 }
-                             
+
                 var deleted = await _context.Favorites
                     .Where(f => f.CustomerId == model.CustomerId && f.ProductId == model.ProductId)
                     .ExecuteDeleteAsync();
@@ -469,12 +469,12 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     response.Status = Status.Failed;
                     response.Message = "Müşteri bulunamadı.";
-                    
+
                     return response;
                 }
 
                 // ürün var mı yok mu diye kontrol edilir
-                if(!await _context.Products.AnyAsync(p => p.ProductId == model.ProductId)) 
+                if (!await _context.Products.AnyAsync(p => p.ProductId == model.ProductId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Ürün bulunamadı.";
@@ -492,7 +492,7 @@ namespace ECOM.API.Infrastructure.Services
                 }
 
                 // müşterinin ürünü daha öncesinde satın alıp almadığı kontrol edilir
-                if(! await _context.OrderHistory.AnyAsync(o => o.ProductId == model.ProductId && o.CustomerId == model.CustomerId))
+                if (!await _context.OrderHistory.AnyAsync(o => o.ProductId == model.ProductId && o.CustomerId == model.CustomerId))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Yorum yapabilmek için ürünü satın almış olmalısınız.";
@@ -520,7 +520,46 @@ namespace ECOM.API.Infrastructure.Services
             {
                 _logger.LogError($"ProductService/AddComment ==> Error: {ex}");
                 response.Status = Status.Error;
-                response.Message = ex.Message;                
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithName(SearchProductRequestDto model)
+        {
+            Response<List<BasicProductResponseDto>> response = new();
+            try
+            {
+                var searchTerm = model.ProductName.ToLower();
+                // ürün adı veya açıklamayla sorgulat
+                var products = await _context.Products
+                    .Where(p => p.Name.ToUpper().Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm)))
+                    .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
+                    .ToListAsync();
+
+                // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
+                var favorites = await _context.Favorites
+                    .Where(f => f.CustomerId == model.CustomerId)
+                    .Select(f => f.ProductId)
+                    .ToListAsync();
+
+                response.Result = [.. products.Select(p => new BasicProductResponseDto
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Score = p.Score,
+                    ImagePath = p.ImagePath,
+                    IsFavorite = favorites.Contains(p.ProductId) // ürün favoriler arasında mı kontrolü
+                })];
+                response.Status = products.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = products.Count > 0 ? "Bulunan ürünler başarıyla getirildi." : "Aranan ürün bulunamadı";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/SearchProductsByWithName ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
             }
             return response;
         }

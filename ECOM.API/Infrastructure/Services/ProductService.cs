@@ -609,6 +609,5 @@ namespace ECOM.API.Infrastructure.Services
                 return new List<TResult>();
             }
         }
-
     }
 }

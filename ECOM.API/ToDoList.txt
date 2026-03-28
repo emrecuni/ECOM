@@ -25,6 +25,4 @@ X Fiyat karşılaştırma işlemini private bir metod ile yap X
 X Cart'a güncelleme saati ekle X
 X Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et X
 X Yorum yapabilmek için ürünü satın almış mı kontrol et X
-
-
-!!! sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız.
+X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız. X

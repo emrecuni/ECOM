@@ -100,7 +100,7 @@ namespace ECOM.Controllers
                     SellerId = sellerId,
                     TotalPrice = decimal.Parse(price.ToString()),
                     Enable = true,
-                    AdditionTime = DateTime.Now
+                    CreatedAt = DateTime.Now
                 };
                 _context.Carts.Add(cart);
             }

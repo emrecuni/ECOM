@@ -14,7 +14,7 @@ namespace ECOM.Data
         public int? Piece { get; set; }
         public decimal TotalPrice { get; set; }
         public bool? Enable { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // navigation property
         public Product Product { get; set; } = null!;

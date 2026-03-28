@@ -17,6 +17,7 @@ builder.Services.AddScoped<ISmtp_Sender, Smtp_Sender>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<EmailSettings>();
 builder.Services.AddScoped<ProductDataProcess>();
+builder.Services.AddScoped<DataContext>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {

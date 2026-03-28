@@ -316,7 +316,7 @@ namespace ECOM.Controllers
 
                 newAddress.CustomerId = customerId;
                 newAddress.ReceiverId = customerId;
-                newAddress.AdditionTime = DateTime.Now;
+                newAddress.CreatedAt = DateTime.Now;
 
 
                 _context.Addresses.Add(newAddress); // yeni adres eklenir

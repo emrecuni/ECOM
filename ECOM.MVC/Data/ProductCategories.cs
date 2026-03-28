@@ -9,7 +9,7 @@ namespace ECOM.Data
         public int CategoryId { get; set; }
         public string Name { get; set; } = null!;
         public bool Type { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         //reverse navigation property
 

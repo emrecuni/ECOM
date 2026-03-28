@@ -15,7 +15,7 @@ namespace ECOM.Data
         public bool Gender { get; set; }
         public bool? IsCustomer { get; set; }
         public DateTime? BirthDate { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // reverse navigation property
         public ICollection<Addresses> ReceiverAddresses { get; set; } = []; // new List<Addresses>()

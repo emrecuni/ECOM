@@ -26,3 +26,4 @@ X Cart'a güncelleme saati ekle X
 X Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et X
 X Yorum yapabilmek için ürünü satın almış mı kontrol et X
 X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız. X
+* Sepetteki tutar gösterimlerini binlik ayraç ile ayır

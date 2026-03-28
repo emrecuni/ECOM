@@ -9,7 +9,7 @@ namespace ECOM.Data
         public int SellerId { get; set; }
         public string? Name { get; set; }
         public float? Score { get; set; }
-        public DateTime? AdditionTime { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // reverse navigation property
         public ICollection<Cart> Carts { get; set; } = [];

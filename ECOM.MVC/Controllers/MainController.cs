@@ -158,7 +158,7 @@ namespace ECOM.Controllers
                     {
                         CustomerId = customerId,
                         ProductId = id,
-                        AdditionTime = DateTime.Now
+                        CreatedAt = DateTime.Now
                     });
                     isFavorite = true;
                 }

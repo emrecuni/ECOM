@@ -19,11 +19,13 @@ namespace ECOM.MVC.Controllers
     public class LoginController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly DataContext _context;
         private readonly ISmtp_Sender _sender;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
+        public LoginController(DataContext context,HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
         {
+            _context = context;
             _httpClient = httpClient;
             _sender = sender;
             _logger = logger;
@@ -42,78 +44,78 @@ namespace ECOM.MVC.Controllers
             {
                 if (model.Email is not null && model.Password is not null)
                 {
-                    _httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
+                    //_httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
 
-                    var response = await _httpClient.PostAsJsonAsync("api/auth/login", new
-                    {
-                        Email = model.Email,
-                        Password = model.Password
-                    });
+                    //var response = await _httpClient.PostAsJsonAsync("api/auth/login", new
+                    //{
+                    //    Email = model.Email,
+                    //    Password = model.Password
+                    //});
 
-                    if (!response.IsSuccessStatusCode)
+                    //if (!response.IsSuccessStatusCode)
+                    //{
+                    //    ModelState.AddModelError("", "Giriş başarısız");
+                    //    return View(model);
+                    //}
+
+                    //var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+
+                    //if (result is null || result.Token is null) // buradaki yönlendirmeyi kontrol et
+                    //    return View(model);
+
+                    //// Token'ı HttpOnly cookie'ye kaydet (XSS'e karşı koruma)
+                    //Response.Cookies.Append("jwt_token", result!.Token, new CookieOptions
+                    //{
+                    //    HttpOnly = true,
+                    //    Secure = true,
+                    //    SameSite = SameSiteMode.Strict,
+                    //    Expires = result.ExpiresAt
+                    //});
+
+                    //// MVC tarafı için cookie auth
+                    //var handler = new JwtSecurityTokenHandler();
+                    //var jwt = handler.ReadJwtToken(result.Token);
+
+                    //var identity = new ClaimsIdentity(
+                    //    jwt.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    //await HttpContext.SignInAsync(
+                    //    CookieAuthenticationDefaults.AuthenticationScheme,
+                    //    new ClaimsPrincipal(identity),
+                    //    new AuthenticationProperties { IsPersistent = true });
+
+                    //return RedirectToAction("Index", "Main");
+
+                    var customer = await _context.Customers.FirstAsync(c => c.Email == model.Email || c.Phone == model.Email);
+                    if (customer is not null && Encryption.VerifyPassword(model.Password, customer.Password!))
                     {
-                        ModelState.AddModelError("", "Giriş başarısız");
-                        return View(model);
+
+                        var claims = new List<Claim>
+                        {
+                            new (ClaimTypes.Name, customer.Name!),
+                            new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                            new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var autProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTime.UtcNow.AddDays(30)
+                        };
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            autProperties);
+
+                        return RedirectToAction("Index", "Main");
                     }
-
-                    var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
-
-                    if (result is null || result.Token is null) // buradaki yönlendirmeyi kontrol et
-                        return View(model);
-
-                    // Token'ı HttpOnly cookie'ye kaydet (XSS'e karşı koruma)
-                    Response.Cookies.Append("jwt_token", result!.Token, new CookieOptions
+                    else // kullanıcı adı parola hatalı mesajı bastır
                     {
-                        HttpOnly = true,
-                        Secure = true,
-                        SameSite = SameSiteMode.Strict,
-                        Expires = result.ExpiresAt
-                    });
-
-                    // MVC tarafı için cookie auth
-                    var handler = new JwtSecurityTokenHandler();
-                    var jwt = handler.ReadJwtToken(result.Token);
-
-                    var identity = new ClaimsIdentity(
-                        jwt.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(identity),
-                        new AuthenticationProperties { IsPersistent = true });
-
-                    return RedirectToAction("Index", "Main");
-
-                    //var customer = await _context.Customers.FirstAsync(c => c.Email == email || c.Phone == email);
-                    //if (customer is not null && Encryption.VerifyPassword(password, customer.Password!))
-                    //{
-
-                    //    var claims = new List<Claim>
-                    //    {
-                    //        new (ClaimTypes.Name, customer.Name!),
-                    //        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
-                    //        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
-                    //    };
-
-                    //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    //    var autProperties = new AuthenticationProperties
-                    //    {
-                    //        IsPersistent = true,
-                    //        ExpiresUtc = DateTime.UtcNow.AddDays(30)
-                    //    };
-
-                    //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    //        new ClaimsPrincipal(claimsIdentity),
-                    //        autProperties);
-
-                    //    return RedirectToAction("Index", "Main");
-                    //}
-                    //else // kullanıcı adı parola hatalı mesajı bastır
-                    //{
-                    //    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
-                    //    return View();
-                    //}
+                        ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                        return View();
+                    }
                 }
                 else
                 {

@@ -13,8 +13,8 @@ X Gönderilen otp kodunu sendotp response'ta dön X
 X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım X
 X Sepete ekleme metodunu yaz // product X
 X Yorum yapma metodunu yaz // product X
-* Ürün arama metodunu yaz // ad ile // product
-* Ürün arama metodunu yaz // kategori ile // product
+X Ürün arama metodunu yaz // ad ile // product X
+X Ürün arama metodunu yaz // kategori ile // product X
 X Favoriye ekleme metodunu yaz // product X
 * Bilgi güncelleme metodunu yaz // customer
 * Ödeme metodunu yaz // payment

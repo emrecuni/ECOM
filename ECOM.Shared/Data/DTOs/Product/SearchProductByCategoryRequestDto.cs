@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ECOM.Shared.Data.DTOs.Product
 {
-    public class SearchProductRequestDto
+    public class SearchProductByCategoryRequestDto
     {
-        public string ProductName { get; set; } = null!;
+        public int CategoryId { get; set; } 
         public int CustomerId { get; set; }
     }
 }

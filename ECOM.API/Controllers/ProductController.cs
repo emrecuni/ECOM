@@ -110,12 +110,23 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("SearchProductsByWithName")]
-        public async Task<IActionResult> SearchProductsByWithName([FromBody] SearchProductRequestDto model)
+        public async Task<IActionResult> SearchProductsByWithName([FromBody] SearchProductByNameRequestDto model)
         {
             if (!ModelState.IsValid || model is null)
                 return BadRequest(ModelState);
 
             var response = await _productService.SearchProductsByWithName(model);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("SearchProductsByWithCategory")]
+        public async Task<IActionResult> SearchProductsByWithCategory([FromBody] SearchProductByCategoryRequestDto model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
+            var response = await _productService.SearchProductsByWithCategory(model);
             return Ok(response);
         }
     }

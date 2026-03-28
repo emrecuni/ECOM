@@ -525,7 +525,7 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithName(SearchProductRequestDto model)
+        public async Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithName(SearchProductByNameRequestDto model)
         {
             Response<List<BasicProductResponseDto>> response = new();
             try
@@ -558,6 +558,44 @@ namespace ECOM.API.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError($"ProductService/SearchProductsByWithName ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model)
+        {
+            Response<List<BasicProductResponseDto>> response = new();
+            try
+            {
+                // ürün alt veya üst kategoriyle sorgulat
+                var products = await _context.Products
+                    .Where(p => p.SubCategoryId == model.CategoryId || p.SupCategoryId == model.CategoryId)
+                    .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
+                    .ToListAsync();
+
+                // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
+                var favorites = await _context.Favorites
+                    .Where(f => f.CustomerId == model.CustomerId)
+                    .Select(f => f.ProductId)
+                    .ToListAsync();
+
+                response.Result = [.. products.Select(p => new BasicProductResponseDto
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Score = p.Score,
+                    ImagePath = p.ImagePath,
+                    IsFavorite = favorites.Contains(p.ProductId) // ürün favoriler arasında mı kontrolü
+                })];
+                response.Status = products.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = products.Count > 0 ? "Bulunan ürünler başarıyla getirildi." : "Aranan ürün bulunamadı";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/SearchProductsByWithCategory ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

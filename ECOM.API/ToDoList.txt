@@ -28,3 +28,5 @@ X Yorum yapabilmek için ürünü satın almış mı kontrol et X
 X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız. X
 * Sepetteki tutar gösterimlerini binlik ayraç ile ayır
 * "Hesabım" hoverında açılan menüyü yaklaştır imleç boşluğa gelince hemen kapanıyor
+* Parola değiştirirken parola formatını güçlü iste
+* Parola oluştururken parola formatını güçlü iste

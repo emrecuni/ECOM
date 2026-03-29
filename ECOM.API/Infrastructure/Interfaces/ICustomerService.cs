@@ -1,20 +1,15 @@
 ﻿using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Product;
+using ECOM.Shared.Data.DTOs.Customer;
 
 namespace ECOM.API.Infrastructure.Interfaces
 {
     public interface ICustomerService
     {
-        // özük bilgilerini değiştirecek metodu yaz (ad-soyad, doğum tarihi cinsiyet)
-
-        // iletişim bilgilerini değiştirecek metodu yaz (telefon, eposta) // eposta güncellenirken doğrulama iste ?? eskisine mi yenisine mi
-
-        // parola değiştirecek metodu yaz (eski parolayı da iste) ?? auth'a mı yazılmalı
-
-        
-        // müşterinin kuponlarını çekecek metodu yaz
-
-        // 
+        public Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model);
+        public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model);
+        public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model);
+        public Task<Response<List<CouponResponseDto>>> GetCoupons(int customerId);
         public Task<Response<string>> AddFavorite(FavoriteRequestDto model);
         public Task<Response<string>> RemoveFavorite(FavoriteRequestDto model);
         public Task<Response<List<BasicProductResponseDto>>> GetFavorites(int customerId);

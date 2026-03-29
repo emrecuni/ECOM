@@ -1,6 +1,7 @@
 ﻿using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Customer;
 using ECOM.Shared.Data.DTOs.Product;
 using ECOM.Shared.Data.Entities;
 using ECOM.Shared.Data.Enums;
@@ -19,6 +20,26 @@ namespace ECOM.API.Infrastructure.Services
             _productService = productService;
             _context = context;
             _logger = logger;
+        }
+
+        public Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Response<List<CouponResponseDto>>> GetCoupons(int customerId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Response<string>> AddFavorite(FavoriteRequestDto model)
@@ -147,6 +168,5 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
-
     }
 }

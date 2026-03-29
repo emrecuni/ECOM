@@ -37,9 +37,39 @@ namespace ECOM.API.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<List<CouponResponseDto>>> GetCoupons(int customerId)
+        public async Task<Response<GetCouponsResponseDto>> GetCoupons(int customerId)
         {
-            throw new NotImplementedException();
+            Response<GetCouponsResponseDto> response = new();
+            try
+            {
+                var coupons = await _context.DCoupons
+                    .Where(cc => cc.CustomerId == customerId)
+                    .Include(cc => cc.Coupon)
+                    .Select(cc => new CouponResponseDto
+                    {
+                        SCouponId = cc.Coupon.SCouponId,
+                        Code = cc.Coupon.Code,
+                        Amount = cc.Coupon.Amount,
+                        ValidityDate = cc.Coupon.ValidityDate,
+                        DCouponId = cc.DCouponId,
+                        DefinitaionDate = cc.DefinitionDate,
+                        Enable = cc.Enable,
+                        LowerLimit = cc.Coupon.LowerLimit     
+                    })
+                    .ToListAsync();
+
+                response.Result = new GetCouponsResponseDto { CustomerId = customerId, Coupons = coupons };
+                response.Status = coupons.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = coupons.Count > 0 ? $"{customerId} Id'li müşterinin kuponları başarıyla getirildi." : $"{customerId} Id'li müşterinin kuponu bulunamadı.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetCoupons ==> Error: {ex}");
+                response.Result = new GetCouponsResponseDto { CustomerId = customerId, Coupons = null };
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<Response<string>> AddFavorite(FavoriteRequestDto model)

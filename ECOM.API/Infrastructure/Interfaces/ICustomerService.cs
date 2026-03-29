@@ -9,7 +9,7 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model);
         public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model);
         public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model);
-        public Task<Response<List<CouponResponseDto>>> GetCoupons(int customerId);
+        public Task<Response<GetCouponsResponseDto>> GetCoupons(int customerId);
         public Task<Response<string>> AddFavorite(FavoriteRequestDto model);
         public Task<Response<string>> RemoveFavorite(FavoriteRequestDto model);
         public Task<Response<List<BasicProductResponseDto>>> GetFavorites(int customerId);

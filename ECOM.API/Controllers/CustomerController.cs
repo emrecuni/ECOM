@@ -15,7 +15,7 @@ namespace ECOM.API.Controllers
         private readonly ICustomerService _customerService;
         private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger) 
+        public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger)
         {
             _customerService = customerService;
             _logger = logger;
@@ -48,6 +48,14 @@ namespace ECOM.API.Controllers
         public async Task<IActionResult> GetFavorites([FromQuery] int customerId)
         {
             var response = await _customerService.GetFavorites(customerId);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("GetCoupons")]
+        public async Task<IActionResult> GetCoupons([FromQuery] int customerId)
+        {
+            var response = await _customerService.GetCoupons(customerId);
             return Ok(response);
         }
     }

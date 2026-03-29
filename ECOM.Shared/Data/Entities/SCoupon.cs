@@ -7,6 +7,7 @@ namespace ECOM.Shared.Data.Entities
     {
         [Key]
         public int SCouponId { get; set; }
+        public string Code { get; set; } = null!;
         public decimal? Amount { get; set; }
         public decimal? LowerLimit { get; set; }
         public DateTime? ValidityDate { get; set; }

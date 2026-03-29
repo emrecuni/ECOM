@@ -38,14 +38,6 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetFavoriteProducts")]
-        public async Task<IActionResult> GetFavoriteProducts([FromQuery] int customerId)
-        {
-            var response = await _productService.GetFavoriteProducts(customerId);
-            return Ok(response);
-        }
-
-        [Authorize]
         [HttpGet("GetCart")]
         public async Task<IActionResult> GetCart([FromQuery] int customerId)
         {
@@ -72,28 +64,6 @@ namespace ECOM.API.Controllers
                 return BadRequest(ModelState);
 
             var response = await _productService.EditCart(model);
-            return Ok(response);
-        }
-
-        [Authorize]
-        [HttpPost("AddFavorite")]
-        public async Task<IActionResult> AddFavorite([FromBody] FavoriteRequestDto model)
-        {
-            if (!ModelState.IsValid || model is null)
-                return BadRequest(ModelState);
-
-            var response = await _productService.AddFavorite(model);
-            return Ok(response);
-        }
-
-        [Authorize]
-        [HttpDelete("RemoveFavorite")]
-        public async Task<IActionResult> RemoveFavorite([FromBody] FavoriteRequestDto model)
-        {
-            if (!ModelState.IsValid || model is null)
-                return BadRequest(ModelState);
-
-            var response = await _productService.RemoveFavorite(model);
             return Ok(response);
         }
 

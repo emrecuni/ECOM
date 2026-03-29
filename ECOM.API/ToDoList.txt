@@ -18,7 +18,7 @@ X Ürün arama metodunu yaz // kategori ile // product X
 X Favoriye ekleme metodunu yaz // product X
 * Bilgi güncelleme metodunu yaz // customer
 * Ödeme metodunu yaz // payment
-* Siparişler metodunu yaz // customer
+* Siparişler metodunu yaz // order
 * Adres gibi yardımcı işlemler için controller yaz // address
 * Kuponları listeleme metodunu yaz // customer
 X Fiyat karşılaştırma işlemini private bir metod ile yap X

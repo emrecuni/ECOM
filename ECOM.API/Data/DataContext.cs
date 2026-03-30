@@ -199,7 +199,7 @@ namespace ECOM.API.Data
                 entity.Property(c => c.DCouponId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(c => c.SCouponId).HasColumnName("S_COUPON_ID").IsRequired();
                 entity.Property(c => c.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
-                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired(false);
+                entity.Property(c => c.Enable).HasColumnName("ENABLE").IsRequired();
                 entity.Property(c => c.DefinitionDate).HasColumnName("DEFINITION_DATE").IsRequired(false);
 
                 // scoupon relation
@@ -408,6 +408,7 @@ namespace ECOM.API.Data
 
                 entity.Property(c => c.SCouponId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(c => c.Amount).HasColumnName("AMOUNT").IsRequired(false);
+                entity.Property(c => c.Code).HasColumnName("CODE").IsRequired(false);
                 entity.Property(c => c.LowerLimit).HasColumnName("LOWER_LIMIT").IsRequired(false);
                 entity.Property(c => c.ValidityDate).HasColumnName("VALIDITY_DATE").IsRequired(false);
             });

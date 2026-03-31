@@ -34,7 +34,16 @@ namespace ECOM.API.Infrastructure.Services
 
         public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model)
         {
-            throw new NotImplementedException();
+            Response<int> response = new();
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/ChangePassword ==> Error: {ex}");
+            }
+            return Task.FromResult(response);
         }
 
         public async Task<Response<GetCouponsResponseDto>> GetCoupons(int customerId)

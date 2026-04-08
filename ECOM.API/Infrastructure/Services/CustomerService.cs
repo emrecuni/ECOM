@@ -1,4 +1,5 @@
 ﻿using ECOM.API.Data;
+using ECOM.API.Helpers;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Customer;
@@ -32,18 +33,44 @@ namespace ECOM.API.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model)
+        public async Task<Response<int>> ChangePassword(ChangePasswordRequestDto model)
         {
             Response<int> response = new();
             try
             {
-
+                var hashedPassword = EncryptionHelper.HashPassword(model.OldPassword);
+                if (await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId && c.Password == hashedPassword))
+                {
+                    if(model.NewPassword == model.ReNewPassword)
+                    {
+                        hashedPassword = EncryptionHelper.HashPassword(model.NewPassword); 
+                        var updated = await _context.Customers
+                            .Where(c => c.CustomerId == model.CustomerId)
+                            .ExecuteUpdateAsync(c => c.SetProperty(p => p.Password, hashedPassword)
+                                                        .SetProperty(p => p.UpdatedAt, DateTime.Now));
+                        response.Result = updated;
+                        response.Status = updated > 0 ? Status.Success : Status.Failed;
+                        response.Message = updated > 0 ? "Şifre başarıyla değiştirildi." : "Şifre değiştirilirken bir hata oluştu.";
+                    }
+                    else
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = "Yeni şifreler eşleşmiyor.";
+                    }
+                }
+                else
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Eski şifre yanlış veya müşteri bulunamadı.";
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"ProductService/ChangePassword ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message= ex.Message;
             }
-            return Task.FromResult(response);
+            return response;
         }
 
         public async Task<Response<GetCouponsResponseDto>> GetCoupons(int customerId)

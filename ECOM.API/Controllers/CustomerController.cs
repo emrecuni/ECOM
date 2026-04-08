@@ -2,6 +2,7 @@
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.API.Infrastructure.Services;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Customer;
 using ECOM.Shared.Data.DTOs.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,5 +59,13 @@ namespace ECOM.API.Controllers
             var response = await _customerService.GetCoupons(customerId);
             return Ok(response);
         }
-    }
+
+        [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto model)
+        {
+            var response = await _customerService.ChangePassword(model);
+            return Ok(response);
+        }
+    } 
 }

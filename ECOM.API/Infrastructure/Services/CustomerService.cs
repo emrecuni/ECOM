@@ -38,8 +38,14 @@ namespace ECOM.API.Infrastructure.Services
             Response<int> response = new();
             try
             {
-                var hashedPassword = EncryptionHelper.HashPassword(model.OldPassword);
-                if (await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId && c.Password == hashedPassword))
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
+                if(customer is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri bulunamadı.";
+                    return response;
+                }
+                else if (EncryptionHelper.VerifyPassword(model.OldPassword, customer.Password!))
                 {
                     if(model.NewPassword == model.ReNewPassword)
                     {

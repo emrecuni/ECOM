@@ -61,11 +61,12 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("ChangePassword")]
+        [HttpPatch("ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto model)
         {
             var response = await _customerService.ChangePassword(model);
             return Ok(response);
         }
+
     } 
 }

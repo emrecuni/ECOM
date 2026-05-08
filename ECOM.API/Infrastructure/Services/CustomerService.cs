@@ -49,7 +49,7 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     if(model.NewPassword == model.ReNewPassword)
                     {
-                        hashedPassword = EncryptionHelper.HashPassword(model.NewPassword); 
+                        var hashedPassword = EncryptionHelper.HashPassword(model.NewPassword); 
                         var updated = await _context.Customers
                             .Where(c => c.CustomerId == model.CustomerId)
                             .ExecuteUpdateAsync(c => c.SetProperty(p => p.Password, hashedPassword)

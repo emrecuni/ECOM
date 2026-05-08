@@ -375,5 +375,13 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
+
+        // siparişleri getir metodunu yaz
+
+        // parola formatını güçlendir
+
+        // adresleri getirme metodunu yaz
+
+        // adres ekleme, silme, güncelleme metodlarını yaz
     }
 }

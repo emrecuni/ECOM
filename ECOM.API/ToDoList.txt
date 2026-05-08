@@ -16,11 +16,11 @@ X Yorum yapma metodunu yaz // product X
 X Ürün arama metodunu yaz // ad ile // product X
 X Ürün arama metodunu yaz // kategori ile // product X
 X Favoriye ekleme metodunu yaz // product X
-* Bilgi güncelleme metodunu yaz // customer
+X Bilgi güncelleme metodunu yaz // customer X
 * Ödeme metodunu yaz // payment
 * Siparişler metodunu yaz // order
 * Adres gibi yardımcı işlemler için controller yaz // address
-* Kuponları listeleme metodunu yaz // customer
+X Kuponları listeleme metodunu yaz // customer X
 X Fiyat karşılaştırma işlemini private bir metod ile yap X
 X Cart'a güncelleme saati ekle X
 X Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et X

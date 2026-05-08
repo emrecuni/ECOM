@@ -10,6 +10,5 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public string OldPassword { get; set; } = null!;
         public string NewPassword { get; set; } = null!;
         public string ReNewPassword { get; set; } = null!;
-        public DateTime UpdatedAt { get; set; }
     }
 }

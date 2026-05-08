@@ -68,5 +68,12 @@ namespace ECOM.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [HttpPatch("ChangeBasicInfo")] 
+        public async Task<IActionResult> ChangeBasicInfo(BasicCustomerRequestDto model)
+        {
+            var response = await _customerService.ChangeBasicInfo(model);
+            return Ok(response);
+        }
     } 
 }

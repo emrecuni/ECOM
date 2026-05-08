@@ -12,6 +12,5 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public DateTime? BirthDate { get; set; }
         public bool? Gender { get; set; }
         public string? VerificationCode { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
 }

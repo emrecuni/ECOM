@@ -23,9 +23,54 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
-        public Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model)
+        public async Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model)
         {
-            throw new NotImplementedException();
+            Response<BasicCustomerResponseDto> response = new();
+            try
+            {
+                var customer = await _context.Customers
+                    .Select(c => new Customers
+                    {
+                        CustomerId = c.CustomerId,
+                        Name = c.Name,
+                        Surname = c.Surname,
+                        BirthDate = c.BirthDate
+                    })
+                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId)
+                    ;
+                if (customer is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri bulunamadı.";
+                    return response;
+                }
+
+                // model'den gönderilen değerler null değilse mevcut müşteri bilgileri güncellenir, null ise mevcut bilgiler korunur
+                customer.Name = model.Name ?? customer.Name;
+                customer.Surname = model.Surname ?? customer.Surname;
+                customer.BirthDate = model.BirthDate ?? customer.BirthDate;
+                customer.Gender = model.Gender ?? customer.Gender;
+                customer.UpdatedAt = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+                response.Result = new BasicCustomerResponseDto
+                {
+                    CustomerId = customer.CustomerId,
+                    Name = customer.Name,
+                    Surname = customer.Surname,
+                    BirthDate = customer.BirthDate,
+                    Gender = customer.Gender
+                };
+                response.Status = Status.Success;
+                response.Message = "Müşteri bilgileri başarıyla güncellendi.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/ChangeBasicInfo ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model)
@@ -72,7 +117,7 @@ namespace ECOM.API.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ProductService/ChangePassword ==> Error: {ex}");
+                _logger.LogError($"CustomerService/ChangePassword ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message= ex.Message;
             }
@@ -159,7 +204,7 @@ namespace ECOM.API.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ProductService/AddFavorite ==> Error: {ex}");
+                _logger.LogError($"CustomerService/AddFavorite ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }
@@ -205,7 +250,7 @@ namespace ECOM.API.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ProductService/RemoveFavorite ==> Error: {ex}");
+                _logger.LogError($"CustomerService/RemoveFavorite ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }
@@ -234,7 +279,7 @@ namespace ECOM.API.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"ProductService/GetFavoriteProducts ==> Error: {ex}");
+                _logger.LogError($"CustomerService/GetFavoriteProducts ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

@@ -11,6 +11,5 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public string? NewPhone { get; set; }
         public string? OldEmail { get; set; }
         public string? NewEmail { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
 }

@@ -16,12 +16,14 @@ namespace ECOM.API.Infrastructure.Services
     {
         private readonly DataContext _context;
         private readonly ISmtpService _smtpService;
+        private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
 
-        public AuthService(DataContext context, ISmtpService smtpService, ILogger<AuthService> logger)
+        public AuthService(DataContext context, ISmtpService smtpService, IConfiguration config, ILogger<AuthService> logger)
         {
             _context = context;
             _smtpService = smtpService;
+            _config = config;
             _logger = logger;
         }
 
@@ -268,6 +270,84 @@ namespace ECOM.API.Infrastructure.Services
                 response.Status = Status.Error;
                 response.Message = $"Şifremi Unuttum Sırasında Bir Hata Oluştu. ==> {ex}";
             }
+            return response;
+        }
+
+        public async Task<Response<SmtpResponseDto>> SendOTP(OtpRequestDto model)
+        {
+            Response<SmtpResponseDto> response = new();
+
+            #region Kullanıcı var mı kontrolü
+            CheckCustomerDto checkCustomerModel = new()
+            {
+                Email = model.Email,
+                Phone = model.Phone
+            };
+
+            var isExistsCustomer = await CheckExistsCustomer(checkCustomerModel);
+
+            if (isExistsCustomer && model.Purpose == OtpPurpose.Register) // kayıt edilmeye çalışılan telefon veya email ile bir müşteri kayıtlıysa
+                return response = new()
+                {
+                    Message = "Bu telefon veya email ile kayıtlı bir müşteri bulunmaktadır.",
+                    Status = Status.Default
+                };
+            else if (!isExistsCustomer && model.Purpose == OtpPurpose.ForgotPassword) // şifremi unuttum amacıyla gönderilen otp'de telefon veya email ile kayıtlı bir müşteri yoksa
+                return response = new()
+                {
+                    Message = "Bu telefon veya email ile kayıtlı bir müşteri bulunmamaktadır.",
+                    Status = Status.Default
+                };
+            #endregion
+
+            #region OTP oluşturma, db'ye yazma ve gönderme
+            string otpCode = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6"); // 6 hane, başına 0 ekler
+            Console.WriteLine($"Auth/Register ==> otpCode: {otpCode}");
+
+            model.CodeHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(otpCode)));// otp kodunu hash'leyerek db'ye kaydederiz, böylece güvenliği artırırız
+
+            if (!await SaveOtpCode(model)) // db'ye yazılamazsa otp'yi göndermez
+                return response = new()
+                {
+                    Message = "OTP kodu oluşturulamadı. Lütfen tekrar deneyiniz.",
+                    Status = Status.Error,
+                };
+
+            string purposeText = model.Purpose switch
+            {
+                OtpPurpose.Register => "<b>e-com</b>'a kayıt olmak için e-posta adresinizi doğrulamanız gerekiyor. Aşağıdaki doğrulama kodunu giriş ekranına yazın.",
+                OtpPurpose.ForgotPassword => "Parola sıfırlama talebiniz alındı. Aşağıdaki doğrulama kodunu giriş ekranına yazın.",
+                OtpPurpose.ChangeEmail => "E-posta adresinizi değiştirmek için doğrulama gerekiyor. Aşağıdaki kodu giriş ekranına yazın.",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            string subject = model.Purpose switch
+            {
+                OtpPurpose.Register => "e-com — E-posta Doğrulama Kodunuz",
+                OtpPurpose.ForgotPassword => "e-com — Parola Sıfırlama Kodunuz",
+                OtpPurpose.ChangeEmail => "e-com — E-posta Değişikliği Kodunuz",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            SmtpRequestDto request = new()
+            {
+                From = _config["Smtp:SenderMail"],
+                Recipients = new List<string>
+                {
+                    model.Email
+                },
+                Subject = subject,
+                Body = System.IO.File.ReadAllText("wwwroot/StaticFiles/otp.html")
+                         .Replace("{{OTP_CODE}}", otpCode)
+                         .Replace("{{PURPOSE_TEXT}}", purposeText),
+                IsBodyHtml = true
+            };
+
+            Console.WriteLine($"Auth/Register ==> mail gönderiliyor.");
+            response = await SendVerifyEmail(request);
+            response.Message = $"OTP Code: {otpCode}";
+            #endregion
+
+            Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return response;
         }
     }

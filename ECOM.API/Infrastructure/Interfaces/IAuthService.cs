@@ -14,5 +14,6 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<RegisterResponseDto>> Register(RegisterRequestDto model);
         public Task<Response<OtpResponseDto>> CheckOtpInDb(OtpRequestDto model);
         public Task<Response<ForgotPasswordResponseDto>> ForgotPassword(ForgotPasswordRequestDto model);
+        public Task<Response<SmtpResponseDto>> SendOTP(OtpRequestDto model);
     }
 }

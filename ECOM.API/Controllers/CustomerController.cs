@@ -75,5 +75,13 @@ namespace ECOM.API.Controllers
             var response = await _customerService.ChangeBasicInfo(model);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpPatch("ChangeContactInfo")]
+        public async Task<IActionResult> ChangeContactInfo(ContactInfoRequestDto model)
+        {
+            var response = await _customerService.ChangeContactInfo(model);
+            return Ok(response);
+        }
     } 
 }

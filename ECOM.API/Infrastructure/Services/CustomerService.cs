@@ -2,8 +2,10 @@
 using ECOM.API.Helpers;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Auth;
 using ECOM.Shared.Data.DTOs.Customer;
 using ECOM.Shared.Data.DTOs.Product;
+using ECOM.Shared.Data.DTOs.Smtp;
 using ECOM.Shared.Data.Entities;
 using ECOM.Shared.Data.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +15,21 @@ namespace ECOM.API.Infrastructure.Services
     public class CustomerService : ICustomerService
     {
         private readonly IProductService _productService;
+        private readonly IAuthService _authService;
+        private readonly IConfiguration _config;
         private readonly DataContext _context;
         private readonly ILogger<CustomerService> _logger;
 
-        public CustomerService(IProductService productService,DataContext context, ILogger<CustomerService> logger)
+        public CustomerService(
+            IProductService productService,
+            IAuthService authService,
+            IConfiguration config,
+            DataContext context, 
+            ILogger<CustomerService> logger)
         {
             _productService = productService;
+            _authService = authService;
+            _config = config;
             _context = context;
             _logger = logger;
         }
@@ -36,8 +47,8 @@ namespace ECOM.API.Infrastructure.Services
                         Surname = c.Surname,
                         BirthDate = c.BirthDate
                     })
-                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId)
-                    ;
+                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
+
                 if (customer is null)
                 {
                     response.Status = Status.Failed;
@@ -73,9 +84,88 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model)
+        public async Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model)
         {
-            throw new NotImplementedException();
+            Response<ContactInfoResponseDto> response = new();
+            try
+            {
+                #region müşteriyi db'den çeker
+
+                var customer = await _context.Customers
+                    .Select(c => new Customers
+                    {
+                        CustomerId = c.CustomerId,
+                        Phone = c.Phone,
+                        Email = c.Email
+                    })
+                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
+
+                if (customer is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri bulunamadı.";
+                    return response;
+                }
+                #endregion
+
+                #region eski değerlerin doğruluğunu kontrol et
+                if (model.OldEmail is not null && customer.Email != model.OldEmail || model.OldPhone is not null && customer.Phone != model.OldPhone)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Eski iletişim bilgileri yanlış.";
+                    return response;
+                }
+                #endregion
+
+                #region doğrulama kodu gönder
+                OtpRequestDto request = new()
+                {
+                    Email = customer.Email!,
+                    Purpose = OtpPurpose.ChangeEmail
+                };
+                var responseVerificationCode = await _authService.SendOTP(request);
+                #endregion
+
+                #region doğrulama kodunu kontrol et
+                if (responseVerificationCode.Message is not null)
+                {
+                    var verificationCode = responseVerificationCode.Message.Substring(responseVerificationCode.Message.IndexOf(": ") +2);
+
+                    request.CodeHash = verificationCode;
+
+                    var responseCheckVerify = await _authService.CheckOtpInDb(request);
+
+                    if(responseCheckVerify.Status == Status.Success)
+                    {
+                        customer.Email = model.NewEmail ?? customer.Email;
+                        customer.Phone = model.NewPhone ?? customer.Phone;
+                        customer.UpdatedAt = DateTime.Now;
+                        await _context.SaveChangesAsync();
+                        response.Result = new ContactInfoResponseDto
+                        {
+                            CustomerId = customer.CustomerId,
+                            NewEmail = customer.Email,
+                            NewPhone = customer.Phone
+                        };
+                        response.Status = Status.Success;
+                        response.Message = "Müşteri iletişim bilgileri başarıyla güncellendi.";
+                    }
+                    else
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = "Doğrulama kodu yanlış.";
+                    }
+                }
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/ChangeBasicInfo ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<Response<int>> ChangePassword(ChangePasswordRequestDto model)
@@ -84,7 +174,7 @@ namespace ECOM.API.Infrastructure.Services
             try
             {
                 var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
-                if(customer is null)
+                if (customer is null)
                 {
                     response.Status = Status.Failed;
                     response.Message = "Müşteri bulunamadı.";
@@ -92,9 +182,9 @@ namespace ECOM.API.Infrastructure.Services
                 }
                 else if (EncryptionHelper.VerifyPassword(model.OldPassword, customer.Password!))
                 {
-                    if(model.NewPassword == model.ReNewPassword)
+                    if (model.NewPassword == model.ReNewPassword)
                     {
-                        var hashedPassword = EncryptionHelper.HashPassword(model.NewPassword); 
+                        var hashedPassword = EncryptionHelper.HashPassword(model.NewPassword);
                         var updated = await _context.Customers
                             .Where(c => c.CustomerId == model.CustomerId)
                             .ExecuteUpdateAsync(c => c.SetProperty(p => p.Password, hashedPassword)
@@ -119,7 +209,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 _logger.LogError($"CustomerService/ChangePassword ==> Error: {ex}");
                 response.Status = Status.Error;
-                response.Message= ex.Message;
+                response.Message = ex.Message;
             }
             return response;
         }
@@ -141,7 +231,7 @@ namespace ECOM.API.Infrastructure.Services
                         DCouponId = cc.DCouponId,
                         DefinitaionDate = cc.DefinitionDate,
                         Enable = cc.Enable,
-                        LowerLimit = cc.Coupon.LowerLimit     
+                        LowerLimit = cc.Coupon.LowerLimit
                     })
                     .ToListAsync();
 

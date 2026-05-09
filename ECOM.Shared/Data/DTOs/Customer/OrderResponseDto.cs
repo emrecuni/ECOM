@@ -6,13 +6,8 @@ using ECOM.Shared.Data.Enums;
 namespace ECOM.Shared.Data.DTOs.Customer
 {
     public class OrderResponseDto
-    {        
-        public int OrderId { get; set; }
-        public int ProductId { get; set; }
-        public int CartId { get; set; }
-        public OrderStatus Status { get; set; }
-        public string? Image { get; set; }
-        public DateTime OrderDate { get; set; }
-        public decimal? Price { get; set; }        
+    {
+        public int CustomerId { get; set; }
+        public List<OrderDto>? Orders { get; set; }
     }
 }

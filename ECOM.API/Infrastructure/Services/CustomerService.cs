@@ -24,7 +24,7 @@ namespace ECOM.API.Infrastructure.Services
             IProductService productService,
             IAuthService authService,
             IConfiguration config,
-            DataContext context, 
+            DataContext context,
             ILogger<CustomerService> logger)
         {
             _productService = productService;
@@ -129,13 +129,13 @@ namespace ECOM.API.Infrastructure.Services
                 #region doğrulama kodunu kontrol et
                 if (responseVerificationCode.Message is not null)
                 {
-                    var verificationCode = responseVerificationCode.Message.Substring(responseVerificationCode.Message.IndexOf(": ") +2);
+                    var verificationCode = responseVerificationCode.Message.Substring(responseVerificationCode.Message.IndexOf(": ") + 2);
 
                     request.CodeHash = verificationCode;
 
                     var responseCheckVerify = await _authService.CheckOtpInDb(request);
 
-                    if(responseCheckVerify.Status == Status.Success)
+                    if (responseCheckVerify.Status == Status.Success)
                     {
                         customer.Email = model.NewEmail ?? customer.Email;
                         customer.Phone = model.NewPhone ?? customer.Phone;
@@ -376,12 +376,40 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public Task<Response<List<OrderResponseDto>>> GetOrders(int customerId)
+        // siparişleri getir metodunu yaz
+        public async Task<Response<OrderResponseDto>> GetOrders(int customerId)
         {
-            throw new NotImplementedException();
+            Response<OrderResponseDto> response = new();
+            try
+            {
+                var orders = await _context.OrderHistory
+                    .Where(o => o.CustomerId == customerId)
+                    .Select(o => new OrderDto
+                    {
+                        OrderId = o.OrderId,
+                        ProductId = o.ProductId,
+                        CartId = o.CartId,
+                        Status = o.DeliveryDate == null ? OrderStatus.GettingReady : OrderStatus.Delivered,
+                        Image = o.Product.ImagePath,
+                        OrderDate = o.OrderDate,
+                        Price = o.TotalPrice
+                    })
+                    .ToListAsync();
+
+                response.Result!.CustomerId = customerId;
+                response.Result!.Orders = orders;
+                response.Status = orders.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = orders.Count > 0 ? $"{customerId} Id'li müşterinin siparişleri başarıyla getirildi." : $"{customerId} Id'li müşterinin siparişi bulunamadı.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetOrders ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        // siparişleri getir metodunu yaz
 
         // parola formatını güçlendir
 

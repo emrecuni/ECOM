@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECOM.API.Data.SeedData
 {
-    public class CardSeed : IEntityTypeConfiguration<CardSeed>
+    public class CardSeed : IEntityTypeConfiguration<Card>
     {
-        public void Configure(EntityTypeBuilder<CardSeed> builder)
+        public void Configure(EntityTypeBuilder<Card> builder)
         {
             builder.HasData(
                new Card

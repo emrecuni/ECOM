@@ -396,8 +396,9 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .ToListAsync();
 
-                response.Result!.CustomerId = customerId;
-                response.Result!.Orders = orders;
+                response.Result = new OrderResponseDto();
+                response.Result.CustomerId = customerId;
+                response.Result.Orders = orders;
                 response.Status = orders.Count > 0 ? Status.Success : Status.Failed;
                 response.Message = orders.Count > 0 ? $"{customerId} Id'li müşterinin siparişleri başarıyla getirildi." : $"{customerId} Id'li müşterinin siparişi bulunamadı.";
             }

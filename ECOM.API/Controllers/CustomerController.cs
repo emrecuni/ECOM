@@ -62,7 +62,7 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPatch("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto model)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto model)
         {
             var response = await _customerService.ChangePassword(model);
             return Ok(response);
@@ -70,7 +70,7 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPatch("ChangeBasicInfo")] 
-        public async Task<IActionResult> ChangeBasicInfo(BasicCustomerRequestDto model)
+        public async Task<IActionResult> ChangeBasicInfo([FromBody] BasicCustomerRequestDto model)
         {
             var response = await _customerService.ChangeBasicInfo(model);
             return Ok(response);
@@ -78,9 +78,17 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPatch("ChangeContactInfo")]
-        public async Task<IActionResult> ChangeContactInfo(ContactInfoRequestDto model)
+        public async Task<IActionResult> ChangeContactInfo([FromBody] ContactInfoRequestDto model)
         {
             var response = await _customerService.ChangeContactInfo(model);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("GetOrders")]
+        public async Task<IActionResult> GetOrders([FromQuery] int customerId)
+        {
+            var response = await _customerService.GetOrders(customerId);
             return Ok(response);
         }
     } 

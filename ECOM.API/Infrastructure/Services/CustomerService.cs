@@ -376,6 +376,11 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
+        public Task<Response<List<OrderResponseDto>>> GetOrders(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
         // siparişleri getir metodunu yaz
 
         // parola formatını güçlendir

@@ -15,5 +15,6 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<List<BasicProductResponseDto>>> GetFavorites(int customerId);
         public Task<Response<OrderResponseDto>> GetOrders(int customerId);
         public Task<Response<AddressResponseDto>> GetAddress(int customerId);
+        public Task<Response<AddressResponseDto>> AddAddress(AddressRequestDto model);
     }
 }

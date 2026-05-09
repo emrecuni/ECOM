@@ -69,7 +69,7 @@ namespace ECOM.API.Controllers
         }
 
         [Authorize]
-        [HttpPatch("ChangeBasicInfo")] 
+        [HttpPatch("ChangeBasicInfo")]
         public async Task<IActionResult> ChangeBasicInfo([FromBody] BasicCustomerRequestDto model)
         {
             var response = await _customerService.ChangeBasicInfo(model);
@@ -99,5 +99,16 @@ namespace ECOM.API.Controllers
             var response = await _customerService.GetAddress(customerId);
             return Ok(response);
         }
-    } 
+
+        [Authorize]
+        [HttpPost("AddAddress")]
+        public async Task<IActionResult> AddAddress([FromBody] AddressRequestDto model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
+            var response = await _customerService.AddAddress(model);
+            return Ok(response);
+        }
+    }
 }

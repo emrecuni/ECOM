@@ -110,9 +110,9 @@ namespace ECOM.API.Infrastructure.Services
         }
 
         // email veya telefon numarası ile müşteri var mı kontrol eder, varsa true döner, yoksa false döner
-        private async Task<bool> CheckExistsCustomer(CheckCustomerDto model)
+        public async Task<bool> CheckExistsCustomer(CheckCustomerDto model)
         {
-            return await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone); ;
+            return await _context.Customers.AnyAsync(c => c.Email == model.Email || c.Phone == model.Phone || c.CustomerId == model.CustomerId); ;
         }
 
         // doğrulama kodunu email ile gönderir

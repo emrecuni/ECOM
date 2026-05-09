@@ -444,8 +444,78 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
+        public async Task<Response<AddressResponseDto>> AddAddress(AddressRequestDto model)
+        {
+            Response<AddressResponseDto> response = new();
+            try
+            {
+                CheckCustomerDto checkCustomer = new() { CustomerId = model.CustomerId };
+                if (!await _authService.CheckExistsCustomer(checkCustomer))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri Bulunamadı.";
+                    return response;
+                }
+
+                // girilecek adresin il-ilçe-mahalle bilgileri doğrulanır
+                if(model.Address is null || model.Address.City is null || model.Address.District is null || model.Address.Neighbourhood is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Geçersiz adres.";
+                    return response;
+                }
+
+                if (!await _context.Cities.AnyAsync(c => c.Name == model.Address!.City))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Geçersiz şehir.";
+                    return response;
+                }
+                else if(!await _context.Districts.AnyAsync(d => d.Name == model.Address!.District && d.City.Name == model.Address.City))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Geçersiz ilçe.";
+                    return response;
+                }
+                else if (!await _context.Neighbourhoods.AnyAsync(n => n.Name == model.Address!.Neighbourhood && n.District.Name == model.Address.District && n.District.City.Name == model.Address.City))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Geçersiz mahalle.";
+                    return response;
+                }
+
+                var address = new Addresses
+                {
+                    CustomerId = model.CustomerId,
+                    AddressName = model.Address.AddressName,
+                    Address = model.Address.Address,
+                    CityId = await _context.Cities.Where(c => c.Name == model.Address.City).Select(c => c.CityId).FirstOrDefaultAsync(),
+                    DistrictId = await _context.Districts.Where(d => d.Name == model.Address.District && d.City.Name == model.Address.City).Select(d => d.DistrictId).FirstOrDefaultAsync(),
+                    NeighbourhoodId = await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood && n.District.Name == model.Address.District && n.District.City.Name == model.Address.City).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync(),
+                    CreatedAt = DateTime.Now
+                };
+
+                await _context.Addresses.AddAsync(address);
+                await _context.SaveChangesAsync();
+
+                response.Result = new AddressResponseDto { CustomerId = model.CustomerId, Addresses = new List<AddressDto> { model.Address } };
+                response.Status = Status.Success;
+                response.Message = "Adres başarıyla eklendi.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetAddress ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
 
 
         // adres ekleme, silme, güncelleme metodlarını yaz
+
+
     }
 }

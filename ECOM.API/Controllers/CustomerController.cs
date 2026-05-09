@@ -91,5 +91,13 @@ namespace ECOM.API.Controllers
             var response = await _customerService.GetOrders(customerId);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpGet("GetAddress")]
+        public async Task<IActionResult> GetAddress([FromQuery] int customerId)
+        {
+            var response = await _customerService.GetAddress(customerId);
+            return Ok(response);
+        }
     } 
 }

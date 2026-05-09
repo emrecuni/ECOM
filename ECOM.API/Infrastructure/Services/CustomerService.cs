@@ -376,7 +376,6 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        // siparişleri getir metodunu yaz
         public async Task<Response<OrderResponseDto>> GetOrders(int customerId)
         {
             Response<OrderResponseDto> response = new();
@@ -396,9 +395,7 @@ namespace ECOM.API.Infrastructure.Services
                     })
                     .ToListAsync();
 
-                response.Result = new OrderResponseDto();
-                response.Result.CustomerId = customerId;
-                response.Result.Orders = orders;
+                response.Result = new OrderResponseDto { CustomerId = customerId, Orders = orders };
                 response.Status = orders.Count > 0 ? Status.Success : Status.Failed;
                 response.Message = orders.Count > 0 ? $"{customerId} Id'li müşterinin siparişleri başarıyla getirildi." : $"{customerId} Id'li müşterinin siparişi bulunamadı.";
             }
@@ -415,6 +412,39 @@ namespace ECOM.API.Infrastructure.Services
         // parola formatını güçlendir
 
         // adresleri getirme metodunu yaz
+        public async Task<Response<AddressResponseDto>> GetAddress(int customerId)
+        {
+            Response<AddressResponseDto> response = new();
+            try
+            {
+                var addresses = await _context.Addresses
+                    .Where(a => a.CustomerId == customerId)
+                    .Select(a => new AddressDto
+                    {
+                        AddressId = a.AddressId,
+                        AddressName = a.AddressName,
+                        Address = a.Address,
+                        City = a.City.Name,
+                        District = a.District.Name,
+                        Neighbourhood = a.Neighbourhood.Name,
+                        UpdatedAt = a.UpdatedAt,
+                        CreatedAt = a.CreatedAt
+                    }).ToListAsync();
+
+                response.Result = new AddressResponseDto { CustomerId = customerId, Addresses = addresses };
+                response.Status = addresses.Count > 0 ? Status.Success : Status.Failed;
+                response.Message = addresses.Count > 0 ? $"{customerId} Id'li müşterinin adresleri başarıyla getirildi." : $"{customerId} Id'li müşterinin adresi bulunamadı.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetAddress ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+
 
         // adres ekleme, silme, güncelleme metodlarını yaz
     }

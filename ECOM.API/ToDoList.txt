@@ -33,3 +33,4 @@ X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona g
 * Sipariş durumu db'de tutulmuyor kolon ekle
 * Bütün kullanıcı varlığı kontrollerini authService/CheckCustomerExists ile yap
 * Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder
+* Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir

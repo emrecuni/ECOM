@@ -485,6 +485,16 @@ namespace ECOM.API.Infrastructure.Services
                 }
 
                 var receiver = await _context.Customers.FirstOrDefaultAsync(r => r.Name == model.Address.Receiver.Name && r.Surname == model.Address.Receiver.Surname);
+                if(receiver is null)
+                {
+                    await _context.Customers.AddAsync(new Customers
+                    {
+                        Name = model.Address.Receiver.Name,
+                        Surname = model.Address.Receiver.Surname,
+                        CreatedAt = DateTime.Now
+                    });
+                    await _context.SaveChangesAsync();
+                }
 
                 var address = new Addresses
                 {
@@ -494,7 +504,7 @@ namespace ECOM.API.Infrastructure.Services
                     CityId = await _context.Cities.Where(c => c.Name == model.Address.City.Name).Select(c => c.CityId).FirstOrDefaultAsync(),
                     DistrictId = await _context.Districts.Where(d => d.Name == model.Address.District.Name && d.City.Name == model.Address.City.Name).Select(d => d.DistrictId).FirstOrDefaultAsync(),
                     NeighbourhoodId = await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name  ).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync(),
-
+                    ReceiverId = receiver is not null ? receiver.CustomerId : await _context.Customers.Where(r => r.Name == model.Address.Receiver.Name && r.Surname == model.Address.Receiver.Surname).Select(r => r.CustomerId).FirstOrDefaultAsync(),
                     CreatedAt = DateTime.Now
                 };
 
@@ -563,9 +573,9 @@ namespace ECOM.API.Infrastructure.Services
                 address.AddressName = model.Address.AddressName ?? address.AddressName;
                 address.Address = model.Address.Address ?? address.Address;
                 address.CityId = model.Address.City is not null ? await _context.Cities.Where(c => c.Name == model.Address.City.Name).Select(c => c.CityId).FirstOrDefaultAsync() : address.CityId;
-                address.DistrictId = model.Address.District is not null ? await _context.Districts.Where(d => d.Name == model.Address.District.Name && d.City.Name == model.Address.City.Name).Select(d => d.DistrictId).FirstOrDefaultAsync() : address.DistrictId;
-                address.NeighbourhoodId = model.Address.Neighbourhood is not null ? await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync() : address.NeighbourhoodId;
-                //address.
+                address.DistrictId = model.Address.District is not null ? await _context.Districts.Where(d => d.Name == model.Address.District.Name && d.City.Name == model.Address.City!.Name).Select(d => d.DistrictId).FirstOrDefaultAsync() : address.DistrictId;
+                address.NeighbourhoodId = model.Address.Neighbourhood is not null ? await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood.Name && n.District.Name == model.Address.District!.Name && n.District.City.Name == model.Address.City!.Name).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync() : address.NeighbourhoodId;
+                address.UpdatedAt = DateTime.Now;
             }
             catch (Exception ex)
             {

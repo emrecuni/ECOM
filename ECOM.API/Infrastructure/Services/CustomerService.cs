@@ -458,47 +458,66 @@ namespace ECOM.API.Infrastructure.Services
                 }
 
                 // girilecek adresin il-ilçe-mahalle bilgileri doğrulanır
-                if(model.Address is null || model.Address.City is null || model.Address.District is null || model.Address.Neighbourhood is null)
+                if (model.Address is null || model.Address.City is null || model.Address.District is null || model.Address.Neighbourhood is null)
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz adres.";
                     return response;
                 }
 
-                if (!await _context.Cities.AnyAsync(c => c.Name == model.Address!.City))
+                if (!await _context.Cities.AnyAsync(c => c.Name == model.Address!.City.Name))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz şehir.";
                     return response;
                 }
-                else if(!await _context.Districts.AnyAsync(d => d.Name == model.Address!.District && d.City.Name == model.Address.City))
+                else if (!await _context.Districts.AnyAsync(d => d.Name == model.Address!.District.Name && d.City.Name == model.Address.City.Name))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz ilçe.";
                     return response;
                 }
-                else if (!await _context.Neighbourhoods.AnyAsync(n => n.Name == model.Address!.Neighbourhood && n.District.Name == model.Address.District && n.District.City.Name == model.Address.City))
+                else if (!await _context.Neighbourhoods.AnyAsync(n => n.Name == model.Address!.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz mahalle.";
                     return response;
                 }
 
+                var receiver = await _context.Customers.FirstOrDefaultAsync(r => r.Name == model.Address.Receiver.Name && r.Surname == model.Address.Receiver.Surname);
+
                 var address = new Addresses
                 {
                     CustomerId = model.CustomerId,
                     AddressName = model.Address.AddressName,
                     Address = model.Address.Address,
-                    CityId = await _context.Cities.Where(c => c.Name == model.Address.City).Select(c => c.CityId).FirstOrDefaultAsync(),
-                    DistrictId = await _context.Districts.Where(d => d.Name == model.Address.District && d.City.Name == model.Address.City).Select(d => d.DistrictId).FirstOrDefaultAsync(),
-                    NeighbourhoodId = await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood && n.District.Name == model.Address.District && n.District.City.Name == model.Address.City).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync(),
+                    CityId = await _context.Cities.Where(c => c.Name == model.Address.City.Name).Select(c => c.CityId).FirstOrDefaultAsync(),
+                    DistrictId = await _context.Districts.Where(d => d.Name == model.Address.District.Name && d.City.Name == model.Address.City.Name).Select(d => d.DistrictId).FirstOrDefaultAsync(),
+                    NeighbourhoodId = await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name  ).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync(),
+
                     CreatedAt = DateTime.Now
                 };
 
                 await _context.Addresses.AddAsync(address);
                 await _context.SaveChangesAsync();
 
-                response.Result = new AddressResponseDto { CustomerId = model.CustomerId, Addresses = new List<AddressDto> { model.Address } };
+                response.Result = new AddressResponseDto 
+                { 
+                    CustomerId = model.CustomerId, 
+                    Addresses = new List<AddressDto> 
+                    {
+                       new AddressDto{
+                           AddressId = address.AddressId,
+                           AddressName = address.AddressName,
+                           Address = address.Address,
+                           City = model.Address.City.Name,
+                           District = model.Address.District.Name,
+                           Neighbourhood = model.Address.Neighbourhood.Name,
+                           CreatedAt = address.CreatedAt,
+                           UpdatedAt = address.UpdatedAt
+                       }
+                    } 
+                };
                 response.Status = Status.Success;
                 response.Message = "Adres başarıyla eklendi.";
                 return response;
@@ -512,7 +531,50 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
+        public async Task<Response<AddressResponseDto>> EditAddress(AddressRequestDto model)
+        {
+            Response<AddressResponseDto> response = new();
+            try
+            {
+                CheckCustomerDto checkCustomer = new() { CustomerId = model.CustomerId };
+                if (!await _authService.CheckExistsCustomer(checkCustomer))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri Bulunamadı.";
+                    return response;
+                }
 
+                var address = await _context.Addresses.FirstOrDefaultAsync(a => a.AddressId == model.Address!.AddressId && a.CustomerId == model.CustomerId);
+
+                if (address is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Adres Bulunamadı.";
+                    return response;
+                }
+
+                if (model is null || model.Address is null || model.Address.City is null || model.Address.District is null || model.Address.Neighbourhood is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Geçersiz adres.";
+                    return response;
+                }
+
+                address.AddressName = model.Address.AddressName ?? address.AddressName;
+                address.Address = model.Address.Address ?? address.Address;
+                address.CityId = model.Address.City is not null ? await _context.Cities.Where(c => c.Name == model.Address.City.Name).Select(c => c.CityId).FirstOrDefaultAsync() : address.CityId;
+                address.DistrictId = model.Address.District is not null ? await _context.Districts.Where(d => d.Name == model.Address.District.Name && d.City.Name == model.Address.City.Name).Select(d => d.DistrictId).FirstOrDefaultAsync() : address.DistrictId;
+                address.NeighbourhoodId = model.Address.Neighbourhood is not null ? await _context.Neighbourhoods.Where(n => n.Name == model.Address.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync() : address.NeighbourhoodId;
+                //address.
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetAddress ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
 
         // adres ekleme, silme, güncelleme metodlarını yaz
 

@@ -465,19 +465,19 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
-                if (!await _context.Cities.AnyAsync(c => c.Name == model.Address!.City.Name))
+                if (!await _context.Cities.AnyAsync(c => c.Name == model.Address!.City.Name!.ToUpper()))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz şehir.";
                     return response;
                 }
-                else if (!await _context.Districts.AnyAsync(d => d.Name == model.Address!.District.Name && d.City.Name == model.Address.City.Name))
+                else if (!await _context.Districts.AnyAsync(d => d.Name == model.Address!.District.Name!.ToUpper() && d.City.Name == model.Address.City.Name!.ToUpper()))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz ilçe.";
                     return response;
                 }
-                else if (!await _context.Neighbourhoods.AnyAsync(n => n.Name == model.Address!.Neighbourhood.Name && n.District.Name == model.Address.District.Name && n.District.City.Name == model.Address.City.Name))
+                else if (!await _context.Neighbourhoods.AnyAsync(n => n.Name == model.Address!.Neighbourhood.Name!.ToUpper() && n.District.Name == model.Address.District.Name!.ToUpper() && n.District.City.Name == model.Address.City.Name!.ToUpper()))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz mahalle.";

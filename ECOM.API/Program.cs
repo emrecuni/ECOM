@@ -19,9 +19,14 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    }); 
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.MaxDepth = 128;
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0;
+});
 //builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen(options =>
 //{
@@ -44,6 +49,11 @@ builder.Services.AddOpenApi();
 //        }
 //    });
 //});
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.SerializerOptions.MaxDepth = 128;
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

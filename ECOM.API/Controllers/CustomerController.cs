@@ -110,5 +110,15 @@ namespace ECOM.API.Controllers
             var response = await _customerService.AddAddress(model);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpDelete("RemoveAddress")]
+        public async Task<IActionResult> RemoveAddress([FromBody] AddressRequestDto model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+            var response = await _customerService.RemoveAddress(model);
+            return Ok(response);
+        }
     }
 }

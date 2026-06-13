@@ -585,6 +585,41 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
+        public async Task<Response<string>> RemoveAddress(AddressRequestDto model)
+        {
+            Response<string> response = new();
+            try
+            {
+                CheckCustomerDto checkCustomer = new() { CustomerId = model.CustomerId };
+                if (!await _authService.CheckExistsCustomer(checkCustomer))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri Bulunamadı.";
+                    return response;
+                }
+
+                var address = await _context.Addresses.FirstOrDefaultAsync(a => a.AddressId == model.Address!.AddressId && a.CustomerId == model.CustomerId);
+
+                if (address is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Adres Bulunamadı.";
+                    return response;
+                }
+                                
+                _context.Addresses.Remove(address);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetAddress ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+
 
         // adres ekleme, silme, güncelleme metodlarını yaz
 

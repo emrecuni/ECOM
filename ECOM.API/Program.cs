@@ -19,13 +19,9 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+    }); 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi(options =>
-{
-    options.AddSchemaTransformer((schema, context, cancellationToken) =>
-        Task.CompletedTask);
-});
+builder.Services.AddOpenApi();
 //builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen(options =>
 //{
@@ -48,11 +44,6 @@ builder.Services.AddOpenApi(options =>
 //        }
 //    });
 //});
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.MaxDepth = 128; // veya daha fazla
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

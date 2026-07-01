@@ -477,8 +477,6 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
-                // Artık city.CityName, district.DistrictName, neighbourhood.NeighbourhoodName kullanılabilir
-
                 if (model.Receiver is null || string.IsNullOrEmpty(model.Receiver.Name) || string.IsNullOrEmpty(model.Receiver.Surname))
                 {
                     response.Status = Status.Failed;
@@ -624,11 +622,5 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
-
-
-
-        // adres ekleme, silme, güncelleme metodlarını yaz
-
-
     }
 }

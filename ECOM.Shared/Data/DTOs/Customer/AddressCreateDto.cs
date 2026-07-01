@@ -11,7 +11,6 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public string? Address { get; set; }
         public int? City { get; set; }
         public int? District { get; set; }
-        public int? Neighbourhood { get; set; }
-        public ReceiverDto? Receiver { get; set; } 
+        public int? Neighbourhood { get; set; }        
     }
 }

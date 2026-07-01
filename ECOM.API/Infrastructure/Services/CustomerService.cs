@@ -484,20 +484,22 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
-                if(model.Address.Receiver is null || string.IsNullOrEmpty(model.Address.Receiver.Name) || string.IsNullOrEmpty(model.Address.Receiver.Surname))
+                if(model.Receiver is null || string.IsNullOrEmpty(model.Receiver.Name) || string.IsNullOrEmpty(model.Receiver.Surname))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz alıcı bilgisi.";
                     return response;
                 }
 
-                var receiver = await _context.Customers.FirstOrDefaultAsync(r => r.Name == model.Address.Receiver.Name && r.Surname == model.Address.Receiver.Surname);
+                var receiver = await _context.Customers.FirstOrDefaultAsync(r => r.Name == model.Receiver.Name && r.Surname == model.Receiver.Surname);
                 if(receiver is null)
                 {
                     await _context.Customers.AddAsync(new Customers
                     {
-                        Name = model.Address.Receiver.Name,
-                        Surname = model.Address.Receiver.Surname,
+                        Name = model.Receiver.Name,
+                        Surname = model.Receiver.Surname,
+                        Phone = model.Receiver.Phone,
+                        IsCustomer = false,
                         CreatedAt = DateTime.Now
                     });
                     await _context.SaveChangesAsync();
@@ -511,7 +513,7 @@ namespace ECOM.API.Infrastructure.Services
                     CityId = await _context.Cities.Where(c => c.CityId == model.Address.City).Select(c => c.CityId).FirstOrDefaultAsync(),
                     DistrictId = await _context.Districts.Where(d => d.DistrictId == model.Address.District && d.CityId == model.Address.City).Select(d => d.DistrictId).FirstOrDefaultAsync(),
                     NeighbourhoodId = await _context.Neighbourhoods.Where(n => n.NeighbourhoodId == model.Address.Neighbourhood && n.DistrictId == model.Address.District && n.District.CityId == model.Address.City  ).Select(n => n.NeighbourhoodId).FirstOrDefaultAsync(),
-                    ReceiverId = receiver is not null ? receiver.CustomerId : await _context.Customers.Where(r => r.Name == model.Address.Receiver.Name && r.Surname == model.Address.Receiver.Surname).Select(r => r.CustomerId).FirstOrDefaultAsync(),
+                    ReceiverId = receiver is not null ? receiver.CustomerId : await _context.Customers.Where(r => r.Name == model.Receiver.Name && r.Surname == model.Receiver.Surname).Select(r => r.CustomerId).FirstOrDefaultAsync(),
                     CreatedAt = DateTime.Now
                 };
 

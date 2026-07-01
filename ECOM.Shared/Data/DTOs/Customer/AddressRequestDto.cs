@@ -9,5 +9,6 @@ namespace ECOM.Shared.Data.DTOs.Customer
     {
         public int CustomerId { get; set; }
         public AddressCreateDto? Address { get; set; }
+        public ReceiverDto? Receiver { get; set; }
     }
 }

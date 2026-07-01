@@ -182,8 +182,8 @@ namespace ECOM.API.Data
                 entity.Property(c => c.Surname).HasColumnName("SURNAME").IsRequired();
                 entity.Property(c => c.Email).HasColumnName("EMAIL").IsRequired(false);
                 entity.Property(c => c.Phone).HasColumnName("PHONE").IsRequired(false);
-                entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired();
-                entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired();
+                entity.Property(c => c.Password).HasColumnName("PASSWORD").IsRequired(false);
+                entity.Property(c => c.Gender).HasColumnName("GENDER").IsRequired(false);
                 entity.Property(c => c.IsCustomer).HasColumnName("IS_CUSTOMER").IsRequired(false);
                 entity.Property(c => c.BirthDate).HasColumnName("BIRTHDATE").IsRequired(false);
                 entity.Property(c => c.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);

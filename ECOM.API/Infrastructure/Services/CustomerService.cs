@@ -458,33 +458,28 @@ namespace ECOM.API.Infrastructure.Services
                 }
 
                 // girilecek adresin il-ilçe-mahalle bilgileri doğrulanır
-                if (model.Address is null || model.Address.City is null || model.Address.District is null || model.Address.Neighbourhood is null)
+                if (model.Address is null || model.Address.City is null
+                    || model.Address.District is null || model.Address.Neighbourhood is null)
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz adres.";
                     return response;
                 }
 
-                if (!await _context.Cities.AnyAsync(c => c.CityId == model.Address!.City))
+                var city = await _context.Cities.FindAsync(model.Address.City);
+                var district = await _context.Districts.FindAsync(model.Address.District);
+                var neighbourhood = await _context.Neighbourhoods.FindAsync(model.Address.Neighbourhood);
+
+                if (city is null || district is null || neighbourhood is null)
                 {
                     response.Status = Status.Failed;
-                    response.Message = "Geçersiz şehir.";
-                    return response;
-                }
-                else if (!await _context.Districts.AnyAsync(d => d.DistrictId == model.Address!.District))
-                {
-                    response.Status = Status.Failed;
-                    response.Message = "Geçersiz ilçe.";
-                    return response;
-                }
-                else if (!await _context.Neighbourhoods.AnyAsync(n => n.NeighbourhoodId == model.Address!.Neighbourhood))
-                {
-                    response.Status = Status.Failed;
-                    response.Message = "Geçersiz mahalle.";
+                    response.Message = "Geçersiz şehir, ilçe veya mahalle.";
                     return response;
                 }
 
-                if(model.Receiver is null || string.IsNullOrEmpty(model.Receiver.Name) || string.IsNullOrEmpty(model.Receiver.Surname))
+                // Artık city.CityName, district.DistrictName, neighbourhood.NeighbourhoodName kullanılabilir
+
+                if (model.Receiver is null || string.IsNullOrEmpty(model.Receiver.Name) || string.IsNullOrEmpty(model.Receiver.Surname))
                 {
                     response.Status = Status.Failed;
                     response.Message = "Geçersiz alıcı bilgisi.";
@@ -529,9 +524,10 @@ namespace ECOM.API.Infrastructure.Services
                            AddressId = address.AddressId,
                            AddressName = address.AddressName,
                            Address = address.Address,
-                           City = address.City.Name,
-                           District = address.District.Name,
-                           Neighbourhood = address.Neighbourhood.Name,
+                           City = city.Name,
+                           District = district.Name,
+                           Neighbourhood = neighbourhood.Name,
+                           Receiver = model.Receiver,
                            CreatedAt = address.CreatedAt,
                            UpdatedAt = address.UpdatedAt
                        }

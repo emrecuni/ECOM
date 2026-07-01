@@ -12,7 +12,7 @@ namespace ECOM.Shared.Data.Entities
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Password { get; set; }
-        public bool Gender { get; set; }
+        public bool? Gender { get; set; }
         public bool? IsCustomer { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? CreatedAt { get; set; }

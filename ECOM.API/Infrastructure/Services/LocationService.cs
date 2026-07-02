@@ -70,7 +70,7 @@ namespace ECOM.API.Infrastructure.Services
 
             try
             {
-                if (_cache.TryGetValue("districts", out List<DistrictDto>? cached))
+                if (_cache.TryGetValue($"districts_{cityId}", out List<DistrictDto>? cached))
                 {
                     if (cached is not null && cached.Count > 0)
                     {
@@ -94,7 +94,7 @@ namespace ECOM.API.Infrastructure.Services
                     .SetAbsoluteExpiration(TimeSpan.FromHours(24))
                     .SetSlidingExpiration(TimeSpan.FromHours(1));
 
-                _cache.Set("districts", districts, options);
+                _cache.Set($"districts_{cityId}", districts, options);
                 response.Status = Status.Success;
                 response.Result = districts;
                 response.Message = "İlçeler getirildi.";
@@ -115,7 +115,7 @@ namespace ECOM.API.Infrastructure.Services
 
             try
             {
-                if (_cache.TryGetValue("neighbourhoods", out List<NeighbourhoodDto>? cached))
+                if (_cache.TryGetValue($"neighbourhoods_{districtId}", out List<NeighbourhoodDto>? cached))
                 {
                     if (cached is not null && cached.Count > 0)
                     {
@@ -139,7 +139,7 @@ namespace ECOM.API.Infrastructure.Services
                     .SetAbsoluteExpiration(TimeSpan.FromHours(24))
                     .SetSlidingExpiration(TimeSpan.FromHours(1));
 
-                _cache.Set("neighbourhoods", neighbourhoods, options);
+                _cache.Set($"neighbourhoods_{districtId}", neighbourhoods, options);
                 response.Status = Status.Success;
                 response.Result = neighbourhoods;
                 response.Message = "Mahalleler getirildi.";

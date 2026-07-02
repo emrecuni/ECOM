@@ -1,6 +1,9 @@
 ﻿using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
+using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Location;
+using ECOM.Shared.Data.Entities;
+using ECOM.Shared.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -17,66 +20,137 @@ namespace ECOM.API.Infrastructure.Services
             _cache = cache;
         }
 
-        public async Task<List<CityDto>> GetCities()
+        public async Task<Response<List<CityDto>>> GetCities()
         {
-            if (_cache.TryGetValue("cities", out List<CityDto>? cached))
-                return cached is null ? cached = new List<CityDto>() : cached;
-
-            var cities = await _context.Cities
-                .Select(c => new CityDto
+            Response<List<CityDto>> response = new();
+            response.Status = Status.Default;
+            try
+            {
+                if (_cache.TryGetValue("cities", out List<CityDto>? cached))
                 {
-                    CityId = c.CityId,
-                    Name = c.Name
-                })
-                .ToListAsync();
+                    if (cached is not null && cached.Count > 0)
+                    {
+                        response.Status = Status.Success;
+                        response.Result = cached;
+                        response.Message = "Şehirler önbellekten getirildi.";
+                        return response;
+                    }
+                }
 
-            var options = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromHours(24)) // 24 saat sonra kesin sil
-                .SetSlidingExpiration(TimeSpan.FromHours(1)); // 1 saat kullanılmazsa sil
+                var cities = await _context.Cities
+                    .Select(c => new CityDto
+                    {
+                        CityId = c.CityId,
+                        Name = c.Name
+                    })
+                    .ToListAsync();
 
-            _cache.Set("cities", cities, options);
-            return cities;
+                var options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(24)) // 24 saat sonra kesin sil
+                    .SetSlidingExpiration(TimeSpan.FromHours(1)); // 1 saat kullanılmazsa sil
+
+                _cache.Set("cities", cities, options);
+                response.Status = Status.Success;
+                response.Result = cities;
+                response.Message = "Şehirler getirildi.";
+            }
+            catch (Exception ex)
+            {
+                response.Status = Status.Error;
+                response.Message = $"Şehirler getirilirken bir hata oluştu: {ex.Message}";
+            }
+            
+            return response;
         }
 
-        public async Task<List<DistrictDto>> GetDistricts(int cityId)
+        public async Task<Response<List<DistrictDto>>> GetDistricts(int cityId)
         {
-            if (_cache.TryGetValue("districts", out List<DistrictDto>? cached))
-                return cached is null ? cached = new List<DistrictDto>() : cached;
+            Response<List<DistrictDto>> response = new();
+            response.Status = Status.Default;
 
-            var districts = await _context.Districts
-                .Select(d => new DistrictDto
+            try
+            {
+                if (_cache.TryGetValue("districts", out List<DistrictDto>? cached))
                 {
-                    DistrictId = d.DistrictId,
-                    Name = d.Name
-                })
-                .ToListAsync();
+                    if (cached is not null && cached.Count > 0)
+                    {
+                        response.Status = Status.Success;
+                        response.Result = cached;
+                        response.Message = "İlçeler önbellekten getirildi.";
+                        return response;
+                    }
+                }
 
-            var options = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromHours(24))
-                .SetSlidingExpiration(TimeSpan.FromHours(1));
+                var districts = await _context.Districts
+                    .Where(d => d.CityId == cityId)
+                    .Select(d => new DistrictDto
+                    {
+                        DistrictId = d.DistrictId,
+                        Name = d.Name
+                    })
+                    .ToListAsync();
 
-            _cache.Set("districts", districts, options);
-            return districts;
+                var options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(24))
+                    .SetSlidingExpiration(TimeSpan.FromHours(1));
+
+                _cache.Set("districts", districts, options);
+                response.Status = Status.Success;
+                response.Result = districts;
+                response.Message = "İlçeler getirildi.";
+            }
+            catch (Exception ex)
+            {
+                response.Status = Status.Error;
+                response.Message = $"İlçeler getirilirken bir hata oluştu: {ex.Message}";
+            }
+          
+            return response;
         }
-        public async Task<List<NeighbourhoodDto>> GetNeighbourhoods(int districtId)
+
+        public async Task<Response<List<NeighbourhoodDto>>> GetNeighbourhoods(int districtId)
         {
-            if(_cache.TryGetValue("neighbourhoods", out List<NeighbourhoodDto>? cached))
-                return cached is null ? cached = new List<NeighbourhoodDto>() : cached;
+            Response<List<NeighbourhoodDto>> response = new();
+            response.Status = Status.Default;
 
-            var neighbourhoods = await _context.Neighbourhoods
-                .Select(n => new NeighbourhoodDto
+            try
+            {
+                if (_cache.TryGetValue("neighbourhoods", out List<NeighbourhoodDto>? cached))
                 {
-                    NeighbourhoodId = n.NeighbourhoodId,
-                    Name = n.Name
-                })
-                .ToListAsync();
+                    if (cached is not null && cached.Count > 0)
+                    {
+                        response.Status = Status.Success;
+                        response.Result = cached;
+                        response.Message = "Mahalleler önbellekten getirildi.";
+                        return response;
+                    }
+                }
 
-            var options = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration (TimeSpan.FromHours(24))
-                .SetSlidingExpiration(TimeSpan.FromHours(1));
+                var neighbourhoods = await _context.Neighbourhoods
+                    .Where(n => n.DistrictId == districtId)
+                    .Select(n => new NeighbourhoodDto
+                    {
+                        NeighbourhoodId = n.NeighbourhoodId,
+                        Name = n.Name
+                    })
+                    .ToListAsync();
 
-            _cache.Set("neighbourhoods", neighbourhoods, options);
-            return neighbourhoods;
+                var options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(24))
+                    .SetSlidingExpiration(TimeSpan.FromHours(1));
+
+                _cache.Set("neighbourhoods", neighbourhoods, options);
+                response.Status = Status.Success;
+                response.Result = neighbourhoods;
+                response.Message = "Mahalleler getirildi.";
+            }
+            catch (Exception ex)
+            {
+                response.Status = Status.Error;
+                response.Message = $"Mahalleler getirilirken bir hata oluştu: {ex.Message}";
+            }
+
+            return response;
         }
     }
 }

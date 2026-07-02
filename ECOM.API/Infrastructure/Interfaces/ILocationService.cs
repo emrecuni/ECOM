@@ -1,11 +1,12 @@
-﻿using ECOM.Shared.Data.DTOs.Location;
+﻿using ECOM.Shared.Data.DTOs;
+using ECOM.Shared.Data.DTOs.Location;
 
 namespace ECOM.API.Infrastructure.Interfaces
 {
     public interface ILocationService
     {
-        public Task<List<CityDto>> GetCities();
-        public Task<List<DistrictDto>> GetDistricts(int cityId);
-        public Task<List<NeighbourhoodDto>> GetNeighbourhoods(int districtId);
+        public Task<Response<List<CityDto>>> GetCities();
+        public Task<Response<List<DistrictDto>>> GetDistricts(int cityId);
+        public Task<Response<List<NeighbourhoodDto>>> GetNeighbourhoods(int districtId);
     }
 }

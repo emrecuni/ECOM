@@ -61,6 +61,7 @@ builder.Services.Configure<JsonOptions>(options =>
 //        }
 //    });
 //});
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -83,6 +84,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISmtpService, SmptService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<SmtpClient>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();

@@ -318,6 +318,7 @@ namespace ECOM.API.Data
                 entity.Property(o => o.CartId).HasColumnName("CART_ID").IsRequired(false);
                 entity.Property(o => o.Piece).HasColumnName("PIECE").IsRequired(false);
                 entity.Property(o => o.TotalPrice).HasColumnName("TOTAL_PRICE").IsRequired();
+                entity.Property(o => o.Status).HasColumnName("STATUS").IsRequired();
                 entity.Property(o => o.OrderDate).HasColumnName("ORDER_DATE").IsRequired(false);
                 entity.Property(o => o.DeliveryDate).HasColumnName("DELIVERY_DATE").IsRequired(false);
 

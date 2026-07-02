@@ -7,7 +7,7 @@ X Email verification tablosunun migration'ını oluştur X
 X Email verification işlemini yaptır X
 * iyzico ödemeleri için api yaz
 * iyzico'da 3d ayarını kurcala Firma ayarları -> ödeme bazında 3d secure ayarları
-* Neighborhood tablosundan city kolonunu kaldır
+X Neighborhood tablosundan city kolonunu kaldır X
 X Doğrulama kodu generater yaz X
 X Gönderilen otp kodunu sendotp response'ta dön X
 X Direkt anasayfa açılacaksa products'a token olmadan nasıl istek atacağım X
@@ -19,7 +19,7 @@ X Favoriye ekleme metodunu yaz // product X
 X Bilgi güncelleme metodunu yaz // customer X
 * Ödeme metodunu yaz // payment
 * Siparişler metodunu yaz // order
-* Adres gibi yardımcı işlemler için controller yaz // address
+X Adres gibi yardımcı işlemler için controller yaz // address X --- location
 X Kuponları listeleme metodunu yaz // customer X
 X Fiyat karşılaştırma işlemini private bir metod ile yap X
 X Cart'a güncelleme saati ekle X
@@ -30,7 +30,8 @@ X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona g
 * "Hesabım" hoverında açılan menüyü yaklaştır imleç boşluğa gelince hemen kapanıyor
 * Parola değiştirirken parola formatını güçlü iste
 * Parola oluştururken parola formatını güçlü iste
-* Sipariş durumu db'de tutulmuyor kolon ekle
+X Sipariş durumu db'de tutulmuyor kolon ekle X
 * Bütün kullanıcı varlığı kontrollerini authService/CheckCustomerExists ile yap
 * Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder
 * Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir
+X LocationController yaz il-ilçe-mahalleyi dönen metodları yaz X

@@ -14,6 +14,7 @@ namespace ECOM.Shared.Data.Entities
         public int? CartId { get; set; }
         public int? Piece { get; set; }
         public decimal TotalPrice { get; set; }
+        public int Status { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
        

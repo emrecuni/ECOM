@@ -13,11 +13,13 @@ namespace ECOM.API.Infrastructure.Services
     {
         private readonly DataContext _context;
         private readonly IMemoryCache _cache;
+        private readonly ILogger<LocationService> _logger;
 
-        public LocationService(DataContext context, IMemoryCache cache)
+        public LocationService(DataContext context, IMemoryCache cache, ILogger<LocationService> logger)
         {
             _context = context;
             _cache = cache;
+            _logger = logger;
         }
 
         public async Task<Response<List<CityDto>>> GetCities()
@@ -58,6 +60,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 response.Status = Status.Error;
                 response.Message = $"Şehirler getirilirken bir hata oluştu: {ex.Message}";
+                _logger.LogError($"LocationService/GetCities ==> Error: {ex}");
             }
             
             return response;
@@ -103,7 +106,8 @@ namespace ECOM.API.Infrastructure.Services
             {
                 response.Status = Status.Error;
                 response.Message = $"İlçeler getirilirken bir hata oluştu: {ex.Message}";
-            }
+                _logger.LogError($"LocationService/GetDistricts ==> Error: {ex}");
+            }   
           
             return response;
         }
@@ -148,8 +152,8 @@ namespace ECOM.API.Infrastructure.Services
             {
                 response.Status = Status.Error;
                 response.Message = $"Mahalleler getirilirken bir hata oluştu: {ex.Message}";
+                _logger.LogError($"LocationService/GetNeighbourhoods ==> Error: {ex}");
             }
-
             return response;
         }
     }

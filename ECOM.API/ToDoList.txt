@@ -32,6 +32,6 @@ X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona g
 * Parola oluştururken parola formatını güçlü iste
 X Sipariş durumu db'de tutulmuyor kolon ekle X
 * Bütün kullanıcı varlığı kontrollerini authService/CheckCustomerExists ile yap
-* Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder
+X Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder X
 * Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir
 X LocationController yaz il-ilçe-mahalleyi dönen metodları yaz X

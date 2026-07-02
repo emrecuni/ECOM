@@ -22,6 +22,7 @@ namespace ECOM.API.Controllers
             _logger = logger;
         }
 
+        #region Favorites
         [Authorize]
         [HttpPost("AddFavorite")]
         public async Task<IActionResult> AddFavorite([FromBody] FavoriteRequestDto model)
@@ -51,6 +52,7 @@ namespace ECOM.API.Controllers
             var response = await _customerService.GetFavorites(customerId);
             return Ok(response);
         }
+        #endregion Favorites
 
         [Authorize]
         [HttpGet("GetCoupons")]
@@ -92,6 +94,7 @@ namespace ECOM.API.Controllers
             return Ok(response);
         }
 
+        #region Address
         [Authorize]
         [HttpGet("GetAddress")]
         public async Task<IActionResult> GetAddress([FromQuery] int customerId)
@@ -120,5 +123,6 @@ namespace ECOM.API.Controllers
             var response = await _customerService.RemoveAddress(model);
             return Ok(response);
         }
+        #endregion Address
     }
 }

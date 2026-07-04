@@ -347,6 +347,21 @@ namespace ECOM.API.Data
                 .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<PaymentSession>(entity =>
+            {
+                entity.ToTable("PAYMENT_SESSIONS");
+                entity.HasKey(p => p.PaymentSessionId);
+                entity.Property(p => p.PaymentSessionId).HasColumnName("ID").ValueGeneratedOnAdd();
+                entity.Property(p => p.ConversationId).HasColumnName("CONVERSATION_ID").IsRequired(false);
+                entity.Property(p => p.Token).HasColumnName("TOKEN").IsRequired(false);
+                entity.Property(p => p.CustomerId).HasColumnName("CUSTOMER_ID").IsRequired();
+                entity.Property(p => p.ExpectedAmount).HasColumnName("EXPECTED_AMOUNT").IsRequired();
+                entity.Property(p => p.Status).HasColumnName("STATUS").IsRequired();
+                entity.Property(p => p.PaymentId).HasColumnName("PAYMENT_ID").IsRequired(false);
+                entity.Property(p => p.CreatedAt).HasColumnName("CREATED_AT").IsRequired(false);
+                entity.Property(p => p.ProcessedAt).HasColumnName("PROCESSED_AT").IsRequired(false);
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("PRODUCTS");
@@ -443,6 +458,7 @@ namespace ECOM.API.Data
         public DbSet<Log> Log => Set<Log>();
         public DbSet<Neighbourhood> Neighbourhoods => Set<Neighbourhood>();
         public DbSet<OrderHistory> OrderHistory => Set<OrderHistory>();
+        public DbSet<PaymentSession> PaymentSessions => Set<PaymentSession>();
         public DbSet<Product> Products => Set<Product>();
         public DbSet<ProductCategories> ProductCategories => Set<ProductCategories>();
         public DbSet<SCoupon> SCoupons => Set<SCoupon>();

@@ -4,6 +4,7 @@ using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Payment;
 using ECOM.Shared.Data.Entities;
+using ECOM.Shared.Data.Enums;
 using Iyzipay;
 using Iyzipay.Model;
 using Iyzipay.Model.V2.Subscription;
@@ -17,12 +18,14 @@ namespace ECOM.API.Infrastructure.Services
     {
         private readonly DataContext _context;
         private readonly Options _iyzico;
+        private readonly IConfiguration _config;
         private readonly ILogger<PaymentService> _logger;
 
-        public PaymentService(DataContext context, Options iyzico, ILogger<PaymentService> logger)
+        public PaymentService(DataContext context, Options iyzico, IConfiguration config, ILogger<PaymentService> logger)
         {
             _context = context;
             _iyzico = iyzico;
+            _config = config;
             _logger = logger;
         }
 
@@ -81,7 +84,7 @@ namespace ECOM.API.Infrastructure.Services
                     Price = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
                     PaidPrice = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
                     Currency = Currency.TRY.ToString(),
-                    CallbackUrl = "http://localhost:5195/Payment/Callback",
+                    CallbackUrl = _config["Iyzico:CallbackUrl"],
                     PaymentGroup = PaymentGroup.PRODUCT.ToString(),
                     Buyer = new Buyer
                     {
@@ -103,14 +106,40 @@ namespace ECOM.API.Infrastructure.Services
 
                 var iyzicoResponse = await CheckoutFormInitialize.Create(request, _iyzico);
 
-                response.Status = iyzicoResponse.Status switch
+                response.Status = iyzicoResponse.StatusCode switch
                 {
-                   "success" => Status.Success,
-                    //TaskStatus.Faulted => Status.Error,
-                    //TaskStatus.Canceled => Status.Error,
-                    _ => Status.Default
+                    200 => Status.Success,
+                    _ => Status.Error
                 };
                 response.Message = iyzicoResponse.CheckoutFormContent;
+
+                if (response.Status == Status.Success)
+                {
+                    using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        PaymentSession paymentSession = new()
+                        {
+                            ConversationId = request.ConversationId,
+                            Token = iyzicoResponse.Token,
+                            CustomerId = model.CustomerId,
+                            ExpectedAmount = totalPrice,
+                            Status = PaymentSessionStatus.Pending,
+                            CreatedAt = DateTime.Now
+                        };
+
+                        await _context.PaymentSessions.AddAsync(paymentSession);
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        response.Status = Status.Failed;
+                        response.Message = "Ödeme işlemi başarılı ancak db işlemi sırasında hata oluştu.";
+                        return response;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -136,7 +165,7 @@ namespace ECOM.API.Infrastructure.Services
                 await _context.Carts
                 .AsNoTracking()
                 .Where(c => c.CustomerId == customerId && c.Enable)
-                .Select(c => new Cart {CartId = c.CartId,ProductId = c.ProductId,CustomerId= c.CustomerId, SellerId = c.SellerId, Piece = c.Piece, TotalPrice = c.TotalPrice })
+                .Select(c => new Cart { CartId = c.CartId, ProductId = c.ProductId, CustomerId = c.CustomerId, SellerId = c.SellerId, Piece = c.Piece, TotalPrice = c.TotalPrice })
                 .ToListAsync();
         }
 
@@ -150,14 +179,12 @@ namespace ECOM.API.Infrastructure.Services
                 .FirstOrDefaultAsync(a => a.AddressId == model.AddressId && a.CustomerId == model.CustomerId);
         }
 
-        public async Task<Response<CallbackResponseDto>> CallBack(IFormCollection form)
+        public async Task<Response<CallbackResponseDto>> CallBack(string token)
         {
             Response<CallbackResponseDto> response = new();
             response.Status = Status.Default;
             try
             {
-                var token = form?["token"];
-
                 if (string.IsNullOrEmpty(token))
                 {
                     response.Status = Status.Error;
@@ -172,22 +199,20 @@ namespace ECOM.API.Infrastructure.Services
                     ConversationId = Guid.NewGuid().ToString() // sipariş ID vb. kullanılabilir
                 };
 
-                var iyzicoResponse = CheckoutForm.Retrieve(request, _iyzico);
+                var iyzicoResponse = await CheckoutForm.Retrieve(request, _iyzico);
 
-                if (iyzicoResponse.Result.Status == "success") // success'i  consttan al
+                if (iyzicoResponse.StatusCode == 200) // success'i  consttan al
                 {
                     using var transaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
-                        var carts = await GetCart(1, isIncludeNavigation: false);
+                        var carts = await GetCart(1, isIncludeNavigation: false); // customerId'yi iyzicoResponse'dan alabiliriz, şimdilik 1 olarak sabitledim
 
                         carts.ForEach(async cart =>
                         {
                             cart.Enable = false;
                             _context.Carts.Update(cart);
                         });
-
-                        await _context.SaveChangesAsync();
 
                         var now = DateTime.Now;
 
@@ -210,9 +235,9 @@ namespace ECOM.API.Infrastructure.Services
                         response.Message = "Ödeme işlemi başarılı ve sipariş oluşturuldu.";
                         response.Result = new CallbackResponseDto
                         {
-                            PaymentStatus = iyzicoResponse.Result.Status,
-                            PaymentId = iyzicoResponse.Result.PaymentId,
-                            Price = decimal.Parse(iyzicoResponse.Result.PaidPrice, CultureInfo.InvariantCulture)
+                            PaymentStatus = iyzicoResponse.Status,
+                            PaymentId = iyzicoResponse.PaymentId,
+                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture)
                         };
                         return response;
                     }
@@ -224,12 +249,12 @@ namespace ECOM.API.Infrastructure.Services
                         response.Message = "Ödeme işlemi başarılı ancak db işlemi sırasında hata oluştu.";
                         response.Result = new CallbackResponseDto
                         {
-                            PaymentStatus = iyzicoResponse.Result.Status,
-                            PaymentId = iyzicoResponse.Result.PaymentId,
-                            Price = decimal.Parse(iyzicoResponse.Result.PaidPrice, CultureInfo.InvariantCulture)
+                            PaymentStatus = iyzicoResponse.Status,
+                            PaymentId = iyzicoResponse.PaymentId,
+                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture)
                         };
                         return response;
-                    }                    
+                    }
                 }
                 else
                 {
@@ -237,14 +262,14 @@ namespace ECOM.API.Infrastructure.Services
                     response.Message = "Ödeme işlemi başarısız.";
                     response.Result = new CallbackResponseDto
                     {
-                        ResultMessage = iyzicoResponse.Result.ErrorMessage,
+                        ResultMessage = iyzicoResponse.ErrorMessage,
                     };
                 }
             }
             catch (Exception ex)
             {
                 response.Status = Status.Error;
-                response.Message = $"Ödeme callback işlemi sırasında bir hata oluştu: {ex.Message}";                
+                response.Message = $"Ödeme callback işlemi sırasında bir hata oluştu: {ex.Message}";
             }
             return response;
         }

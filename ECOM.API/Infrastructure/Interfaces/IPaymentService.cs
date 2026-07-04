@@ -6,6 +6,6 @@ namespace ECOM.API.Infrastructure.Interfaces
     public interface IPaymentService
     {
         public Task<Response<PaymentResponseDto>> Pay(PaymentRequestDto model);
-        public Task<Response<CallbackResponseDto>> CallBack(IFormCollection form);
+        public Task<Response<CallbackResponseDto>> CallBack(string token);
     }
 }

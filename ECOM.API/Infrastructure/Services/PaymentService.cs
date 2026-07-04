@@ -253,7 +253,7 @@ namespace ECOM.API.Infrastructure.Services
                     using var transaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
-                        var carts = await GetCart(1, isIncludeNavigation: false); // customerId'yi iyzicoResponse'dan alabiliriz, şimdilik 1 olarak sabitledim
+                        var carts = await GetCart(session.CustomerId, isIncludeNavigation: false); // customerId'yi iyzicoResponse'dan alabiliriz, şimdilik 1 olarak sabitledim
 
                         carts.ForEach(async cart =>
                         {

@@ -101,16 +101,16 @@ namespace ECOM.API.Infrastructure.Services
                     BillingAddress = orderAddress
                 };
 
-                var iyzicoResponse = CheckoutFormInitialize.Create(request, _iyzico);
+                var iyzicoResponse = await CheckoutFormInitialize.Create(request, _iyzico);
 
                 response.Status = iyzicoResponse.Status switch
                 {
-                    TaskStatus.Created => Status.Success,
-                    TaskStatus.Faulted => Status.Error,
-                    TaskStatus.Canceled => Status.Error,
+                   "success" => Status.Success,
+                    //TaskStatus.Faulted => Status.Error,
+                    //TaskStatus.Canceled => Status.Error,
                     _ => Status.Default
                 };
-                response.Message = iyzicoResponse.Result.CheckoutFormContent;
+                response.Message = iyzicoResponse.CheckoutFormContent;
             }
             catch (Exception ex)
             {
@@ -150,13 +150,13 @@ namespace ECOM.API.Infrastructure.Services
                 .FirstOrDefaultAsync(a => a.AddressId == model.AddressId && a.CustomerId == model.CustomerId);
         }
 
-        public async Task<Response<CallbackResponseDto>> CallBack(CallbackRequestDto model)
+        public async Task<Response<CallbackResponseDto>> CallBack(IFormCollection form)
         {
             Response<CallbackResponseDto> response = new();
             response.Status = Status.Default;
             try
             {
-                var token = model.Form?["token"];
+                var token = form?["token"];
 
                 if (string.IsNullOrEmpty(token))
                 {
@@ -179,7 +179,7 @@ namespace ECOM.API.Infrastructure.Services
                     using var transaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
-                        var carts = await GetCart(model.CustomerId, isIncludeNavigation: false);
+                        var carts = await GetCart(1, isIncludeNavigation: false);
 
                         carts.ForEach(async cart =>
                         {

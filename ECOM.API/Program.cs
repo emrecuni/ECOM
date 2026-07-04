@@ -77,6 +77,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
     });
+builder.Services.AddSingleton(new Iyzipay.Options
+{
+    ApiKey = builder.Configuration["Iyzico:ApiKey"],
+    SecretKey = builder.Configuration["Iyzico:SecretKey"],
+    BaseUrl = builder.Configuration["Iyzico:BaseUrl"]
+});
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -85,6 +92,7 @@ builder.Services.AddScoped<ISmtpService, SmptService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<SmtpClient>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();

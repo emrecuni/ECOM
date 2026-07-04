@@ -35,3 +35,19 @@ X Sipariş durumu db'de tutulmuyor kolon ekle X
 X Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder X
 * Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir
 X LocationController yaz il-ilçe-mahalleyi dönen metodları yaz X
+* Mahalle tablosuna posta kodu gerekebilir payservice'te zipCode gönderiyoruz çünkü
+* Ex message'ları response'ta dönme hata kodu dön log tut loglardan bak hata mesajlarına
+
+
+
+
+
+payment/pay response'unda dönen içeriği şuraya yapıştır
+
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="iyzipay-checkout-form" class="responsive"></div>
+    <!-- Pay response'undaki message içeriğini buraya yapıştır -->
+</body>
+</html>

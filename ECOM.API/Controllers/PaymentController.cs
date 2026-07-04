@@ -21,6 +21,7 @@ namespace ECOM.API.Controllers
             _paymentSevice = paymentService;            
         }
 
+        [Authorize]
         [HttpPost("Pay")]
         public async Task<IActionResult> Pay([FromBody] PaymentRequestDto model)
         {

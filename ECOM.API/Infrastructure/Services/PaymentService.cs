@@ -75,7 +75,7 @@ namespace ECOM.API.Infrastructure.Services
                     Country = "Türkiye",
                     ContactName = carts[0].Customer.Name + " " + carts[0].Customer.Surname,
                     Description = "test",
-                    ZipCode = "34930"
+                    ZipCode = address?.Neighbourhood.ZipCode
                 };
 
                 CreateCheckoutFormInitializeRequest request = new()

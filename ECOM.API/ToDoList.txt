@@ -37,7 +37,10 @@ X Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder X
 X LocationController yaz il-ilçe-mahalleyi dönen metodları yaz X
 * Mahalle tablosuna posta kodu gerekebilir payservice'te zipCode gönderiyoruz çünkü
 * Ex message'ları response'ta dönme hata kodu dön log tut loglardan bak hata mesajlarına
-
+* Payment/Callback:
+** Replay saldırısı: Saldırgan (veya yanlışlıkla kullanıcının kendisi, sayfa yenileyerek) aynı geçerli token'ı iki kez POST ederse kodun siparişi iki kez oluşturur mu? Şu anki kodda Enable == true filtresi ikinci çağrıda boş liste döndürür, bu kısmi bir koruma — ama boş listeyle "başarılı" dönersin ve idempotency şansa kalmış olur. Doğru çözüm: işlenen token/paymentId'leri kaydet, aynı token geldiğinde "zaten işlendi" diye erken dön.
+** Tutar doğrulama (önceden değinmiştim, güvenlik bağlamında tekrar): Retrieve cevabındaki PaidPrice'ı DB'deki sepet toplamıyla karşılaştır. Kullanıcı Pay ile Callback arasında sepete ürün ekleyip çıkarabilir; 100 TL'lik ödeme ile 500 TL'lik sepeti sipariş haline getirmemelisin. iyzicoResponse.Result.Status == "success" tek başına "doğru tutarda ödendi" demek değildir.
+* Callback'te cardId yazılmıyor tabloya
 
 
 
@@ -51,3 +54,8 @@ payment/pay response'unda dönen içeriği şuraya yapıştır
     <!-- Pay response'undaki message içeriğini buraya yapıştır -->
 </body>
 </html>
+
+
+Kart Numarası: 5526080000000006
+Tarih: 12/30
+CVV: 000

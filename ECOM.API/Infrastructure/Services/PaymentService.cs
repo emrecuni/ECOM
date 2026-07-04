@@ -192,6 +192,38 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
+                var session = await _context.PaymentSessions.FirstOrDefaultAsync(s => s.Token == token);
+
+                if (session is null)
+                {
+                    response.Status = Status.Error;
+                    response.Message = "Ödeme oturumu bulunamadı.";
+                    return response;
+                }
+                else if (session.Status == PaymentSessionStatus.Completed)
+                {
+                    response.Status = Status.Error;
+                    response.Message = "Ödeme oturumu zaten tamamlanmış.";
+                    return response;
+                }
+
+                var now = DateTime.UtcNow;
+
+                var claimed = await _context.PaymentSessions
+                .Where(s => s.Token == token &&
+                (s.Status == PaymentSessionStatus.Pending ||
+                 (s.Status == PaymentSessionStatus.Processing &&
+                  s.ProcessingStartedAt < now.AddMinutes(-2))))
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(x => x.Status, PaymentSessionStatus.Processing)
+                    .SetProperty(x => x.ProcessingStartedAt, now));
+
+                if (claimed == 0)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ödeme zaten işleniyor/işlenmiş.";
+                }
+
                 var request = new RetrieveCheckoutFormRequest
                 {
                     Token = token,
@@ -203,6 +235,21 @@ namespace ECOM.API.Infrastructure.Services
 
                 if (iyzicoResponse.StatusCode == 200) // success'i  consttan al
                 {
+                    // gönderilen tutar ile beklenen tutarı karşılaştır
+                    if (!decimal.TryParse(iyzicoResponse.PaidPrice, NumberStyles.Number, CultureInfo.InvariantCulture, out var paidPrice))
+                    {
+                        response.Status = Status.Error;
+                        response.Message = "Ödeme tutarı okunamadı.";
+                        return response;
+                    }
+
+                    if (paidPrice != session.ExpectedAmount)
+                    {
+                        response.Status = Status.Error;
+                        response.Message = "Ödeme tutarı beklenen tutarla eşleşmiyor.";
+                        return response;
+                    }
+
                     using var transaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
@@ -214,7 +261,7 @@ namespace ECOM.API.Infrastructure.Services
                             _context.Carts.Update(cart);
                         });
 
-                        var now = DateTime.Now;
+                        now = DateTime.Now;
 
                         var orderList = carts.Select(order => new OrderHistory
                         {
@@ -226,6 +273,10 @@ namespace ECOM.API.Infrastructure.Services
                             TotalPrice = order.TotalPrice,
                             OrderDate = now
                         });
+
+                        session.Status = PaymentSessionStatus.Completed;
+                        session.ProcessedAt = now;
+                        session.PaymentId = iyzicoResponse.PaymentId;
 
                         await _context.OrderHistory.AddRangeAsync(orderList);
                         await _context.SaveChangesAsync();

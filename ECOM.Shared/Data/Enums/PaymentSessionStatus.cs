@@ -8,6 +8,7 @@ namespace ECOM.Shared.Data.Enums
     {
         Pending,
         Completed,
-        Failed
+        Failed,
+        Processing
     }
 }

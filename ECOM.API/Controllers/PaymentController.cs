@@ -4,6 +4,7 @@ using ECOM.Shared.Data.DTOs.Payment;
 using ECOM.Shared.Data.Entities;
 using Iyzipay.Model;
 using Iyzipay.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,10 +28,12 @@ namespace ECOM.API.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("Callback")]
-        public async Task<IActionResult> Callback(IFormCollection form)
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<IActionResult> Callback([FromForm] CallbackRequestDto model)
         {
-            var result = await _paymentSevice.CallBack(form);
+            var result = await _paymentSevice.CallBack(model.Token);
             return Ok(result);
         }
     }

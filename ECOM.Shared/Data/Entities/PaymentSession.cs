@@ -16,5 +16,6 @@ namespace ECOM.Shared.Data.Entities
         public string? PaymentId { get; set; }        // Retrieve sonrası doldur
         public DateTime? CreatedAt { get; set; }
         public DateTime? ProcessedAt { get; set; }
+        public DateTime? ProcessingStartedAt { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Text.Json.Serialization;
 using ECOM.API.Data;
+using ECOM.API.Data.SeedData;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.API.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,7 +84,6 @@ builder.Services.AddSingleton(new Iyzipay.Options
     SecretKey = builder.Configuration["Iyzico:SecretKey"],
     BaseUrl = builder.Configuration["Iyzico:BaseUrl"]
 });
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -115,6 +115,13 @@ builder.Services.AddScoped<SmtpClient>(provider =>
 //});
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    await LocationSeeder.SeedAsync(context);
+}
 
 app.Use(async (context, next) =>
 {

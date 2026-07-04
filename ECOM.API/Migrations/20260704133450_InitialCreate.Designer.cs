@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOM.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260704121504_ZipCodeAddedToNeighbourhoodTable")]
-    partial class ZipCodeAddedToNeighbourhoodTable
+    [Migration("20260704133450_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -516,7 +516,7 @@ namespace ECOM.API.Migrations
                             CommentId = 3,
                             Comment = "Wonderful! Highly recommend.",
                             CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CustomerId = 4,
+                            CustomerId = 3,
                             ProductId = 1,
                             Score = 5
                         },
@@ -585,6 +585,50 @@ namespace ECOM.API.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("CUSTOMERS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = 1,
+                            BirthDate = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ahmet.yilmaz@gmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Ahmet",
+                            Password = "gDdBkms2Z3g8T43jHKcphA==$lBOYfNxnf13JEUqZLLvgQ7ytu3NoYySvUOcQGSOd1PI=$3.32768.2",
+                            Phone = "05321234567",
+                            Surname = "Yılmaz",
+                            UpdatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 2,
+                            BirthDate = new DateTime(1995, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ayse.kaya@gmail.com",
+                            Gender = false,
+                            IsCustomer = true,
+                            Name = "Ayşe",
+                            Password = "HlfQh6k799FJUKAnqBVKgA==$jb8mRVf3nPXxaJbKua8tTNncbhmK1WsnOLIjsGc/Rww=$3.32768.2",
+                            Phone = "05339876543",
+                            Surname = "Kaya",
+                            UpdatedAt = new DateTime(2024, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 3,
+                            BirthDate = new DateTime(1988, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "mehmet.demir@hotmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Mehmet",
+                            Password = "8ljtPIZfCw9rZDKIHLlSQA==$1vK4aLmq9qDA4o/am0VuGPUZNz6lnnRQGtj+0wYMWhY=$3.32768.2",
+                            Phone = "05453456789",
+                            Surname = "Demir",
+                            UpdatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ECOM.Shared.Data.Entities.DCoupon", b =>

@@ -31,7 +31,7 @@ namespace ECOM.API.Data.SeedData
                 {
                     CommentId = 3,
                     ProductId = 1,
-                    CustomerId = 4,
+                    CustomerId = 3,
                     Comment = "Wonderful! Highly recommend.",
                     Score = 5,
                     CreatedAt = new DateTime(2026, 3, 15)

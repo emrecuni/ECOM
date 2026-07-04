@@ -434,17 +434,407 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CityId = 1,
-                            Name = "İstanbul"
+                            Name = "Adana"
                         },
                         new
                         {
                             CityId = 2,
-                            Name = "Ankara"
+                            Name = "Adıyaman"
                         },
                         new
                         {
                             CityId = 3,
+                            Name = "Afyonkarahisar"
+                        },
+                        new
+                        {
+                            CityId = 4,
+                            Name = "Ağrı"
+                        },
+                        new
+                        {
+                            CityId = 5,
+                            Name = "Amasya"
+                        },
+                        new
+                        {
+                            CityId = 6,
+                            Name = "Ankara"
+                        },
+                        new
+                        {
+                            CityId = 7,
+                            Name = "Antalya"
+                        },
+                        new
+                        {
+                            CityId = 8,
+                            Name = "Artvin"
+                        },
+                        new
+                        {
+                            CityId = 9,
+                            Name = "Aydın"
+                        },
+                        new
+                        {
+                            CityId = 10,
+                            Name = "Balıkesir"
+                        },
+                        new
+                        {
+                            CityId = 11,
+                            Name = "Bilecik"
+                        },
+                        new
+                        {
+                            CityId = 12,
+                            Name = "Bingöl"
+                        },
+                        new
+                        {
+                            CityId = 13,
+                            Name = "Bitlis"
+                        },
+                        new
+                        {
+                            CityId = 14,
+                            Name = "Bolu"
+                        },
+                        new
+                        {
+                            CityId = 15,
+                            Name = "Burdur"
+                        },
+                        new
+                        {
+                            CityId = 16,
+                            Name = "Bursa"
+                        },
+                        new
+                        {
+                            CityId = 17,
+                            Name = "Çanakkale"
+                        },
+                        new
+                        {
+                            CityId = 18,
+                            Name = "Çankırı"
+                        },
+                        new
+                        {
+                            CityId = 19,
+                            Name = "Çorum"
+                        },
+                        new
+                        {
+                            CityId = 20,
+                            Name = "Denizli"
+                        },
+                        new
+                        {
+                            CityId = 21,
+                            Name = "Diyarbakır"
+                        },
+                        new
+                        {
+                            CityId = 22,
+                            Name = "Edirne"
+                        },
+                        new
+                        {
+                            CityId = 23,
+                            Name = "Elazığ"
+                        },
+                        new
+                        {
+                            CityId = 24,
+                            Name = "Erzincan"
+                        },
+                        new
+                        {
+                            CityId = 25,
+                            Name = "Erzurum"
+                        },
+                        new
+                        {
+                            CityId = 26,
+                            Name = "Eskişehir"
+                        },
+                        new
+                        {
+                            CityId = 27,
+                            Name = "Gaziantep"
+                        },
+                        new
+                        {
+                            CityId = 28,
+                            Name = "Giresun"
+                        },
+                        new
+                        {
+                            CityId = 29,
+                            Name = "Gümüşhane"
+                        },
+                        new
+                        {
+                            CityId = 30,
+                            Name = "Hakkari"
+                        },
+                        new
+                        {
+                            CityId = 31,
+                            Name = "Hatay"
+                        },
+                        new
+                        {
+                            CityId = 32,
+                            Name = "Isparta"
+                        },
+                        new
+                        {
+                            CityId = 33,
+                            Name = "Mersin"
+                        },
+                        new
+                        {
+                            CityId = 34,
+                            Name = "İstanbul"
+                        },
+                        new
+                        {
+                            CityId = 35,
                             Name = "İzmir"
+                        },
+                        new
+                        {
+                            CityId = 36,
+                            Name = "Kars"
+                        },
+                        new
+                        {
+                            CityId = 37,
+                            Name = "Kastamonu"
+                        },
+                        new
+                        {
+                            CityId = 38,
+                            Name = "Kayseri"
+                        },
+                        new
+                        {
+                            CityId = 39,
+                            Name = "Kırklareli"
+                        },
+                        new
+                        {
+                            CityId = 40,
+                            Name = "Kırşehir"
+                        },
+                        new
+                        {
+                            CityId = 41,
+                            Name = "Kocaeli"
+                        },
+                        new
+                        {
+                            CityId = 42,
+                            Name = "Konya"
+                        },
+                        new
+                        {
+                            CityId = 43,
+                            Name = "Kütahya"
+                        },
+                        new
+                        {
+                            CityId = 44,
+                            Name = "Malatya"
+                        },
+                        new
+                        {
+                            CityId = 45,
+                            Name = "Manisa"
+                        },
+                        new
+                        {
+                            CityId = 46,
+                            Name = "Kahramanmaraş"
+                        },
+                        new
+                        {
+                            CityId = 47,
+                            Name = "Mardin"
+                        },
+                        new
+                        {
+                            CityId = 48,
+                            Name = "Muğla"
+                        },
+                        new
+                        {
+                            CityId = 49,
+                            Name = "Muş"
+                        },
+                        new
+                        {
+                            CityId = 50,
+                            Name = "Nevşehir"
+                        },
+                        new
+                        {
+                            CityId = 51,
+                            Name = "Niğde"
+                        },
+                        new
+                        {
+                            CityId = 52,
+                            Name = "Ordu"
+                        },
+                        new
+                        {
+                            CityId = 53,
+                            Name = "Rize"
+                        },
+                        new
+                        {
+                            CityId = 54,
+                            Name = "Sakarya"
+                        },
+                        new
+                        {
+                            CityId = 55,
+                            Name = "Samsun"
+                        },
+                        new
+                        {
+                            CityId = 56,
+                            Name = "Siirt"
+                        },
+                        new
+                        {
+                            CityId = 57,
+                            Name = "Sinop"
+                        },
+                        new
+                        {
+                            CityId = 58,
+                            Name = "Sivas"
+                        },
+                        new
+                        {
+                            CityId = 59,
+                            Name = "Tekirdağ"
+                        },
+                        new
+                        {
+                            CityId = 60,
+                            Name = "Tokat"
+                        },
+                        new
+                        {
+                            CityId = 61,
+                            Name = "Trabzon"
+                        },
+                        new
+                        {
+                            CityId = 62,
+                            Name = "Tunceli"
+                        },
+                        new
+                        {
+                            CityId = 63,
+                            Name = "Şanlıurfa"
+                        },
+                        new
+                        {
+                            CityId = 64,
+                            Name = "Uşak"
+                        },
+                        new
+                        {
+                            CityId = 65,
+                            Name = "Van"
+                        },
+                        new
+                        {
+                            CityId = 66,
+                            Name = "Yozgat"
+                        },
+                        new
+                        {
+                            CityId = 67,
+                            Name = "Zonguldak"
+                        },
+                        new
+                        {
+                            CityId = 68,
+                            Name = "Aksaray"
+                        },
+                        new
+                        {
+                            CityId = 69,
+                            Name = "Bayburt"
+                        },
+                        new
+                        {
+                            CityId = 70,
+                            Name = "Karaman"
+                        },
+                        new
+                        {
+                            CityId = 71,
+                            Name = "Kırıkkale"
+                        },
+                        new
+                        {
+                            CityId = 72,
+                            Name = "Batman"
+                        },
+                        new
+                        {
+                            CityId = 73,
+                            Name = "Şırnak"
+                        },
+                        new
+                        {
+                            CityId = 74,
+                            Name = "Bartın"
+                        },
+                        new
+                        {
+                            CityId = 75,
+                            Name = "Ardahan"
+                        },
+                        new
+                        {
+                            CityId = 76,
+                            Name = "Iğdır"
+                        },
+                        new
+                        {
+                            CityId = 77,
+                            Name = "Yalova"
+                        },
+                        new
+                        {
+                            CityId = 78,
+                            Name = "Karabük"
+                        },
+                        new
+                        {
+                            CityId = 79,
+                            Name = "Kilis"
+                        },
+                        new
+                        {
+                            CityId = 80,
+                            Name = "Osmaniye"
+                        },
+                        new
+                        {
+                            CityId = 81,
+                            Name = "Düzce"
                         });
                 });
 
@@ -513,7 +903,7 @@ namespace ECOM.API.Migrations
                             CommentId = 3,
                             Comment = "Wonderful! Highly recommend.",
                             CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CustomerId = 4,
+                            CustomerId = 3,
                             ProductId = 1,
                             Score = 5
                         },
@@ -582,6 +972,50 @@ namespace ECOM.API.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("CUSTOMERS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = 1,
+                            BirthDate = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ahmet.yilmaz@gmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Ahmet",
+                            Password = "gDdBkms2Z3g8T43jHKcphA==$lBOYfNxnf13JEUqZLLvgQ7ytu3NoYySvUOcQGSOd1PI=$3.32768.2",
+                            Phone = "05321234567",
+                            Surname = "Yılmaz",
+                            UpdatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 2,
+                            BirthDate = new DateTime(1995, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ayse.kaya@gmail.com",
+                            Gender = false,
+                            IsCustomer = true,
+                            Name = "Ayşe",
+                            Password = "HlfQh6k799FJUKAnqBVKgA==$jb8mRVf3nPXxaJbKua8tTNncbhmK1WsnOLIjsGc/Rww=$3.32768.2",
+                            Phone = "05339876543",
+                            Surname = "Kaya",
+                            UpdatedAt = new DateTime(2024, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 3,
+                            BirthDate = new DateTime(1988, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "mehmet.demir@hotmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Mehmet",
+                            Password = "8ljtPIZfCw9rZDKIHLlSQA==$1vK4aLmq9qDA4o/am0VuGPUZNz6lnnRQGtj+0wYMWhY=$3.32768.2",
+                            Phone = "05453456789",
+                            Surname = "Demir",
+                            UpdatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ECOM.Shared.Data.Entities.DCoupon", b =>

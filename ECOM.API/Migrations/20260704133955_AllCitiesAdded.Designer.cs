@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOM.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260317192726_CartSeedAdded")]
-    partial class CartSeedAdded
+    [Migration("20260704133955_AllCitiesAdded")]
+    partial class AllCitiesAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,43 +25,7 @@ namespace ECOM.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ECOM.API.Data.Entities.EmailVerification", b =>
-                {
-                    b.Property<int>("VerificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VerificationId"));
-
-                    b.Property<string>("CodeHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CODE_HASH");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CREATED_AT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("EMAIL");
-
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("EXPIRED_AT");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_USED");
-
-                    b.HasKey("VerificationId");
-
-                    b.ToTable("EMAIL_VERIFICATION", (string)null);
-                });
-
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Addresses", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Addresses", b =>
                 {
                     b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
@@ -69,10 +33,6 @@ namespace ECOM.API.Migrations
                         .HasColumnName("ID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
-
-                    b.Property<DateTime?>("AdditionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
@@ -85,6 +45,10 @@ namespace ECOM.API.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int")
                         .HasColumnName("CITY_ID");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -101,6 +65,10 @@ namespace ECOM.API.Migrations
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int")
                         .HasColumnName("RECEIVER_ID");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UPDATED_AT");
 
                     b.HasKey("AddressId");
 
@@ -120,10 +88,10 @@ namespace ECOM.API.Migrations
                         new
                         {
                             AddressId = 1,
-                            AdditionTime = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Address = "Moda Cad. No:12 D:3",
                             AddressName = "Ev",
                             CityId = 1,
+                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             DistrictId = 1,
                             NeighbourhoodId = 1,
@@ -132,10 +100,10 @@ namespace ECOM.API.Migrations
                         new
                         {
                             AddressId = 2,
-                            AdditionTime = new DateTime(2024, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Address = "Levent Mah. Büyükdere Cad. No:45 Kat:7",
                             AddressName = "İş yeri",
                             CityId = 1,
+                            CreatedAt = new DateTime(2024, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             DistrictId = 2,
                             NeighbourhoodId = 3,
@@ -144,10 +112,10 @@ namespace ECOM.API.Migrations
                         new
                         {
                             AddressId = 3,
-                            AdditionTime = new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Address = "Fenerbahçe Mah. Bağdat Cad. No:78",
                             AddressName = "Ev",
                             CityId = 1,
+                            CreatedAt = new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             DistrictId = 1,
                             NeighbourhoodId = 2,
@@ -156,10 +124,10 @@ namespace ECOM.API.Migrations
                         new
                         {
                             AddressId = 4,
-                            AdditionTime = new DateTime(2024, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Address = "Etiler Mah. Nisbetiye Cad. No:5 D:8",
                             AddressName = "Annem",
                             CityId = 1,
+                            CreatedAt = new DateTime(2024, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             DistrictId = 2,
                             NeighbourhoodId = 4,
@@ -168,10 +136,10 @@ namespace ECOM.API.Migrations
                         new
                         {
                             AddressId = 5,
-                            AdditionTime = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Address = "Kızılay Mah. Atatürk Bulvarı No:101 D:2",
                             AddressName = "Ev",
                             CityId = 2,
+                            CreatedAt = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 3,
                             DistrictId = 4,
                             NeighbourhoodId = 5,
@@ -179,7 +147,7 @@ namespace ECOM.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Brand", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Brand", b =>
                 {
                     b.Property<int>("BrandId")
                         .ValueGeneratedOnAdd()
@@ -188,9 +156,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
 
-                    b.Property<DateTime?>("AdditionTime")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -205,36 +173,36 @@ namespace ECOM.API.Migrations
                         new
                         {
                             BrandId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Samsung"
                         },
                         new
                         {
                             BrandId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Apple"
                         },
                         new
                         {
                             BrandId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sony"
                         },
                         new
                         {
                             BrandId = 4,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "LG"
                         },
                         new
                         {
                             BrandId = 5,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Xiaomi"
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Card", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Card", b =>
                 {
                     b.Property<int>("CardId")
                         .ValueGeneratedOnAdd()
@@ -242,10 +210,6 @@ namespace ECOM.API.Migrations
                         .HasColumnName("ID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CardId"));
-
-                    b.Property<DateTime?>("AdditionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
 
                     b.Property<string>("CVV")
                         .IsRequired()
@@ -256,6 +220,10 @@ namespace ECOM.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CARD_NO");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -269,9 +237,38 @@ namespace ECOM.API.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("CARDS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CardId = 1,
+                            CVV = "000",
+                            CardNo = "4111111111111111",
+                            CreatedAt = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ExpirationDate = "12/26"
+                        },
+                        new
+                        {
+                            CardId = 2,
+                            CVV = "000",
+                            CardNo = "5500000000000004",
+                            CreatedAt = new DateTime(2024, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ExpirationDate = "08/27"
+                        },
+                        new
+                        {
+                            CardId = 3,
+                            CVV = "000",
+                            CardNo = "3714496353984312",
+                            CreatedAt = new DateTime(2024, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ExpirationDate = "05/26"
+                        });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Cart", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Cart", b =>
                 {
                     b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
@@ -280,9 +277,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
 
-                    b.Property<DateTime?>("AdditionTime")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -292,11 +289,11 @@ namespace ECOM.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("DCOUPON_ID");
 
-                    b.Property<bool?>("Enable")
+                    b.Property<bool>("Enable")
                         .HasColumnType("bit")
                         .HasColumnName("ENABLE");
 
-                    b.Property<int?>("Piece")
+                    b.Property<int>("Piece")
                         .HasColumnType("int")
                         .HasColumnName("PIECE");
 
@@ -311,6 +308,10 @@ namespace ECOM.API.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("TOTAL_PRICE");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UPDATED_AT");
 
                     b.HasKey("CartId");
 
@@ -328,7 +329,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 1,
-                            AdditionTime = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = true,
                             Piece = 1,
@@ -339,7 +340,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 2,
-                            AdditionTime = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = true,
                             Piece = 1,
@@ -350,7 +351,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 3,
-                            AdditionTime = new DateTime(2024, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = true,
                             Piece = 2,
@@ -361,7 +362,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 4,
-                            AdditionTime = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = true,
                             Piece = 1,
@@ -372,7 +373,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 5,
-                            AdditionTime = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 3,
                             Enable = true,
                             Piece = 1,
@@ -383,7 +384,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 6,
-                            AdditionTime = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 3,
                             Enable = true,
                             Piece = 3,
@@ -394,7 +395,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 7,
-                            AdditionTime = new DateTime(2024, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = false,
                             Piece = 1,
@@ -405,7 +406,7 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CartId = 8,
-                            AdditionTime = new DateTime(2024, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = false,
                             Piece = 2,
@@ -415,7 +416,7 @@ namespace ECOM.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.City", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.City", b =>
                 {
                     b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
@@ -436,21 +437,411 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CityId = 1,
-                            Name = "İstanbul"
+                            Name = "Adana"
                         },
                         new
                         {
                             CityId = 2,
-                            Name = "Ankara"
+                            Name = "Adıyaman"
                         },
                         new
                         {
                             CityId = 3,
+                            Name = "Afyonkarahisar"
+                        },
+                        new
+                        {
+                            CityId = 4,
+                            Name = "Ağrı"
+                        },
+                        new
+                        {
+                            CityId = 5,
+                            Name = "Amasya"
+                        },
+                        new
+                        {
+                            CityId = 6,
+                            Name = "Ankara"
+                        },
+                        new
+                        {
+                            CityId = 7,
+                            Name = "Antalya"
+                        },
+                        new
+                        {
+                            CityId = 8,
+                            Name = "Artvin"
+                        },
+                        new
+                        {
+                            CityId = 9,
+                            Name = "Aydın"
+                        },
+                        new
+                        {
+                            CityId = 10,
+                            Name = "Balıkesir"
+                        },
+                        new
+                        {
+                            CityId = 11,
+                            Name = "Bilecik"
+                        },
+                        new
+                        {
+                            CityId = 12,
+                            Name = "Bingöl"
+                        },
+                        new
+                        {
+                            CityId = 13,
+                            Name = "Bitlis"
+                        },
+                        new
+                        {
+                            CityId = 14,
+                            Name = "Bolu"
+                        },
+                        new
+                        {
+                            CityId = 15,
+                            Name = "Burdur"
+                        },
+                        new
+                        {
+                            CityId = 16,
+                            Name = "Bursa"
+                        },
+                        new
+                        {
+                            CityId = 17,
+                            Name = "Çanakkale"
+                        },
+                        new
+                        {
+                            CityId = 18,
+                            Name = "Çankırı"
+                        },
+                        new
+                        {
+                            CityId = 19,
+                            Name = "Çorum"
+                        },
+                        new
+                        {
+                            CityId = 20,
+                            Name = "Denizli"
+                        },
+                        new
+                        {
+                            CityId = 21,
+                            Name = "Diyarbakır"
+                        },
+                        new
+                        {
+                            CityId = 22,
+                            Name = "Edirne"
+                        },
+                        new
+                        {
+                            CityId = 23,
+                            Name = "Elazığ"
+                        },
+                        new
+                        {
+                            CityId = 24,
+                            Name = "Erzincan"
+                        },
+                        new
+                        {
+                            CityId = 25,
+                            Name = "Erzurum"
+                        },
+                        new
+                        {
+                            CityId = 26,
+                            Name = "Eskişehir"
+                        },
+                        new
+                        {
+                            CityId = 27,
+                            Name = "Gaziantep"
+                        },
+                        new
+                        {
+                            CityId = 28,
+                            Name = "Giresun"
+                        },
+                        new
+                        {
+                            CityId = 29,
+                            Name = "Gümüşhane"
+                        },
+                        new
+                        {
+                            CityId = 30,
+                            Name = "Hakkari"
+                        },
+                        new
+                        {
+                            CityId = 31,
+                            Name = "Hatay"
+                        },
+                        new
+                        {
+                            CityId = 32,
+                            Name = "Isparta"
+                        },
+                        new
+                        {
+                            CityId = 33,
+                            Name = "Mersin"
+                        },
+                        new
+                        {
+                            CityId = 34,
+                            Name = "İstanbul"
+                        },
+                        new
+                        {
+                            CityId = 35,
                             Name = "İzmir"
+                        },
+                        new
+                        {
+                            CityId = 36,
+                            Name = "Kars"
+                        },
+                        new
+                        {
+                            CityId = 37,
+                            Name = "Kastamonu"
+                        },
+                        new
+                        {
+                            CityId = 38,
+                            Name = "Kayseri"
+                        },
+                        new
+                        {
+                            CityId = 39,
+                            Name = "Kırklareli"
+                        },
+                        new
+                        {
+                            CityId = 40,
+                            Name = "Kırşehir"
+                        },
+                        new
+                        {
+                            CityId = 41,
+                            Name = "Kocaeli"
+                        },
+                        new
+                        {
+                            CityId = 42,
+                            Name = "Konya"
+                        },
+                        new
+                        {
+                            CityId = 43,
+                            Name = "Kütahya"
+                        },
+                        new
+                        {
+                            CityId = 44,
+                            Name = "Malatya"
+                        },
+                        new
+                        {
+                            CityId = 45,
+                            Name = "Manisa"
+                        },
+                        new
+                        {
+                            CityId = 46,
+                            Name = "Kahramanmaraş"
+                        },
+                        new
+                        {
+                            CityId = 47,
+                            Name = "Mardin"
+                        },
+                        new
+                        {
+                            CityId = 48,
+                            Name = "Muğla"
+                        },
+                        new
+                        {
+                            CityId = 49,
+                            Name = "Muş"
+                        },
+                        new
+                        {
+                            CityId = 50,
+                            Name = "Nevşehir"
+                        },
+                        new
+                        {
+                            CityId = 51,
+                            Name = "Niğde"
+                        },
+                        new
+                        {
+                            CityId = 52,
+                            Name = "Ordu"
+                        },
+                        new
+                        {
+                            CityId = 53,
+                            Name = "Rize"
+                        },
+                        new
+                        {
+                            CityId = 54,
+                            Name = "Sakarya"
+                        },
+                        new
+                        {
+                            CityId = 55,
+                            Name = "Samsun"
+                        },
+                        new
+                        {
+                            CityId = 56,
+                            Name = "Siirt"
+                        },
+                        new
+                        {
+                            CityId = 57,
+                            Name = "Sinop"
+                        },
+                        new
+                        {
+                            CityId = 58,
+                            Name = "Sivas"
+                        },
+                        new
+                        {
+                            CityId = 59,
+                            Name = "Tekirdağ"
+                        },
+                        new
+                        {
+                            CityId = 60,
+                            Name = "Tokat"
+                        },
+                        new
+                        {
+                            CityId = 61,
+                            Name = "Trabzon"
+                        },
+                        new
+                        {
+                            CityId = 62,
+                            Name = "Tunceli"
+                        },
+                        new
+                        {
+                            CityId = 63,
+                            Name = "Şanlıurfa"
+                        },
+                        new
+                        {
+                            CityId = 64,
+                            Name = "Uşak"
+                        },
+                        new
+                        {
+                            CityId = 65,
+                            Name = "Van"
+                        },
+                        new
+                        {
+                            CityId = 66,
+                            Name = "Yozgat"
+                        },
+                        new
+                        {
+                            CityId = 67,
+                            Name = "Zonguldak"
+                        },
+                        new
+                        {
+                            CityId = 68,
+                            Name = "Aksaray"
+                        },
+                        new
+                        {
+                            CityId = 69,
+                            Name = "Bayburt"
+                        },
+                        new
+                        {
+                            CityId = 70,
+                            Name = "Karaman"
+                        },
+                        new
+                        {
+                            CityId = 71,
+                            Name = "Kırıkkale"
+                        },
+                        new
+                        {
+                            CityId = 72,
+                            Name = "Batman"
+                        },
+                        new
+                        {
+                            CityId = 73,
+                            Name = "Şırnak"
+                        },
+                        new
+                        {
+                            CityId = 74,
+                            Name = "Bartın"
+                        },
+                        new
+                        {
+                            CityId = 75,
+                            Name = "Ardahan"
+                        },
+                        new
+                        {
+                            CityId = 76,
+                            Name = "Iğdır"
+                        },
+                        new
+                        {
+                            CityId = 77,
+                            Name = "Yalova"
+                        },
+                        new
+                        {
+                            CityId = 78,
+                            Name = "Karabük"
+                        },
+                        new
+                        {
+                            CityId = 79,
+                            Name = "Kilis"
+                        },
+                        new
+                        {
+                            CityId = 80,
+                            Name = "Osmaniye"
+                        },
+                        new
+                        {
+                            CityId = 81,
+                            Name = "Düzce"
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Comments", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Comments", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
@@ -462,6 +853,10 @@ namespace ECOM.API.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("COMMENT");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -475,7 +870,7 @@ namespace ECOM.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("PRODUCT_ID");
 
-                    b.Property<int?>("Score")
+                    b.Property<int>("Score")
                         .HasColumnType("int")
                         .HasColumnName("SCORE");
 
@@ -486,9 +881,47 @@ namespace ECOM.API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("COMMENTS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CommentId = 1,
+                            Comment = "Great product! Highly recommend.",
+                            CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 1,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 2,
+                            Comment = "Not bad! Recommend.",
+                            CreatedAt = new DateTime(2026, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 1,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 3,
+                            Comment = "Wonderful! Highly recommend.",
+                            CreatedAt = new DateTime(2026, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 1,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 4,
+                            Comment = "Recommend.",
+                            CreatedAt = new DateTime(2026, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 3,
+                            Score = 4
+                        });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Customers", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Customers", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
@@ -497,19 +930,19 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
-                    b.Property<DateTime?>("AdditionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
-
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("BIRTHDATE");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("EMAIL");
 
-                    b.Property<bool>("Gender")
+                    b.Property<bool?>("Gender")
                         .HasColumnType("bit")
                         .HasColumnName("GENDER");
 
@@ -523,7 +956,6 @@ namespace ECOM.API.Migrations
                         .HasColumnName("NAME");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PASSWORD");
 
@@ -536,12 +968,60 @@ namespace ECOM.API.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("SURNAME");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UPDATED_AT");
+
                     b.HasKey("CustomerId");
 
                     b.ToTable("CUSTOMERS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CustomerId = 1,
+                            BirthDate = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ahmet.yilmaz@gmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Ahmet",
+                            Password = "gDdBkms2Z3g8T43jHKcphA==$lBOYfNxnf13JEUqZLLvgQ7ytu3NoYySvUOcQGSOd1PI=$3.32768.2",
+                            Phone = "05321234567",
+                            Surname = "Yılmaz",
+                            UpdatedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 2,
+                            BirthDate = new DateTime(1995, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ayse.kaya@gmail.com",
+                            Gender = false,
+                            IsCustomer = true,
+                            Name = "Ayşe",
+                            Password = "HlfQh6k799FJUKAnqBVKgA==$jb8mRVf3nPXxaJbKua8tTNncbhmK1WsnOLIjsGc/Rww=$3.32768.2",
+                            Phone = "05339876543",
+                            Surname = "Kaya",
+                            UpdatedAt = new DateTime(2024, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            CustomerId = 3,
+                            BirthDate = new DateTime(1988, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "mehmet.demir@hotmail.com",
+                            Gender = true,
+                            IsCustomer = true,
+                            Name = "Mehmet",
+                            Password = "8ljtPIZfCw9rZDKIHLlSQA==$1vK4aLmq9qDA4o/am0VuGPUZNz6lnnRQGtj+0wYMWhY=$3.32768.2",
+                            Phone = "05453456789",
+                            Surname = "Demir",
+                            UpdatedAt = new DateTime(2024, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.DCoupon", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.DCoupon", b =>
                 {
                     b.Property<int>("DCouponId")
                         .ValueGeneratedOnAdd()
@@ -558,7 +1038,7 @@ namespace ECOM.API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DEFINITION_DATE");
 
-                    b.Property<bool?>("Enable")
+                    b.Property<bool>("Enable")
                         .HasColumnType("bit")
                         .HasColumnName("ENABLE");
 
@@ -575,7 +1055,7 @@ namespace ECOM.API.Migrations
                     b.ToTable("D_COUPONS", (string)null);
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.District", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.District", b =>
                 {
                     b.Property<int>("DistrictId")
                         .ValueGeneratedOnAdd()
@@ -631,7 +1111,55 @@ namespace ECOM.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Favorites", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.EmailVerification", b =>
+                {
+                    b.Property<int>("VerificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VerificationId"));
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("int")
+                        .HasColumnName("ATTEMPT_COUNT");
+
+                    b.Property<bool>("CanUsed")
+                        .HasColumnType("bit")
+                        .HasColumnName("CAN_USED");
+
+                    b.Property<string>("CodeHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CODE_HASH");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EMAIL");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EXPIRED_AT");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit")
+                        .HasColumnName("IS_USED");
+
+                    b.Property<int>("Purpose")
+                        .HasColumnType("int")
+                        .HasColumnName("PURPOSE");
+
+                    b.HasKey("VerificationId");
+
+                    b.ToTable("EMAIL_VERIFICATION", (string)null);
+                });
+
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Favorites", b =>
                 {
                     b.Property<int>("FavoriteId")
                         .ValueGeneratedOnAdd()
@@ -640,9 +1168,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FavoriteId"));
 
-                    b.Property<DateTime?>("AdditionTime")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int")
@@ -659,9 +1187,39 @@ namespace ECOM.API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("FAVORITES", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            FavoriteId = 1,
+                            CreatedAt = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            FavoriteId = 2,
+                            CreatedAt = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            FavoriteId = 3,
+                            CreatedAt = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            FavoriteId = 4,
+                            CreatedAt = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 4
+                        });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Log", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Log", b =>
                 {
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
@@ -695,7 +1253,7 @@ namespace ECOM.API.Migrations
                     b.ToTable("LOG", (string)null);
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Neighbourhood", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Neighbourhood", b =>
                 {
                     b.Property<int>("NeighbourhoodId")
                         .ValueGeneratedOnAdd()
@@ -714,6 +1272,10 @@ namespace ECOM.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("NAME");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ZIP_CODE");
 
                     b.HasKey("NeighbourhoodId");
 
@@ -756,7 +1318,7 @@ namespace ECOM.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.OrderHistory", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.OrderHistory", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -797,6 +1359,10 @@ namespace ECOM.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SELLER_ID");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("STATUS");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("TOTAL_PRICE");
@@ -812,9 +1378,165 @@ namespace ECOM.API.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("ORDER_HISTORY", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = 1,
+                            CardId = 1,
+                            CustomerId = 1,
+                            DeliveryDate = new DateTime(2024, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 1,
+                            SellerId = 1,
+                            Status = 0,
+                            TotalPrice = 54999.99m
+                        },
+                        new
+                        {
+                            OrderId = 2,
+                            CardId = 1,
+                            CustomerId = 1,
+                            DeliveryDate = new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 8,
+                            SellerId = 2,
+                            Status = 0,
+                            TotalPrice = 9999.99m
+                        },
+                        new
+                        {
+                            OrderId = 3,
+                            CardId = 2,
+                            CartId = 4,
+                            CustomerId = 2,
+                            DeliveryDate = new DateTime(2024, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 4,
+                            SellerId = 1,
+                            Status = 0,
+                            TotalPrice = 40499.99m
+                        },
+                        new
+                        {
+                            OrderId = 4,
+                            CardId = 2,
+                            CustomerId = 2,
+                            DeliveryDate = new DateTime(2024, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 2,
+                            ProductId = 9,
+                            SellerId = 3,
+                            Status = 0,
+                            TotalPrice = 16999.98m
+                        },
+                        new
+                        {
+                            OrderId = 5,
+                            CardId = 3,
+                            CartId = 5,
+                            CustomerId = 3,
+                            DeliveryDate = new DateTime(2024, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 7,
+                            SellerId = 1,
+                            Status = 0,
+                            TotalPrice = 29999.99m
+                        },
+                        new
+                        {
+                            OrderId = 6,
+                            CardId = 3,
+                            CustomerId = 3,
+                            DeliveryDate = new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 3,
+                            SellerId = 3,
+                            Status = 0,
+                            TotalPrice = 24999.99m
+                        },
+                        new
+                        {
+                            OrderId = 7,
+                            CardId = 1,
+                            CustomerId = 1,
+                            OrderDate = new DateTime(2024, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 1,
+                            ProductId = 6,
+                            SellerId = 3,
+                            Status = 0,
+                            TotalPrice = 34999.99m
+                        },
+                        new
+                        {
+                            OrderId = 8,
+                            CardId = 2,
+                            CartId = 8,
+                            CustomerId = 2,
+                            OrderDate = new DateTime(2024, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Piece = 2,
+                            ProductId = 10,
+                            SellerId = 1,
+                            Status = 0,
+                            TotalPrice = 6299.98m
+                        });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Product", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.PaymentSession", b =>
+                {
+                    b.Property<int>("PaymentSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentSessionId"));
+
+                    b.Property<string>("ConversationId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CONVERSATION_ID");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("CUSTOMER_ID");
+
+                    b.Property<decimal>("ExpectedAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("EXPECTED_AMOUNT");
+
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PAYMENT_ID");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PROCESSED_AT");
+
+                    b.Property<DateTime?>("ProcessingStartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("STATUS");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TOKEN");
+
+                    b.HasKey("PaymentSessionId");
+
+                    b.ToTable("PAYMENT_SESSIONS", (string)null);
+                });
+
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -823,16 +1545,16 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<DateTime?>("AdditionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
-
                     b.Property<int>("BrandId")
                         .HasColumnType("int")
                         .HasColumnName("BRAND_ID");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CREATED_AT");
+
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<string>("ImagePath")
@@ -841,10 +1563,10 @@ namespace ECOM.API.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("NAME");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("PRICE");
 
@@ -868,6 +1590,10 @@ namespace ECOM.API.Migrations
 
                     b.HasIndex("BrandId");
 
+                    b.HasIndex("Description");
+
+                    b.HasIndex("Name");
+
                     b.HasIndex("SellerId");
 
                     b.HasIndex("SubCategoryId");
@@ -880,8 +1606,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 1,
-                            AdditionTime = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 2,
+                            CreatedAt = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "A17 Pro çip, 48MP kamera sistemi ve titanyum tasarım ile güçlü bir akıllı telefon.",
                             ImagePath = "/images/products/iphone15pro.jpg",
                             Name = "Apple iPhone 15 Pro",
@@ -894,8 +1620,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 2,
-                            AdditionTime = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 1,
+                            CreatedAt = new DateTime(2024, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Snapdragon 8 Gen 3 işlemci, 200MP kamera ve dahili S Pen ile üst segment deneyimi.",
                             ImagePath = "/images/products/s24ultra.jpg",
                             Name = "Samsung Galaxy S24 Ultra",
@@ -908,8 +1634,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 3,
-                            AdditionTime = new DateTime(2024, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 5,
+                            CreatedAt = new DateTime(2024, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Leica kamera ortaklığı, 5000mAh batarya ve 144Hz AMOLED ekran.",
                             ImagePath = "/images/products/xiaomi14tpro.jpg",
                             Name = "Xiaomi 14T Pro",
@@ -922,8 +1648,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 4,
-                            AdditionTime = new DateTime(2024, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 2,
+                            CreatedAt = new DateTime(2024, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "M3 çip, 13.6 inç Liquid Retina ekran ve 18 saate kadar pil ömrü.",
                             ImagePath = "/images/products/macbookairm3.jpg",
                             Name = "Apple MacBook Air M3",
@@ -936,8 +1662,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 5,
-                            AdditionTime = new DateTime(2024, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 1,
+                            CreatedAt = new DateTime(2024, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Intel Core Ultra 7 işlemci, 14 inç AMOLED ekran ve hafif alüminyum gövde.",
                             ImagePath = "/images/products/galaxybook4pro.jpg",
                             Name = "Samsung Galaxy Book4 Pro",
@@ -950,8 +1676,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 6,
-                            AdditionTime = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 1,
+                            CreatedAt = new DateTime(2024, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Neo Quantum işlemci, Mini LED arka aydınlatma ve Dolby Atmos ses desteği.",
                             ImagePath = "/images/products/samsungneqled65.jpg",
                             Name = "Samsung Neo QLED 4K 65\"",
@@ -964,8 +1690,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 7,
-                            AdditionTime = new DateTime(2024, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 4,
+                            CreatedAt = new DateTime(2024, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "OLED evo panel, α9 AI işlemci ve webOS 24 ile sinema kalitesi deneyim.",
                             ImagePath = "/images/products/lgoled c4.jpg",
                             Name = "LG OLED C4 55\"",
@@ -978,8 +1704,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 8,
-                            AdditionTime = new DateTime(2023, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 3,
+                            CreatedAt = new DateTime(2023, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Sektörün en iyi gürültü engelleme teknolojisi, 30 saat pil ömrü ve katlanabilir tasarım.",
                             ImagePath = "/images/products/sonywh1000xm5.jpg",
                             Name = "Sony WH-1000XM5",
@@ -992,8 +1718,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 9,
-                            AdditionTime = new DateTime(2023, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 2,
+                            CreatedAt = new DateTime(2023, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Aktif gürültü engelleme, Adaptif Ses ve H2 çip ile mükemmel ses deneyimi.",
                             ImagePath = "/images/products/airpodspro2.jpg",
                             Name = "Apple AirPods Pro 2",
@@ -1006,8 +1732,8 @@ namespace ECOM.API.Migrations
                         new
                         {
                             ProductId = 10,
-                            AdditionTime = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BrandId = 5,
+                            CreatedAt = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "OLED ekran, HEPA filtre ve Mi Home uygulaması ile akıllı hava temizleyici.",
                             ImagePath = "/images/products/xiaomipurifier4pro.jpg",
                             Name = "Xiaomi Smart Air Purifier 4 Pro",
@@ -1019,7 +1745,7 @@ namespace ECOM.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.ProductCategories", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.ProductCategories", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -1028,9 +1754,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
-                    b.Property<DateTime?>("AdditionTime")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1049,48 +1775,48 @@ namespace ECOM.API.Migrations
                         new
                         {
                             CategoryId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Elektronik",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Telefon",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bilgisayar",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 4,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Televizyon",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 5,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Ses Sistemleri",
                             Type = false
                         },
                         new
                         {
                             CategoryId = 6,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Küçük Ev Aletleri",
                             Type = false
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.SCoupon", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.SCoupon", b =>
                 {
                     b.Property<int>("SCouponId")
                         .ValueGeneratedOnAdd()
@@ -1102,6 +1828,10 @@ namespace ECOM.API.Migrations
                     b.Property<decimal?>("Amount")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("AMOUNT");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CODE");
 
                     b.Property<decimal?>("LowerLimit")
                         .HasColumnType("decimal(18,2)")
@@ -1116,7 +1846,7 @@ namespace ECOM.API.Migrations
                     b.ToTable("S_COUPONS", (string)null);
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Seller", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Seller", b =>
                 {
                     b.Property<int>("SellerId")
                         .ValueGeneratedOnAdd()
@@ -1125,9 +1855,9 @@ namespace ECOM.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SellerId"));
 
-                    b.Property<DateTime?>("AdditionTime")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("ADDITION_TIME");
+                        .HasColumnName("CREATED_AT");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")
@@ -1145,50 +1875,50 @@ namespace ECOM.API.Migrations
                         new
                         {
                             SellerId = 1,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "TechStore"
                         },
                         new
                         {
                             SellerId = 2,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "ElektroMarket"
                         },
                         new
                         {
                             SellerId = 3,
-                            AdditionTime = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "DigiShop"
                         });
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Addresses", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Addresses", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.City", "City")
+                    b.HasOne("ECOM.Shared.Data.Entities.City", "City")
                         .WithMany("CityOfAddresses")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("CustomerAddresses")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.District", "District")
+                    b.HasOne("ECOM.Shared.Data.Entities.District", "District")
                         .WithMany("DistrictOfAddresses")
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Neighbourhood", "Neighbourhood")
+                    b.HasOne("ECOM.Shared.Data.Entities.Neighbourhood", "Neighbourhood")
                         .WithMany("NeighbourhoodOfAddresss")
                         .HasForeignKey("NeighbourhoodId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Receiver")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Receiver")
                         .WithMany("ReceiverAddresses")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1205,9 +1935,9 @@ namespace ECOM.API.Migrations
                     b.Navigation("Receiver");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Card", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Card", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Cards")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1216,26 +1946,26 @@ namespace ECOM.API.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Cart", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Cart", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Carts")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.DCoupon", "Coupon")
+                    b.HasOne("ECOM.Shared.Data.Entities.DCoupon", "Coupon")
                         .WithMany("Carts")
                         .HasForeignKey("DCouponId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECOM.Api.Data.Entities.Product", "Product")
+                    b.HasOne("ECOM.Shared.Data.Entities.Product", "Product")
                         .WithMany("Carts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Seller", "Seller")
+                    b.HasOne("ECOM.Shared.Data.Entities.Seller", "Seller")
                         .WithMany("Carts")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1250,15 +1980,15 @@ namespace ECOM.API.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Comments", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Comments", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Comments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Product", "Product")
+                    b.HasOne("ECOM.Shared.Data.Entities.Product", "Product")
                         .WithMany("Comments")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1269,15 +1999,15 @@ namespace ECOM.API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.DCoupon", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.DCoupon", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Coupons")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.SCoupon", "Coupon")
+                    b.HasOne("ECOM.Shared.Data.Entities.SCoupon", "Coupon")
                         .WithMany("Coupons")
                         .HasForeignKey("SCouponId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1288,9 +2018,9 @@ namespace ECOM.API.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.District", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.District", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.City", "City")
+                    b.HasOne("ECOM.Shared.Data.Entities.City", "City")
                         .WithMany("Districts")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1299,15 +2029,15 @@ namespace ECOM.API.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Favorites", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Favorites", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Favorites")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Product", "Product")
+                    b.HasOne("ECOM.Shared.Data.Entities.Product", "Product")
                         .WithMany("Favorites")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1318,13 +2048,13 @@ namespace ECOM.API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Neighbourhood", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Neighbourhood", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.City", null)
+                    b.HasOne("ECOM.Shared.Data.Entities.City", null)
                         .WithMany("Neighbourhoods")
                         .HasForeignKey("CityId");
 
-                    b.HasOne("ECOM.Api.Data.Entities.District", "District")
+                    b.HasOne("ECOM.Shared.Data.Entities.District", "District")
                         .WithMany("Neighbourhoods")
                         .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1333,26 +2063,26 @@ namespace ECOM.API.Migrations
                     b.Navigation("District");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.OrderHistory", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.OrderHistory", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Card", "Card")
+                    b.HasOne("ECOM.Shared.Data.Entities.Card", "Card")
                         .WithMany("Orders")
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECOM.Api.Data.Entities.Customers", "Customer")
+                    b.HasOne("ECOM.Shared.Data.Entities.Customers", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Product", "Product")
+                    b.HasOne("ECOM.Shared.Data.Entities.Product", "Product")
                         .WithMany("Orders")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Seller", "Seller")
+                    b.HasOne("ECOM.Shared.Data.Entities.Seller", "Seller")
                         .WithMany("Orders")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1367,27 +2097,27 @@ namespace ECOM.API.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Product", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Product", b =>
                 {
-                    b.HasOne("ECOM.Api.Data.Entities.Brand", "Brand")
+                    b.HasOne("ECOM.Shared.Data.Entities.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.Seller", "Seller")
+                    b.HasOne("ECOM.Shared.Data.Entities.Seller", "Seller")
                         .WithMany("Products")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.ProductCategories", "SubCategory")
+                    b.HasOne("ECOM.Shared.Data.Entities.ProductCategories", "SubCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECOM.Api.Data.Entities.ProductCategories", "SupCategory")
+                    b.HasOne("ECOM.Shared.Data.Entities.ProductCategories", "SupCategory")
                         .WithMany("SupCategories")
                         .HasForeignKey("SupCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1402,17 +2132,17 @@ namespace ECOM.API.Migrations
                     b.Navigation("SupCategory");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Brand", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Brand", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Card", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Card", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.City", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.City", b =>
                 {
                     b.Navigation("CityOfAddresses");
 
@@ -1421,7 +2151,7 @@ namespace ECOM.API.Migrations
                     b.Navigation("Neighbourhoods");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Customers", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Customers", b =>
                 {
                     b.Navigation("Cards");
 
@@ -1440,24 +2170,24 @@ namespace ECOM.API.Migrations
                     b.Navigation("ReceiverAddresses");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.DCoupon", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.DCoupon", b =>
                 {
                     b.Navigation("Carts");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.District", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.District", b =>
                 {
                     b.Navigation("DistrictOfAddresses");
 
                     b.Navigation("Neighbourhoods");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Neighbourhood", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Neighbourhood", b =>
                 {
                     b.Navigation("NeighbourhoodOfAddresss");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Product", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Product", b =>
                 {
                     b.Navigation("Carts");
 
@@ -1468,19 +2198,19 @@ namespace ECOM.API.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.ProductCategories", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.ProductCategories", b =>
                 {
                     b.Navigation("SubCategories");
 
                     b.Navigation("SupCategories");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.SCoupon", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.SCoupon", b =>
                 {
                     b.Navigation("Coupons");
                 });
 
-            modelBuilder.Entity("ECOM.Api.Data.Entities.Seller", b =>
+            modelBuilder.Entity("ECOM.Shared.Data.Entities.Seller", b =>
                 {
                     b.Navigation("Carts");
 

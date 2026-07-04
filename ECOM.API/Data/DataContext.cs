@@ -296,6 +296,7 @@ namespace ECOM.API.Data
                 entity.Property(n => n.NeighbourhoodId).HasColumnName("ID").ValueGeneratedOnAdd();
                 entity.Property(n => n.DistrictId).HasColumnName("DISTRICT_ID").IsRequired();
                 entity.Property(n => n.Name).HasColumnName("NAME").IsRequired(false);
+                entity.Property(n => n.ZipCode).HasColumnName("ZIP_CODE").IsRequired(false);
 
                 // district relation
                 entity.HasOne(n => n.District)

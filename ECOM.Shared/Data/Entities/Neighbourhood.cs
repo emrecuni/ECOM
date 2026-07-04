@@ -9,6 +9,7 @@ namespace ECOM.Shared.Data.Entities
         public int NeighbourhoodId { get; set; }
         public int DistrictId { get; set; }
         public string? Name { get; set; }
+        public string? ZipCode { get; set; }
 
         // navigation property
         public District District { get; set; } = null!;

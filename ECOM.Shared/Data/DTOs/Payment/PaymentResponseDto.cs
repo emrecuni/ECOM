@@ -10,6 +10,5 @@ namespace ECOM.Shared.Data.DTOs.Payment
         public string? ErrorCode { get; set; }
         public string? ErrorGroup { get; set; }
         public string? Content { get; set; }
-        // içeriği burda dön hata mesajını da eklE
     }
 }

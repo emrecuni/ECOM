@@ -94,9 +94,9 @@ namespace ECOM.API.Infrastructure.Services
                         Email = carts[0].Customer.Email,
                         GsmNumber = $"+90{carts[0].Customer.Phone}",
                         IdentityNumber = "12345678901",
-                        RegistrationAddress = "İstanbul, Türkiye",
+                        RegistrationAddress = $"{orderAddress.City}, Türkiye",
                         Ip = "85.34.78.112",
-                        City = "İstanbul",
+                        City = orderAddress.City,
                         Country = "Turkey",
                     },
                     BasketItems = basket,
@@ -106,12 +106,31 @@ namespace ECOM.API.Infrastructure.Services
 
                 var iyzicoResponse = await CheckoutFormInitialize.Create(request, _iyzico);
 
-                response.Status = iyzicoResponse.StatusCode switch
+                switch (iyzicoResponse.Status)
                 {
-                    200 => Status.Success,
-                    _ => Status.Error
+                    case "success":
+                        response.Status = Status.Success;
+                        response.Message = "İşlem başarılı.";
+                        _logger.LogInformation($"PaymentService/Pay ==> İyzico ödeme formu oluşturuldu. Token: {iyzicoResponse.Token}");
+                        break;
+                    case "failure":
+                        response.Status = Status.Failed;
+                        response.Message = "İşlem başarısız.";
+                        _logger.LogWarning($"PaymentService/Pay ==> İyzico ödeme formu oluşturulamadı. ErrorCode: {iyzicoResponse.ErrorCode}, ErrorMessage: {iyzicoResponse.ErrorMessage}");
+                        break;
+                    default:
+                        response.Status = Status.Error;
+                        response.Message= "Bir hata oluştu.";   
+                        _logger.LogError($"PaymentService/Pay ==> İyzico ödeme formu oluşturulamadı. Status: {iyzicoResponse.Status}, ErrorCode: {iyzicoResponse.ErrorCode}, ErrorMessage: {iyzicoResponse.ErrorMessage}");
+                        break;
+                }
+                response.Result = new PaymentResponseDto()
+                {
+                    Content = iyzicoResponse.CheckoutFormContent,
+                    ErrorCode = iyzicoResponse.ErrorCode,
+                    ErrorGroup = iyzicoResponse.ErrorGroup,
+                    ErrorMessage = iyzicoResponse.ErrorMessage
                 };
-                response.Message = iyzicoResponse.CheckoutFormContent;
 
                 if (response.Status == Status.Success)
                 {
@@ -136,7 +155,7 @@ namespace ECOM.API.Infrastructure.Services
                     {
                         await transaction.RollbackAsync();
                         response.Status = Status.Failed;
-                        response.Message = "Ödeme işlemi başarılı ancak db işlemi sırasında hata oluştu.";
+                        response.Message = "İşlemi başarılı ancak db işlemi sırasında hata oluştu.";
                         return response;
                     }
                 }
@@ -288,7 +307,10 @@ namespace ECOM.API.Infrastructure.Services
                         {
                             PaymentStatus = iyzicoResponse.Status,
                             PaymentId = iyzicoResponse.PaymentId,
-                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture)
+                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture),
+                            ErrorCode = iyzicoResponse.ErrorCode,
+                            ErrorGroup = iyzicoResponse.ErrorGroup,
+                            ErrorMessage = iyzicoResponse.ErrorMessage
                         };
                         return response;
                     }
@@ -302,7 +324,10 @@ namespace ECOM.API.Infrastructure.Services
                         {
                             PaymentStatus = iyzicoResponse.Status,
                             PaymentId = iyzicoResponse.PaymentId,
-                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture)
+                            Price = decimal.Parse(iyzicoResponse.PaidPrice, CultureInfo.InvariantCulture),
+                            ErrorCode = iyzicoResponse.ErrorCode,
+                            ErrorGroup = iyzicoResponse.ErrorGroup,
+                            ErrorMessage = iyzicoResponse.ErrorMessage
                         };
                         return response;
                     }
@@ -313,7 +338,9 @@ namespace ECOM.API.Infrastructure.Services
                     response.Message = "Ödeme işlemi başarısız.";
                     response.Result = new CallbackResponseDto
                     {
-                        ResultMessage = iyzicoResponse.ErrorMessage,
+                        ErrorCode = iyzicoResponse.ErrorCode,
+                        ErrorGroup = iyzicoResponse.ErrorGroup,
+                        ErrorMessage = iyzicoResponse.ErrorMessage
                     };
                 }
             }

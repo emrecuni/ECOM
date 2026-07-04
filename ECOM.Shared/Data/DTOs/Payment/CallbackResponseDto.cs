@@ -9,6 +9,9 @@ namespace ECOM.Shared.Data.DTOs.Payment
         public string? PaymentStatus { get; set; }
         public string? PaymentId { get; set; }
         public string? ResultMessage { get; set; }
+        public string? ErrorCode { get; set; }
+        public string? ErrorGroup { get; set; }
+        public string? ErrorMessage { get; set; }
         public decimal Price { get; set; }
     }
 }

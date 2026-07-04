@@ -15,7 +15,6 @@ namespace ECOM.Shared.Data.Entities
         public int? Piece { get; set; }
         public decimal TotalPrice { get; set; }
         public int Status { get; set; }
-        public string? Token { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
        

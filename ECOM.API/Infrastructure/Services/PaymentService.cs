@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
+using ECOM.Shared.Data.Constants;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Payment;
 using ECOM.Shared.Data.Entities;
@@ -108,12 +109,12 @@ namespace ECOM.API.Infrastructure.Services
 
                 switch (iyzicoResponse.Status)
                 {
-                    case "success":
+                    case PaymentConstants.IyzicoResponseSuccessStatus:
                         response.Status = Status.Success;
                         response.Message = "İşlem başarılı.";
                         _logger.LogInformation($"PaymentService/Pay ==> İyzico ödeme formu oluşturuldu. Token: {iyzicoResponse.Token}");
                         break;
-                    case "failure":
+                    case PaymentConstants.IyzicoResponseFailureStatus:
                         response.Status = Status.Failed;
                         response.Message = "İşlem başarısız.";
                         _logger.LogWarning($"PaymentService/Pay ==> İyzico ödeme formu oluşturulamadı. ErrorCode: {iyzicoResponse.ErrorCode}, ErrorMessage: {iyzicoResponse.ErrorMessage}");
@@ -252,7 +253,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 var iyzicoResponse = await CheckoutForm.Retrieve(request, _iyzico);
 
-                if (iyzicoResponse.StatusCode == 200) // success'i  consttan al
+                if (iyzicoResponse.Status == PaymentConstants.IyzicoResponseSuccessStatus) 
                 {
                     // gönderilen tutar ile beklenen tutarı karşılaştır
                     if (!decimal.TryParse(iyzicoResponse.PaidPrice, NumberStyles.Number, CultureInfo.InvariantCulture, out var paidPrice))

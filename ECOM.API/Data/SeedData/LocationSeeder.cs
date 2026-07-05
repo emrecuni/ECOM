@@ -22,7 +22,6 @@ namespace ECOM.API.Data.SeedData
             var cityLookup = cities.ToDictionary(c => c.Name!.ToUpper(), c => c.CityId);
 
             int districtId = 1;
-            int neighbourhoodId = 1;
 
             var districts = new List<District>();
             var neighbourhoods = new List<Neighbourhood>();
@@ -36,7 +35,6 @@ namespace ECOM.API.Data.SeedData
                 {
                     var district = new District
                     {
-                       //DistrictId = districtId,
                         CityId = cityId,
                         Name = districtName
                     };
@@ -46,7 +44,6 @@ namespace ECOM.API.Data.SeedData
                     {
                         neighbourhoods.Add(new Neighbourhood
                         {
-                            //NeighbourhoodId = neighbourhoodId++,
                             DistrictId = districtId,
                             Name = mahalleName,
                             ZipCode = null   // bu JSON'da zipcode yok

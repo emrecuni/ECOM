@@ -1,0 +1,1363 @@
+{
+  "info": {
+    "_postman_id": "d99ea484-a6f3-4abd-9a11-32f32ea6deff",
+    "name": "ECOM_API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31811614"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cuniiemre@gmail.com\",\n  \"password\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Auth/Token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Auth",
+                "Token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send_OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"emrecancuni6152@gmail.com\",\n  \"phone\": \"\",\n  \"purpose\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Auth/SendOTP",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Auth",
+                "SendOTP"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check_OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"emrecuni0067@gmail.com\",\n  \"codeHash\": \"826029\",\n  \"purpose\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Auth/CheckOTP",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Auth",
+                "CheckOTP"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Emrecan\",\n  \"surname\": \"Cüni\",\n  \"email\": \"emrecuni0067@gmail.com\",\n  \"phone\": \"5459670208\",\n  \"password\": \"123\",\n  \"rePassword\": \"123\",\n  \"gender\": true,\n  \"birthDate\": \"2000-11-08\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Auth/Register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Auth",
+                "Register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot_Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cuniiemre@gmail.com\",\n  \"password\": \"123\",\n  \"rePassword\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Auth/ForgotPassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Auth",
+                "ForgotPassword"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Get_Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Product/GetProducts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "GetProducts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Product/GetProductDetails?productId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "GetProductDetails"
+              ],
+              "query": [
+                {
+                  "key": "productId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Favorites",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NzAyNTEzLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.EQ32LVEq4wcasH2K5YnEiR1XOaFTmNS1-9zYXQJG7eA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Product/GetFavoriteProducts?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "GetFavoriteProducts"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Products_conf",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Product/GetProducts?customerId=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "GetProducts"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NTQ3OTE4LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.hxOIdw-1XO_Ot4ZeWFsPpFAIL59naVMm_kMOjoKzUHs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Product/GetCart?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "GetCart"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NTQ3OTE4LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.hxOIdw-1XO_Ot4ZeWFsPpFAIL59naVMm_kMOjoKzUHs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 4,\n  \"productId\": 3,\n  \"sellerId\": 3,\n  \"piece\": 1,\n  \"price\": 24999.99,\n  \"enable\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/AddCart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "AddCart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit_Cart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NTQ3OTE4LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.hxOIdw-1XO_Ot4ZeWFsPpFAIL59naVMm_kMOjoKzUHs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 2,\n  \"sellerId\": 2,\n  \"piece\": 1,\n  \"enable\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/EditCart",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "EditCart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_Favorite",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NTU1MjA0LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.HP-Yhue-V410zhSd2UF-f_uFCa7d-rH9pECKJ8yo-eI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/AddFavorite",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "AddFavorite"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete_Favorite",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NTU1MjA0LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.HP-Yhue-V410zhSd2UF-f_uFCa7d-rH9pECKJ8yo-eI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/RemoveFavorite",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "RemoveFavorite"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_Comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc0NjQzMDcxLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.hKTBbIuoiElLLCDOugcFiumMnrqXARgEIIKJgNE4HTo",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 1,\n  \"comment\": null,\n  \"score\": 5,\n  \"imagePath\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/AddComment",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "AddComment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search_Products_By_With_Name",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"productName\": \"PRO\",\n    \"customerId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/SearchProductsByWithName",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "SearchProductsByWithName"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search_Products_By_With_Category",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": 3,\n  \"customerId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Product/SearchProductsByWithCategory",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Product",
+                "SearchProductsByWithCategory"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "Get_Coupons",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc4MDA3MTgxLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.A1YwGma_844ntStAJMas5w_yW7cFtO-O8LRkChkTtDQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/GetCoupons?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "GetCoupons"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change_Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc4MjYwMDU5LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.26L5LRIpUHuLM3OTgMUtm3Mb0HmTL6C2ovtoW-UGgZE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"oldPassword\": \"admin\",\n  \"newPassword\": \"123\",\n  \"reNewPassword\": \"123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/ChangePassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "ChangePassword"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/GetFavorites?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "GetFavorites"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_Favorite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/AddFavorite",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "AddFavorite"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove_Favorite",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/RemoveFavorite",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "RemoveFavorite"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change_Basic_Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc4MjY2ODAzLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.wVNuLXe93kthdNRsECoL2ygQ_zHdAVqV4h49p6sSz7A",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"name\": null,\n  \"surname\": null,\n  \"birthDate\": null,\n  \"gender\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/ChangeBasicInfo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "ChangeBasicInfo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change_Contact_Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc4MjY2ODAzLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.wVNuLXe93kthdNRsECoL2ygQ_zHdAVqV4h49p6sSz7A",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"oldPhone\": null,\n  \"newPhone\": null,\n  \"oldEmail\": null,\n  \"newEmail\": null  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/ChangeContactInfo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "ChangeContactInfo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Orders",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZWNhbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzc4MzQyNTI5LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.G16sqLFA-ccE4CvWMg6tvgSLv0yFUFNfu5Kn7dXYMMM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/GetOrders?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "GetOrders"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Address",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZWNhbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzgyOTM3NzgyLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.UPcNoHkAW7zlpPdKRrM30liRM542C4iuGVkvl6jEkgY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/GetAddress?customerId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "GetAddress"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_Address",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZWNhbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzgyOTM3NzgyLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.UPcNoHkAW7zlpPdKRrM30liRM542C4iuGVkvl6jEkgY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"address\": {\n    \"addressName\": \"TEST\",\n    \"address\": \"test test test\",\n    \"city\": 2,\n    \"district\": 4,\n    \"neighbourhood\": 5\n  },\n  \"receiver\":{\n    \"name\": \"Ali\",\n    \"surname\": \"Veli\",\n    \"phone\": \"5455455544\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/AddAddress",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "AddAddress"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove_Address",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZWNhbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzgyMDMxOTcyLCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.dK2pM43omR1gN9Z_JiWu6fy7NdM2L7do3HC8TwUFLDQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 2,\n  \"address\": {\n    \"addressId\": 3\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5195/api/Customer/RemoveAddress",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5195",
+              "path": [
+                "api",
+                "Customer",
+                "RemoveAddress"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Location",
+      "item": [
+        {
+          "name": "Get_Cities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:7254/api/Location/GetCities",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7254",
+              "path": [
+                "api",
+                "Location",
+                "GetCities"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Districts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:7254/api/Location/GetDistricts?cityId=1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7254",
+              "path": [
+                "api",
+                "Location",
+                "GetDistricts"
+              ],
+              "query": [
+                {
+                  "key": "cityId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get_Neighbourhoods",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:7254/api/Location/GetNeighbourhoods?districtId=2",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7254",
+              "path": [
+                "api",
+                "Location",
+                "GetNeighbourhoods"
+              ],
+              "query": [
+                {
+                  "key": "districtId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Pay",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRW1yZWNhbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImN1bmlpZW1yZUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJUcnVlIiwiZXhwIjoxNzgzMTY4ODE4LCJpc3MiOiJFQ09NLkFQSSIsImF1ZCI6IkVDT00ifQ.cI6fUHerH8kuUHTruibF780-U1_uqbt6cx09gjDu0UE",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"addressId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7254/api/Payment/Pay",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7254",
+              "path": [
+                "api",
+                "Payment",
+                "Pay"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

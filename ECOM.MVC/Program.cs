@@ -1,7 +1,7 @@
-using ECOM.Data;
-using ECOM.Interface;
 using ECOM.Models;
-using ECOM.Services;
+using ECOM.MVC.OldFiles.Data;
+using ECOM.MVC.OldFiles.Interface;
+using ECOM.MVC.OldFiles.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;

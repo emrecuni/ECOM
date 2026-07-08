@@ -1,11 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ECOM.Data;
 using ECOM.DTO;
-using ECOM.Interface;
 using ECOM.Models;
-using ECOM.Services;
+using ECOM.MVC.OldFiles.Data;
+using ECOM.MVC.OldFiles.Interface;
+using ECOM.MVC.OldFiles.Services;
 using ECOM.Shared.Data.DTOs.Auth;
 
 //using Iyzipay;
@@ -44,14 +44,15 @@ namespace ECOM.MVC.Controllers
             {
                 if (model.Email is not null && model.Password is not null)
                 {
-                    //_httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
+                    _httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
 
-                    //var response = await _httpClient.PostAsJsonAsync("api/auth/login", new
-                    //{
-                    //    Email = model.Email,
-                    //    Password = model.Password
-                    //});
+                    var response = await _httpClient.PostAsJsonAsync("api/auth/token", new
+                    {
+                        Email = model.Email,
+                        Password = model.Password
+                    });
 
+                    return View();
                     //if (!response.IsSuccessStatusCode)
                     //{
                     //    ModelState.AddModelError("", "Giriş başarısız");
@@ -86,36 +87,36 @@ namespace ECOM.MVC.Controllers
 
                     //return RedirectToAction("Index", "Main");
 
-                    var customer = await _context.Customers.FirstAsync(c => c.Email == model.Email || c.Phone == model.Email);
-                    if (customer is not null && Encryption.VerifyPassword(model.Password, customer.Password!))
-                    {
+                    //var customer = await _context.Customers.FirstAsync(c => c.Email == model.Email || c.Phone == model.Email);
+                    //if (customer is not null && Encryption.VerifyPassword(model.Password, customer.Password!))
+                    //{
 
-                        var claims = new List<Claim>
-                        {
-                            new (ClaimTypes.Name, customer.Name!),
-                            new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
-                            new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
-                        };
+                    //    var claims = new List<Claim>
+                    //    {
+                    //        new (ClaimTypes.Name, customer.Name!),
+                    //        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                    //        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
+                    //    };
 
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                        var autProperties = new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTime.UtcNow.AddDays(30)
-                        };
+                    //    var autProperties = new AuthenticationProperties
+                    //    {
+                    //        IsPersistent = true,
+                    //        ExpiresUtc = DateTime.UtcNow.AddDays(30)
+                    //    };
 
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                            new ClaimsPrincipal(claimsIdentity),
-                            autProperties);
+                    //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    //        new ClaimsPrincipal(claimsIdentity),
+                    //        autProperties);
 
-                        return RedirectToAction("Index", "Main");
-                    }
-                    else // kullanıcı adı parola hatalı mesajı bastır
-                    {
-                        ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
-                        return View();
-                    }
+                    //    return RedirectToAction("Index", "Main");
+                    //}
+                    //else // kullanıcı adı parola hatalı mesajı bastır
+                    //{
+                    //    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
+                    //    return View();
+                    //}
                 }
                 else
                 {

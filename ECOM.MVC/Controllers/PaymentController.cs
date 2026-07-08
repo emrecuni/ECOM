@@ -1,7 +1,8 @@
 ﻿using Azure;
 using ECOM.Data;
 using ECOM.Models;
-using ECOM.Services;
+using ECOM.MVC.OldFiles.Data;
+using ECOM.MVC.OldFiles.Services;
 using Iyzipay;
 using Iyzipay.Model;
 using Iyzipay.Model.V2.Subscription;

@@ -1,7 +1,8 @@
 ﻿using ECOM.Data;
-using ECOM.DTO;
 using ECOM.Models;
-using ECOM.Services;
+using ECOM.MVC.OldFiles.Data;
+using ECOM.MVC.OldFiles.DTO;
+using ECOM.MVC.OldFiles.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
-﻿using ECOM.Data;
-using ECOM.Models;
-using ECOM.Services;
+﻿using ECOM.Models;
+using ECOM.MVC.OldFiles.Data;
+using ECOM.MVC.OldFiles.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;

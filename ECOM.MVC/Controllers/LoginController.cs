@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ECOM.DTO;
 using ECOM.Models;
+using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
@@ -20,11 +20,13 @@ namespace ECOM.MVC.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly DataContext _context;
+        private readonly IAuthApiClient _authApiClient;
         private readonly ISmtp_Sender _sender;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(DataContext context,HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
+        public LoginController(IAuthApiClient authApiClient,DataContext context,HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
         {
+            _authApiClient = authApiClient;
             _context = context;
             _httpClient = httpClient;
             _sender = sender;
@@ -38,20 +40,31 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(LoginRequestDto model)
+        public async Task<IActionResult> Index(LoginRequestDto model,CancellationToken ct)
         {
             try
             {
+                if(!ModelState.IsValid)
+                    return View(model);
+
                 if (model.Email is not null && model.Password is not null)
                 {
                     _httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
 
-                    var response = await _httpClient.PostAsJsonAsync("api/auth/token", new
-                    {
-                        Email = model.Email,
-                        Password = model.Password
-                    });
+                    //var response = await _httpClient.PostAsJsonAsync("api/auth/token", new
+                    //{
+                    //    Email = model.Email,
+                    //    Password = model.Password
+                    //});
 
+                    var result = await _authApiClient.TokenAsync(model,ct);
+
+                    if (result.IsSuccess)
+                    {
+
+                    }
+
+                    return RedirectToAction("Index", "Main");
                     return View();
                     //if (!response.IsSuccessStatusCode)
                     //{

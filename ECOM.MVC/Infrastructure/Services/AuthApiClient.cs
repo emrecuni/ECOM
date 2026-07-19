@@ -1,6 +1,7 @@
 ﻿using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.Infrastructure.Models;
 using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.DTOs.Smtp;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -27,6 +28,35 @@ namespace ECOM.MVC.Infrastructure.Services
 
             var error = await ReadErrorMessageAsync(response, ct);
             return ApiResult<LoginResponseDto>.Fail(error, response.StatusCode);
+        }
+
+        public async Task<ApiResult<SmtpResponseDto>?> SendOtpAsync(OtpRequestDto model, CancellationToken ct)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/SendOtp", model, ct);
+
+            if(response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<SmtpResponseDto>(ct);
+                return ApiResult<SmtpResponseDto>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<SmtpResponseDto>.Fail(error, response.StatusCode);
+        }
+
+        public Task<ApiResult<OtpResponseDto>?> CheckOtpAsync(OtpRequestDto model, CancellationToken ct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResult<RegisterResponseDto>?> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResult<ForgotPasswordResponseDto>?> ForgotPassword(ForgotPasswordRequestDto model, CancellationToken ct)
+        {
+            throw new NotImplementedException();
         }
 
         private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken ct)

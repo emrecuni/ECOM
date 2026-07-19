@@ -1,4 +1,5 @@
 using ECOM.Models;
+using ECOM.MVC.Infrastructure;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
@@ -18,6 +19,7 @@ builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<EmailSettings>();
 builder.Services.AddScoped<ProductDataProcess>();
 builder.Services.AddScoped<DataContext>();
+builder.Services.AddEcomApiClient(builder.Configuration);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {

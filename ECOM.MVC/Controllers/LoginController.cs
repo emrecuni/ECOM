@@ -24,7 +24,7 @@ namespace ECOM.MVC.Controllers
         private readonly ISmtp_Sender _sender;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(IAuthApiClient authApiClient,DataContext context,HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
+        public LoginController(IAuthApiClient authApiClient, DataContext context, HttpClient httpClient, ISmtp_Sender sender, ILogger<LoginController> logger)
         {
             _authApiClient = authApiClient;
             _context = context;
@@ -40,11 +40,11 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(LoginRequestDto model,CancellationToken ct)
+        public async Task<IActionResult> Index(LoginRequestDto model, CancellationToken ct)
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                     return View(model);
 
                 if (model.Email is not null && model.Password is not null)
@@ -57,14 +57,33 @@ namespace ECOM.MVC.Controllers
                     //    Password = model.Password
                     //});
 
-                    var result = await _authApiClient.TokenAsync(model,ct);
+                    var result = await _authApiClient.TokenAsync(model, ct);
 
-                    if (result.IsSuccess)
+                    if (result is not null && result.IsSuccess)
                     {
+                        Response.Cookies.Append("jwt_token", result!.Data!.Token!, new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Secure = true,
+                            SameSite = SameSiteMode.Strict,
+                            Expires = result.Data.ExpiresAt
+                        });
 
+                        var handler = new JwtSecurityTokenHandler();
+                        var jwt = handler.ReadJwtToken(result.Data.Token);
+
+                        var identity = new ClaimsIdentity(
+                            jwt.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(identity),
+                            new AuthenticationProperties { IsPersistent = true });
+
+                        return RedirectToAction("Index", "Main");
                     }
 
-                    return RedirectToAction("Index", "Main");
+                    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
                     return View();
                     //if (!response.IsSuccessStatusCode)
                     //{

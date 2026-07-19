@@ -368,3 +368,5 @@ appsettings.Development.json
 /ECOM/appsettings.Development.json
 /ECOM_API/appsettings.json
 /ECOM_API/appsettings.Development.json
+/ECOM.API/Migrations/20260613111431_AddressTableUpdated.cs
+/ECOM.API/Migrations/20260613111431_AddressTableUpdated.Designer.cs

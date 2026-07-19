@@ -9,5 +9,6 @@ namespace ECOM.Shared.Data.DTOs.Auth
         public string? Token { get; set; }
         public string? Name { get; set; }
         public DateTime ExpiresAt { get; set; }
+        public string? Message { get; set; }
     }
 }

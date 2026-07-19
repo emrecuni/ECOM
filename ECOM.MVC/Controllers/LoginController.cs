@@ -7,6 +7,8 @@ using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
 using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.Enums;
+
 
 //using Iyzipay;
 using Microsoft.AspNetCore.Authentication;
@@ -197,7 +199,7 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult ForgotPassword(string email) // parola sıfırlama isteği girilen mail adresine girilmelidir
+        public async Task<IActionResult> ForgotPassword(string email,CancellationToken ct) // parola sıfırlama isteği girilen mail adresine girilmelidir
         {
             try
             {
@@ -208,14 +210,15 @@ namespace ECOM.MVC.Controllers
                     return View("Forgot-Password");
                 }
 
-                EmailContent content = new()
+                OtpRequestDto request = new()
                 {
-                    ToMail = email,
-                    Subject = "Parola Sıfırlama İsteği",
-                    Body = "Aşağıdaki linke tıklayınız."
+                    Email = email,
+                    Purpose = OtpPurpose.ForgotPassword
                 };
 
-                if (_sender.SendMail(content)) // mail başarıyla gönderilirse
+                var result = await _authApiClient.SendOtpAsync(request, ct);
+
+                if (result is not null && result.IsSuccess)
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";

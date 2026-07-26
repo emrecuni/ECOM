@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ECOM.Models;
 using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Models;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
@@ -196,7 +197,7 @@ namespace ECOM.MVC.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-
+            ViewBag.FormType = ForgotPasswordProcessStatus.SendOtp;
             return View("Forgot-Password");
         }
 
@@ -223,6 +224,7 @@ namespace ECOM.MVC.Controllers
                 if (result is not null && result.IsSuccess)
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
+                    ViewBag.FormType = ForgotPasswordProcessStatus.CheckOtp;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;

@@ -8,6 +8,7 @@ using ECOM.Shared.Data.Entities;
 using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECOM.API.Controllers
@@ -66,7 +67,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("SendOTP")]
+        [EnableRateLimiting("otp")]
         public async Task<IActionResult> SendOtp(OtpRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
@@ -150,7 +151,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("CheckOTP")]
+        [EnableRateLimiting("otp")]
         public async Task<IActionResult> CheckOtp(OtpRequestDto model)
         {
             if (model is null || !ModelState.IsValid)

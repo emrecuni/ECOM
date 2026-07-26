@@ -1,6 +1,7 @@
 using System.Net.Mail;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using ECOM.API.Data;
 using ECOM.API.Data.SeedData;
 using ECOM.API.Infrastructure.Interfaces;
@@ -107,6 +108,17 @@ builder.Services.AddScoped<SmtpClient>(provider =>
     };
     return smtpClient;
 });
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("otp", ctx => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 3,
+            Window = TimeSpan.FromMinutes(15)
+        }));
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
 //builder.Services.AddAuthorization(options =>
 //{
 //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -144,5 +156,6 @@ app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 app.MapControllers();
 app.Run();

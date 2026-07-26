@@ -1,4 +1,5 @@
-﻿using ECOM.MVC.Infrastructure.Interfaces;
+﻿using ECOM.MVC.Infrastructure.Handlers;
+using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.Infrastructure.Services;
 
 namespace ECOM.MVC.Infrastructure
@@ -11,6 +12,9 @@ namespace ECOM.MVC.Infrastructure
 
             if (string.IsNullOrEmpty(baseUrl))
                 throw new InvalidOperationException("EcomApi:BaseUrl configuration is missing.");
+
+            services.AddHttpContextAccessor();
+            services.AddTransient<AuthTokenHandler>();
 
             services.AddEcomClient<IAuthApiClient, AuthApiClient>(baseUrl);
 
@@ -26,7 +30,8 @@ namespace ECOM.MVC.Infrastructure
             {
                 client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
+            })
+            .AddHttpMessageHandler<AuthTokenHandler>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.Infrastructure.Models;
+using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Auth;
 using ECOM.Shared.Data.DTOs.Smtp;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ namespace ECOM.MVC.Infrastructure.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ApiResult<LoginResponseDto>?> TokenAsync(LoginRequestDto model,CancellationToken ct)
+        public async Task<ApiResult<LoginResponseDto>?> TokenAsync(LoginRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/Token", model, ct);
 
@@ -30,31 +31,40 @@ namespace ECOM.MVC.Infrastructure.Services
             return ApiResult<LoginResponseDto>.Fail(error, response.StatusCode);
         }
 
-        public async Task<ApiResult<SmtpResponseDto>?> SendOtpAsync(OtpRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<SmtpResponseDto>?>> SendOtpAsync(OtpRequestDto model, CancellationToken ct)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/Auth/SendOtp", model, ct);
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/SendOTP", model, ct);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var data = await response.Content.ReadFromJsonAsync<SmtpResponseDto>(ct);
-                return ApiResult<SmtpResponseDto>.Ok(data!, response.StatusCode);
+                var data = await response.Content.ReadFromJsonAsync<Response<SmtpResponseDto>>(ct);
+                return ApiResult<Response<SmtpResponseDto>?>.Ok(data!, response.StatusCode);
             }
 
             var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<SmtpResponseDto>.Fail(error, response.StatusCode);
+            return ApiResult<Response<SmtpResponseDto>?>.Fail(error, response.StatusCode);
         }
 
-        public Task<ApiResult<OtpResponseDto>?> CheckOtpAsync(OtpRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<OtpResponseDto>?>> CheckOtpAsync(OtpRequestDto model, CancellationToken ct)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/CheckOTP", model, ct);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<Response<OtpResponseDto>>(ct);
+                return ApiResult<Response<OtpResponseDto>?>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<Response<OtpResponseDto>?>.Fail(error, response.StatusCode);
+        }
+
+        public Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApiResult<RegisterResponseDto>?> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApiResult<ForgotPasswordResponseDto>?> ForgotPassword(ForgotPasswordRequestDto model, CancellationToken ct)
+        public Task<ApiResult<Response<ForgotPasswordResponseDto>?>> ForgotPassword(ForgotPasswordRequestDto model, CancellationToken ct)
         {
             throw new NotImplementedException();
         }

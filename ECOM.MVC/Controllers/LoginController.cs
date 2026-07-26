@@ -61,14 +61,16 @@ namespace ECOM.MVC.Controllers
 
                     var result = await _authApiClient.TokenAsync(model, ct);
 
-                    if (result is not null && result.IsSuccess)
+                    if (result is not null && result.IsSuccess && result.Data is not null)
                     {
-                        Response.Cookies.Append("jwt_token", result!.Data!.Token!, new CookieOptions
+                        var props = new AuthenticationProperties
                         {
-                            HttpOnly = true,
-                            Secure = true,
-                            SameSite = SameSiteMode.Strict,
-                            Expires = result.Data.ExpiresAt
+                            IsPersistent = true,
+                            ExpiresUtc = result.Data.ExpiresAt   
+                        };
+                        props.StoreTokens(new[]
+                        {
+                            new AuthenticationToken { Name = "access_token", Value = result.Data.Token! }
                         });
 
                         var handler = new JwtSecurityTokenHandler();
@@ -80,7 +82,7 @@ namespace ECOM.MVC.Controllers
                         await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             new ClaimsPrincipal(identity),
-                            new AuthenticationProperties { IsPersistent = true });
+                            props);
 
                         return RedirectToAction("Index", "Main");
                     }
@@ -199,7 +201,7 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(string email,CancellationToken ct) // parola sıfırlama isteği girilen mail adresine girilmelidir
+        public async Task<IActionResult> ForgotPassword(string email, CancellationToken ct) // parola sıfırlama isteği girilen mail adresine girilmelidir
         {
             try
             {
@@ -222,6 +224,8 @@ namespace ECOM.MVC.Controllers
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
+                    ViewBag.Email = request.Email;
+                    ViewBag.Purpose = request.Purpose;
                 }
                 else
                 {
@@ -234,6 +238,29 @@ namespace ECOM.MVC.Controllers
                 ViewBag.IsSuccess = StatusTypes.Error;
                 ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
                 NLogger.logger.Error($"ForgotPassword Post Error => {ex}");
+            }
+            return View("Forgot-Password");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyOtpCode(OtpRequestDto request,CancellationToken ct)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View("Forgot-Password");
+
+                var result = await _authApiClient.CheckOtpAsync(request, ct);
+
+                if(result is not null && result.IsSuccess)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
             return View("Forgot-Password");
         }

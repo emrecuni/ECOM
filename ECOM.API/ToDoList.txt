@@ -43,7 +43,7 @@ XX Tutar doğrulama (önceden değinmiştim, güvenlik bağlamında tekrar): Ret
 * Callback'te cardId yazılmıyor tabloya
 X Pay response'unu düzelt // dto ile dön mesajları X
 X Callback'teki cart'a giderken customerid'yi dinamik ver X
-
+* Parola değiştirme için metod yaz
 
 
 payment/pay response'unda dönen içeriği şuraya yapıştır

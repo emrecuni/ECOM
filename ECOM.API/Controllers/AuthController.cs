@@ -67,6 +67,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("SendOTP")]
         [EnableRateLimiting("otp")]
         public async Task<IActionResult> SendOtp(OtpRequestDto model)
         {
@@ -151,6 +152,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("CheckOTP")]
         [EnableRateLimiting("otp")]
         public async Task<IActionResult> CheckOtp(OtpRequestDto model)
         {

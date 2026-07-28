@@ -216,9 +216,9 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<ForgotPasswordResponseDto>> ForgotPassword(ForgotPasswordRequestDto model)
+        public async Task<Response<ResetPasswordResponseDto>> ResetPassword(ResetPasswordRequestDto model)
         {
-            Response<ForgotPasswordResponseDto> response = new();
+            Response<ResetPasswordResponseDto> response = new();
             try
             {
                 CheckCustomerDto checkCustomerModel = new()
@@ -254,7 +254,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 response.Status = Status.Success;
                 response.Message = "Parola başarıyla güncellendi. Giriş yapabilirsiniz.";
-                response.Result = new ForgotPasswordResponseDto
+                response.Result = new ResetPasswordResponseDto
                 {
                     CustomerId = customer.CustomerId,
                     Email = customer.Email,

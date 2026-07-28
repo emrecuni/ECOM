@@ -64,7 +64,7 @@ namespace ECOM.MVC.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResult<Response<ForgotPasswordResponseDto>?>> ForgotPassword(ForgotPasswordRequestDto model, CancellationToken ct)
+        public Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPassword(ResetPasswordRequestDto model, CancellationToken ct)
         {
             throw new NotImplementedException();
         }

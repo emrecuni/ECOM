@@ -181,14 +181,14 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDto model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto model)
         {
             if (model is null || !ModelState.IsValid)
                 return BadRequest("Model is null");
 
-            Response<ForgotPasswordResponseDto> response = new();
+            Response<ResetPasswordResponseDto> response = new();
 
-            response = await _authService.ForgotPassword(model);
+            response = await _authService.ResetPassword(model);
 
             return Ok(response);
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ECOM.Shared.Data.DTOs.Auth
 {
-    public class ForgotPasswordRequestDto
+    public class ResetPasswordRequestDto
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;

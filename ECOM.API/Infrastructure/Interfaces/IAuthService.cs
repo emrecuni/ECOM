@@ -13,7 +13,7 @@ namespace ECOM.API.Infrastructure.Interfaces
         //public Task<bool> SaveOtpCode(OtpRequestDto model);
         public Task<Response<RegisterResponseDto>> Register(RegisterRequestDto model);
         public Task<Response<OtpResponseDto>> CheckOtpInDb(OtpRequestDto model);
-        public Task<Response<ForgotPasswordResponseDto>> ForgotPassword(ForgotPasswordRequestDto model);
+        public Task<Response<ResetPasswordResponseDto>> ResetPassword(ResetPasswordRequestDto model);
         public Task<Response<SmtpResponseDto>> SendOTP(OtpRequestDto model);
     }
 }

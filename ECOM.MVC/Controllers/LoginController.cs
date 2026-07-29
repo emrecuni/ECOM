@@ -260,16 +260,32 @@ namespace ECOM.MVC.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid)    
                     return View("Forgot-Password");
 
                 var result = await _authApiClient.CheckOtpAsync(request, ct);
 
-                if (result is not null && result.IsSuccess)
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Doğrulama Başarılı. Yeni Parolanızı Giriniz.";
                     ViewBag.FormType = ForgotPasswordProcessStatus.VerificationOtp;
+                    ViewBag.Email = request.Email;
+                    ViewBag.Purpose = request.Purpose;
+                }
+                else if(result is not null && result.IsSuccess && result.Data is not null && result.Data.Result is not null && result.Data.Result.AttemptCount == 3)
+                {
+                    ViewBag.IsSuccess = StatusTypes.Error;
+                    ViewBag.Info = "3 Defa Hatalı Girdiniz. Tekrar Kod Alınız.";
+                    ViewBag.FormType = ForgotPasswordProcessStatus.SendOtp;
+                    ViewBag.Email = request.Email;
+                    ViewBag.Purpose = request.Purpose;
+                }
+                else if (result is not null && result.IsSuccess)
+                {
+                    ViewBag.IsSuccess = StatusTypes.Warning;
+                    ViewBag.Info = result.Data?.Message;
+                    ViewBag.FormType = ForgotPasswordProcessStatus.CheckOtp;
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }

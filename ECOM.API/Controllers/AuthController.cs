@@ -180,7 +180,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("ForgotPassword")]
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto model)
         {
             if (model is null || !ModelState.IsValid)

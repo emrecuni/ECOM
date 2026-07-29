@@ -64,9 +64,18 @@ namespace ECOM.MVC.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPassword(ResetPasswordRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPasswordAsync(ResetPasswordRequestDto model, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/ResetPassword", model, ct);
+
+            if( response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<Response<ResetPasswordResponseDto>>(ct);
+                return ApiResult<Response<ResetPasswordResponseDto>?>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<Response<ResetPasswordResponseDto>?>.Fail(error, response.StatusCode);
         }
 
         private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken ct)

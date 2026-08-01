@@ -1,6 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using Azure.Core;
 using ECOM.Models;
 using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.Models;
@@ -9,13 +7,14 @@ using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
 using ECOM.Shared.Data.DTOs.Auth;
 using ECOM.Shared.Data.Enums;
-
-
 //using Iyzipay;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ECOM.MVC.Controllers
 {
@@ -197,7 +196,7 @@ namespace ECOM.MVC.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            ViewBag.FormType = ForgotPasswordProcessStatus.SendOtp;
+            ViewBag.FormType = OtpProcessStatus.SendOtp;
             return View("Forgot-Password");
         }
 
@@ -224,12 +223,12 @@ namespace ECOM.MVC.Controllers
                 if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
-                    ViewBag.FormType = ForgotPasswordProcessStatus.CheckOtp;
+                    ViewBag.FormType = OtpProcessStatus.CheckOtp;
                     ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }
-                else if (result is not null && result.IsSuccess && result.Data is not null )
+                else if (result is not null && result.IsSuccess && result.Data is not null)
                 {
                     ViewBag.IsSuccess = StatusTypes.Warning;
                     ViewBag.Info = result.Data.Message;
@@ -260,7 +259,7 @@ namespace ECOM.MVC.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)    
+                if (!ModelState.IsValid)
                     return View("Forgot-Password");
 
                 var result = await _authApiClient.CheckOtpAsync(request, ct);
@@ -269,15 +268,15 @@ namespace ECOM.MVC.Controllers
                 {
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Doğrulama Başarılı. Yeni Parolanızı Giriniz.";
-                    ViewBag.FormType = ForgotPasswordProcessStatus.VerificationOtp;
+                    ViewBag.FormType = OtpProcessStatus.VerificationOtp;
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }
-                else if(result is not null && result.IsSuccess && result.Data is not null && result.Data.Result is not null && result.Data.Result.AttemptCount == 3)
+                else if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Result is not null && result.Data.Result.AttemptCount == 3)
                 {
                     ViewBag.IsSuccess = StatusTypes.Error;
                     ViewBag.Info = "3 Defa Hatalı Girdiniz. Tekrar Kod Alınız.";
-                    ViewBag.FormType = ForgotPasswordProcessStatus.SendOtp;
+                    ViewBag.FormType = OtpProcessStatus.SendOtp;
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }
@@ -285,7 +284,7 @@ namespace ECOM.MVC.Controllers
                 {
                     ViewBag.IsSuccess = StatusTypes.Warning;
                     ViewBag.Info = result.Data?.Message;
-                    ViewBag.FormType = ForgotPasswordProcessStatus.CheckOtp;
+                    ViewBag.FormType = OtpProcessStatus.CheckOtp;
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }
@@ -293,7 +292,7 @@ namespace ECOM.MVC.Controllers
                 {
                     ViewBag.IsSuccess = StatusTypes.Error;
                     ViewBag.Info = "Doğrulama Başarısız. Tekrar Deneyiniz.";
-                    ViewBag.FormType = ForgotPasswordProcessStatus.CheckOtp;
+                    ViewBag.FormType = OtpProcessStatus.CheckOtp;
                     ViewBag.Email = request.Email;
                     ViewBag.Purpose = request.Purpose;
                 }
@@ -314,7 +313,7 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto model,CancellationToken ct)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto model, CancellationToken ct)
         {
             try
             {
@@ -344,11 +343,66 @@ namespace ECOM.MVC.Controllers
             return View("Forgot-Password");
         }
 
-
         [HttpGet]
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult RegisterEmail()
+        {
+            return RedirectToAction("Register");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterEmail(RegisterRequestDto model, CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View("Register");
+
+            CheckCustomerDto checkCustomerDto = new()
+            {
+                Email = model.Email
+            };
+
+            var checkExistsCustomer = await _authApiClient.CheckExistsCustomer(checkCustomerDto, ct);
+
+            if (checkExistsCustomer?.Data?.Result == true)
+            {
+                ViewBag.IsSuccess = StatusTypes.Warning;
+                ViewBag.Info = checkExistsCustomer.Data.Message;
+                return View("Register");
+            }
+
+            OtpRequestDto otpRequest = new()
+            {
+                Email = model.Email,
+                Purpose = OtpPurpose.Register
+            };
+
+            var result = await _authApiClient.SendOtpAsync(otpRequest, ct);
+
+            if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
+            {
+                ViewBag.IsSuccess = StatusTypes.Success;
+                ViewBag.FormType = OtpProcessStatus.CheckOtp;
+                ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
+                ViewBag.Email = otpRequest.Email;
+                ViewBag.Purpose = otpRequest.Purpose;
+            }
+            else if (result is not null && result.IsSuccess && result.Data is not null)
+            {
+                ViewBag.IsSuccess = StatusTypes.Warning;
+                ViewBag.Info = result.Data.Message;
+            }
+            else
+            {
+                ViewBag.IsSuccess = StatusTypes.Error;
+                ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
+            }
+
+            return View("Register");
         }
 
         //[HttpPost]

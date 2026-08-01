@@ -68,7 +68,7 @@ namespace ECOM.MVC.Infrastructure.Services
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/ResetPassword", model, ct);
 
-            if( response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadFromJsonAsync<Response<ResetPasswordResponseDto>>(ct);
                 return ApiResult<Response<ResetPasswordResponseDto>?>.Ok(data!, response.StatusCode);
@@ -98,6 +98,20 @@ namespace ECOM.MVC.Infrastructure.Services
                 HttpStatusCode.BadRequest => "Geçersiz istek.",
                 _ => "Bir hata oluştu, lütfen tekrar deneyin."
             };
+        }
+
+        public async Task<ApiResult<Response<bool>>> CheckExistsCustomer(CheckCustomerDto model, CancellationToken ct)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/CheckExistsCustomer", model, ct);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<Response<bool>>(ct);
+                return ApiResult<Response<bool>>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<Response<bool>>.Fail(error, response.StatusCode);
         }
     }
 }

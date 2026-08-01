@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Auth;
@@ -147,7 +148,7 @@ namespace ECOM.API.Controllers
             //response.Message = $"OTP Code: {otpCode}";
             //#endregion
 
-            Console.WriteLine($"Auth/Register ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
+            Console.WriteLine($"Auth/SendOtp ==> {(response.Status == Status.Success ? """Mail Gönderimi başarılı""" : """mail gönderimi başarısız""")}");
             return Ok(response);
         }
 
@@ -189,6 +190,22 @@ namespace ECOM.API.Controllers
             Response<ResetPasswordResponseDto> response = new();
 
             response = await _authService.ResetPassword(model);
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("CheckExistsCustomer")]
+        public async Task<IActionResult> CheckExistsCustomer(CheckCustomerDto model)
+        {
+            if (model is null || !ModelState.IsValid)
+                return BadRequest("Model is null");
+
+            Response<bool> response = new();
+            var result = await _authService.CheckExistsCustomer(model);
+            response.Result = result;
+            response.Status = Status.Success;
+            response.Message = result ? "Mail adresi zaten kayıtlı" : "Mail adresi kayıtlı değil";
 
             return Ok(response);
         }

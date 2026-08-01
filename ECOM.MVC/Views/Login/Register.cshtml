@@ -1,8 +1,7 @@
 @{
     // Adım: "email" | "verify" | "complete"
-    string step = ViewBag.Step ?? "email";
+    var step = ViewBag.FormType; //ViewBag.Step ?? "email";
     string maskedEmail = ViewBag.MaskedEmail ?? "";
-    string tempEmail = ViewBag.TempEmail ?? "";
 }
 
 @section Styles {
@@ -21,9 +20,9 @@
 
         <!-- ===== STEP INDICATOR ===== -->
         <div class="register-steps">
-            <div class="reg-step @(step == "email" ? "active" : (step == "verify" || step == "complete" ? "done" : ""))">
+            <div class="reg-step @(step == ECOM.MVC.Models.OtpProcessStatus.SendOtp ? "active" : (step == ECOM.MVC.Models.OtpProcessStatus.CheckOtp || step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp ? ECOM.MVC.Models.OtpProcessStatus.Done : ""))">
                 <div class="reg-step-circle">
-                    @if (step == "verify" || step == "complete")
+                    @if (step == ECOM.MVC.Models.OtpProcessStatus.CheckOtp || step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp)
                     {
                         <i class="fas fa-check"></i>
                     }
@@ -34,10 +33,10 @@
                 </div>
                 <span class="reg-step-label">E-posta</span>
             </div>
-            <div class="reg-step-line @(step == "verify" || step == "complete" ? "done" : "")"></div>
-            <div class="reg-step @(step == "verify" ? "active" : (step == "complete" ? "done" : ""))">
+            <div class="reg-step-line @(step == ECOM.MVC.Models.OtpProcessStatus.CheckOtp || step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp ? ECOM.MVC.Models.OtpProcessStatus.Done : "")"></div>
+            <div class="reg-step @(step == ECOM.MVC.Models.OtpProcessStatus.CheckOtp ? ECOM.MVC.Models.OtpProcessStatus.Active : (step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp ? ECOM.MVC.Models.OtpProcessStatus.Done : ""))">
                 <div class="reg-step-circle">
-                    @if (step == "complete")
+                    @if (step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp)
                     {
                         <i class="fas fa-check"></i>
                     }
@@ -48,15 +47,15 @@
                 </div>
                 <span class="reg-step-label">Doğrulama</span>
             </div>
-            <div class="reg-step-line @(step == "complete" ? "done" : "")"></div>
-            <div class="reg-step @(step == "complete" ? "active" : "")">
+            <div class="reg-step-line @(step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp ? ECOM.MVC.Models.OtpProcessStatus.Done  : "")"></div>
+            <div class="reg-step @(step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp ? ECOM.MVC.Models.OtpProcessStatus.Active : "")">
                 <div class="reg-step-circle"><span>3</span></div>
                 <span class="reg-step-label">Bilgiler</span>
             </div>
         </div>
 
         <!-- ===== ADIM 1: E-POSTA ===== -->
-        @if (step == "email")
+        @if (step == ECOM.MVC.Models.OtpProcessStatus.SendOtp) // (step == "email")
         {
             <div class="step-header">
                 <div class="step-icon-wrap">
@@ -94,7 +93,7 @@
         }
 
         <!-- ===== ADIM 2: DOĞRULAMA KODU ===== -->
-        @if (step == "verify")
+        @if (step == ECOM.MVC.Models.OtpProcessStatus.CheckOtp) // (step == "verify")
         {
             <div class="step-header">
                 <div class="step-icon-wrap" style="background:#EFF6FF; color:#3B82F6;">
@@ -107,8 +106,6 @@
             </div>
 
             <form asp-action="VerifyEmail" method="post">
-                <input type="hidden" name="email" value="@tempEmail" />
-
                 <!-- OTP Input -->
                 <div class="otp-wrapper">
                     <div class="otp-inputs" id="otpInputs">
@@ -120,6 +117,9 @@
                         <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
                     </div>
                     <input type="hidden" name="code" id="otpHidden">
+                    <input type="hidden" name="email" value="@ViewBag.Email" />
+                    <input type="hidden" name="purpose" value="@ViewBag.Purpose" />
+                    <input type="hidden" name="phone" value="@String.Empty" />
                 </div>
 
                 @if (ViewBag.IsSuccess == StatusTypes.Error)
@@ -144,7 +144,7 @@
             <div class="otp-resend">
                 Kod gelmedi mi?
                 <form asp-action="RegisterEmail" method="post" style="display:inline;">
-                    <input type="hidden" name="email" value="@tempEmail" />
+                    <input type="hidden" name="email" value="@ViewBag.Email" />
                     <button type="submit" class="resend-btn" id="resendBtn" disabled>
                         Tekrar Gönder
                     </button>
@@ -159,7 +159,7 @@
         }
 
         <!-- ===== ADIM 3: BİLGİLERİ TAMAMLA ===== -->
-        @if (step == "complete")
+        @if (step == ECOM.MVC.Models.OtpProcessStatus.VerificationOtp) // (step == "complete")
         {
             <div class="step-header">
                 <div class="step-icon-wrap" style="background:#F0FDF4; color:#16A34A;">
@@ -173,7 +173,7 @@
             </div>
 
             <form asp-action="RegisterComplete" method="post">
-                <input type="hidden" name="email" value="@tempEmail" />
+                <input type="hidden" name="email" value="@ViewBag.Email" />
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
                     <div class="auth-form-group">
@@ -265,127 +265,127 @@
 </div>
 
 @section Scripts {
-<script>
-// ===== OTP INPUT LOGIC =====
-const otpBoxes = document.querySelectorAll('.otp-box');
-const otpHidden = document.getElementById('otpHidden');
+    <script>
+        // ===== OTP INPUT LOGIC =====
+        const otpBoxes = document.querySelectorAll('.otp-box');
+        const otpHidden = document.getElementById('otpHidden');
 
-if (otpBoxes.length) {
-    otpBoxes.forEach((box, i) => {
-        box.addEventListener('input', (e) => {
-            const val = e.target.value.replace(/\D/g, '');
-            e.target.value = val;
-            if (val && i < otpBoxes.length - 1) otpBoxes[i + 1].focus();
-            syncOtp();
-        });
+        if (otpBoxes.length) {
+            otpBoxes.forEach((box, i) => {
+                box.addEventListener('input', (e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    e.target.value = val;
+                    if (val && i < otpBoxes.length - 1) otpBoxes[i + 1].focus();
+                    syncOtp();
+                });
 
-        box.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && !box.value && i > 0) {
-                otpBoxes[i - 1].focus();
-                otpBoxes[i - 1].value = '';
-                syncOtp();
-            }
-        });
+                box.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !box.value && i > 0) {
+                        otpBoxes[i - 1].focus();
+                        otpBoxes[i - 1].value = '';
+                        syncOtp();
+                    }
+                });
 
-        box.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
-            paste.split('').forEach((ch, idx) => {
-                if (otpBoxes[idx]) otpBoxes[idx].value = ch;
+                box.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+                    paste.split('').forEach((ch, idx) => {
+                        if (otpBoxes[idx]) otpBoxes[idx].value = ch;
+                    });
+                    otpBoxes[Math.min(paste.length, otpBoxes.length - 1)].focus();
+                    syncOtp();
+                });
             });
-            otpBoxes[Math.min(paste.length, otpBoxes.length - 1)].focus();
-            syncOtp();
-        });
-    });
 
-    function syncOtp() {
-        otpHidden.value = Array.from(otpBoxes).map(b => b.value).join('');
-    }
-
-    otpBoxes[0]?.focus();
-}
-
-// ===== COUNTDOWN TIMER =====
-const countdownEl = document.getElementById('countdown');
-const resendBtn = document.getElementById('resendBtn');
-
-if (countdownEl) {
-    let seconds = 180;
-    const timer = setInterval(() => {
-        seconds--;
-        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
-        countdownEl.textContent = `${m}:${s}`;
-
-        if (seconds <= 30) countdownEl.style.color = 'var(--danger)';
-
-        if (seconds <= 0) {
-            clearInterval(timer);
-            countdownEl.textContent = 'Süresi doldu';
-            if (resendBtn) {
-                resendBtn.disabled = false;
-                resendBtn.style.opacity = '1';
+            function syncOtp() {
+                otpHidden.value = Array.from(otpBoxes).map(b => b.value).join('');
             }
+
+            otpBoxes[0]?.focus();
         }
-    }, 1000);
-}
 
-// ===== PASSWORD STRENGTH =====
-const passwordInput = document.getElementById('passwordInput');
-const confirmInput = document.getElementById('confirmInput');
-const strengthFill = document.getElementById('strengthFill');
-const strengthLabel = document.getElementById('strengthLabel');
-const matchHint = document.getElementById('matchHint');
-const togglePassword = document.getElementById('togglePassword');
+        // ===== COUNTDOWN TIMER =====
+        const countdownEl = document.getElementById('countdown');
+        const resendBtn = document.getElementById('resendBtn');
 
-if (passwordInput) {
-    passwordInput.addEventListener('input', function () {
-        const val = this.value;
-        let score = 0;
-        if (val.length >= 8) score++;
-        if (/[A-Z]/.test(val)) score++;
-        if (/[0-9]/.test(val)) score++;
-        if (/[^A-Za-z0-9]/.test(val)) score++;
+        if (countdownEl) {
+            let seconds = 180;
+            const timer = setInterval(() => {
+                seconds--;
+                const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+                countdownEl.textContent = `${m}:${s}`;
 
-        const levels = [
-            { label: '', color: 'transparent', width: '0%' },
-            { label: 'Çok Zayıf', color: '#EF4444', width: '25%' },
-            { label: 'Zayıf', color: '#F97316', width: '50%' },
-            { label: 'İyi', color: '#EAB308', width: '75%' },
-            { label: 'Güçlü', color: '#22C55E', width: '100%' },
-        ];
+                if (seconds <= 30) countdownEl.style.color = 'var(--danger)';
 
-        const level = levels[score] || levels[0];
-        strengthFill.style.width = level.width;
-        strengthFill.style.background = level.color;
-        strengthLabel.textContent = level.label;
-        strengthLabel.style.color = level.color;
-    });
-
-    confirmInput?.addEventListener('input', function () {
-        if (!this.value) { matchHint.textContent = ''; return; }
-        if (this.value === passwordInput.value) {
-            matchHint.textContent = '✓ Parolalar eşleşiyor';
-            matchHint.style.color = '#22C55E';
-        } else {
-            matchHint.textContent = '✗ Parolalar eşleşmiyor';
-            matchHint.style.color = '#EF4444';
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = 'Süresi doldu';
+                    if (resendBtn) {
+                        resendBtn.disabled = false;
+                        resendBtn.style.opacity = '1';
+                    }
+                }
+            }, 1000);
         }
-    });
 
-    togglePassword?.addEventListener('click', function () {
-        const type = passwordInput.type === 'password' ? 'text' : 'password';
-        passwordInput.type = type;
-        this.className = type === 'password' ? 'fas fa-lock' : 'fas fa-lock-open';
-    });
-}
+        // ===== PASSWORD STRENGTH =====
+        const passwordInput = document.getElementById('passwordInput');
+        const confirmInput = document.getElementById('confirmInput');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const matchHint = document.getElementById('matchHint');
+        const togglePassword = document.getElementById('togglePassword');
 
-// ===== RADIO OPTION TOGGLE =====
-document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
-    radio.addEventListener('change', function () {
-        document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
-        this.closest('.radio-option').classList.add('selected');
-    });
-});
-</script>
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function () {
+                const val = this.value;
+                let score = 0;
+                if (val.length >= 8) score++;
+                if (/[A-Z]/.test(val)) score++;
+                if (/[0-9]/.test(val)) score++;
+                if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                const levels = [
+                    { label: '', color: 'transparent', width: '0%' },
+                    { label: 'Çok Zayıf', color: '#EF4444', width: '25%' },
+                    { label: 'Zayıf', color: '#F97316', width: '50%' },
+                    { label: 'İyi', color: '#EAB308', width: '75%' },
+                    { label: 'Güçlü', color: '#22C55E', width: '100%' },
+                ];
+
+                const level = levels[score] || levels[0];
+                strengthFill.style.width = level.width;
+                strengthFill.style.background = level.color;
+                strengthLabel.textContent = level.label;
+                strengthLabel.style.color = level.color;
+            });
+
+            confirmInput?.addEventListener('input', function () {
+                if (!this.value) { matchHint.textContent = ''; return; }
+                if (this.value === passwordInput.value) {
+                    matchHint.textContent = '✓ Parolalar eşleşiyor';
+                    matchHint.style.color = '#22C55E';
+                } else {
+                    matchHint.textContent = '✗ Parolalar eşleşmiyor';
+                    matchHint.style.color = '#EF4444';
+                }
+            });
+
+            togglePassword?.addEventListener('click', function () {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                this.className = type === 'password' ? 'fas fa-lock' : 'fas fa-lock-open';
+            });
+        }
+
+        // ===== RADIO OPTION TOGGLE =====
+        document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+                this.closest('.radio-option').classList.add('selected');
+            });
+        });
+    </script>
 }

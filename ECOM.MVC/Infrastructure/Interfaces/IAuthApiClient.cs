@@ -13,5 +13,6 @@ namespace ECOM.MVC.Infrastructure.Interfaces
         public Task<ApiResult<Response<OtpResponseDto>?>> CheckOtpAsync(OtpRequestDto model,CancellationToken ct);
         public Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model,CancellationToken ct);
         public Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPasswordAsync(ResetPasswordRequestDto model,CancellationToken ct);
+        public Task<ApiResult<Response<bool>>> CheckExistsCustomer(CheckCustomerDto model, CancellationToken ct);
     }
 }

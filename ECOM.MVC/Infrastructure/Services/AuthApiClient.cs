@@ -59,9 +59,18 @@ namespace ECOM.MVC.Infrastructure.Services
             return ApiResult<Response<OtpResponseDto>?>.Fail(error, response.StatusCode);
         }
 
-        public Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/Register", model, ct);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<Response<RegisterResponseDto>>(ct);
+                return ApiResult<Response<RegisterResponseDto>?>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<Response<RegisterResponseDto>?>.Fail(error, response.StatusCode);
         }
 
         public async Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPasswordAsync(ResetPasswordRequestDto model, CancellationToken ct)

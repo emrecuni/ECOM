@@ -105,7 +105,7 @@
                 </p>
             </div>
 
-            <form asp-action="VerifyEmail" method="post">
+            <form asp-action="VerifyOtpCode" method="post">
                 <!-- OTP Input -->
                 <div class="otp-wrapper">
                     <div class="otp-inputs" id="otpInputs">
@@ -116,7 +116,7 @@
                         <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
                         <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]">
                     </div>
-                    <input type="hidden" name="code" id="otpHidden">
+                    <input type="hidden" name="codeHash" id="otpHidden">
                     <input type="hidden" name="email" value="@ViewBag.Email" />
                     <input type="hidden" name="purpose" value="@ViewBag.Purpose" />
                     <input type="hidden" name="phone" value="@String.Empty" />
@@ -211,7 +211,7 @@
                 <div class="auth-form-group">
                     <label class="auth-label">Parola Tekrar</label>
                     <div class="auth-input-wrapper">
-                        <input type="password" class="auth-input" name="passwordConfirm"
+                        <input type="password" class="auth-input" name="rePassword"
                                placeholder="Parolanızı tekrar girin" required id="confirmInput">
                         <i class="fas fa-lock"></i>
                     </div>
@@ -221,7 +221,7 @@
                 <div class="auth-form-group">
                     <label class="auth-label">Telefon</label>
                     <div class="auth-input-wrapper">
-                        <input type="tel" class="auth-input" name="phone" placeholder="05XX XXX XX XX" required>
+                        <input type="tel" class="auth-input" name="phone" placeholder="5XX XXX XX XX" required>
                         <i class="fas fa-phone"></i>
                     </div>
                 </div>

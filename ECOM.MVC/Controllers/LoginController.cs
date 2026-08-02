@@ -260,7 +260,7 @@ namespace ECOM.MVC.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return View("Forgot-Password");
+                    return View("Index");
 
                 var result = await _authApiClient.CheckOtpAsync(request, ct);
 
@@ -269,33 +269,28 @@ namespace ECOM.MVC.Controllers
                     ViewBag.IsSuccess = StatusTypes.Success;
                     ViewBag.Info = "Doğrulama Başarılı. Yeni Parolanızı Giriniz.";
                     ViewBag.FormType = OtpProcessStatus.VerificationOtp;
-                    ViewBag.Email = request.Email;
-                    ViewBag.Purpose = request.Purpose;
                 }
                 else if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Result is not null && result.Data.Result.AttemptCount == 3)
                 {
                     ViewBag.IsSuccess = StatusTypes.Error;
                     ViewBag.Info = "3 Defa Hatalı Girdiniz. Tekrar Kod Alınız.";
                     ViewBag.FormType = OtpProcessStatus.SendOtp;
-                    ViewBag.Email = request.Email;
-                    ViewBag.Purpose = request.Purpose;
                 }
                 else if (result is not null && result.IsSuccess)
                 {
                     ViewBag.IsSuccess = StatusTypes.Warning;
                     ViewBag.Info = result.Data?.Message;
                     ViewBag.FormType = OtpProcessStatus.CheckOtp;
-                    ViewBag.Email = request.Email;
-                    ViewBag.Purpose = request.Purpose;
                 }
                 else
                 {
                     ViewBag.IsSuccess = StatusTypes.Error;
                     ViewBag.Info = "Doğrulama Başarısız. Tekrar Deneyiniz.";
                     ViewBag.FormType = OtpProcessStatus.CheckOtp;
-                    ViewBag.Email = request.Email;
-                    ViewBag.Purpose = request.Purpose;
                 }
+                ViewBag.Email = request.Email;
+                ViewBag.MaskedEmail = string.Concat(request.Email.Substring(0, 1), "***", request.Email.Substring(request.Email.IndexOf('@')));
+                ViewBag.Purpose = request.Purpose;
             }
             catch (Exception ex)
             {
@@ -303,7 +298,12 @@ namespace ECOM.MVC.Controllers
                 ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
                 NLogger.logger.Error($"VerifyOtpCode  Post Error => {ex}");
             }
-            return View("Forgot-Password");
+            if (request.Purpose == OtpPurpose.ForgotPassword)
+                return View("Forgot-Password");
+            else if (request.Purpose == OtpPurpose.Register)
+                return View("Register");
+            else
+                return View("Index");
         }
 
         [HttpGet]
@@ -344,12 +344,6 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpGet]
         public IActionResult RegisterEmail()
         {
             return RedirectToAction("Register");
@@ -358,7 +352,7 @@ namespace ECOM.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterEmail(RegisterRequestDto model, CancellationToken ct)
         {
-            if (!ModelState.IsValid)
+            if (model is null || model.Email is null)
                 return View("Register");
 
             CheckCustomerDto checkCustomerDto = new()
@@ -372,6 +366,7 @@ namespace ECOM.MVC.Controllers
             {
                 ViewBag.IsSuccess = StatusTypes.Warning;
                 ViewBag.Info = checkExistsCustomer.Data.Message;
+                ViewBag.FormType = OtpProcessStatus.SendOtp;
                 return View("Register");
             }
 
@@ -405,6 +400,41 @@ namespace ECOM.MVC.Controllers
             return View("Register");
         }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            ViewBag.FormType = OtpProcessStatus.SendOtp;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequestDto model,CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var response = await _authApiClient.RegisterAsync(model, ct);
+
+            if( response is not null && response.IsSuccess && response.Data is not null && response.Data.Status == Status.Success)
+            {
+                ViewBag.IsSuccess = StatusTypes.Success;
+                ViewBag.Info = "Kayıt Başarılı. Giriş Yapabilirsiniz.";
+                return RedirectToAction("Index");
+            }
+            else if (response is not null && response.IsSuccess && response.Data is not null)
+            {
+                ViewBag.IsSuccess = StatusTypes.Warning;
+                ViewBag.Info = response.Data.Message;
+            }
+            else
+            {
+                ViewBag.IsSuccess = StatusTypes.Error;
+                ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
+            }
+
+
+            return RedirectToAction("RegisterEmail", model);
+        }
         //[HttpPost]
         //public async Task<IActionResult> Register(RegisterViewModel model) // parametreleri modele dönüştür
         //{

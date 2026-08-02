@@ -384,6 +384,7 @@ namespace ECOM.MVC.Controllers
                 ViewBag.FormType = OtpProcessStatus.CheckOtp;
                 ViewBag.Info = "Parola Sıfırlama İsteği Gönderildi.";
                 ViewBag.Email = otpRequest.Email;
+                ViewBag.MaskedEmail = string.Concat(otpRequest.Email.Substring(0, 1), "***", otpRequest.Email.Substring(otpRequest.Email.IndexOf('@')));
                 ViewBag.Purpose = otpRequest.Purpose;
             }
             else if (result is not null && result.IsSuccess && result.Data is not null)
@@ -419,7 +420,8 @@ namespace ECOM.MVC.Controllers
             {
                 ViewBag.IsSuccess = StatusTypes.Success;
                 ViewBag.Info = "Kayıt Başarılı. Giriş Yapabilirsiniz.";
-                return RedirectToAction("Index");
+                ViewBag.FormType = OtpProcessStatus.Done;
+                return View();
             }
             else if (response is not null && response.IsSuccess && response.Data is not null)
             {

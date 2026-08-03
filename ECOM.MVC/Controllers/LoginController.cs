@@ -355,6 +355,7 @@ namespace ECOM.MVC.Controllers
             if (model is null || model.Email is null)
                 return View("Register");
 
+            model.Email = model.Email.ToLower();
             CheckCustomerDto checkCustomerDto = new()
             {
                 Email = model.Email

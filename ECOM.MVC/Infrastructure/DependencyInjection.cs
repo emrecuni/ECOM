@@ -17,6 +17,7 @@ namespace ECOM.MVC.Infrastructure
             services.AddTransient<AuthTokenHandler>();
 
             services.AddEcomClient<IAuthApiClient, AuthApiClient>(baseUrl);
+            services.AddEcomClient<IProductApiClient, ProductApiClient>(baseUrl);
 
             return services;
         }

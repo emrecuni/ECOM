@@ -8,7 +8,6 @@ namespace ECOM.MVC.Infrastructure.Interfaces
     public interface IAuthApiClient
     {
         public Task<ApiResult<LoginResponseDto>?> TokenAsync(LoginRequestDto model, CancellationToken ct);
-
         public Task<ApiResult<Response<SmtpResponseDto>?>> SendOtpAsync(OtpRequestDto model,CancellationToken ct);
         public Task<ApiResult<Response<OtpResponseDto>?>> CheckOtpAsync(OtpRequestDto model,CancellationToken ct);
         public Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model,CancellationToken ct);

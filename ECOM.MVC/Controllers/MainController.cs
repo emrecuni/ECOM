@@ -1,5 +1,6 @@
 ﻿
 using ECOM.Models;
+using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.DTO;
 using ECOM.MVC.OldFiles.Services;
@@ -13,61 +14,71 @@ namespace ECOM.Controllers
 {
     public class MainController : Controller
     {
+        private readonly IProductApiClient _productService;
         private readonly DataContext _context;
         private readonly ILogger<MainController> _logger;
 
-        public MainController(DataContext context, ILogger<MainController> logger)
+        public MainController(IProductApiClient productService, DataContext context, ILogger<MainController> logger)
         {
+            _productService = productService;
             _context = context;
             _logger = logger;
         }
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
+
+            var customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var products = await _productService.GetAllProductsAsync(customerId, ct);
+
+
+
             /*
              * bütün verileri çekme
              * null kontrolü ekle
              * exception kontrolü ekle
              */
 
+
+
             // veri tabanındaki bütün ürünleri çeker
 
             //int customerId = 1;
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            //int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            // bütün ürünler çekilir
-            var products = await _context.Products
-                .Include(p => p.Brand)
-                .Include(p => p.SupCategory)
-                .Include(p => p.SubCategory)
-                .Include(p => p.Seller)                 
-                .ToListAsync();
+            //// bütün ürünler çekilir
+            //var products = await _context.Products
+            //    .Include(p => p.Brand)
+            //    .Include(p => p.SupCategory)
+            //    .Include(p => p.SubCategory)
+            //    .Include(p => p.Seller)                 
+            //    .ToListAsync();
 
-            // kulanıcının favorilediği ürünlerin id'leri alınır
-            var favorites = await _context.Favorites
-                .Where(f => f.CustomerId == customerId)
-                .Select(f => f.ProductId)
-                .ToListAsync();
+            //// kulanıcının favorilediği ürünlerin id'leri alınır
+            //var favorites = await _context.Favorites
+            //    .Where(f => f.CustomerId == customerId)
+            //    .Select(f => f.ProductId)
+            //    .ToListAsync();
 
-            // bütün ürünler dto'ya aktarılır ve favori bilgisi eklenir
-            List<ProductDTO> productDTOs = [.. products.Select(p => new ProductDTO
-            {
-                ProductId = p.ProductId,
-                Name = p.Name,
-                Price = p.Price,
-                Score = p.Score,
-                ImagePath = p.ImagePath,
-                BrandName = p.Brand.Name,
-                SupCategory = p.SupCategory.Name,
-                SubCategory = p.SubCategory.Name,
-                SellerName = p.Seller.Name,
-                IsFavorite = favorites.Contains(p.ProductId)
-            })];
+            //// bütün ürünler dto'ya aktarılır ve favori bilgisi eklenir
+            //List<ProductDTO> productDTOs = [.. products.Select(p => new ProductDTO
+            //{
+            //    ProductId = p.ProductId,
+            //    Name = p.Name,
+            //    Price = p.Price,
+            //    Score = p.Score,
+            //    ImagePath = p.ImagePath,
+            //    BrandName = p.Brand.Name,
+            //    SupCategory = p.SupCategory.Name,
+            //    SubCategory = p.SubCategory.Name,
+            //    SellerName = p.Seller.Name,
+            //    IsFavorite = favorites.Contains(p.ProductId)
+            //})];
 
 
 
-            return View(productDTOs);
+            return View(products);
         }
 
         [Authorize]

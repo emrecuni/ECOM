@@ -60,7 +60,7 @@ namespace ECOM.MVC.Infrastructure.Services
 
         public async Task<ApiResult<Response<List<BasicProductResponseDto>>>?> GetAllProductsAsync(int customerId, CancellationToken ct)
         {
-            var response = await _httpClient.GetAsync($"api/Product/GetAllProducts?customerId={customerId}", ct);
+            var response = await _httpClient.GetAsync($"api/Product/GetProducts?customerId={customerId}", ct);
 
             if (response.IsSuccessStatusCode)
             {

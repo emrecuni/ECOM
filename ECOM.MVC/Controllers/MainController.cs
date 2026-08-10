@@ -4,6 +4,7 @@ using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.DTO;
 using ECOM.MVC.OldFiles.Services;
+using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,53 +33,44 @@ namespace ECOM.Controllers
             var customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var products = await _productService.GetAllProductsAsync(customerId, ct);
 
-
-
-            /*
-             * bütün verileri çekme
-             * null kontrolü ekle
-             * exception kontrolü ekle
-             */
-
-
-
-            // veri tabanındaki bütün ürünleri çeker
-
-            //int customerId = 1;
-            //int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            //// bütün ürünler çekilir
-            //var products = await _context.Products
-            //    .Include(p => p.Brand)
-            //    .Include(p => p.SupCategory)
-            //    .Include(p => p.SubCategory)
-            //    .Include(p => p.Seller)                 
-            //    .ToListAsync();
-
-            //// kulanıcının favorilediği ürünlerin id'leri alınır
-            //var favorites = await _context.Favorites
-            //    .Where(f => f.CustomerId == customerId)
-            //    .Select(f => f.ProductId)
-            //    .ToListAsync();
-
-            //// bütün ürünler dto'ya aktarılır ve favori bilgisi eklenir
-            //List<ProductDTO> productDTOs = [.. products.Select(p => new ProductDTO
-            //{
-            //    ProductId = p.ProductId,
-            //    Name = p.Name,
-            //    Price = p.Price,
-            //    Score = p.Score,
-            //    ImagePath = p.ImagePath,
-            //    BrandName = p.Brand.Name,
-            //    SupCategory = p.SupCategory.Name,
-            //    SubCategory = p.SubCategory.Name,
-            //    SellerName = p.Seller.Name,
-            //    IsFavorite = favorites.Contains(p.ProductId)
-            //})];
+            if (products is null)
+            {
+                ErrorViewModel error = new()
+                {
+                    RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                    Message = "Message: Ürünler çekilirken bir hata oluştu.",
+                    Title = "Giriş Yapılırken Bir Hata Oluştu."
+                };
+                _logger.LogError($"Main/Index Error ");
+                return View("Error", error);
+            }
+            else if (!products.IsSuccess)
+            {
+                ErrorViewModel error = new()
+                {
+                    RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                    Message = $"Message: {products.ErrorMessage}",
+                    Title = "Giriş Yapılırken Bir Hata Oluştu."
+                };
+                _logger.LogError($"Main/Index Error ");
+                return View("Error", error);
+            }
+            else if (products.Data is not null && products.Data.Status != Status.Success)
+            {
+                ErrorViewModel error = new()
+                {
+                    RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                    Message = $"Message: {products.Data.Message}",
+                    Title = "Giriş Yapılırken Bir Hata Oluştu."
+                };
+                _logger.LogError($"Main/Index Error ");
+                return View("Error", error);
+            }
 
 
 
-            return View(products);
+
+            return View(products!.Data!.Result);
         }
 
         [Authorize]
@@ -156,7 +148,7 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Favorite (int id)
+        public async Task<IActionResult> Favorite(int id)
         {
             try
             {
@@ -164,7 +156,7 @@ namespace ECOM.Controllers
                 bool isFavorite;
                 var favorite = await _context.Favorites.FirstOrDefaultAsync(f => f.CustomerId == customerId && f.ProductId == id);
 
-                if(favorite is null) // favorilerde yoksa eklenir
+                if (favorite is null) // favorilerde yoksa eklenir
                 {
                     _context.Favorites.Add(favorite = new Favorites
                     {
@@ -180,7 +172,7 @@ namespace ECOM.Controllers
                     isFavorite = false;
                 }
                 await _context.SaveChangesAsync(); // veri tabanına kaydedilir
-                
+
                 return Json(new { isFavorite });
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using ECOM.API.Data;
+﻿using ECOM.API.Data;
 using ECOM.API.Infrastructure.Interfaces;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Product;
@@ -7,6 +6,7 @@ using ECOM.Shared.Data.Entities;
 using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ECOM.API.Infrastructure.Services
 {
@@ -481,6 +481,37 @@ namespace ECOM.API.Infrastructure.Services
                 _logger.LogError($"ProductService/GetFavorites ==> Error: {ex}");
                 return new List<TResult>();
             }
+        }
+
+        public async Task<Response<List<int>>> GetCategoryIds(string category)
+        {
+            Response<List<int>> response = new();
+            try
+            {
+                var categories = await _context.ProductCategories
+                    .Where(c => c.Name.Contains(category))
+                    .Select(c => c.CategoryId)
+                    .ToListAsync();
+
+                if (categories.Count == 0)
+                {
+                    response.Status = Status.Default;
+                    response.Message = "Aranan kategori bulunamadı.";
+                    response.Result = categories;
+                    return response;
+                }
+                response.Status = Status.Success;
+                response.Message = "Aranan kategori(ler) bulundu.";
+                response.Result = categories;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ProductService/CheckPriceDiff ==> Error: {ex}");
+                _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

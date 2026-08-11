@@ -99,5 +99,16 @@ namespace ECOM.API.Controllers
             var response = await _productService.SearchProductsByWithCategory(model);
             return Ok(response);
         }
+
+        [AllowAnonymous]
+        [HttpGet("GetCategoryIds")]
+        public async Task<IActionResult> GetCategoryIds(string model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+
+            var response = await _productService.GetCategoryIds(model);
+            return Ok(response);
+        }
     }
 }

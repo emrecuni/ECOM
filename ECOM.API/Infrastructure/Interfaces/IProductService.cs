@@ -16,5 +16,6 @@ namespace ECOM.API.Infrastructure.Interfaces
         public Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithName(SearchProductByNameRequestDto model);
         public Task<Response<List<BasicProductResponseDto>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model);
         public Task<List<TResult>> GetFavoritesIds<TResult>(int customerId, Expression<Func<Favorites, TResult>> selector);
+        public Task<Response<List<int>>> GetCategoryIds(string category);
     }
 }

@@ -4,10 +4,12 @@ using ECOM.MVC.Infrastructure.Interfaces;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.DTO;
 using ECOM.MVC.OldFiles.Services;
+using ECOM.Shared.Data.DTOs.Product;
 using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -29,11 +31,10 @@ namespace ECOM.Controllers
         [Authorize]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-
             var customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var products = await _productService.GetAllProductsAsync(customerId, ct);
+            var result = await _productService.GetAllProductsAsync(customerId, ct);
 
-            if (products is null)
+            if (result is null)
             {
                 ErrorViewModel error = new()
                 {
@@ -44,49 +45,63 @@ namespace ECOM.Controllers
                 _logger.LogError($"Main/Index Error ");
                 return View("Error", error);
             }
-            else if (!products.IsSuccess)
+            else if (!result.IsSuccess)
             {
                 ErrorViewModel error = new()
                 {
                     RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                    Message = $"Message: {products.ErrorMessage}",
+                    Message = $"Message: {result.ErrorMessage}",
                     Title = "Giriş Yapılırken Bir Hata Oluştu."
                 };
                 _logger.LogError($"Main/Index Error ");
                 return View("Error", error);
             }
-            else if (products.Data is not null && products.Data.Status != Status.Success)
+            else if (result.Data is not null && result.Data.Status != Status.Success)
             {
                 ErrorViewModel error = new()
                 {
                     RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                    Message = $"Message: {products.Data.Message}",
+                    Message = $"Message: {result.Data.Message}",
                     Title = "Giriş Yapılırken Bir Hata Oluştu."
                 };
                 _logger.LogError($"Main/Index Error ");
                 return View("Error", error);
             }
-
-
-
-
-            return View(products!.Data!.Result);
+            return View(result!.Data!.Result);
         }
 
         [Authorize]
-        public async Task<IActionResult> ProductsByCategoryName(string category)
+        public async Task<IActionResult> ProductsByCategoryName(string category,CancellationToken ct)
         {
             try
             {
-                var products = await _context.Products
-                    .Include(p => p.Brand)
-                    .Include(p => p.SupCategory)
-                    .Include(p => p.SubCategory)
-                    .Include(p => p.Seller)
-                    .Where(p => p.SupCategory.Name == category.ToUpper())
-                    .ToListAsync();
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                return View("Index", products);
+                var categoryResult = await _productService.GetCategoryIdsAsync(category,ct);
+
+                SearchProductByCategoryRequestDto model = new()
+                {
+                    CustomerId = customerId,
+                    CategoryIds = categoryResult?.Data?.Result
+                };
+
+                var result = await _productService.SearchProductsByWithCategory(model, ct);
+
+                if( result.IsSuccess && result.Data?.Status == Status.Success)
+                {
+                    return View("Index", result.Data.Result);
+                }
+                else
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = $"Message: {result.ErrorMessage}",
+                        Title = "Ürünler getirilirken bir hata oluştu."
+                    };
+                    _logger.LogError($"Main/ProductsByCategoryName Error ");
+                    return View("Error", error);
+                }
             }
             catch (Exception ex)
             {
@@ -119,26 +134,41 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> SearchProductByName(string search)
+        public async Task<IActionResult> SearchProductByName(string category, CancellationToken ct)
         {
             try
             {
-                if (search is null)
+                if (category is null)
                     return View("Index");
 
-                var products = await _context.Products
-                    .Include(p => p.Brand)
-                    .Include(p => p.SupCategory)
-                    .Include(p => p.SubCategory)
-                    .Include(p => p.Seller)
-                    .Where(p => p.Name!.ToUpper().Contains(search.ToUpper())
-                    || p.Seller.Name!.ToUpper().Contains(search.ToUpper())
-                    || p.Brand.Name!.ToUpper().Contains(search.ToUpper())
-                    || p.SubCategory.Name.ToUpper().Contains(search.ToUpper())
-                    || p.SupCategory.Name.ToUpper().Contains(search.ToUpper()))
-                    .ToListAsync();
+                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                return View("Index", products);
+                var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
+
+                SearchProductByCategoryRequestDto model = new()
+                {
+                    CustomerId = customerId,
+                    CategoryIds = categoryResult?.Data?.Result
+                };
+
+
+                var result = await _productService.SearchProductsByWithCategory(model, ct);
+
+                if (result.IsSuccess && result.Data?.Status == Status.Success)
+                {
+                    return View("Index", result.Data.Result);
+                }
+                else
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = $"Message: {result.ErrorMessage}",
+                        Title = "Ürünler getirilirken bir hata oluştu."
+                    };
+                    _logger.LogError($"Main/SearchProductByName Error ");
+                    return View("Error", error);
+                }
             }
             catch (Exception ex)
             {

@@ -102,7 +102,7 @@ namespace ECOM.MVC.Infrastructure.Services
 
         public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model, CancellationToken ct)
         {
-            var response = await _httpClient.GetAsync($"api/Product/SearchProductsByWithCategory?categoryId={model.CategoryId}&customerId={model.CustomerId}", ct);
+            var response = await _httpClient.PostAsJsonAsync($"api/Product/SearchProductsByWithCategory", model, ct);
 
             if (response.IsSuccessStatusCode)
             {
@@ -126,6 +126,20 @@ namespace ECOM.MVC.Infrastructure.Services
 
             var error = await ReadErrorMessageAsync(response, ct);
             return ApiResult<Response<List<BasicProductResponseDto>>>.Fail(error, response.StatusCode);
+        }
+
+        public async Task<ApiResult<Response<List<int>>>> GetCategoryIdsAsync(string category, CancellationToken ct)
+        {
+            var response = await _httpClient.GetAsync($"api/Product/GetCategoryIds?category={category}", ct);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadFromJsonAsync<Response<List<int>>>(ct);
+                return ApiResult<Response<List<int>>>.Ok(data!, response.StatusCode);
+            }
+
+            var error = await ReadErrorMessageAsync(response, ct);
+            return ApiResult<Response<List<int>>>.Fail(error, response.StatusCode);
         }
 
         private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken ct)

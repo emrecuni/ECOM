@@ -14,5 +14,6 @@ namespace ECOM.MVC.Infrastructure.Interfaces
         public Task<ApiResult<Response<string>>?> AddCommentAsync(AddCommentRequestDto model, CancellationToken ct);
         public Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithName(SearchProductByNameRequestDto model, CancellationToken ct);
         public Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model, CancellationToken ct);
+        public Task<ApiResult<Response<List<int>>>> GetCategoryIdsAsync(string category, CancellationToken ct);
     }
 }

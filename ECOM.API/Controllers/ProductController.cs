@@ -69,7 +69,7 @@ namespace ECOM.API.Controllers
 
         [Authorize]
         [HttpPost("AddComment")]
-        public async Task<IActionResult> AddComment(AddCommentRequestDto model)
+        public async Task<IActionResult> AddComment([FromBody] AddCommentRequestDto model)
         {
             if (!ModelState.IsValid || model is null)
                 return BadRequest(ModelState);
@@ -90,10 +90,10 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("SearchProductsByWithCategory")]
+        [HttpPost("SearchProductsByWithCategory")]
         public async Task<IActionResult> SearchProductsByWithCategory([FromBody] SearchProductByCategoryRequestDto model)
         {
-            if (!ModelState.IsValid || model is null || model.CategoryIds?.Count > 0)
+            if (!ModelState.IsValid || model is null || model.CategoryIds?.Count == 0)
                 return BadRequest(ModelState);
 
             var response = await _productService.SearchProductsByWithCategory(model);
@@ -102,12 +102,12 @@ namespace ECOM.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetCategoryIds")]
-        public async Task<IActionResult> GetCategoryIds(string model)
+        public async Task<IActionResult> GetCategoryIds([FromQuery] string category)
         {
-            if (!ModelState.IsValid || model is null)
+            if (!ModelState.IsValid || category is null)
                 return BadRequest(ModelState);
 
-            var response = await _productService.GetCategoryIds(model);
+            var response = await _productService.GetCategoryIds(category);
             return Ok(response);
         }
     }

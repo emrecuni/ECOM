@@ -388,7 +388,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 // ürün alt veya üst kategoriyle sorgulat
                 var products = await _context.Products
-                    .Where(p => p.SubCategoryId == model.CategoryId || p.SupCategoryId == model.CategoryId)
+                    .Where(p => model.CategoryIds!.Contains(p.SubCategoryId) || model.CategoryIds.Contains(p.SupCategoryId))
                     .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
                     .ToListAsync();
 

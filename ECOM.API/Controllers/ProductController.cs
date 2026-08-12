@@ -93,7 +93,7 @@ namespace ECOM.API.Controllers
         [HttpGet("SearchProductsByWithCategory")]
         public async Task<IActionResult> SearchProductsByWithCategory([FromBody] SearchProductByCategoryRequestDto model)
         {
-            if (!ModelState.IsValid || model is null)
+            if (!ModelState.IsValid || model is null || model.CategoryIds?.Count > 0)
                 return BadRequest(ModelState);
 
             var response = await _productService.SearchProductsByWithCategory(model);

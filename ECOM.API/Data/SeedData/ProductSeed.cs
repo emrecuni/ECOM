@@ -20,7 +20,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "A17 Pro çip, 48MP kamera sistemi ve titanyum tasarım ile güçlü bir akıllı telefon.",
                     Price = 54999.99m,
                     Score = 4.8f,
-                    ImagePath = "/images/products/iphone15pro.jpg",
+                    ImagePath = "products/iphone15pro.jpg",
                     CreatedAt = new DateTime(2024, 9, 15)
                 },
                 new Product
@@ -34,7 +34,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Snapdragon 8 Gen 3 işlemci, 200MP kamera ve dahili S Pen ile üst segment deneyimi.",
                     Price = 49999.99m,
                     Score = 4.7f,
-                    ImagePath = "/images/products/s24ultra.jpg",
+                    ImagePath = "products/s24ultra.jpg",
                     CreatedAt = new DateTime(2024, 1, 20)
                 },
                 new Product
@@ -48,7 +48,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Leica kamera ortaklığı, 5000mAh batarya ve 144Hz AMOLED ekran.",
                     Price = 24999.99m,
                     Score = 4.5f,
-                    ImagePath = "/images/products/xiaomi14tpro.jpg",
+                    ImagePath = "products/xiaomi14tpro.jpg",
                     CreatedAt = new DateTime(2024, 10, 3)
                 },
                 new Product
@@ -62,7 +62,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "M3 çip, 13.6 inç Liquid Retina ekran ve 18 saate kadar pil ömrü.",
                     Price = 44999.99m,
                     Score = 4.9f,
-                    ImagePath = "/images/products/macbookairm3.jpg",
+                    ImagePath = "products/macbookairm3.jpg",
                     CreatedAt = new DateTime(2024, 3, 8)
                 },
                 new Product
@@ -76,7 +76,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Intel Core Ultra 7 işlemci, 14 inç AMOLED ekran ve hafif alüminyum gövde.",
                     Price = 38999.99m,
                     Score = 4.4f,
-                    ImagePath = "/images/products/galaxybook4pro.jpg",
+                    ImagePath = "products/galaxybook4pro.jpg",
                     CreatedAt = new DateTime(2024, 4, 12)
                 },
                 new Product
@@ -90,7 +90,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Neo Quantum işlemci, Mini LED arka aydınlatma ve Dolby Atmos ses desteği.",
                     Price = 34999.99m,
                     Score = 4.6f,
-                    ImagePath = "/images/products/samsungneqled65.jpg",
+                    ImagePath = "products/samsungneqled65.jpg",
                     CreatedAt = new DateTime(2024, 2, 18)
                 },
                 new Product
@@ -104,7 +104,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "OLED evo panel, α9 AI işlemci ve webOS 24 ile sinema kalitesi deneyim.",
                     Price = 29999.99m,
                     Score = 4.8f,
-                    ImagePath = "/images/products/lgoled c4.jpg",
+                    ImagePath = "products/lgoled c4.jpg",
                     CreatedAt = new DateTime(2024, 5, 22)
                 },
                 new Product
@@ -118,7 +118,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Sektörün en iyi gürültü engelleme teknolojisi, 30 saat pil ömrü ve katlanabilir tasarım.",
                     Price = 9999.99m,
                     Score = 4.9f,
-                    ImagePath = "/images/products/sonywh1000xm5.jpg",
+                    ImagePath = "products/sonywh1000xm5.jpg",
                     CreatedAt = new DateTime(2023, 11, 5)
                 },
                 new Product
@@ -132,7 +132,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "Aktif gürültü engelleme, Adaptif Ses ve H2 çip ile mükemmel ses deneyimi.",
                     Price = 8499.99m,
                     Score = 4.7f,
-                    ImagePath = "/images/products/airpodspro2.jpg",
+                    ImagePath = "products/airpodspro2.jpg",
                     CreatedAt = new DateTime(2023, 9, 23)
                 },
                 new Product
@@ -146,7 +146,7 @@ namespace ECOM.API.Data.SeedData
                     Description = "OLED ekran, HEPA filtre ve Mi Home uygulaması ile akıllı hava temizleyici.",
                     Price = 3499.99m,
                     Score = 4.3f,
-                    ImagePath = "/images/products/xiaomipurifier4pro.jpg",
+                    ImagePath = "products/xiaomipurifier4pro.jpg",
                     CreatedAt = new DateTime(2024, 6, 30)
                 }
             );

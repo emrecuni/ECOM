@@ -84,7 +84,7 @@ namespace ECOM.Controllers
                     CustomerId = customerId,
                     CategoryIds = categoryResult?.Data?.Result
                 };
-
+ 
                 var result = await _productService.SearchProductsByWithCategory(model, ct);
 
                 if( result.IsSuccess && result.Data?.Status == Status.Success)

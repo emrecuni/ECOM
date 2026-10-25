@@ -1,4 +1,4 @@
-@model ECOM.Models.ProductDetailViewModel
+@model ECOM.Shared.Data.DTOs.Product.DetailProductResponseDto
 
 @section Styles {
     <link rel="stylesheet" href="~/css/product.css">
@@ -9,11 +9,11 @@
     <div class="breadcrumb-bar">
         <a asp-controller="Main" asp-action="Index">Ana Sayfa</a>
         <span class="sep"><i class="fas fa-chevron-right"></i></span>
-        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SupCategoryId">@Model.Product!.SupCategory.Name</a>
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.SupCategoryId">@Model.SupCategory</a>
         <span class="sep"><i class="fas fa-chevron-right"></i></span>
-        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.Product.SubCategoryId">@Model.Product.SubCategory.Name</a>
+        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@Model.SubCategoryId">@Model.SubCategory</a>
         <span class="sep"><i class="fas fa-chevron-right"></i></span>
-        <span class="current">@Model.Product.Name</span>
+        <span class="current">@Model.Name</span>
     </div>
 
     <!-- Main Product Card -->
@@ -21,7 +21,7 @@
         <!-- Image -->
         <div class="product-gallery">
             <div class="product-main-img">
-                <img src="~/@Model.Product.ImagePath" alt="@Model.Product.Name">
+                <img src="~/img/@Model.ImagePath" alt="@Model.Name">
             </div>
         </div>
 
@@ -29,27 +29,27 @@
         <div class="product-info-panel">
             <span class="product-brand-badge">
                 <i class="fas fa-tag"></i>
-                @Model.Product.Brand.Name
+                @Model.BrandName
             </span>
 
-            <h1 class="product-title">@Model.Product.Name</h1>
+            <h1 class="product-title">@Model.Name</h1>
 
             <!-- Rating -->
             <div class="product-rating-row">
-                @if (Model.Product.Comments.Count > 0)
+                @if (Model.Comments.Count > 0)
                 {
                     <div class="score-badge">
                         <i class="fas fa-star"></i>
-                        @Model.Product.Score
+                        @Model.Score
                     </div>
                     <div class="star-row">
                         @for (int i = 1; i <= 5; i++)
                         {
-                            <span class="star" data-filled="@(i <= Model.Product.Score ? "true" : "false")">&#9733;</span>
+                            <span class="star" data-filled="@(i <= Model.Score ? "true" : "false")">&#9733;</span>
                         }
                     </div>
                     <a class="review-count-link" href="javascript:void(0);" onclick="scrollToSection('comments')">
-                        @Model.Product.Comments.Count Değerlendirme
+                        @Model.Comments.Count Değerlendirme
                     </a>
                 }
                 else
@@ -67,22 +67,22 @@
             <div class="seller-info">
                 <i class="fas fa-store" style="color:var(--primary)"></i>
                 <span>Satıcı:</span>
-                <span class="seller-badge">@Model.Product.Seller.Name</span>
+                <span class="seller-badge">@Model.SellerName</span>
             </div>
 
             <!-- Price -->
             <div class="product-price-block">
                 <span class="price-currency">₺</span>
-                <span class="price-amount">@Model.Product.Price</span>
+                <span class="price-amount">@Model.Price</span>
             </div>
 
             <!-- Actions -->
             <div class="product-actions">
                 <form asp-action="AddCart" method="post" style="flex:1; min-width:160px;">
-                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                    <input type="hidden" name="productName" value="@Model.Product.Name">
-                    <input type="hidden" name="sellerId" value="@Model.Product.SellerId">
-                    <input type="hidden" name="price" value="@Model.Product.Price">
+                    <input type="hidden" name="productId" value="@Model.ProductId" />
+                    <input type="hidden" name="productName" value="@Model.Name">
+                    <input type="hidden" name="sellerId" value="@Model.SellerId">
+                    <input type="hidden" name="price" value="@Model.Price">
                     <button type="submit" class="btn-add-cart" style="width:100%;">
                         <i class="fas fa-shopping-cart"></i>
                         Sepete Ekle
@@ -110,7 +110,7 @@
         <h2 class="section-card-title">
             <i class="fas fa-align-left"></i> Ürün Açıklaması
         </h2>
-        <p class="description-text">@Model.Product.Description</p>
+        <p class="description-text">@Model.Description</p>
     </div>
 
     <!-- Reviews -->
@@ -135,10 +135,10 @@
                 <div class="review-item">
                     <div class="reviewer-info">
                         <div class="reviewer-avatar">
-                            @comment.Customer.Name.Substring(0, 1).ToUpper()
+                            @comment.CustomerName?.Substring(0, 1).ToUpper()
                         </div>
                         <div>
-                            <div class="reviewer-name">@comment.Customer.Name @comment.Customer.Surname!.Substring(0, 1).</div>
+                            <div class="reviewer-name">@comment.CustomerName @comment.CustomerSurname!.Substring(0, 1).</div>
                             <div class="review-stars">
                                 @for (int i = 0; i < 5; i++)
                                 {
@@ -169,7 +169,7 @@
                 </ul>
 
                 <input type="hidden" id="rate" name="rate" value="3">
-                <input type="hidden" name="id" value="@Model.Product.ProductId">
+                <input type="hidden" name="id" value="@Model.ProductId">
 
                 <textarea class="review-textarea" id="review-text" name="review" rows="4"
                           placeholder="Ürün hakkındaki düşüncelerinizi paylaşın..."></textarea>

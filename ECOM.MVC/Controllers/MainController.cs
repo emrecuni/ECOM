@@ -1,6 +1,7 @@
 ﻿
 using ECOM.Models;
 using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Infrastructure.Services;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.DTO;
 using ECOM.MVC.OldFiles.Services;
@@ -31,8 +32,7 @@ namespace ECOM.Controllers
         [Authorize]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-            var customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var result = await _productService.GetAllProductsAsync(customerId, ct);
+            var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), ct);
 
             if (result is null)
             {
@@ -71,26 +71,22 @@ namespace ECOM.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ProductsByCategoryName(string category,CancellationToken ct)
+        public async Task<IActionResult> ProductsByCategoryName(string category, CancellationToken ct)
         {
             try
             {
                 int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                var categoryResult = await _productService.GetCategoryIdsAsync(category,ct);
+                var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
 
-                SearchProductByCategoryRequestDto model = new()
+                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto()
                 {
-                    CustomerId = customerId,
+                    CustomerId = User.GetCustomerId(),
                     CategoryIds = categoryResult?.Data?.Result
-                };
- 
-                var result = await _productService.SearchProductsByWithCategory(model, ct);
+                }, ct);
 
-                if( result.IsSuccess && result.Data?.Status == Status.Success)
-                {
-                    return View("Index", result.Data.Result);
-                }
+                if (result.IsSuccess && result.Data?.Status == Status.Success)                
+                    return View("Index", result.Data.Result);                
                 else
                 {
                     ErrorViewModel error = new()
@@ -110,22 +106,43 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> ProductsByCategoryId(int id)
+        public async Task<IActionResult> ProductsByCategoryId(int id, CancellationToken ct)
         {
             try
             {
                 if (id == 0) // buradaki kontrolü geliştir
                     return View("Index");
 
-                var products = await _context.Products
-                    .Include(p => p.Brand)
-                    .Include(p => p.SupCategory)
-                    .Include(p => p.SubCategory)
-                    .Include(p => p.Seller)
-                    .Where(p => p.SupCategoryId == id || p.SubCategoryId == id)
-                    .ToListAsync();
 
-                return View("Index", products);
+                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
+                {
+                    CategoryIds = new List<int>() { id },
+                    CustomerId = User.GetCustomerId()
+                }, ct);
+
+                if (result.IsSuccess && result.Data?.Status == Status.Success)                
+                    return View("Index", result.Data.Result);                
+                else
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = $"Message: {result.ErrorMessage}",
+                        Title = "Ürünler getirilirken bir hata oluştu."
+                    };
+                    _logger.LogError($"Main/ProductsByCategoryId Error ");
+                    return View("Error", error);
+                }
+
+                //var products = await _context.Products
+                //    .Include(p => p.Brand)
+                //    .Include(p => p.SupCategory)
+                //    .Include(p => p.SubCategory)
+                //    .Include(p => p.Seller)
+                //    .Where(p => p.SupCategoryId == id || p.SubCategoryId == id)
+                //    .ToListAsync();
+
+                //return View("Index", products);
             }
             catch (Exception ex)
             {

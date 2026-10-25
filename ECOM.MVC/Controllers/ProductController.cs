@@ -1,6 +1,10 @@
 ﻿using ECOM.Models;
+using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Infrastructure.Services;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Services;
+using ECOM.Shared.Data.DTOs.Product;
+using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog.Targets;
@@ -11,25 +15,70 @@ namespace ECOM.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly IProductApiClient _productService;
         private readonly DataContext _context;
         private readonly ProductDataProcess _product;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(DataContext context, ProductDataProcess product)
+        public ProductController(IProductApiClient productService, DataContext context, ProductDataProcess product, ILogger<ProductController> logger)
         {
+            _productService = productService;
             _context = context;
             _product = product;
+            _logger = logger;
         }
 
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int id, CancellationToken ct)
         {
             try
             {
-                var productViewModel = await _product.GetProductWithCommentsById(id);
+                var result = await _productService.GetProductDetailsAsync(new DetailProductRequestDto()
+                {
+                    CustomerId = User.GetCustomerId(),
+                    ProductId = id
+                }, ct);
 
-                if (productViewModel?.Product is null) // ürün bulunamazsa hata mesajı döndürsün
-                    return NotFound();
+                if (result is null)
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = "Message: Ürün detayı çekilirken bir hata oluştu.",
+                        Title = "Ürün Sayfası Yüklenirken Bir Hata Oluştu."
+                    };
+                    _logger.LogError($"Product/Index Error ");
+                    return View("Error", error);
+                }
+                else if (!result.IsSuccess)
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = $"Message: {result.ErrorMessage}",
+                        Title = "Ürün Sayfası Yüklenirken Bir Hata Oluştu."
+                    };
+                    _logger.LogError($"Product/Index Error ");
+                    return View("Error", error);
+                }
+                else if (result.Data is not null && result.Data.Status != Status.Success)
+                {
+                    ErrorViewModel error = new()
+                    {
+                        RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                        Message = $"Message: {result.Data.Message}",
+                        Title = "Ürün Sayfası Yüklenirken Bir Hata Oluştu."
+                    };
+                    _logger.LogError($"Product/Index Error ");
+                    return View("Error", error);
+                }
+                return View(result!.Data!.Result);
 
-                return View(productViewModel);
+                //var productViewModel = await _product.GetProductWithCommentsById(id);
+
+                //if (productViewModel?.Product is null) // ürün bulunamazsa hata mesajı döndürsün
+                //    return NotFound();
+
+                //return View(productViewModel);
             }
             catch (Exception ex)
             {

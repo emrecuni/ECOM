@@ -19,12 +19,14 @@ namespace ECOM.Controllers
     public class MainController : Controller
     {
         private readonly IProductApiClient _productService;
+        private readonly ICustomerApiClient _customerService;
         private readonly DataContext _context;
         private readonly ILogger<MainController> _logger;
 
-        public MainController(IProductApiClient productService, DataContext context, ILogger<MainController> logger)
+        public MainController(IProductApiClient productService, ICustomerApiClient customerService, DataContext context, ILogger<MainController> logger)
         {
             _productService = productService;
+            _customerService = customerService;
             _context = context;
             _logger = logger;
         }
@@ -116,7 +118,7 @@ namespace ECOM.Controllers
 
                 var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
-                    CategoryIds = new List<int>{ id },
+                    CategoryIds = new List<int> { id },
                     CustomerId = User.GetCustomerId()
                 }, ct);
 
@@ -149,7 +151,7 @@ namespace ECOM.Controllers
                     return View("Index");
 
                 var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
-                
+
                 var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
@@ -178,32 +180,36 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Favorite(int id)
+        public async Task<IActionResult> Favorite(int id, CancellationToken ct)
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                bool isFavorite;
-                var favorite = await _context.Favorites.FirstOrDefaultAsync(f => f.CustomerId == customerId && f.ProductId == id);
+                var favoriteResult = await _customerService.GetFavoritesAsync(User.GetCustomerId(), ct);
 
-                if (favorite is null) // favorilerde yoksa eklenir
+                if (favoriteResult.IsSuccess && favoriteResult.Data!.Result!.Any(f => f.ProductId == id))
                 {
-                    _context.Favorites.Add(favorite = new Favorites
+                    var removeResult = await _customerService.RemoveFavoriteAsync(new FavoriteRequestDto
                     {
-                        CustomerId = customerId,
-                        ProductId = id,
-                        CreatedAt = DateTime.Now
-                    });
-                    isFavorite = true;
+                        CustomerId = User.GetCustomerId(),
+                        ProductId = id
+                    }, ct);
+                    if (removeResult.IsSuccess)
+                        return Json(new { isFavorite = false });
+                    else
+                        return Json(new { isFavorite = true });
                 }
-                else // favorilerde varsa silinir
+                else
                 {
-                    _context.Favorites.Remove(favorite);
-                    isFavorite = false;
+                    var addResult = await _customerService.AddFavoriteAsync(new FavoriteRequestDto
+                    {
+                        CustomerId = User.GetCustomerId(),
+                        ProductId = id
+                    }, ct);
+                    if (addResult.IsSuccess)
+                        return Json(new { isFavorite = true });
+                    else
+                        return Json(new { isFavorite = false });
                 }
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
-
-                return Json(new { isFavorite });
             }
             catch (Exception ex)
             {

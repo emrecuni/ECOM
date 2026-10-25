@@ -72,13 +72,6 @@ namespace ECOM.Controllers
                     return View("Error", error);
                 }
                 return View(result!.Data!.Result);
-
-                //var productViewModel = await _product.GetProductWithCommentsById(id);
-
-                //if (productViewModel?.Product is null) // ürün bulunamazsa hata mesajı döndürsün
-                //    return NotFound();
-
-                //return View(productViewModel);
             }
             catch (Exception ex)
             {

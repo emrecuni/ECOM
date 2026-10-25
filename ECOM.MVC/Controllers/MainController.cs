@@ -133,16 +133,6 @@ namespace ECOM.Controllers
                     _logger.LogError($"Main/ProductsByCategoryId Error ");
                     return View("Error", error);
                 }
-
-                //var products = await _context.Products
-                //    .Include(p => p.Brand)
-                //    .Include(p => p.SupCategory)
-                //    .Include(p => p.SubCategory)
-                //    .Include(p => p.Seller)
-                //    .Where(p => p.SupCategoryId == id || p.SubCategoryId == id)
-                //    .ToListAsync();
-
-                //return View("Index", products);
             }
             catch (Exception ex)
             {

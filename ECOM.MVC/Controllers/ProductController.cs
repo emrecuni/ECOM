@@ -32,7 +32,7 @@ namespace ECOM.Controllers
         {
             try
             {
-                var result = await _productService.GetProductDetailsAsync(new DetailProductRequestDto()
+                var result = await _productService.GetProductDetailsAsync(new DetailProductRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
                     ProductId = id

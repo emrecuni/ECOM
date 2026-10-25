@@ -75,18 +75,19 @@ namespace ECOM.Controllers
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
                 var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
 
-                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto()
+                if (categoryResult?.Data?.Result?.Count == 0)
+                    return RedirectToAction("Index");
+
+                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
                     CategoryIds = categoryResult?.Data?.Result
                 }, ct);
 
-                if (result.IsSuccess && result.Data?.Status == Status.Success)                
-                    return View("Index", result.Data.Result);                
+                if (result.IsSuccess && result.Data?.Status == Status.Success)
+                    return View("Index", result.Data.Result);
                 else
                 {
                     ErrorViewModel error = new()
@@ -113,15 +114,14 @@ namespace ECOM.Controllers
                 if (id == 0) // buradaki kontrolü geliştir
                     return View("Index");
 
-
                 var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
-                    CategoryIds = new List<int>() { id },
+                    CategoryIds = new List<int>{ id },
                     CustomerId = User.GetCustomerId()
                 }, ct);
 
-                if (result.IsSuccess && result.Data?.Status == Status.Success)                
-                    return View("Index", result.Data.Result);                
+                if (result.IsSuccess && result.Data?.Status == Status.Success)
+                    return View("Index", result.Data.Result);
                 else
                 {
                     ErrorViewModel error = new()
@@ -148,23 +148,16 @@ namespace ECOM.Controllers
                 if (category is null)
                     return View("Index");
 
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
                 var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
-
-                SearchProductByCategoryRequestDto model = new()
+                
+                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
-                    CustomerId = customerId,
+                    CustomerId = User.GetCustomerId(),
                     CategoryIds = categoryResult?.Data?.Result
-                };
-
-
-                var result = await _productService.SearchProductsByWithCategory(model, ct);
+                }, ct);
 
                 if (result.IsSuccess && result.Data?.Status == Status.Success)
-                {
                     return View("Index", result.Data.Result);
-                }
                 else
                 {
                     ErrorViewModel error = new()

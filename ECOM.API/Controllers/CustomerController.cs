@@ -123,6 +123,16 @@ namespace ECOM.API.Controllers
             var response = await _customerService.RemoveAddress(model);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpPatch("EditAddress")]
+        public async Task<IActionResult> EditAddress([FromBody] AddressRequestDto model)
+        {
+            if (!ModelState.IsValid || model is null)
+                return BadRequest(ModelState);
+            var response = await _customerService.EditAddress(model);
+            return Ok(response);
+        }
         #endregion Address
     }
 }

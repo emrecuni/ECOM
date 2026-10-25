@@ -19,127 +19,67 @@ namespace ECOM.MVC.Infrastructure.Services
         public async Task<ApiResult<Response<string>>?> AddCartAsync(AddCartRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Product/AddCart", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<string>>(ct);
-                return ApiResult<Response<string>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<string>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<string>>(response, ct);
         }
 
         public async Task<ApiResult<Response<string>>?> AddCommentAsync(AddCommentRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Product/AddComment", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<string>>(ct);
-                return ApiResult<Response<string>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<string>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<string>>(response, ct);
         }
 
         public async Task<ApiResult<Response<string>>?> EditCartAsync(EditCartRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PatchAsJsonAsync("api/Product/EditCart", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<string>>(ct);
-                return ApiResult<Response<string>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<string>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<string>>(response, ct);
         }
 
         public async Task<ApiResult<Response<List<BasicProductResponseDto>>>?> GetAllProductsAsync(int customerId, CancellationToken ct)
         {
             var response = await _httpClient.GetAsync($"api/Product/GetProducts?customerId={customerId}", ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<List<BasicProductResponseDto>>>(ct);
-                return ApiResult<Response<List<BasicProductResponseDto>>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<List<BasicProductResponseDto>>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
         }
 
         public async Task<ApiResult<Response<List<CartResponseDto>>>?> GetCartAsync(int customerId, CancellationToken ct)
         {
             var response = await _httpClient.GetAsync($"api/Product/GetCart?customerId={customerId}", ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<List<CartResponseDto>>>(ct);
-                return ApiResult<Response<List<CartResponseDto>>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<List<CartResponseDto>>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<List<CartResponseDto>>>(response, ct);
         }
 
         public async Task<ApiResult<Response<DetailProductResponseDto>>?> GetProductDetailsAsync(DetailProductRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.GetAsync($"api/Product/GetProductDetails?productId={model.ProductId}&customerId={model.CustomerId}", ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<DetailProductResponseDto>>(ct);
-                return ApiResult<Response<DetailProductResponseDto>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<DetailProductResponseDto>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<DetailProductResponseDto>>(response, ct);
         }
 
         public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync($"api/Product/SearchProductsByWithCategory", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<List<BasicProductResponseDto>>>(ct);
-                return ApiResult<Response<List<BasicProductResponseDto>>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<List<BasicProductResponseDto>>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
         }
 
         public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithName(SearchProductByNameRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.GetAsync($"api/Product/SearchProductsByWithName?name={model.ProductName}&customerId={model.CustomerId}", ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<List<BasicProductResponseDto>>>(ct);
-                return ApiResult<Response<List<BasicProductResponseDto>>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<List<BasicProductResponseDto>>>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
         }
 
         public async Task<ApiResult<Response<List<int>>>> GetCategoryIdsAsync(string category, CancellationToken ct)
         {
             var response = await _httpClient.GetAsync($"api/Product/GetCategoryIds?category={category}", ct);
+            return await ToApiResultAsync<Response<List<int>>>(response, ct);
+        }
 
+        private static async Task<ApiResult<T>> ToApiResultAsync<T>(HttpResponseMessage response, CancellationToken ct)
+        {
             if (response.IsSuccessStatusCode)
             {
-                var data = await response.Content.ReadFromJsonAsync<Response<List<int>>>(ct);
-                return ApiResult<Response<List<int>>>.Ok(data!, response.StatusCode);
+                var data = await response.Content.ReadFromJsonAsync<T>(ct);
+                return ApiResult<T>.Ok(data!, response.StatusCode);
             }
 
             var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<List<int>>>.Fail(error, response.StatusCode);
+            return ApiResult<T>.Fail(error, response.StatusCode);
         }
 
         private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken ct)

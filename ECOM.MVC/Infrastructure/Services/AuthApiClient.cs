@@ -20,71 +20,49 @@ namespace ECOM.MVC.Infrastructure.Services
         public async Task<ApiResult<LoginResponseDto>?> TokenAsync(LoginRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/Token", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<LoginResponseDto>(ct);
-                return ApiResult<LoginResponseDto>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<LoginResponseDto>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<LoginResponseDto>(response, ct);
         }
 
         public async Task<ApiResult<Response<SmtpResponseDto>?>> SendOtpAsync(OtpRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/SendOTP", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<SmtpResponseDto>>(ct);
-                return ApiResult<Response<SmtpResponseDto>?>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<SmtpResponseDto>?>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<SmtpResponseDto>?>(response, ct);
         }
 
         public async Task<ApiResult<Response<OtpResponseDto>?>> CheckOtpAsync(OtpRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/CheckOTP", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<OtpResponseDto>>(ct);
-                return ApiResult<Response<OtpResponseDto>?>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<OtpResponseDto>?>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<OtpResponseDto>?>(response, ct);
         }
 
         public async Task<ApiResult<Response<RegisterResponseDto>?>> RegisterAsync(RegisterRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/Register", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<RegisterResponseDto>>(ct);
-                return ApiResult<Response<RegisterResponseDto>?>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<RegisterResponseDto>?>.Fail(error, response.StatusCode);
+            return await ToApiResultAsync<Response<RegisterResponseDto>?>(response, ct);
         }
 
         public async Task<ApiResult<Response<ResetPasswordResponseDto>?>> ResetPasswordAsync(ResetPasswordRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Auth/ResetPassword", model, ct);
+            return await ToApiResultAsync<Response<ResetPasswordResponseDto>?>(response, ct);
+        }
 
+        public async Task<ApiResult<Response<bool>>> CheckExistsCustomer(CheckCustomerDto model, CancellationToken ct)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/CheckExistsCustomer", model, ct);
+            return await ToApiResultAsync<Response<bool>>(response, ct);
+        }
+
+        private static async Task<ApiResult<T>> ToApiResultAsync<T>(HttpResponseMessage response, CancellationToken ct)
+        {
             if (response.IsSuccessStatusCode)
             {
-                var data = await response.Content.ReadFromJsonAsync<Response<ResetPasswordResponseDto>>(ct);
-                return ApiResult<Response<ResetPasswordResponseDto>?>.Ok(data!, response.StatusCode);
+                var data = await response.Content.ReadFromJsonAsync<T>(ct);
+                return ApiResult<T>.Ok(data!, response.StatusCode);
             }
 
             var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<ResetPasswordResponseDto>?>.Fail(error, response.StatusCode);
+            return ApiResult<T>.Fail(error, response.StatusCode);
         }
 
         private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken ct)
@@ -107,20 +85,6 @@ namespace ECOM.MVC.Infrastructure.Services
                 HttpStatusCode.BadRequest => "Geçersiz istek.",
                 _ => "Bir hata oluştu, lütfen tekrar deneyin."
             };
-        }
-
-        public async Task<ApiResult<Response<bool>>> CheckExistsCustomer(CheckCustomerDto model, CancellationToken ct)
-        {
-            var response = await _httpClient.PostAsJsonAsync("api/Auth/CheckExistsCustomer", model, ct);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = await response.Content.ReadFromJsonAsync<Response<bool>>(ct);
-                return ApiResult<Response<bool>>.Ok(data!, response.StatusCode);
-            }
-
-            var error = await ReadErrorMessageAsync(response, ct);
-            return ApiResult<Response<bool>>.Fail(error, response.StatusCode);
         }
     }
 }

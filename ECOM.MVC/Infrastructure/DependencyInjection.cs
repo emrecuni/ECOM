@@ -18,6 +18,7 @@ namespace ECOM.MVC.Infrastructure
 
             services.AddEcomClient<IAuthApiClient, AuthApiClient>(baseUrl);
             services.AddEcomClient<IProductApiClient, ProductApiClient>(baseUrl);
+            services.AddEcomClient<ICustomerApiClient, CustomerApiClient>(baseUrl);
 
             return services;
         }

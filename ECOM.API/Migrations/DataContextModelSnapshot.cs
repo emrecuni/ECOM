@@ -196,6 +196,48 @@ namespace ECOM.API.Migrations
                             BrandId = 5,
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Xiaomi"
+                        },
+                        new
+                        {
+                            BrandId = 6,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nike"
+                        },
+                        new
+                        {
+                            BrandId = 7,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Adidas"
+                        },
+                        new
+                        {
+                            BrandId = 8,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mavi"
+                        },
+                        new
+                        {
+                            BrandId = 9,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zara"
+                        },
+                        new
+                        {
+                            BrandId = 10,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "IKEA"
+                        },
+                        new
+                        {
+                            BrandId = 11,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Karaca"
+                        },
+                        new
+                        {
+                            BrandId = 12,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tefal"
                         });
                 });
 
@@ -1739,6 +1781,146 @@ namespace ECOM.API.Migrations
                             SellerId = 1,
                             SubCategoryId = 6,
                             SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 11,
+                            BrandId = 8,
+                            CreatedAt = new DateTime(2024, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Esnek denim kumaş, slim fit kesim ve koyu indigo yıkama ile günlük kullanıma uygun erkek jean.",
+                            ImagePath = "products/mavijakejean.jpg",
+                            Name = "Mavi Jake Slim Fit Jean",
+                            Price = 1799.99m,
+                            Score = 4.5f,
+                            SellerId = 4,
+                            SubCategoryId = 8,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 12,
+                            BrandId = 7,
+                            CreatedAt = new DateTime(2024, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yumuşak pamuklu iç yüzey, klasik 3 şerit detayı ve rahat kesimli erkek sweatshirt.",
+                            ImagePath = "products/adidasessentialssweat.jpg",
+                            Name = "Adidas Essentials 3-Stripes Sweatshirt",
+                            Price = 1499.99m,
+                            Score = 4.4f,
+                            SellerId = 4,
+                            SubCategoryId = 8,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 13,
+                            BrandId = 9,
+                            CreatedAt = new DateTime(2024, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Su itici kumaş, kruvaze önden kapanış ve bel kuşağı ile zamansız kadın trençkot.",
+                            ImagePath = "products/zaratrenckot.jpg",
+                            Name = "Zara Kuşaklı Trençkot",
+                            Price = 3299.99m,
+                            Score = 4.6f,
+                            SellerId = 4,
+                            SubCategoryId = 9,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 14,
+                            BrandId = 8,
+                            CreatedAt = new DateTime(2024, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yüksek bel, skinny kesim ve toparlayıcı esnek kumaş ile kadın jean.",
+                            ImagePath = "products/maviserenayjean.jpg",
+                            Name = "Mavi Serenay Yüksek Bel Jean",
+                            Price = 1699.99m,
+                            Score = 4.3f,
+                            SellerId = 4,
+                            SubCategoryId = 9,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 15,
+                            BrandId = 6,
+                            CreatedAt = new DateTime(2024, 2, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Deri üst yüzey, Air yastıklama teknolojisi ve ikonik tasarımıyla günlük spor ayakkabı.",
+                            ImagePath = "products/nikeairforce1.jpg",
+                            Name = "Nike Air Force 1 '07",
+                            Price = 4299.99m,
+                            Score = 4.8f,
+                            SellerId = 4,
+                            SubCategoryId = 10,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 16,
+                            BrandId = 7,
+                            CreatedAt = new DateTime(2024, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hafif Boost ara taban, Primeknit üst yüzey ve Continental dış taban ile koşu ayakkabısı.",
+                            ImagePath = "products/adidasultraboostlight.jpg",
+                            Name = "Adidas Ultraboost Light",
+                            Price = 6499.99m,
+                            Score = 4.7f,
+                            SellerId = 4,
+                            SubCategoryId = 10,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 17,
+                            BrandId = 10,
+                            CreatedAt = new DateTime(2024, 1, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "4x4 bölmeli, çok yönlü kullanılabilen beyaz raf ünitesi; dikey veya yatay yerleştirilebilir.",
+                            ImagePath = "products/ikeakallax.jpg",
+                            Name = "IKEA KALLAX Raf Ünitesi",
+                            Price = 4999.99m,
+                            Score = 4.6f,
+                            SellerId = 5,
+                            SubCategoryId = 12,
+                            SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 18,
+                            BrandId = 10,
+                            CreatedAt = new DateTime(2024, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Huş kaplama esnek çerçeve ve yıkanabilir minder kılıfı ile ergonomik dinlenme koltuğu.",
+                            ImagePath = "products/ikeapoang.jpg",
+                            Name = "IKEA POÄNG Koltuk",
+                            Price = 5999.99m,
+                            Score = 4.5f,
+                            SellerId = 5,
+                            SubCategoryId = 12,
+                            SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 19,
+                            BrandId = 11,
+                            CreatedAt = new DateTime(2024, 8, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Köpük sensörü, sesli uyarı ve 5 fincan kapasitesi ile pratik Türk kahvesi makinesi.",
+                            ImagePath = "products/karacahatir.jpg",
+                            Name = "Karaca Hatır Türk Kahvesi Makinesi",
+                            Price = 2499.99m,
+                            Score = 4.6f,
+                            SellerId = 5,
+                            SubCategoryId = 13,
+                            SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 20,
+                            BrandId = 12,
+                            CreatedAt = new DateTime(2024, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Çıkarılabilir saplar, Titanium yapışmaz kaplama ve indüksiyon uyumlu tabanlı istiflenebilir set.",
+                            ImagePath = "products/tefalingenio.jpg",
+                            Name = "Tefal Ingenio 13 Parça Tencere Seti",
+                            Price = 6999.99m,
+                            Score = 4.7f,
+                            SellerId = 5,
+                            SubCategoryId = 13,
+                            SupCategoryId = 11
                         });
                 });
 
@@ -1809,6 +1991,55 @@ namespace ECOM.API.Migrations
                             CategoryId = 6,
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Küçük Ev Aletleri",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 7,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Moda",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 8,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Erkek Giyim",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 9,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Kadın Giyim",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 10,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ayakkabı",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 11,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ev & Yaşam",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 12,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mobilya",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 13,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mutfak Gereçleri",
                             Type = false
                         });
                 });
@@ -1886,6 +2117,18 @@ namespace ECOM.API.Migrations
                             SellerId = 3,
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "DigiShop"
+                        },
+                        new
+                        {
+                            SellerId = 4,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "ModaPlus"
+                        },
+                        new
+                        {
+                            SellerId = 5,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EvDekor"
                         });
                 });
 

@@ -148,6 +148,146 @@ namespace ECOM.API.Data.SeedData
                     Score = 4.3f,
                     ImagePath = "products/xiaomipurifier4pro.jpg",
                     CreatedAt = new DateTime(2024, 6, 30)
+                },
+                new Product
+                {
+                    ProductId = 11,
+                    BrandId = 8,
+                    SupCategoryId = 7,
+                    SubCategoryId = 8,
+                    SellerId = 4,
+                    Name = "Mavi Jake Slim Fit Jean",
+                    Description = "Esnek denim kumaş, slim fit kesim ve koyu indigo yıkama ile günlük kullanıma uygun erkek jean.",
+                    Price = 1799.99m,
+                    Score = 4.5f,
+                    ImagePath = "products/mavijakejean.jpg",
+                    CreatedAt = new DateTime(2024, 3, 14)
+                },
+                new Product
+                {
+                    ProductId = 12,
+                    BrandId = 7,
+                    SupCategoryId = 7,
+                    SubCategoryId = 8,
+                    SellerId = 4,
+                    Name = "Adidas Essentials 3-Stripes Sweatshirt",
+                    Description = "Yumuşak pamuklu iç yüzey, klasik 3 şerit detayı ve rahat kesimli erkek sweatshirt.",
+                    Price = 1499.99m,
+                    Score = 4.4f,
+                    ImagePath = "products/adidasessentialssweat.jpg",
+                    CreatedAt = new DateTime(2024, 10, 8)
+                },
+                new Product
+                {
+                    ProductId = 13,
+                    BrandId = 9,
+                    SupCategoryId = 7,
+                    SubCategoryId = 9,
+                    SellerId = 4,
+                    Name = "Zara Kuşaklı Trençkot",
+                    Description = "Su itici kumaş, kruvaze önden kapanış ve bel kuşağı ile zamansız kadın trençkot.",
+                    Price = 3299.99m,
+                    Score = 4.6f,
+                    ImagePath = "products/zaratrenckot.jpg",
+                    CreatedAt = new DateTime(2024, 9, 2)
+                },
+                new Product
+                {
+                    ProductId = 14,
+                    BrandId = 8,
+                    SupCategoryId = 7,
+                    SubCategoryId = 9,
+                    SellerId = 4,
+                    Name = "Mavi Serenay Yüksek Bel Jean",
+                    Description = "Yüksek bel, skinny kesim ve toparlayıcı esnek kumaş ile kadın jean.",
+                    Price = 1699.99m,
+                    Score = 4.3f,
+                    ImagePath = "products/maviserenayjean.jpg",
+                    CreatedAt = new DateTime(2024, 5, 6)
+                },
+                new Product
+                {
+                    ProductId = 15,
+                    BrandId = 6,
+                    SupCategoryId = 7,
+                    SubCategoryId = 10,
+                    SellerId = 4,
+                    Name = "Nike Air Force 1 '07",
+                    Description = "Deri üst yüzey, Air yastıklama teknolojisi ve ikonik tasarımıyla günlük spor ayakkabı.",
+                    Price = 4299.99m,
+                    Score = 4.8f,
+                    ImagePath = "products/nikeairforce1.jpg",
+                    CreatedAt = new DateTime(2024, 2, 27)
+                },
+                new Product
+                {
+                    ProductId = 16,
+                    BrandId = 7,
+                    SupCategoryId = 7,
+                    SubCategoryId = 10,
+                    SellerId = 4,
+                    Name = "Adidas Ultraboost Light",
+                    Description = "Hafif Boost ara taban, Primeknit üst yüzey ve Continental dış taban ile koşu ayakkabısı.",
+                    Price = 6499.99m,
+                    Score = 4.7f,
+                    ImagePath = "products/adidasultraboostlight.jpg",
+                    CreatedAt = new DateTime(2024, 4, 19)
+                },
+                new Product
+                {
+                    ProductId = 17,
+                    BrandId = 10,
+                    SupCategoryId = 11,
+                    SubCategoryId = 12,
+                    SellerId = 5,
+                    Name = "IKEA KALLAX Raf Ünitesi",
+                    Description = "4x4 bölmeli, çok yönlü kullanılabilen beyaz raf ünitesi; dikey veya yatay yerleştirilebilir.",
+                    Price = 4999.99m,
+                    Score = 4.6f,
+                    ImagePath = "products/ikeakallax.jpg",
+                    CreatedAt = new DateTime(2024, 1, 11)
+                },
+                new Product
+                {
+                    ProductId = 18,
+                    BrandId = 10,
+                    SupCategoryId = 11,
+                    SubCategoryId = 12,
+                    SellerId = 5,
+                    Name = "IKEA POÄNG Koltuk",
+                    Description = "Huş kaplama esnek çerçeve ve yıkanabilir minder kılıfı ile ergonomik dinlenme koltuğu.",
+                    Price = 5999.99m,
+                    Score = 4.5f,
+                    ImagePath = "products/ikeapoang.jpg",
+                    CreatedAt = new DateTime(2024, 7, 3)
+                },
+                new Product
+                {
+                    ProductId = 19,
+                    BrandId = 11,
+                    SupCategoryId = 11,
+                    SubCategoryId = 13,
+                    SellerId = 5,
+                    Name = "Karaca Hatır Türk Kahvesi Makinesi",
+                    Description = "Köpük sensörü, sesli uyarı ve 5 fincan kapasitesi ile pratik Türk kahvesi makinesi.",
+                    Price = 2499.99m,
+                    Score = 4.6f,
+                    ImagePath = "products/karacahatir.jpg",
+                    CreatedAt = new DateTime(2024, 8, 21)
+                },
+                new Product
+                {
+                    ProductId = 20,
+                    BrandId = 12,
+                    SupCategoryId = 11,
+                    SubCategoryId = 13,
+                    SellerId = 5,
+                    Name = "Tefal Ingenio 13 Parça Tencere Seti",
+                    Description = "Çıkarılabilir saplar, Titanium yapışmaz kaplama ve indüksiyon uyumlu tabanlı istiflenebilir set.",
+                    Price = 6999.99m,
+                    Score = 4.7f,
+                    ImagePath = "products/tefalingenio.jpg",
+                    CreatedAt = new DateTime(2024, 11, 2)
                 }
             );
         }

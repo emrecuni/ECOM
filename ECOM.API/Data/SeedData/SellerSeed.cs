@@ -11,7 +11,9 @@ namespace ECOM.API.Data.SeedData
             builder.HasData(
                 new Seller { SellerId = 1, Name = "TechStore", CreatedAt = new DateTime(2023,5,5) },
                 new Seller { SellerId = 2, Name = "ElektroMarket", CreatedAt = new DateTime(2023, 5, 5) },
-                new Seller { SellerId = 3, Name = "DigiShop", CreatedAt = new DateTime(2023, 5, 5) }
+                new Seller { SellerId = 3, Name = "DigiShop", CreatedAt = new DateTime(2023, 5, 5) },
+                new Seller { SellerId = 4, Name = "ModaPlus", CreatedAt = new DateTime(2023, 5, 5) },
+                new Seller { SellerId = 5, Name = "EvDekor", CreatedAt = new DateTime(2023, 5, 5) }
             );
         }
     }

@@ -28,14 +28,13 @@ namespace ECOM.API.Infrastructure.Services
             {
                 Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
-
-                CheckPriceDiffDto priceDiffModel = new()
+                                
+                response = await CheckPriceDiff(new CheckPriceDiffDto
                 {
                     ProductId = model.ProductId,
                     Price = model.Price
-                };
+                });
 
-                response = await CheckPriceDiff(priceDiffModel);
                 if (response.Status != Status.Success)
                     return response; // fiyat farkı büyükse işlemi durdur
 
@@ -52,25 +51,44 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
-                #endregion
+                #endregion Sepete eklenecek ürün satıcıda mevcut mu
 
-                var cartItem = new Cart
+                var cartItem = await _context.Carts
+                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId &&
+                                              c.ProductId == model.ProductId &&
+                                              c.SellerId == model.SellerId);
+
+                if (cartItem is not null)
                 {
-                    CustomerId = model.CustomerId,
-                    ProductId = model.ProductId,
-                    SellerId = model.SellerId,
-                    Piece = model.Piece,
-                    TotalPrice = model.Price * model.Piece,
-                    Enable = model.Enable,
-                    CreatedAt = DateTime.Now
-                };
+                    cartItem.Piece += model.Piece; // mevcut ürünün adedini güncelle
+                    cartItem.TotalPrice += model.Price * model.Piece; // toplam fiyatı güncelle
+                    
+                    _context.Carts.Update(cartItem); // ürün sepette güncellenir
 
-                await _context.Carts.AddAsync(cartItem); // ürün sepete eklenir
+                    response.Status = Status.Success;
+                    response.Message = "Sepetteki ürün adedi güncellendi.";
+                    response.Result = $"ProductId: {model.ProductId}";
+                    return response;
+                }
+                else
+                {
+                    await _context.Carts.AddAsync(new Cart
+                    {
+                        CustomerId = model.CustomerId,
+                        ProductId = model.ProductId,
+                        SellerId = model.SellerId,
+                        Piece = model.Piece,
+                        TotalPrice = model.Price * model.Piece,
+                        Enable = model.Enable,
+                        CreatedAt = DateTime.Now
+                    }); // ürün sepete eklenir
+
+                    response.Status = Status.Success;
+                    response.Message = "Ürün sepete başarıyla eklendi.";
+                    response.Result = $"ProductId: {model.ProductId}"; // eklenen ürünün id'si döndürülür
+                }
+                
                 await _context.SaveChangesAsync(); // değişiklikler kaydedilir
-
-                response.Status = Status.Success;
-                response.Message = "Ürün sepete başarıyla eklendi.";
-                response.Result = $"ProductId: {model.ProductId}"; // eklenen ürünün id'si döndürülür
             }
             catch (Exception ex)
             {

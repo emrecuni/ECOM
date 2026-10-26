@@ -96,46 +96,26 @@ namespace ECOM.Controllers
                 ImagePath = imagePath
             }, ct);
 
-            if (result is not null && result.IsSuccess && result.Data?.Status == Status.Success)           
+            if (result is not null && result.IsSuccess && result.Data?.Status == Status.Success)
                 TempData["Info"] = "Yorumunuz Başarıyla Eklendi.";
             else
                 TempData["Error"] = "Yorum eklenirken bir hata oluştu. Lütfen tekrar deneyin.";
-            return RedirectToAction("Index", new { id = id });            
+            return RedirectToAction("Index", new { id = id });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, float price) // seçilen ürünü sepete ekler
+        public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, decimal price, CancellationToken ct) // seçilen ürünü sepete ekler
         {
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
-
-            // veri tabanında ilgili müşterinin ilgili ürün ve satıcıdan sepete eklediği bir ürünleri çeker
-            var carts = await _context.Carts
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId && c.ProductId == productId && c.SellerId == sellerId && c.Enable == true);
-
-            if (carts is not null)
+            await _productService.AddCartAsync(new AddCartRequestDto
             {
-                carts.Piece++;
-                carts.TotalPrice += decimal.Parse(price.ToString());
-                _context.Carts.Update(carts);
-            }
-            else
-            {
-                Cart cart = new()
-                {
-                    CustomerId = customerId,
-                    ProductId = productId,
-                    Piece = 1,
-                    SellerId = sellerId,
-                    TotalPrice = decimal.Parse(price.ToString()),
-                    Enable = true,
-                    CreatedAt = DateTime.Now
-                };
-                _context.Carts.Add(cart);
-            }
+                CustomerId = User.GetCustomerId(),
+                ProductId = productId,
+                SellerId = sellerId,
+                Piece = 1,
+                Price = price,
+                Enable = true
+            }, ct);
 
-            await _context.SaveChangesAsync();
-
-            //index/addcart'a gidiyor
             return RedirectToAction("Index", new { id = productId });
         }
 

@@ -82,39 +82,25 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendComment(int id, int rate, string? review)
+        public async Task<IActionResult> SendComment(int id, int rate, string? review, string imagePath, CancellationToken ct)
         {
             if (rate < 1 || rate > 5)
                 return BadRequest("Geçersiz puan değeri.");
 
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var newComment = new Comments
+            var result = await _productService.AddCommentAsync(new AddCommentRequestDto
             {
-                Comment = review,
+                CustomerId = User.GetCustomerId(),
                 ProductId = id,
                 Score = rate,
-                CustomerId = customerId
-            };
+                Comment = review,
+                ImagePath = imagePath
+            }, ct);
 
-            _context.Comments.Add(newComment); // yorum comments tablosuna insert edilir
-            await _context.SaveChangesAsync();
-
-            var productViewModel = await _product.GetProductWithCommentsById(id);
-            if (productViewModel is null) // ürün bulunamazsa hata mesajı döndürsün
-                return NotFound();
-
-            var scores = await _context.Comments
-                .Where(c => c.ProductId == id && c.Score != null)
-                .Select(c => c.Score!.Value)
-                .ToListAsync();
-
-            productViewModel.Product!.Score = float.Parse(scores.Average().ToString("0.0"));
-
-            _context.Products.Update(productViewModel.Product); // ürün skoru güncellenir
-            await _context.SaveChangesAsync();
-
-            TempData["Info"] = "Yorumunuz Başarıyla Eklendi.";
-            return RedirectToAction("Index", new { id = id });
+            if (result is not null && result.IsSuccess && result.Data?.Status == Status.Success)           
+                TempData["Info"] = "Yorumunuz Başarıyla Eklendi.";
+            else
+                TempData["Error"] = "Yorum eklenirken bir hata oluştu. Lütfen tekrar deneyin.";
+            return RedirectToAction("Index", new { id = id });            
         }
 
         [HttpPost]

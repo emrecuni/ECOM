@@ -333,8 +333,18 @@ namespace ECOM.API.Infrastructure.Services
                 await _context.Comments.AddAsync(comment); // yorum tabloya eklenir
                 await _context.SaveChangesAsync(); // değişiklikler kaydedilir
 
-                response.Status = Status.Success;
-                response.Message = "Yorum başarıyla eklendi.";
+                // ürün puanını güncelle
+                var updateScoreResponse = await UpdateProductScore(model.ProductId);
+                if (updateScoreResponse.Status == Status.Success)
+                {
+                    response.Status = Status.Success;
+                    response.Message = "Yorum başarıyla eklendi.";
+                }
+                else
+                {
+                    response.Status = Status.Error;
+                    response.Message = "Yorum eklendi ancak ürün puanı güncellenemedi.";
+                }
             }
             catch (Exception ex)
             {
@@ -508,6 +518,49 @@ namespace ECOM.API.Infrastructure.Services
             {
                 Console.WriteLine($"ProductService/CheckPriceDiff ==> Error: {ex}");
                 _logger.LogError($"ProductService/CheckPriceDiff ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        private async Task<Response<float?>> UpdateProductScore(int productId)
+        {
+            var response = new Response<float?>();
+            try
+            {
+                var product = await _context.Products.FindAsync(productId);
+                if (product is null)
+                {
+                    response.Status = Status.Default;
+                    response.Message = "Ürün bulunamadı.";
+                    return response;
+                }
+
+                var scores = await _context.Comments
+                    .Where(c => c.ProductId == productId)
+                    .Select(c => c.Score!)
+                    .ToListAsync();
+
+                if (scores.Count == 0)
+                {
+                    response.Status = Status.Default;
+                    response.Message = "Henüz yorum yok.";
+                    return response;
+                }
+
+                product.Score = (float)scores.Average();
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+
+                response.Status = Status.Success;
+                response.Message = "Ürün puanı başarıyla güncellendi.";
+                response.Result = product.Score;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ProductService/UpdateProductScore ==> Error: {ex}");
+                _logger.LogError($"ProductService/UpdateProductScore ==> Error: {ex}");
                 response.Status = Status.Error;
                 response.Message = ex.Message;
             }

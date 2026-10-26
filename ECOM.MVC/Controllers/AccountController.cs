@@ -1,4 +1,6 @@
 ﻿using ECOM.Models;
+using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Infrastructure.Services;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
@@ -12,29 +14,41 @@ namespace ECOM.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly ICustomerApiClient _customerService;
         private readonly DataContext _context;
         private readonly ISmtp_Sender _sender;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(DataContext context, ISmtp_Sender sender, ILogger<AccountController> logger)
+        public AccountController(ICustomerApiClient customerService, DataContext context, ISmtp_Sender sender, ILogger<AccountController> logger)
         {
+            _customerService = customerService;
             _context = context;
             _sender = sender;
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+                AccountViewModel accountViewModel = new();
+                var result = await _customerService.GetCustomerByIdAsync(User.GetCustomerId(), ct);
 
-                var customer = await _context.Customers.FirstAsync(c => c.CustomerId == customerId);
-
-                AccountViewModel accountViewModel = new()
+                if (result is not null && result.IsSuccess == true)
                 {
-                    Customers = customer
-                };
+                    var customer = result.Data?.Result;
+                    if (customer is null)
+                        return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı
+
+                    accountViewModel.Customers = new Customers
+                    {
+                        CustomerId = customer.CustomerId,
+                        Name = customer.Name,
+                        Surname = customer.Surname,
+                        BirthDate = customer.BirthDate,
+                        Gender = customer.Gender
+                    };
+                }
 
                 return View("Index", accountViewModel);
             }
@@ -52,25 +66,21 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> Order()
+        public async Task<IActionResult> Order(CancellationToken ct)
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var result = await _customerService.GetOrdersAsync(User.GetCustomerId(), ct);
 
-                var orders = await _context.OrderHistory
-                    .Include(o => o.Product)
-                    .Where(o => o.CustomerId == customerId)
-                    .ToListAsync();
-
-                if (orders is null)
+                if(result is not null && result.IsSuccess == true)
                 {
-                    return NotFound();
+                    var orders = result.Data?.Result;
+                    if (orders is null)
+                        return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı                    
+                    return View("Order", orders);
                 }
-
-                AccountViewModel accountViewModel = new() { Orders = orders };
-
-                return View("Order", orders);
+                else
+                    return NotFound();
             }
             catch (Exception ex)
             {

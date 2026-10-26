@@ -10,6 +10,6 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public string? Name { get; set; }
         public string? Surname { get; set; }
         public DateTime? BirthDate { get; set; }
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
     }
 }

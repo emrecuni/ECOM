@@ -7,6 +7,7 @@ namespace ECOM.MVC.Infrastructure.Interfaces
 {
     public interface ICustomerApiClient
     {
+        public Task<ApiResult<Response<BasicCustomerResponseDto>>> GetCustomerByIdAsync(int customerId, CancellationToken ct);
         public Task<ApiResult<Response<string>>> AddFavoriteAsync(FavoriteRequestDto model, CancellationToken ct);
         public Task<ApiResult<Response<string>>> RemoveFavoriteAsync(FavoriteRequestDto model, CancellationToken ct);
         public Task<ApiResult<Response<List<BasicProductResponseDto>>>> GetFavoritesAsync(int customerId, CancellationToken ct);

@@ -17,6 +17,13 @@ namespace ECOM.MVC.Infrastructure.Services
             _httpClient = httpClient;
         }
 
+
+        public async Task<ApiResult<Response<BasicCustomerResponseDto>>> GetCustomerByIdAsync(int customerId, CancellationToken ct)
+        {
+            var response = await _httpClient.GetAsync($"api/Customer/GetCustomer?customerId={customerId}", ct);
+            return await ToApiResultAsync<Response<BasicCustomerResponseDto>>(response, ct);
+        }
+
         #region Favorites
         public async Task<ApiResult<Response<string>>> AddFavoriteAsync(FavoriteRequestDto model, CancellationToken ct)
         {
@@ -137,5 +144,6 @@ namespace ECOM.MVC.Infrastructure.Services
                 _ => "Bir hata oluştu, lütfen tekrar deneyin."
             };
         }
+
     }
 }

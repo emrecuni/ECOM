@@ -34,6 +34,41 @@ namespace ECOM.API.Infrastructure.Services
             _logger = logger;
         }
 
+        public async Task<Response<BasicCustomerResponseDto>> GetCustomerById(int customerId)
+        {
+            Response<BasicCustomerResponseDto> response = new();
+            try
+            {
+                var customer = await _context.Customers
+                    .Where(c => c.CustomerId == customerId)
+                    .Select(c => new BasicCustomerResponseDto
+                    {
+                        CustomerId = c.CustomerId,
+                        Name = c.Name,
+                        Surname = c.Surname,
+                        BirthDate = c.BirthDate,
+                        Gender = c.Gender
+                    })
+                    .FirstOrDefaultAsync();
+                if (customer is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Müşteri bulunamadı.";
+                    return response;
+                }
+                response.Result = customer;
+                response.Status = Status.Success;
+                response.Message = "Müşteri bilgileri başarıyla getirildi.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CustomerService/GetCustomerById ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
         public async Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model)
         {
             Response<BasicCustomerResponseDto> response = new();
@@ -407,7 +442,6 @@ namespace ECOM.API.Infrastructure.Services
             }
             return response;
         }
-
 
         // parola formatını güçlendir
 

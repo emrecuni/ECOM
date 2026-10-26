@@ -22,6 +22,14 @@ namespace ECOM.API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
+        [HttpGet("GetCustomer")]
+        public async Task<IActionResult> GetCustomer([FromQuery] int customerId)
+        {
+            var response = await _customerService.GetCustomerById(customerId);
+            return Ok(response);
+        }
+
         #region Favorites
         [Authorize]
         [HttpPost("AddFavorite")]

@@ -6,6 +6,7 @@ namespace ECOM.API.Infrastructure.Interfaces
 {
     public interface ICustomerService
     {
+        public Task<Response<BasicCustomerResponseDto>> GetCustomerById(int customerId);
         public Task<Response<BasicCustomerResponseDto>> ChangeBasicInfo(BasicCustomerRequestDto model);
         public Task<Response<ContactInfoResponseDto>> ChangeContactInfo(ContactInfoRequestDto model);
         public Task<Response<int>> ChangePassword(ChangePasswordRequestDto model);

@@ -53,12 +53,6 @@ namespace ECOM.MVC.Controllers
                 {
                     _httpClient.BaseAddress = new Uri("http://localhost:5195/"); // API'nin temel URL'si
 
-                    //var response = await _httpClient.PostAsJsonAsync("api/auth/token", new
-                    //{
-                    //    Email = model.Email,
-                    //    Password = model.Password
-                    //});
-
                     var result = await _authApiClient.TokenAsync(model, ct);
 
                     if (result is not null && result.IsSuccess && result.Data is not null)
@@ -89,70 +83,6 @@ namespace ECOM.MVC.Controllers
 
                     ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
                     return View();
-                    //if (!response.IsSuccessStatusCode)
-                    //{
-                    //    ModelState.AddModelError("", "Giriş başarısız");
-                    //    return View(model);
-                    //}
-
-                    //var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
-
-                    //if (result is null || result.Token is null) // buradaki yönlendirmeyi kontrol et
-                    //    return View(model);
-
-                    //// Token'ı HttpOnly cookie'ye kaydet (XSS'e karşı koruma)
-                    //Response.Cookies.Append("jwt_token", result!.Token, new CookieOptions
-                    //{
-                    //    HttpOnly = true,
-                    //    Secure = true,
-                    //    SameSite = SameSiteMode.Strict,
-                    //    Expires = result.ExpiresAt
-                    //});
-
-                    //// MVC tarafı için cookie auth
-                    //var handler = new JwtSecurityTokenHandler();
-                    //var jwt = handler.ReadJwtToken(result.Token);
-
-                    //var identity = new ClaimsIdentity(
-                    //    jwt.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    //await HttpContext.SignInAsync(
-                    //    CookieAuthenticationDefaults.AuthenticationScheme,
-                    //    new ClaimsPrincipal(identity),
-                    //    new AuthenticationProperties { IsPersistent = true });
-
-                    //return RedirectToAction("Index", "Main");
-
-                    //var customer = await _context.Customers.FirstAsync(c => c.Email == model.Email || c.Phone == model.Email);
-                    //if (customer is not null && Encryption.VerifyPassword(model.Password, customer.Password!))
-                    //{
-
-                    //    var claims = new List<Claim>
-                    //    {
-                    //        new (ClaimTypes.Name, customer.Name!),
-                    //        new (ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
-                    //        new (ClaimTypes.Role,customer.IsCustomer.ToString()!)
-                    //    };
-
-                    //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    //    var autProperties = new AuthenticationProperties
-                    //    {
-                    //        IsPersistent = true,
-                    //        ExpiresUtc = DateTime.UtcNow.AddDays(30)
-                    //    };
-
-                    //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    //        new ClaimsPrincipal(claimsIdentity),
-                    //        autProperties);
-
-                    //    return RedirectToAction("Index", "Main");
-                    //}
-                    //else // kullanıcı adı parola hatalı mesajı bastır
-                    //{
-                    //    ViewBag.WrongPassword = "Email veya Parolanızı Kontrol Ediniz.";
-                    //    return View();
-                    //}
                 }
                 else
                 {
@@ -435,53 +365,7 @@ namespace ECOM.MVC.Controllers
                 ViewBag.Info = "Bir Hata Oluştu Tekrar Deneyiniz.";
             }
 
-
             return RedirectToAction("RegisterEmail", model);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Register(RegisterViewModel model) // parametreleri modele dönüştür
-        //{
-        //    if (!ModelState.IsValid)
-        //        return View(model);
-
-        //    // kayıt olacak kullanıcın veri tabanında olup olmadığı kontrol edilir
-        //    var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == model.Email || c.Phone == model.Phone);
-        //    if (customer is not null) // müşteri kayıtlıysa
-        //    {
-        //        ViewBag.Info = "E-Mail veya Telefon Zaten Kayıtlı";
-        //        ViewBag.IsSuccess = StatusTypes.Warning;
-        //        return View(model);
-        //    }
-
-        //    try
-        //    {
-        //        var encryptedPassword = Encryption.HashPassword(model.Password!);
-
-        //        Customers newCustomer = new()
-        //        {
-        //            Name = model.Name,
-        //            Surname = model.Surname,
-        //            Email = model.Email,
-        //            Password = encryptedPassword,
-        //            Phone = model.Phone,
-        //            Gender = model.Gender,
-        //            BirthDate = model.Birthdate,
-        //            AdditionTime = DateTime.Now,
-        //            IsCustomer = true
-        //        };
-
-        //        _context.Customers.Add(newCustomer);
-        //        await _context.SaveChangesAsync();
-        //        ViewBag.Info = "Yeni Kayıt Başarılı.";
-        //        ViewBag.IsSuccess = StatusTypes.Success;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        NLogger.logger.Error($"Register New Record Error => {ex}");
-        //        ViewBag.Info = "Kayıt Sırasında Bir Hata Oluştu Tekrar Deneyiniz.";
-        //        ViewBag.IsSuccess = StatusTypes.Error;
-        //    }
-        //    return View();
-        //}
     }
 }

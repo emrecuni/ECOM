@@ -13,11 +13,10 @@ $(document).on("click", ".favorite-btn", function (e) {
         type: 'POST',
         data: { id: productId },
         success: function (result) {
-            if (result.isFavorite) {
-                button.find("i").addClass("text-danger"); // Kalp kırmızı olsun
-            } else {
-                button.find("i").removeClass("text-danger"); // Favoriden çıkar
-            }
+            // sayfa ilk yüklendiğinde favori olan ürünlerde kalbi kırmızı yapan butondaki favorite-product sınıfıdır (main.css),
+            // bu yüzden i'deki text-danger ile birlikte o da güncellenir
+            button.toggleClass("favorite-product", result.isFavorite);
+            button.find("i").toggleClass("text-danger", result.isFavorite);
         },
         error: function () {
             alert("Bir hata oluştu, lütfen tekrar deneyin.");

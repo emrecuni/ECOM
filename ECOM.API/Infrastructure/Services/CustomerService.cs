@@ -437,6 +437,7 @@ namespace ECOM.API.Infrastructure.Services
                         Status = o.DeliveryDate == null ? OrderStatus.GettingReady : OrderStatus.Delivered,
                         Image = o.Product.ImagePath,
                         OrderDate = o.OrderDate,
+                        DeliveryDate = o.DeliveryDate,
                         Price = o.TotalPrice
                     })
                     .ToListAsync();

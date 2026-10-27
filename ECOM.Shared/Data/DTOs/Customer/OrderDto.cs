@@ -13,6 +13,7 @@ namespace ECOM.Shared.Data.DTOs.Customer
         public OrderStatus Status { get; set; }
         public string? Image { get; set; }
         public DateTime? OrderDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public decimal? Price { get; set; }
     }
 }

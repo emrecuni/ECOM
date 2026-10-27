@@ -38,6 +38,9 @@ namespace ECOM.Controllers
                         return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı
 
                     accountViewModel.Customers = customer;
+                    accountViewModel.Orders = [];
+                    accountViewModel.Coupons = [];
+                    accountViewModel.Favorites = [];
                 }
 
                 return View("Index", accountViewModel);

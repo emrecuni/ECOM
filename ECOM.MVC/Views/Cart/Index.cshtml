@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    @if (Model.Carts is null || Model.Carts.Count == 0)
+    @if (Model.Cart?.Products is null || Model.Cart.Products.Count == 0)
     {
         <!-- Empty Cart -->
         <div class="empty-cart-wrapper">
@@ -67,14 +67,14 @@
         <!-- Cart Title -->
         <div class="cart-title">
             Sepetim
-            <span class="cart-count-badge">@Model.Carts.Count Ürün</span>
+            <span class="cart-count-badge">@Model.Cart.Products.Count Ürün</span>
         </div>
 
         <!-- Cart Layout -->
         <div class="cart-layout">
             <!-- Orders -->
             <div class="orders-col">
-                @foreach (var cart in Model.Carts.ToList())
+                @foreach (var cart in Model.Cart.Products)
                 {
                     @await Html.PartialAsync("Cart", cart)
                 }
@@ -82,16 +82,9 @@
 
             <!-- Cart Total -->
             @{
-                decimal cartSummaryPrice = 0;
-                int cartSummaryProductCount = 0;
-                foreach (var cart in Model.Carts.ToList())
-                {
-                    if (cart.Enable == true)
-                    {
-                        cartSummaryPrice += cart.TotalPrice;
-                        cartSummaryProductCount++;
-                    }
-                }
+                // toplam fiyat api'de sadece seçili (enable) ürünlerden hesaplanır
+                decimal cartSummaryPrice = Model.Cart.TotalPrice;
+                int cartSummaryProductCount = Model.Cart.Products.Count(p => p.Enable);
             }
 
             <div class="cart-total-panel">
@@ -101,8 +94,8 @@
                 </div>
 
                 <div class="cart-total-row">
-                    <span>Seçilen Ürünler (@cartSummaryProductCount)</span>
-                    <span>₺@cartSummaryPrice.ToString("F2")</span>
+                    <span>Seçilen Ürünler (<span id="summary-count">@cartSummaryProductCount</span>)</span>
+                    <span id="summary-subtotal">₺@cartSummaryPrice.ToString("F2")</span>
                 </div>
                 <div class="cart-total-row">
                     <span>Kargo</span>
@@ -110,11 +103,11 @@
                 </div>
                 <div class="cart-total-row grand-total">
                     <span>Toplam</span>
-                    <span class="amount">₺@cartSummaryPrice.ToString("F2")</span>
+                    <span class="amount" id="summary-total">₺@cartSummaryPrice.ToString("F2")</span>
                 </div>
 
                 <form asp-controller="Payment" asp-action="Index" method="post">
-                    <input type="hidden" name="cart-total" value="@cartSummaryPrice" />
+                    <input type="hidden" name="cart-total" id="summary-total-input" value="@cartSummaryPrice" />
                     <button type="submit" class="checkout-btn">
                         <i class="fas fa-lock"></i>
                         Alışverişi Tamamla
@@ -140,3 +133,54 @@
         }
     }
 </div>
+
+<script>
+    // sepet satırlarının adet ve seçim değişiklikleri; satır başına değil sayfada bir kez bağlanır
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.order').forEach(order => {
+            const checkbox = order.querySelector('.order-is-active');
+            const countInput = order.querySelector('.order-count');
+
+            // api adet ve seçili durumunu birlikte güncellediği için her değişiklikte ikisi de gönderilir
+            const update = async function () {
+                const piece = parseInt(countInput.value, 10);
+                if (!piece || piece < 1) {
+                    countInput.value = 1;
+                    return;
+                }
+
+                const response = await fetch('/Cart/Update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId: parseInt(order.dataset.productId, 10),
+                        sellerId: parseInt(order.dataset.sellerId, 10),
+                        piece: piece,
+                        enable: checkbox.checked
+                    })
+                });
+
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    alert(data.message ?? "Sepet güncellenemedi.");
+                    return;
+                }
+
+                if (data.itemPrice)
+                    order.querySelector('.price').textContent = `₺${data.itemPrice}`;
+
+                updateCartSummaryDisplay(data.totalPrice, data.count);
+            };
+
+            checkbox.addEventListener('change', update);
+            countInput.addEventListener('change', update);
+        });
+    });
+
+    function updateCartSummaryDisplay(totalPrice, count) {
+        document.getElementById('summary-count').textContent = count;
+        document.getElementById('summary-subtotal').textContent = `₺${totalPrice}`;
+        document.getElementById('summary-total').textContent = `₺${totalPrice}`;
+        document.getElementById('summary-total-input').value = totalPrice;
+    }
+</script>

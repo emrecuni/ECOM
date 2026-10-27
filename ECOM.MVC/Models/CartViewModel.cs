@@ -1,10 +1,10 @@
-﻿using ECOM.MVC.OldFiles.Data;
+﻿using ECOM.Shared.Data.DTOs.Product;
 
 namespace ECOM.Models
 {
     public class CartViewModel
     {
-        public List<Cart> Carts { get; set; } = [];
-        public List<Favorites> Favorites { get; set; } = [];
+        public CartResponseDto? Cart { get; set; } // sepet boşsa null
+        public List<BasicProductResponseDto> Favorites { get; set; } = [];
     }
 }

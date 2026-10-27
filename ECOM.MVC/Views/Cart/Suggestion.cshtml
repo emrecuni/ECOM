@@ -1,9 +1,9 @@
-﻿@model IEnumerable<ECOM.MVC.OldFiles.Data.Favorites>
+﻿@model IEnumerable<ECOM.Shared.Data.DTOs.Product.BasicProductResponseDto>
 
 <div class="suggestion">
     <!--beğendiklerim-->
     @foreach (var favorite in Model)
     {
-        @await Html.PartialAsync("Favorite",favorite.Product)
+        @await Html.PartialAsync("Favorite", favorite)
     }
 </div>

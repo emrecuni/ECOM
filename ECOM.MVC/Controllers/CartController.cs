@@ -1,111 +1,114 @@
 ﻿using ECOM.Models;
-using ECOM.MVC.OldFiles.Data;
-using ECOM.MVC.OldFiles.Services;
+using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Infrastructure.Services;
+using ECOM.Shared.Data.DTOs.Product;
+using ECOM.Shared.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IProductApiClient _productService;
+        private readonly ICustomerApiClient _customerService;
+        private readonly ILogger<CartController> _logger;
 
-        public CartController(DataContext context)
+        public CartController(IProductApiClient productService, ICustomerApiClient customerService, ILogger<CartController> logger)
         {
-            _context = context;
+            _productService = productService;
+            _customerService = customerService;
+            _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
-
-            var carts = await _context.Carts
-                .Include(c => c.Customer)
-                .Include(c => c.Product)
-                .Include(c => c.Seller)
-                .Include(c => c.Coupon)
-                .Where(c => c.CustomerId == customerId && c.Enable == true)
-                .ToListAsync();
-
-
-            CartViewModel cartViewModel = new()
-            {
-                Carts = carts,
-                Favorites = await _context.Favorites
-                    .Include(f => f.Product)
-                    .Where(f => f.CustomerId == customerId)
-                    .ToListAsync()
-            };
-
-            return View(cartViewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateStatus([FromBody] CartStatusModel model) // sepetteki ürünün statüsünü günceller
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
             try
             {
-                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.CartId == model.CartId);
+                var cartResult = await _productService.GetCartAsync(User.GetCustomerId(), ct);
 
-                if (cart is null)
-                    return NotFound();
+                // api sepet boşken de Status.Failed döner; bu yüzden sadece http hatası ve Status.Error gerçek hata sayılır
+                if (cartResult is null || !cartResult.IsSuccess || cartResult.Data is null || cartResult.Data.Status == Status.Error)
+                {
+                    Guid guid = Guid.NewGuid();
+                    ErrorViewModel error = new ErrorViewModel
+                    {
+                        Message = $"Hata Kodu: {guid}",
+                        RequestId = HttpContext.TraceIdentifier,
+                        Title = "Sepet getirilirken bir hata oluştu."
+                    };
+                    _logger.LogError($"Cart/Index Error Hata Kodu: {guid} => {cartResult?.Data?.Message ?? cartResult?.ErrorMessage}");
+                    return View("Error", error);
+                }
 
-                cart.Enable = model.IsActive;// veri tabanından çekilen ürünün statüsüne modelden gelen değer yazılır
+                CartViewModel cartViewModel = new()
+                {
+                    Cart = cartResult.Data.Status == Status.Success ? cartResult.Data.Result : null
+                };
 
-                _context.Carts.Update(cart); // değer güncellenir
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                // favoriler gelmezse sepet sayfası yine açılır, sadece öneri bölümü boş kalır
+                var favoriteResult = await _customerService.GetFavoritesAsync(User.GetCustomerId(), ct);
+                if (favoriteResult.IsSuccess && favoriteResult.Data?.Status == Status.Success && favoriteResult.Data.Result is not null)
+                    cartViewModel.Favorites = favoriteResult.Data.Result;
 
-                var newTotal = await _context.Carts
-                   .Where(c => c.Enable == true)
-                   .SumAsync(c => c.TotalPrice);
-
-                var count = await _context.Carts
-                    .Where(c => c.Enable == true)
-                    .CountAsync();
-
-                return Json(new { totalPrice = newTotal.ToString("F2"), count });
+                return View(cartViewModel);
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"UpdateStatus Error => {ex}");
-                return View("Error");
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Sepet getirilirken bir hata oluştu."
+                };
+                _logger.LogError($"Cart/Index Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateQuantity([FromBody] CartQuantityModel model) // sepetteki ürünün adedini günceller
+        public async Task<IActionResult> Update([FromBody] CartUpdateModel model, CancellationToken ct) // sepetteki ürünün adedini ve seçili durumunu günceller
         {
             try
             {
-                var cart = await _context.Carts
-                    .Include(c => c.Product)
-                    .FirstOrDefaultAsync(c => c.CartId == model.CartId); // ilgili ürünü veri tabanından çekilir
+                if (model is null || model.Piece < 1)
+                    return BadRequest(new { message = "Geçersiz adet." });
 
-                if (cart is null)
-                    return NotFound();
+                var editResult = await _productService.EditCartAsync(new EditCartRequestDto
+                {
+                    CustomerId = User.GetCustomerId(),
+                    ProductId = model.ProductId,
+                    SellerId = model.SellerId,
+                    Piece = model.Piece,
+                    Enable = model.Enable
+                }, ct);
 
-                cart.Piece = model.Piece; // veri tabanından çekilen ürünün adedine modelden gelen değer yazılır
-                cart.TotalPrice = (decimal)cart.Product.Price! * model.Piece; // toplam fiyat güncellenir
+                if (editResult is null || !editResult.IsSuccess || editResult.Data?.Status != Status.Success)
+                    return BadRequest(new { message = editResult?.Data?.Message ?? editResult?.ErrorMessage ?? "Sepet güncellenemedi." });
 
-                _context.Carts.Update(cart); // değer güncellenir
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                // güncel toplamlar api'nin hesapladığı sepetten alınır
+                var cartResult = await _productService.GetCartAsync(User.GetCustomerId(), ct);
+                var cart = cartResult?.Data?.Status == Status.Success ? cartResult.Data.Result : null;
 
-                var newTotal = await _context.Carts
-                    .Where(c => c.Enable == true)
-                    .SumAsync(c => c.TotalPrice);
+                if (cartResult is null || !cartResult.IsSuccess || cart is null)
+                    return BadRequest(new { message = cartResult?.Data?.Message ?? cartResult?.ErrorMessage ?? "Sepet getirilemedi." });
 
-                var count = await _context.Carts
-                    .Where(c => c.Enable == true)
-                    .CountAsync();
+                var item = cart.Products?.FirstOrDefault(p => p.Id == model.ProductId && p.SellerId == model.SellerId);
 
-                return Json(new { totalPrice = newTotal.ToString("F2"), count, cartTotalPrice = cart.TotalPrice.ToString("F2") });
+                return Json(new
+                {
+                    totalPrice = cart.TotalPrice.ToString("F2"),
+                    count = cart.Products?.Count(p => p.Enable) ?? 0,
+                    itemPrice = item?.Price.ToString("F2")
+                });
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"UpdateQuantity Error => {ex}");
-                return View("Error");
+                Guid guid = Guid.NewGuid();
+                _logger.LogError($"Cart/Update Error Hata Kodu: {guid} => {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = $"Sepet güncellenirken bir hata oluştu. Hata Kodu: {guid}" });
             }
         }
     }

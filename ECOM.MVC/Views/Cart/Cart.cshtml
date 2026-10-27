@@ -1,78 +1,23 @@
-﻿@model ECOM.MVC.OldFiles.Data.Cart
+﻿@model ECOM.Shared.Data.DTOs.Product.ProductOfCartDto
 
-<div class="order">
+@* sepet satırı api'de ürün + satıcı ile tanımlanır; güncelleme script'i Cart/Index.cshtml içinde, her satır için tekrar yüklenmesin diye *@
+<div class="order" data-product-id="@Model.Id" data-seller-id="@Model.SellerId">
     <div class="order-header d-flex justify-content-between align-items-center">
-        <span class="saler">Satıcı: <b>@Model.Seller.Name</b></span>
+        <span class="saler">Satıcı: <b>@Model.SellerName</b></span>
         <span class="cargo-desc"><b>Kargo Bedava</b></span>
     </div>
     <hr />
     <div class="order-body">
-        <input type="checkbox" name="order-is-active" class="order-is-active" data-id="@Model.CartId" checked />
-        <img src="~/@Model.Product.ImagePath" alt="Ürün" class="product-image" />
+        <input type="checkbox" name="order-is-active" class="order-is-active" @(Model.Enable ? "checked" : "") />
+        <img src="~/@Model.ImagePath" alt="Ürün" class="product-image" />
         <div class="order-info">
-            <span class="order-name"><b><a asp-controller="Product" asp-action="Index" asp-route-id="@Model.ProductId">@Model.Product.Name</a></b></span>
+            <span class="order-name"><b><a asp-controller="Product" asp-action="Index" asp-route-id="@Model.Id">@Model.Name</a></b></span>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
             <input type="number" name="order-count" class="order-count"
-                   value="@Model.Piece" data-id="@Model.CartId" min="1" />
+                   value="@Model.Piece" min="1" />
 
-            <span class="price">₺@Model.TotalPrice.ToString("F2")</span>
+            <span class="price">₺@Model.Price.ToString("F2")</span>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Checkbox değişimi
-        document.querySelectorAll('.order-is-active').forEach(cb => {
-            cb.addEventListener('change', async function () {
-                const cartId = this.dataset.id;
-                const isActive = this.checked;
-
-                await fetch('/Cart/UpdateStatus', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ cartId, isActive })
-                }).then(res => res.json())
-                    .then(data => {
-                        updateCartSummaryDisplay(data.totalPrice, data.count);
-                    });
-            });
-        });
-
-        // Adet değişimi
-        document.querySelectorAll('.order-count').forEach(input => {
-            input.addEventListener('change', async function () {
-                const cartId = this.dataset.id;
-                const piece = this.value;
-
-                const response = await fetch('/Cart/UpdateQuantity', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ cartId, piece })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    // Ürünün yanındaki toplam fiyatı güncelle
-                    const priceElement = this.closest('.order-info').querySelector('.price');
-                    priceElement.textContent = `₺${data.cartTotalPrice}`;
-
-                    // Genel sepet özetini güncelle
-                    updateCartSummaryDisplay(data.totalPrice, data.count);
-                }
-            });
-        });
-    });
-
-    function updateCartSummaryDisplay(totalPrice, count) {
-        document.querySelector('.cart-total span b').textContent = `₺${totalPrice}`;
-        document.querySelector('.cart-summary .d-flex.justify-content-between span').textContent = `₺${totalPrice}`;
-        document.querySelector('.cart-total h5').textContent = `SEÇİLEN ÜRÜNLER (${count})`;
-    }
-</script>

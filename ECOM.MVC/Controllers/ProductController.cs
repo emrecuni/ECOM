@@ -106,7 +106,7 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, decimal price, CancellationToken ct) // seçilen ürünü sepete ekler
         {
-            await _productService.AddCartAsync(new AddCartRequestDto
+            var result = await _productService.AddCartAsync(new AddCartRequestDto
             {
                 CustomerId = User.GetCustomerId(),
                 ProductId = productId,
@@ -115,6 +115,9 @@ namespace ECOM.Controllers
                 Price = price,
                 Enable = true
             }, ct);
+
+            if (result is null || !result.IsSuccess || result.Data?.Status != Status.Success)
+                TempData["Error"] = result?.Data?.Message ?? result?.ErrorMessage ?? "Ürün sepete eklenirken bir hata oluştu.";
 
             return RedirectToAction("Index", new { id = productId });
         }

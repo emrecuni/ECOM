@@ -46,6 +46,8 @@ namespace ECOM.API.Infrastructure.Services
                         CustomerId = c.CustomerId,
                         Name = c.Name,
                         Surname = c.Surname,
+                        Email = c.Email,
+                        Phone = c.Phone,
                         BirthDate = c.BirthDate,
                         Gender = c.Gender
                     })
@@ -126,14 +128,8 @@ namespace ECOM.API.Infrastructure.Services
             {
                 #region müşteriyi db'den çeker
 
-                var customer = await _context.Customers
-                    .Select(c => new Customers
-                    {
-                        CustomerId = c.CustomerId,
-                        Phone = c.Phone,
-                        Email = c.Email
-                    })
-                    .FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
+                // select ile projeksiyon yapılırsa entity takip edilmez ve SaveChanges değişikliği yazmaz, bu yüzden doğrudan çekilir
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
 
                 if (customer is null)
                 {
@@ -152,45 +148,60 @@ namespace ECOM.API.Infrastructure.Services
                 }
                 #endregion
 
-                #region doğrulama kodu gönder
+                #region yeni email'in başka bir müşteride kayıtlı olmadığını kontrol et
+                if (!string.IsNullOrWhiteSpace(model.NewEmail) && model.NewEmail != customer.Email)
+                {
+                    var emailInUse = await _context.Customers.AnyAsync(c => c.Email == model.NewEmail && c.CustomerId != model.CustomerId);
+                    if (emailInUse)
+                    {
+                        response.Status = Status.Failed;
+                        response.Message = "Bu e-posta adresi başka bir hesapta kayıtlı.";
+                        return response;
+                    }
+                }
+                #endregion
+
+                #region kullanıcının girdiği doğrulama kodunu kontrol et
+                // kod önceden Auth/SendOTP ile (Purpose = ChangeEmail) müşterinin mevcut e-postasına gönderilmiş olmalı;
+                // böylece değişikliği yapanın o hesabın e-postasına erişimi olduğu kanıtlanır
+                if (string.IsNullOrWhiteSpace(model.VerificationCode))
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Doğrulama kodu girilmedi.";
+                    return response;
+                }
+
                 OtpRequestDto request = new()
                 {
                     Email = customer.Email!,
+                    CodeHash = model.VerificationCode,
                     Purpose = OtpPurpose.ChangeEmail
                 };
-                var responseVerificationCode = await _authService.SendOTP(request);
+
+                var responseCheckVerify = await _authService.CheckOtpInDb(request);
+
+                if (responseCheckVerify.Status != Status.Success)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = responseCheckVerify.Message ?? "Doğrulama kodu yanlış.";
+                    return response;
+                }
                 #endregion
 
-                #region doğrulama kodunu kontrol et
-                if (responseVerificationCode.Message is not null)
+                #region iletişim bilgilerini güncelle
+                customer.Email = model.NewEmail ?? customer.Email;
+                customer.Phone = model.NewPhone ?? customer.Phone;
+                customer.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                response.Result = new ContactInfoResponseDto
                 {
-                    var verificationCode = responseVerificationCode.Message.Substring(responseVerificationCode.Message.IndexOf(": ") + 2);
-
-                    request.CodeHash = verificationCode;
-
-                    var responseCheckVerify = await _authService.CheckOtpInDb(request);
-
-                    if (responseCheckVerify.Status == Status.Success)
-                    {
-                        customer.Email = model.NewEmail ?? customer.Email;
-                        customer.Phone = model.NewPhone ?? customer.Phone;
-                        customer.UpdatedAt = DateTime.Now;
-                        await _context.SaveChangesAsync();
-                        response.Result = new ContactInfoResponseDto
-                        {
-                            CustomerId = customer.CustomerId,
-                            NewEmail = customer.Email,
-                            NewPhone = customer.Phone
-                        };
-                        response.Status = Status.Success;
-                        response.Message = "Müşteri iletişim bilgileri başarıyla güncellendi.";
-                    }
-                    else
-                    {
-                        response.Status = Status.Failed;
-                        response.Message = "Doğrulama kodu yanlış.";
-                    }
-                }
+                    CustomerId = customer.CustomerId,
+                    NewEmail = customer.Email,
+                    NewPhone = customer.Phone
+                };
+                response.Status = Status.Success;
+                response.Message = "Müşteri iletişim bilgileri başarıyla güncellendi.";
                 #endregion
 
             }

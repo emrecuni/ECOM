@@ -344,7 +344,10 @@ namespace ECOM.API.Infrastructure.Services
                 };
 
                 response = await SendVerifyEmail(request);
-                response.Message = $"OTP Code: {otpCode}";
+
+                // kod sadece e-postayla gider, cevaba yazılmaz; yoksa e-postaya erişimi olmayan biri de kodu öğrenebilir
+                if (response.Status == Status.Success)
+                    response.Message = "Doğrulama kodu e-posta adresinize gönderildi.";
                 #endregion
 
             }

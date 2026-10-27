@@ -79,7 +79,7 @@ namespace ECOM.Controllers
             {
                 var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
 
-                if (categoryResult?.Data?.Result?.Count == 0)
+                if (!categoryResult.IsSuccess || categoryResult.Data?.Status != Status.Success || categoryResult.Data.Result is null || categoryResult.Data.Result.Count == 0)
                     return RedirectToAction("Index");
 
                 var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
@@ -152,6 +152,9 @@ namespace ECOM.Controllers
 
                 var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
 
+                if (!categoryResult.IsSuccess || categoryResult.Data?.Status != Status.Success || categoryResult.Data.Result is null || categoryResult.Data.Result.Count == 0)
+                    return RedirectToAction("Index");
+
                 var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
@@ -186,14 +189,17 @@ namespace ECOM.Controllers
             {
                 var favoriteResult = await _customerService.GetFavoritesAsync(User.GetCustomerId(), ct);
 
-                if (favoriteResult.IsSuccess && favoriteResult.Data!.Result!.Any(f => f.ProductId == id))
+                if (!favoriteResult.IsSuccess || favoriteResult.Data?.Status != Status.Success)
+                    return StatusCode(StatusCodes.Status502BadGateway, new { message = favoriteResult.Data?.Message ?? favoriteResult.ErrorMessage ?? "Favoriler getirilemedi." }); // ajax success'e düşüp kalbin durumunu bozmasın
+
+                if (favoriteResult.Data.Result?.Any(f => f.ProductId == id) == true)
                 {
                     var removeResult = await _customerService.RemoveFavoriteAsync(new FavoriteRequestDto
                     {
                         CustomerId = User.GetCustomerId(),
                         ProductId = id
                     }, ct);
-                    if (removeResult.IsSuccess)
+                    if (removeResult.IsSuccess && removeResult.Data?.Status == Status.Success)
                         return Json(new { isFavorite = false });
                     else
                         return Json(new { isFavorite = true });
@@ -205,7 +211,7 @@ namespace ECOM.Controllers
                         CustomerId = User.GetCustomerId(),
                         ProductId = id
                     }, ct);
-                    if (addResult.IsSuccess)
+                    if (addResult.IsSuccess && addResult.Data?.Status == Status.Success)
                         return Json(new { isFavorite = true });
                     else
                         return Json(new { isFavorite = false });

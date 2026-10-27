@@ -4,26 +4,23 @@ using ECOM.MVC.Infrastructure.Services;
 using ECOM.MVC.OldFiles.Data;
 using ECOM.MVC.OldFiles.Interface;
 using ECOM.MVC.OldFiles.Services;
-using Iyzipay.Model.V2.Subscription;
+using ECOM.Shared.Data.DTOs.Auth;
+using ECOM.Shared.Data.DTOs.Customer;
+using ECOM.Shared.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ICustomerApiClient _customerService;
-        private readonly DataContext _context;
-        private readonly ISmtp_Sender _sender;
+        private readonly IAuthApiClient _authService;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(ICustomerApiClient customerService, DataContext context, ISmtp_Sender sender, ILogger<AccountController> logger)
+        public AccountController(ICustomerApiClient customerService, IAuthApiClient authService, ILogger<AccountController> logger)
         {
             _customerService = customerService;
-            _context = context;
-            _sender = sender;
+            _authService = authService;
             _logger = logger;
         }
 
@@ -34,20 +31,13 @@ namespace ECOM.Controllers
                 AccountViewModel accountViewModel = new();
                 var result = await _customerService.GetCustomerByIdAsync(User.GetCustomerId(), ct);
 
-                if (result is not null && result.IsSuccess == true)
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
                 {
                     var customer = result.Data?.Result;
                     if (customer is null)
                         return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı
 
-                    accountViewModel.Customers = new Customers
-                    {
-                        CustomerId = customer.CustomerId,
-                        Name = customer.Name,
-                        Surname = customer.Surname,
-                        BirthDate = customer.BirthDate,
-                        Gender = customer.Gender
-                    };
+                    accountViewModel.Customers = customer;
                 }
 
                 return View("Index", accountViewModel);
@@ -72,7 +62,7 @@ namespace ECOM.Controllers
             {
                 var result = await _customerService.GetOrdersAsync(User.GetCustomerId(), ct);
 
-                if(result is not null && result.IsSuccess == true)
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
                 {
                     var orders = result.Data?.Result;
                     if (orders is null)
@@ -117,27 +107,19 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditMembership(Customers customer)
+        public async Task<IActionResult> EditMembership(BasicCustomerRequestDto customer, CancellationToken ct)
         {
             try
             {
-                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
+                var result = await _customerService.ChangeBasicInfoAsync(customer, ct);
 
-                if (existingCustomer is null)
-                {// mesaj döndür
-                    return NotFound();
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
+                    return RedirectToAction("Index");
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result?.Data?.Message ?? result?.ErrorMessage ??"Üyelik bilgileri güncellenirken bir hata oluştu.");
+                    return View("Index", customer);
                 }
-
-                existingCustomer.Name = customer.Name;
-                existingCustomer.Surname = customer.Surname;
-                existingCustomer.Gender = customer.Gender;
-                //existingCustomer.Password = Encryption.HashPassword(customer.Password!);
-
-                _context.Update(existingCustomer); // güncellenir
-
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
-
-                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -153,21 +135,26 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> ChangePasswordAsync(Customers customer)
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordAsync(string password, string newPassword, string againPassword, CancellationToken ct)
         {
             try
             {
-                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
+                // form alan adları (password, newPassword, againPassword) api'nin beklediği dto'ya çevrilir
+                ChangePasswordRequestDto request = new()
+                {
+                    CustomerId = User.GetCustomerId(),
+                    OldPassword = password,
+                    NewPassword = newPassword,
+                    ReNewPassword = againPassword
+                };
 
-                if (existingCustomer is null)
-                {// mesaj döndür
-                    return NotFound();
-                }
-                existingCustomer.Password = Encryption.HashPassword(customer.Password!);
+                var result = await _customerService.ChangePasswordAsync(request, ct);
 
-                _context.Update(existingCustomer); // güncellenir
-
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
+                    TempData["Info"] = result.Data.Message ?? "Parolanız başarıyla güncellendi.";
+                else
+                    TempData["Error"] = result?.Data?.Message ?? result?.ErrorMessage ?? "Parola değiştirilirken bir hata oluştu.";
 
                 return RedirectToAction("Index");
             }
@@ -207,33 +194,26 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> EditCommunicationSettings(Customers customer)
+        [HttpPost]
+        public async Task<IActionResult> EditCommunicationSettings(string? email, string? phone, string? verificationCode, CancellationToken ct)
         {
             try
             {
-                var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
-
-                if (existingCustomer is null)
-                {// mesaj döndür
-                    return NotFound();
-                }
-
-                // yeni email'in db'de var olan bir email olmamasını kontrol et
-                var checkEmail = await _context.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email);
-                if (checkEmail is not null && checkEmail.CustomerId != customer.CustomerId)
+                // ajax ile çağrıldığı için sonuç json olarak döner; kodun doğruluğu api tarafında kontrol edilir
+                ContactInfoRequestDto request = new()
                 {
-                    ModelState.AddModelError("Email", "Bu email zaten kayıtlı.");
-                    return View("CommunicationSettings", customer);
-                }
+                    CustomerId = User.GetCustomerId(),
+                    NewEmail = email,
+                    NewPhone = phone,
+                    VerificationCode = verificationCode
+                };
 
-                existingCustomer.Email = customer.Email;
-                existingCustomer.Phone = customer.Phone;
+                var result = await _customerService.ChangeContactInfoAsync(request, ct);
 
-                _context.Update(existingCustomer); // güncellenir
+                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
+                    return Json(new { success = true, message = result.Data.Message ?? "İletişim bilgileriniz güncellendi." });
 
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
-
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = result?.Data?.Message ?? result?.ErrorMessage ?? "İletişim bilgileri güncellenirken bir hata oluştu." });
             }
             catch (Exception ex)
             {
@@ -250,65 +230,34 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendOTPCode(string toMail)
+        public async Task<IActionResult> SendOTPCode(CancellationToken ct)
         {
             try
             {
-                string code = string.Empty;
-                Random random = new();
+                // kod, istemciden gelen adrese değil müşterinin kayıtlı e-postasına gönderilir
+                var customerResult = await _customerService.GetCustomerByIdAsync(User.GetCustomerId(), ct);
+                var email = customerResult?.Data?.Result?.Email;
 
-                for (int i = 0; i < 6; i++)
-                    code += random.Next(1, 9);
+                if (customerResult is null || !customerResult.IsSuccess || customerResult.Data?.Status != Status.Success || string.IsNullOrWhiteSpace(email))
+                    return BadRequest(new { message = "Müşteri bilgileri getirilemedi." });
 
-                EmailContent content = new()
+                // kod api tarafında üretilip db'ye hash'li yazılır ve sadece e-postayla gider; view'a hiç gelmez
+                var result = await _authService.SendOtpAsync(new OtpRequestDto
                 {
-                    ToMail = toMail,
-                    Subject = "Parola Yenileme Doğrulama Kodu",
-                    Body = $"Parola yenileme işlemi için doğrulama kodunuz: {code}. Bu kod 2 dakika içerisinde geçersiz olacaktır.",
-                    Expire = 120
-                };
+                    Email = email,
+                    Purpose = OtpPurpose.ChangeEmail
+                }, ct);
 
-                _sender.SendMail(content);
+                if (result is null || !result.IsSuccess || result.Data?.Status != Status.Success)
+                    return BadRequest(new { message = result?.Data?.Message ?? result?.ErrorMessage ?? "Doğrulama kodu gönderilemedi." });
 
-                return PartialView("ChangeEmail", code);
-
+                return PartialView("ChangeEmail");
             }
             catch (Exception ex)
             {
                 Guid guid = Guid.NewGuid();
-                ErrorViewModel error = new ErrorViewModel
-                {
-                    Message = $"Hata Kodu: {guid}",
-                    RequestId = HttpContext.TraceIdentifier,
-                    Title = "Parola değiştirilirken bir hata oluştu."
-                };
-                _logger.LogError($"Account/LoadForm Error Hata Kodu: {guid} => {ex}");
-                return View("Error", error);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CheckOTPCode(string code, string modelCode)
-        {
-            try
-            {
-
-                if (code == modelCode)
-                    return Json(new { success = true, message = "Kod doğrulandı." });
-                else
-                    return Json(new { success = false, message = "Kod doğrulanamadı." });
-            }
-            catch (Exception ex)
-            {
-                Guid guid = Guid.NewGuid();
-                ErrorViewModel error = new ErrorViewModel
-                {
-                    Message = $"Hata Kodu: {guid}",
-                    RequestId = HttpContext.TraceIdentifier,
-                    Title = "Kod doğrulanırken bir hata oluştu."
-                };
-                _logger.LogError($"Account/CheckOTPCode Error Hata Kodu: {guid} => {ex}");
-                return View("Error", error);
+                _logger.LogError($"Account/SendOTPCode Error Hata Kodu: {guid} => {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = $"Doğrulama kodu gönderilirken bir hata oluştu. Hata Kodu: {guid}" });
             }
         }
 
@@ -318,28 +267,49 @@ namespace ECOM.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Address(Addresses newAddress)
+        public async Task<IActionResult> Address(string? name, string? surname, string? phone, string? addressName, string? address,
+            int? cityId, int? districtId, int? neighbourhoodId, CancellationToken ct)
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
+                // payment sayfasındaki yeni adres formunun alanları api'nin beklediği dto'ya çevrilir
+                AddressRequestDto request = new()
+                {
+                    CustomerId = User.GetCustomerId(),
+                    Address = new AddressCreateDto
+                    {
+                        AddressName = addressName,
+                        Address = address,
+                        City = cityId,
+                        District = districtId,
+                        Neighbourhood = neighbourhoodId
+                    },
+                    Receiver = new ReceiverDto
+                    {
+                        Name = name,
+                        Surname = surname,
+                        Phone = phone
+                    }
+                };
 
-                newAddress.CustomerId = customerId;
-                newAddress.ReceiverId = customerId;
-                newAddress.CreatedAt = DateTime.Now;
+                var result = await _customerService.AddAddressAsync(request, ct);
 
-
-                _context.Addresses.Add(newAddress); // yeni adres eklenir
-
-                await _context.SaveChangesAsync(); // veri tabanına kaydedilir
+                if (result is null || !result.IsSuccess || result.Data is null || result.Data.Status != Status.Success)
+                    TempData["Error"] = result?.Data?.Message ?? result?.ErrorMessage ?? "Adres eklenirken bir hata oluştu.";
 
                 return RedirectToAction("Index", "Payment");
-
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"Address Error => {ex}");
-                return View("Error", new { message = "Adres eklenirken bir hata oluştu." });
+                Guid guid = Guid.NewGuid();
+                ErrorViewModel error = new ErrorViewModel
+                {
+                    Message = $"Hata Kodu: {guid}",
+                    RequestId = HttpContext.TraceIdentifier,
+                    Title = "Adres eklenirken bir hata oluştu."
+                };
+                _logger.LogError($"Account/Address Error Hata Kodu: {guid} => {ex}");
+                return View("Error", error);
             }
         }
     }

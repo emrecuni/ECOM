@@ -3,7 +3,7 @@ using ECOM.MVC.Infrastructure.Models;
 using ECOM.Shared.Data.DTOs;
 using ECOM.Shared.Data.DTOs.Auth;
 using ECOM.Shared.Data.DTOs.Smtp;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Net;
 
 namespace ECOM.MVC.Infrastructure.Services
@@ -69,9 +69,14 @@ namespace ECOM.MVC.Infrastructure.Services
         {
             try
             {
-                var body = await response.Content.ReadFromJsonAsync<ApiErrorResponse>(ct);
-                if (!string.IsNullOrWhiteSpace(body?.Message))
-                    return body.Message;
+                // JWT doğrulamasının döndüğü 401 gibi yanıtlarda gövde boş gelir; boş gövde json olarak okunmaya çalışılmaz
+                var content = await response.Content.ReadAsStringAsync(ct);
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+                    var body = JsonSerializer.Deserialize<ApiErrorResponse>(content, JsonSerializerOptions.Web);
+                    if (!string.IsNullOrWhiteSpace(body?.Message))
+                        return body.Message;
+                }
             }
             catch (JsonException)
             {

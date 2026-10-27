@@ -1,52 +1,42 @@
-﻿@model string
-
-
-
-<div class="modal-body" id="verificationSection">
-    <form id="verificationForm">
+﻿
+<div class="modal-body" id="userSection">
+    <p class="text-muted mb-3">Mevcut e-posta adresinize bir doğrulama kodu gönderdik. Kodu ve yeni e-posta adresinizi girin.</p>
+    <form id="userForm">
         <div class="mb-3">
-            <label class="form-label">Kod</label>
-            <input type="text" class="form-control" name="code" required>
+            <label class="form-label">Doğrulama Kodu</label>
+            <input type="text" class="form-control" name="verificationCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required>
         </div>
-        <button id="verificationCode" type="submit" class="btn btn-success">Doğrula</button>
+        <div class="mb-3">
+            <label class="form-label">Yeni E-Posta</label>
+            <input type="email" class="form-control" name="Email" required>
+        </div>
+        <button id="btnSaveEmail" type="submit" class="btn btn-success">Kaydet</button>
     </form>
     <!-- Geri sayım göstergesi -->
-    <div class="mb-2 text-muted mt-3" >
-        Kalan süre: <span id="countdownTimer">02:00</span>
+    <div class="mb-2 text-muted mt-3">
+        Kalan süre: <span id="countdownTimer">03:00</span>
     </div>
 </div>
 
-<div class="modal-body" id="userSection" style="display:none">
-    <form id="userForm">
-        <div class="mb-3">
-            <label class="form-label">E-Posta</label>
-            <input type="email" class="form-control" name="Email" required>
-        </div>
-        <button type="submit" class="btn btn-success">Kaydet</button>
-    </form>
-</div>
-
 <script>
-    let otpStartTime = null; // Başlangıç zamanı
     let otpInterval = null;
-    const otpTimeout = 2 * 60 * 1000; // 2 dakika (ms cinsinden)
+    const otpTimeout = 3 * 60 * 1000; // api'deki kod geçerlilik süresiyle aynı (3 dakika)
 
-    // Zamanlayıcı başlatma fonksiyonu
+    // Zamanlayıcı başlatma fonksiyonu; süre dolunca kaydet butonu kapanır
     function startOtpTimer() {
         const countdownEl = $("#countdownTimer");
-        otpStartTime = new Date().getTime();
+        const otpStartTime = new Date().getTime();
 
         if (otpInterval) clearInterval(otpInterval);
 
         otpInterval = setInterval(function () {
-            const now = new Date().getTime();
-            const remaining = otpTimeout - (now - otpStartTime);
+            const remaining = otpTimeout - (new Date().getTime() - otpStartTime);
 
             if (remaining <= 0) {
                 clearInterval(otpInterval);
                 countdownEl.text("00:00");
+                $("#btnSaveEmail").prop("disabled", true);
                 alert("Kodun süresi doldu. Lütfen yeniden kod isteyin.");
-                $("#verificationCode").prop("disabled", true);
                 return;
             }
 
@@ -59,50 +49,13 @@
     }
 
     // Modal açıldığında zaman başlasın
-    $(document).on('shown.bs.modal', '#myModal', function () {
-        $("#verificationCode").prop("disabled", false);
-        $("#countdownTimer").text("02:00");
+    $(document).off('shown.bs.modal.otp').on('shown.bs.modal.otp', '#myModal', function () {
+        $("#btnSaveEmail").prop("disabled", false);
         startOtpTimer();
     });
 
     // Modal kapandığında sıfırla
-    $(document).on('hidden.bs.modal', '#myModal', function () {
+    $(document).off('hidden.bs.modal.otp').on('hidden.bs.modal.otp', '#myModal', function () {
         clearInterval(otpInterval);
-        otpStartTime = null;
-    });
-
-
-    $(document).on("submit", "#verificationForm", function (e) {
-        e.preventDefault();
-
-        // Süre dolmuş mu kontrol et
-        const now = new Date().getTime();
-        if (!otpStartTime || (now - otpStartTime) > otpTimeout) {
-            alert("Kodun süresi doldu. Lütfen yeniden kod isteyin.");
-            return;
-        }
-
-
-        // Form verisi + model değeri birlikte gönderilecek
-        const formData = $(this).serialize() + "&modelCode=@Model";
-
-        $.post("/Account/CheckOTPCode", formData, function (result) {
-            if (result.success) {
-                alert(result.message);
-
-                // Doğrulama başarılıysa: verificationForm gizle, userForm göster
-                $("#verificationSection").hide();
-                $("#userSection").show();
-
-            } else {
-                alert(result.message);
-
-                // Başarısızsa: userForm gizli kalsın, verificationForm görünür olsun
-                $("#userSection").hide();
-                $("#verificationSection").show();
-            }
-        }).fail(function () {
-            alert("Sunucuya bağlanırken hata oluştu.");
-        });
     });
 </script>

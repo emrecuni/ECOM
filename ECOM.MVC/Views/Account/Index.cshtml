@@ -191,17 +191,24 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btnOpenForm) {
         const email = btnOpenForm.getAttribute("data-email");
         btnOpenForm.addEventListener("click", function () {
-            $.post("/Account/SendOTPCode", "toMail=" + email, function (data) {
+            $.post("/Account/SendOTPCode", function (data) {
                 $("#myModal .modal-content").html(data);
                 new bootstrap.Modal(document.getElementById('myModal')).show();
+            }).fail(function (xhr) {
+                alert(xhr.responseJSON?.message ?? "Doğrulama kodu gönderilemedi.");
             });
         });
     }
 
     $(document).on("submit", "#userForm", function (e) {
         e.preventDefault();
-        const extra = $(this).data("extra");
-        $.post("/Account/EditCommunicationSettings", extra + "&" + $(this).serialize(), function () {});
+        $.post("/Account/EditCommunicationSettings", $(this).serialize(), function (result) {
+            alert(result.message);
+            if (result.success)
+                location.reload();
+        }).fail(function () {
+            alert("Sunucuya bağlanırken hata oluştu.");
+        });
     });
 });
 </script>

@@ -1,4 +1,4 @@
-@model ECOM.MVC.OldFiles.Data.Customers
+@model ECOM.Shared.Data.DTOs.Customer.BasicCustomerResponseDto
 
 <div class="membership-form">
     <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:24px; display:flex; align-items:center; gap:8px;">
@@ -37,19 +37,4 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $("#btnOpenForm").click(function () {
-        const email = $(this).data("email");
-        $.post("/Account/SendOTPCode", "toMail=" + email, function (data) {
-            $("#myModal .modal-content").html(data);
-            new bootstrap.Modal(document.getElementById('myModal')).show();
-        });
-    });
-
-    $(document).on("submit", "#userForm", function (e) {
-        e.preventDefault();
-        const extra = "customerId=@Model.CustomerId&phone=@Model.Phone";
-        $.post("/Account/EditCommunicationSettings", extra + "&" + $(this).serialize(), function () {});
-    });
-</script>
+<!-- buton ve form işlemleri bu partial'ı render eden Account/Index.cshtml içinde -->

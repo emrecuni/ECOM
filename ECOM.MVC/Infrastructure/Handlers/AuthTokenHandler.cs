@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
 
 namespace ECOM.MVC.Infrastructure.Handlers
 {
@@ -11,7 +12,9 @@ namespace ECOM.MVC.Infrastructure.Handlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var token = _httpContextAccessor.HttpContext?.Request.Cookies["jwt_token"];
+            // token ayrı bir cookie'de değil; login sırasında StoreTokens ile şifreli auth cookie'sinin içine "access_token" adıyla yazılır
+            var httpContext = _httpContextAccessor.HttpContext;
+            var token = httpContext is null ? null : await httpContext.GetTokenAsync("access_token");
             if (!string.IsNullOrEmpty(token))
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 

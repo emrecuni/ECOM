@@ -15,6 +15,9 @@ namespace ECOM.API.Infrastructure.Services
         private readonly DataContext _context;
         private readonly ILogger<ProductService> _logger;
 
+        // sepet ile db fiyatı arasında kabul edilen en yüksek fark (yüzde)
+        private const decimal PriceTolerancePercent = 10;
+
         public ProductService(DataContext context, ILogger<ProductService> logger)
         {
             _context = context;
@@ -28,7 +31,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 Console.WriteLine("ProductService/AddCart ==> Metodu çalışmaya başladı");
                 #region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
-                                
+
                 response = await CheckPriceDiff(new CheckPriceDiffDto
                 {
                     ProductId = model.ProductId,
@@ -62,7 +65,7 @@ namespace ECOM.API.Infrastructure.Services
                 {
                     cartItem.Piece += model.Piece; // mevcut ürünün adedini güncelle
                     cartItem.TotalPrice += model.Price * model.Piece; // toplam fiyatı güncelle
-                    
+
                     _context.Carts.Update(cartItem); // ürün sepette güncellenir
 
                     response.Status = Status.Success;
@@ -87,7 +90,7 @@ namespace ECOM.API.Infrastructure.Services
                     response.Message = "Ürün sepete başarıyla eklendi.";
                     response.Result = $"ProductId: {model.ProductId}"; // eklenen ürünün id'si döndürülür
                 }
-                
+
                 await _context.SaveChangesAsync(); // değişiklikler kaydedilir
             }
             catch (Exception ex)
@@ -116,41 +119,46 @@ namespace ECOM.API.Infrastructure.Services
                     return response;
                 }
 
-                // fiyat karşılaştırma yapmak gerekirse request'e price değerini ekle
-                //#region Gönderilen fiyat ile db'deki fiyatı karşılaştırma
-                //CheckPriceDiffDto priceDiffModel = new()
-                //{
-                //    ProductId = model.ProductId,
-                //    Price = model.Price
-                //};
+                #region Sepetteki birim fiyat ile db'deki fiyatı karşılaştırma
 
-                //response = await CheckPriceDiff(priceDiffModel);
-                //if (response.Status != Status.Success)
-                //    return response; // fiyat farkı büyükse işlemi durdur
-
-                //#endregion
-
-
-                /*
-                 * fiyat karşılaştırma yap ve fiyatı ona göre güncelle
-                 */
-
-                var price = await _context.Products
+                // fiyat istemciden alınmaz; sepete eklendiği andaki birim fiyat db'deki güncel fiyatla karşılaştırılır
+                var dbPrice = await _context.Products
                     .AsNoTracking()
                     .Where(p => p.ProductId == model.ProductId)
-                    .Select(p => p.Price)
+                    .Select(p => (decimal?)p.Price)
                     .FirstOrDefaultAsync();
+
+                if (dbPrice is null)
+                {
+                    response.Status = Status.Failed;
+                    response.Message = "Ürün bulunamadı.";
+                    return response;
+                }
+
+                var cartUnitPrice = cartItem.Piece > 0 ? cartItem.TotalPrice / cartItem.Piece : dbPrice.Value;
+                var unitPrice = cartUnitPrice;
+                bool priceUpdated = false;
+
+                // fark tolerans değerinin üzerindeyse sepetteki fiyat db'deki güncel fiyatla değiştirilir
+                if (dbPrice.Value > 0 && Math.Abs(dbPrice.Value - cartUnitPrice) / dbPrice.Value * 100 > PriceTolerancePercent)
+                {
+                    _logger.LogWarning($"ProductService/EditCart ==> Fiyat güncellendi: CartId: {cartItem.CartId}, sepet fiyatı: {cartUnitPrice}, DB fiyatı: {dbPrice.Value}");
+                    unitPrice = dbPrice.Value;
+                    priceUpdated = true;
+                }
+
+                #endregion Sepetteki birim fiyat ile db'deki fiyatı karşılaştırma
 
                 cartItem.Piece = model.Piece;
                 cartItem.Enable = model.Enable;
-                cartItem.TotalPrice = price * model.Piece;
+                cartItem.TotalPrice = unitPrice * model.Piece;
                 cartItem.UpdatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync(); // değişiklikler kaydedilir
 
                 Console.WriteLine("ProductService/EditCart ==> Sepet güncellendi db'ye yazıldı");
                 response.Status = Status.Success;
-                response.Message = "Sepet Başarıyla Güncellendi.";
+                response.Message = priceUpdated ? "Ürünün fiyatı değiştiği için sepetteki fiyat güncellendi." : "Sepet Başarıyla Güncellendi.";
                 response.Result = $"CartId: {cartItem.CartId}";
             }
             catch (Exception ex)
@@ -381,7 +389,7 @@ namespace ECOM.API.Infrastructure.Services
                 var searchTerm = model.ProductName.Trim();
                 // ürün adı veya açıklamayla sorgulat
                 var products = await _context.Products
-                    .Where(p => p.Name.Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm)) || (p.Brand.Name.Contains(searchTerm)))
+                    .Where(p => p.Name.Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm)) || (p.Brand != null && p.Brand.Name != null && p.Brand.Name.Contains(searchTerm)))
                     .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
                     .ToListAsync();
 
@@ -470,7 +478,7 @@ namespace ECOM.API.Infrastructure.Services
 
                     // fiyat farkı yüzde 10'den fazla ise kullanıcıyı uyar, değilse db'deki fiyatı kullan
                     var priceDiff = Math.Abs(product.Price - model.Price) / product.Price * 100;
-                    if (priceDiff > 10)
+                    if (priceDiff > PriceTolerancePercent)
                     {
                         response.Status = Status.Failed;
                         response.Message = $"Fiyat uyuşmazlığı tespit edildi. Gönderilen fiyat: {model.Price}, DB fiyatı: {product.Price}. Lütfen fiyatı kontrol edin.";

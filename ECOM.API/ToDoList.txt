@@ -51,11 +51,11 @@ X Parola değiştirme için metod yaz X
 X Sepette ürün varsa ufak bir ikon ile kaç adet ürün olduğunu "Sepetim"de göster X
 X Aramaya ürünü dahil et sadece kategori arıyor X
 X Aramaya markaları da dahil et X
-* Ürünler listelenirken skorlarını doğru göster
+X Ürünler listelenirken skorlarını doğru göster X
 X Sepette ürün görselleri gelmiyor X
 * Servis çağrılarını logda göster
 * Menülerin hover'ına alt kategorileri getir
-* Product service edit cart'taki yorum satırına bir bak
+X Product service edit cart'taki yorum satırına bir bak X
 * Lazy loading ekle
 * Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir
 X Ödeme tamamlandığında cart tablosundan ilgili kayıtları bir daha getirtme X

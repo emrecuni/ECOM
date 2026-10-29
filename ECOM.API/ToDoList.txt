@@ -1,11 +1,11 @@
 ﻿X Swagger ekle projeye X
 X Login doğrulama ekle X
-* Login(mvc)'de eklenecek claims'leri api'den dön
+X Login(mvc)'de eklenecek claims'leri api'den dön X
 X İşlemleri service dosyalarında yaptır X
 X Product controller ekle X
 X Email verification tablosunun migration'ını oluştur X
 X Email verification işlemini yaptır X
-* iyzico ödemeleri için api yaz
+X iyzico ödemeleri için api yaz X
 * iyzico'da 3d ayarını kurcala Firma ayarları -> ödeme bazında 3d secure ayarları
 X Neighborhood tablosundan city kolonunu kaldır X
 X Doğrulama kodu generater yaz X
@@ -17,8 +17,8 @@ X Ürün arama metodunu yaz // ad ile // product X
 X Ürün arama metodunu yaz // kategori ile // product X
 X Favoriye ekleme metodunu yaz // product X
 X Bilgi güncelleme metodunu yaz // customer X
-* Ödeme metodunu yaz // payment
-* Siparişler metodunu yaz // order
+X Ödeme metodunu yaz // payment X
+X Siparişler metodunu yaz // order X
 X Adres gibi yardımcı işlemler için controller yaz // address X --- location
 X Kuponları listeleme metodunu yaz // customer X
 X Fiyat karşılaştırma işlemini private bir metod ile yap X
@@ -27,13 +27,13 @@ X Sepete eklenen ürünün satıcısı o ürünü satıyor mu kontrol et X
 X Yorum yapabilmek için ürünü satın almış mı kontrol et X
 X sepete eklerken gönderilen fiyat ile db'deki fiyatı karşılaştırıp ona göre ekleme yapmalıyız. X
 * Sepetteki tutar gösterimlerini binlik ayraç ile ayır
-* "Hesabım" hoverında açılan menüyü yaklaştır imleç boşluğa gelince hemen kapanıyor
+X "Hesabım" hoverında açılan menüyü yaklaştır imleç boşluğa gelince hemen kapanıyor X
 * Parola değiştirirken parola formatını güçlü iste
 * Parola oluştururken parola formatını güçlü iste
 X Sipariş durumu db'de tutulmuyor kolon ekle X
 * Bütün kullanıcı varlığı kontrollerini authService/CheckCustomerExists ile yap
 X Adres eklemede il-ilçe-mahalleyi string değil de id olarak gönder X
-* Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir
+X Customer tablosunda iscustomer false ise parola ve gender'ın false olması durumunu değiştir X
 X LocationController yaz il-ilçe-mahalleyi dönen metodları yaz X
 * Mahalle tablosuna posta kodu gerekebilir payservice'te zipCode gönderiyoruz çünkü
 * Ex message'ları response'ta dönme hata kodu dön log tut loglardan bak hata mesajlarına
@@ -43,7 +43,7 @@ XX Tutar doğrulama (önceden değinmiştim, güvenlik bağlamında tekrar): Ret
 * Callback'te cardId yazılmıyor tabloya
 X Pay response'unu düzelt // dto ile dön mesajları X
 X Callback'teki cart'a giderken customerid'yi dinamik ver X
-* Parola değiştirme için metod yaz
+X Parola değiştirme için metod yaz X
 * Parola kurallarını ortak bir yere al
 * Register'da telefon uzunluğu 10'dan fazla olmasın
 * Forgot-password'daki script'leri external yap

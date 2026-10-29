@@ -48,7 +48,7 @@ X Parola değiştirme için metod yaz X
 * Register'da telefon uzunluğu 10'dan fazla olmasın
 * Forgot-password'daki script'leri external yap
 * Register'da required alanları belirt
-* Sepette ürün varsa ufak bir ikon ile kaç adet ürün olduğunu "Sepetim"de göster
+X Sepette ürün varsa ufak bir ikon ile kaç adet ürün olduğunu "Sepetim"de göster X
 * Aramaya ürünü dahil et sadece kategori arıyor
 * Ürünler listelenirken skorlarını doğru göster
 X Sepette ürün görselleri gelmiyor X

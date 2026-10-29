@@ -44,14 +44,14 @@
                     <div class="selected-address-box" id="selected-address-content">
                         <div class="address-tag">
                             <i class="fas fa-home"></i>
-                            @Model.Addresses.ToList()[0].AddressName
+                            @Model.Addresses[0].AddressName
                         </div>
                         <p class="address-detail">
-                            @Model.Addresses.ToList()[0].Address
+                            @Model.Addresses[0].Address
                             <span class="address-location">
-                                @Model.Addresses.ToList()[0].Neighbourhood.Name /
-                                @Model.Addresses.ToList()[0].District.Name /
-                                @Model.Addresses.ToList()[0].City.Name
+                                @Model.Addresses[0].Neighbourhood /
+                                @Model.Addresses[0].District /
+                                @Model.Addresses[0].City
                             </span>
                         </p>
                     </div>
@@ -75,7 +75,7 @@
                 <div id="other-addresses" class="address-list">
                     @if (Model.Addresses.Count > 0)
                     {
-                        @foreach (var address in Model.Addresses.ToList())
+                        @foreach (var address in Model.Addresses)
                         {
                             <div class="address-option" onclick="selectAddress(this)"
                                  data-address-id="@address.AddressId">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="address-option-detail">
                                         @address.Address —
-                                        @address.Neighbourhood.Name / @address.District.Name / @address.City.Name
+                                        @address.Neighbourhood / @address.District / @address.City
                                     </div>
                                 </div>
                             </div>
@@ -148,36 +148,23 @@
                                 <label class="field-label">Şehir</label>
                                 <select class="field-input" id="cityId" name="cityId" style="cursor:pointer;">
                                     <option selected disabled>Seçiniz</option>
-                                    @foreach (var city in Model.Cities.ToList())
+                                    @foreach (var city in Model.Cities)
                                     {
                                         <option value="@city.CityId">@city.Name</option>
                                     }
                                 </select>
                             </div>
+                            @* ilçe ve mahalleler şehir/ilçe seçilince ajax ile doldurulur *@
                             <div class="form-field-group">
                                 <label class="field-label">İlçe</label>
                                 <select class="field-input" id="districtId" name="districtId" style="cursor:pointer;">
                                     <option selected disabled>Seçiniz</option>
-                                    @if (Model.Districts.Count > 0)
-                                    {
-                                        @foreach (var district in Model.Districts.ToList())
-                                        {
-                                            <option value="@district.DistrictId">@district.Name</option>
-                                        }
-                                    }
                                 </select>
                             </div>
                             <div class="form-field-group">
                                 <label class="field-label">Mahalle</label>
                                 <select class="field-input" id="neighbourhoodId" name="neighbourhoodId" style="cursor:pointer;">
                                     <option selected disabled>Seçiniz</option>
-                                    @if (Model.Neighbourhoods.Count > 0)
-                                    {
-                                        @foreach (var neighbourhood in Model.Neighbourhoods.ToList())
-                                        {
-                                            <option value="@neighbourhood.NeighbourhoodId">@neighbourhood.Name</option>
-                                        }
-                                    }
                                 </select>
                             </div>
                         </div>
@@ -200,16 +187,10 @@
                 </div>
 
                 @{
-                    decimal cartSummaryPrice = 0;
-                    int productCount = 0;
-                    foreach (var cart in Model.Cart.ToList())
-                    {
-                        if (cart.Enable == true)
-                        {
-                            cartSummaryPrice += cart.TotalPrice;
-                            productCount++;
-                        }
-                    }
+                    // toplam fiyat api'de sadece seçili (enable) ürünlerden hesaplanır
+                    var selectedProducts = Model.Cart?.Products?.Where(p => p.Enable).ToList() ?? [];
+                    decimal cartSummaryPrice = Model.Cart?.TotalPrice ?? 0;
+                    int productCount = selectedProducts.Count;
                 }
 
                 <div class="summary-row">
@@ -239,14 +220,14 @@
 
                 <!-- Cart Items Preview -->
                 <div class="cart-preview">
-                    @foreach (var cart in Model.Cart.ToList().Where(c => c.Enable == true))
+                    @foreach (var cart in selectedProducts)
                     {
                         <div class="cart-preview-item">
                             <div class="cart-preview-info">
-                                <span class="cart-preview-name">@cart.Product.Name</span>
-                                <span class="cart-preview-qty">x@cart.Count</span>
+                                <span class="cart-preview-name">@cart.Name</span>
+                                <span class="cart-preview-qty">x @cart.Piece</span>
                             </div>
-                            <span class="cart-preview-price">₺@cart.TotalPrice.ToString("F2")</span>
+                            <span class="cart-preview-price">₺@cart.Price.ToString("F2")</span>
                         </div>
                     }
                 </div>
@@ -287,7 +268,8 @@
 
     function prepareAddressId() {
         const selected = document.querySelector('.address-option.selected');
-        const address = selected ? selected.dataset.addressId : @Model.Addresses[0].AddressId;
+        // adresi olmayan müşteride ilk adres yoktur; boş gönderilirse controller "Adres seçimi yapınız." döner
+        const address = selected ? selected.dataset.addressId : '@(Model.Addresses.Count > 0 ? Model.Addresses[0].AddressId.ToString() : "")';
         document.getElementById('addressId').value = address;
     }
 

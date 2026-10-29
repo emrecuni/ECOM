@@ -1,305 +1,184 @@
-﻿using Azure;
-
-using ECOM.Models;
-using ECOM.MVC.OldFiles.Data;
-using ECOM.MVC.OldFiles.Services;
-using Iyzipay;
-using Iyzipay.Model;
-using Iyzipay.Model.V2.Subscription;
-using Iyzipay.Request;
+﻿using ECOM.Models;
+using ECOM.MVC.Infrastructure.Interfaces;
+using ECOM.MVC.Infrastructure.Services;
+using ECOM.Shared.Data.DTOs.Location;
+using ECOM.Shared.Data.DTOs.Payment;
+using ECOM.Shared.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Globalization;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ECOM.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
-        private readonly Options _iyzico;
-        private readonly DataContext _context;
+        private readonly IPaymentApiClient _paymentService;
+        private readonly IProductApiClient _productService;
+        private readonly ICustomerApiClient _customerService;
+        private readonly ILocationApiClient _locationService;
+        private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(IConfiguration config, DataContext context)
+        public PaymentController(IPaymentApiClient paymentService, IProductApiClient productService, ICustomerApiClient customerService,
+            ILocationApiClient locationService, ILogger<PaymentController> logger)
         {
-            _iyzico = new Options
-            {
-                ApiKey = config["IyzicoOptions:ApiKey"],
-                SecretKey = config["IyzicoOptions:SecretKey"],
-                BaseUrl = config["IyzicoOptions:BaseUrl"]
-            };
-            _context = context;
+            _paymentService = paymentService;
+            _productService = productService;
+            _customerService = customerService;
+            _locationService = locationService;
+            _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
             try
             {
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
-                var addresses = await _context.Addresses
-                    .Include(a => a.City)
-                    .Include(a => a.District)
-                    .Include(a => a.Neighbourhood)
-                    .ToListAsync();
+                int customerId = User.GetCustomerId();
 
-                var cart = await _context.Carts
-                    .Include(c => c.Customer)
-                    .Include(c => c.Product)
-                    .Include(c => c.Seller)
-                    .Include(c => c.Coupon)
-                    .Where(c => c.CustomerId == customerId && c.Enable == true)
-                    .ToListAsync();
+                // api sepet boşken Status.Failed döner; ödeme sayfasında boş sepetle işlem yapılamayacağı için sepete yönlendirilir
+                var cartResult = await _productService.GetCartAsync(customerId, ct);
+                if (cartResult is null || !cartResult.IsSuccess || cartResult.Data is null || cartResult.Data.Status == Status.Error)
+                    return PaymentError($"Payment/Index sepet => {cartResult?.Data?.Message ?? cartResult?.ErrorMessage}", "Sepet getirilirken bir hata oluştu.");
 
-                var cities = await _context.Cities.ToListAsync();
+                var cart = cartResult.Data.Status == Status.Success ? cartResult.Data.Result : null;
+                if (cart?.Products is null || !cart.Products.Any(p => p.Enable))
+                    return RedirectToAction("Index", "Cart");
 
-                //var disricts = await _context.Districts
-                //    .Include(d => d.City)
-                //    .ToListAsync();
+                // adresi olmayan müşteride api Status.Failed döner, bu durumda liste boş kalır ve yeni adres formu kullanılır
+                var addressResult = await _customerService.GetAddressAsync(customerId, ct);
+                if (!addressResult.IsSuccess || addressResult.Data is null || addressResult.Data.Status == Status.Error)
+                    return PaymentError($"Payment/Index adres => {addressResult.Data?.Message ?? addressResult.ErrorMessage}", "Adresler getirilirken bir hata oluştu.");
 
-                //var neighbourhoods = await _context.Neighbourhoods
-                //    .Include(n => n.City)
-                //    .Include(n => n.District)
-                //    .ToListAsync();                    
+                var cityResult = await _locationService.GetCitiesAsync(ct);
+                if (!cityResult.IsSuccess || cityResult.Data?.Status != Status.Success)
+                    return PaymentError($"Payment/Index şehir => {cityResult.Data?.Message ?? cityResult.ErrorMessage}", "Şehirler getirilirken bir hata oluştu.");
 
-                AddressViewModel model = new AddressViewModel
+                AddressViewModel model = new()
                 {
-                    Addresses = addresses,
+                    Addresses = addressResult.Data.Result?.Addresses ?? [],
                     Cart = cart,
-                    Cities = cities
-                    //Districts = disricts,
-                    //Neighbourhoods = neighbourhoods
+                    Cities = cityResult.Data.Result ?? []
                 };
 
                 return View(model);
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"Payment/Index Error => {ex}");
-                return View("Error");
+                return PaymentError($"Payment/Index => {ex}", "Ödeme sayfası yüklenirken bir hata oluştu.");
             }
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetDistrictsAsync(int cityId)
+        public async Task<JsonResult> GetDistrictsAsync(int cityId, CancellationToken ct)
         {
             try
             {
-                var disricts = await _context.Districts
-                    .Where(d => d.CityId == cityId)
-                    .Select(d => new { d.DistrictId, d.Name })
-                    .OrderBy(d => d.Name)
-                    .ToListAsync();
+                var result = await _locationService.GetDistrictsAsync(cityId, ct);
 
-                return Json(disricts);
+                if (!result.IsSuccess || result.Data?.Status != Status.Success)
+                    return Json(new List<DistrictDto>());
+
+                return Json(result.Data.Result?.OrderBy(d => d.Name).ToList() ?? []);
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"GetDistricts Error => {ex}");
-                return Json(null);
-
+                _logger.LogError($"Payment/GetDistricts Error => {ex}");
+                return Json(new List<DistrictDto>());
             }
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetNeighbourhoodsAsync(int districtId)
+        public async Task<JsonResult> GetNeighbourhoodsAsync(int districtId, CancellationToken ct)
         {
             try
             {
-                var neighbourhoods = await _context.Neighbourhoods
-                    .Where(n => n.DistrictId == districtId)
-                    .Select(n => new { n.NeighbourhoodId, n.Name })
-                    .OrderBy(n => n.Name)
-                    .ToListAsync();
+                var result = await _locationService.GetNeighbourhoodsAsync(districtId, ct);
 
-                return Json(neighbourhoods);
+                if (!result.IsSuccess || result.Data?.Status != Status.Success)
+                    return Json(new List<NeighbourhoodDto>());
+
+                return Json(result.Data.Result?.OrderBy(n => n.Name).ToList() ?? []);
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"GetDistricts Error => {ex}");
-                return Json(null);
-
+                _logger.LogError($"Payment/GetNeighbourhoods Error => {ex}");
+                return Json(new List<NeighbourhoodDto>());
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pay(string addressId)
+        public async Task<IActionResult> Pay(int? addressId, CancellationToken ct)
         {
             try
             {
                 if (addressId is null)
-                    return View("Error", new { message = "Adres seçimi yapınız." });
-
-                int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
-
-                //var cartIds = cartList.Select(c => c.CartId).ToList();
-                // sepetteki ürünler db'den çekilir
-                var carts = await _context.Carts
-                    .Include(p => p.Product)
-                    .Include(p => p.Customer)
-                    .Include(p => p.Seller)
-                    .Include(p => p.Product.SupCategory)
-                    .Include(p => p.Product.SubCategory)
-                    .Where(c => c.CustomerId == customerId && c.Enable == true)
-                    .ToListAsync();
-                if (carts is null || carts.Count == 0)
-                    return View("Error", new { message = "Sepet boş veya geçersiz." });
-
-                // seçilen adres db'den çekilir
-                var validAddress = await _context.Addresses
-                    .Include(a => a.City)
-                    .Include(a => a.District)
-                    .Include(a => a.Neighbourhood)
-                    .FirstOrDefaultAsync(a => a.AddressId == int.Parse(addressId));
-
-                List<BasketItem> basket = new();
-                float totalPrice = 0;
-
-                
-                // ödeme request'i için sepetteki ürünler basketitem list'e eklenir
-                foreach (var basketItem in carts)
                 {
-                    basket.Add(new BasketItem
-                    {
-                        Id = $"BI{basketItem.CartId}",
-                        Name = basketItem.Product.Name,
-                        Category1 = basketItem.Product.SupCategory.Name,
-                        Category2 = basketItem.Product.SubCategory.Name,
-                        ItemType = BasketItemType.PHYSICAL.ToString(),
-                        Price = basketItem.TotalPrice.ToString("0.00", CultureInfo.InvariantCulture) // iyzico "," ile değil "." ile ondalık ayracı bekliyor
-                    });
-                    totalPrice += (float)basketItem.TotalPrice; // toplam fiyat hesaplanır
+                    ViewBag.ErrorMessage = "Adres seçimi yapınız.";
+                    return View("Error");
                 }
 
-                // ödeme için adres bilgileri hazırlanır
-                Address orderAddress = new()
+                // sepet, adres ve iyzico ödeme formu api tarafında hazırlanır
+                var result = await _paymentService.PayAsync(new PaymentRequestDto
                 {
-                    City = validAddress?.City.Name,
-                    Country = "Türkiye",
-                    ContactName = carts[0].Customer.Name + " " + carts[0].Customer.Surname,
-                    Description = "test",
-                    ZipCode = "34930"
-                };
+                    CustomerId = User.GetCustomerId(),
+                    AddressId = addressId.Value
+                }, ct);
 
-                // istek hazırlanır
-                var request = new CreateCheckoutFormInitializeRequest
+                if (result.IsSuccess && result.Data?.Status == Status.Success && !string.IsNullOrEmpty(result.Data.Result?.Content))
                 {
-                    Locale = Locale.TR.ToString(),
-                    ConversationId = Guid.NewGuid().ToString(), //guid oluştur
-                    Price = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
-                    PaidPrice = totalPrice.ToString("0.00", CultureInfo.InvariantCulture),
-                    Currency = Currency.TRY.ToString(),
-                    CallbackUrl = "https://localhost:7064/Payment/Callback",
-                    PaymentGroup = PaymentGroup.PRODUCT.ToString(),
-                    Buyer = new Buyer
-                    {
-                        Id = $"BY{customerId}",
-                        Name = carts[0].Customer.Name,
-                        Surname = carts[0].Customer.Surname,
-                        Email = carts[0].Customer.Email,
-                        GsmNumber = $"+90{carts[0].Customer.Phone}",
-                        IdentityNumber = "12345678901",
-                        RegistrationAddress = "İstanbul, Türkiye",
-                        Ip = "85.34.78.112",
-                        City = "İstanbul",
-                        Country = "Turkey",
-                    },
-                    BasketItems = basket,
-                    ShippingAddress = orderAddress,
-                    BillingAddress = orderAddress
-                };
+                    ViewBag.CheckoutFormContent = result.Data.Result.Content; // Iyzico'dan gelen ödeme formu içeriği
+                    return View();
+                }
 
-                var response = CheckoutFormInitialize.Create(request, _iyzico);
-
-                ViewBag.CheckoutFormContent = response.Result.CheckoutFormContent; // Iyzico'dan gelen ödeme formu içeriği
-
-                return View();
+                ViewBag.ErrorMessage = result.Data?.Result?.ErrorMessage ?? result.Data?.Message ?? result.ErrorMessage ?? "Ödeme başlatılamadı.";
+                return View("Error");
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"Payment/Pay Error => {ex}");
-                return View("Error");
+                return PaymentError($"Payment/Pay => {ex}", "Ödeme başlatılırken bir hata oluştu.");
             }
         }
 
+        // iyzico ödeme sonrası buraya cross-site form post yapar; SameSite cookie gönderilmeyebileceği için oturum aranmaz,
+        // api ödeme oturumunu token üzerinden bulur
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Callback(IFormCollection form)
+        public async Task<IActionResult> Callback([FromForm] string? token, CancellationToken ct)
         {
             try
             {
-                var token = form["token"];
-
                 if (string.IsNullOrEmpty(token))
+                {
+                    ViewBag.ErrorMessage = "Ödeme bilgisi bulunamadı.";
                     return View("Error");
+                }
 
-                var request = new RetrieveCheckoutFormRequest
+                var result = await _paymentService.CallbackAsync(new CallbackRequestDto { Token = token }, ct);
+
+                if (result.IsSuccess && result.Data?.Status == Status.Success && result.Data.Result is not null)
                 {
-                    Token = token,
-                    Locale = Locale.TR.ToString(),
-                    ConversationId = Guid.NewGuid().ToString() // sipariş ID vb. kullanılabilir
-                };
-
-
-                var response = CheckoutForm.Retrieve(request, _iyzico);
-
-                if (response.Result.Status == "success")
-                {
-                    using var transaction = await _context.Database.BeginTransactionAsync(); // transaction başlatılır
-                    try
-                    {
-                        int customerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); // giriş yapan kullanıcının id'sini alır
-                        var carts = await _context.Carts
-                            .Where(c => c.CustomerId == customerId && c.Enable == true)
-                            .ToListAsync();
-
-                        for (int i = 0; i < carts.Count; i++)
-                            carts[i].Enable = false; // sepet ürünleri ödeme sonrası devre dışı bırakılır
-
-                        //_context.Carts.UpdateRange(carts); // sepet güncellenir
-                        await _context.SaveChangesAsync(); // veri tabanına kaydedilir
-
-                        var now = DateTime.Now;
-
-                        // sepetteki bütün ürünler liste eklenir
-                        var orderList = carts.Select(order => new OrderHistory
-                        {
-                            ProductId = order.ProductId,
-                            CustomerId = order.CustomerId,
-                            SellerId = order.SellerId,
-                            CartId = order.CartId,
-                            Piece = order.Piece,
-                            TotalPrice = order.TotalPrice,
-                            OrderDate = now
-                        });
-
-                        _context.OrderHistory.AddRange(orderList); // siparişler orderhistory tablosuna eklenir
-
-                        await _context.SaveChangesAsync(); // veri tabanı güncellenir
-
-                        await transaction.CommitAsync(); // transaction commit edilir
-                    }
-                    catch (Exception ex)
-                    {
-                        await transaction.RollbackAsync(); // hata durumunda transaction geri alınır
-                        NLogger.logger.Error($"Payment/Callback Success Error => {ex}");
-                    }
                     ViewBag.PaymentStatus = "Ödeme Başarılı";
-                    ViewBag.PaymentId = response.Result.PaymentId;
-                    ViewBag.Price = float.Parse(response.Result.Price.Replace(".", ","));
+                    ViewBag.PaymentId = result.Data.Result.PaymentId;
+                    ViewBag.Price = result.Data.Result.Price.ToString("F2");
 
                     return View("Success");
                 }
-                else
-                {
-                    ViewBag.ErrorMessage = response.Result.ErrorMessage;
-                    return View("Error");
-                }
+
+                ViewBag.ErrorMessage = result.Data?.Result?.ErrorMessage ?? result.Data?.Message ?? result.ErrorMessage ?? "Ödeme tamamlanamadı.";
+                return View("Error");
             }
             catch (Exception ex)
             {
-                NLogger.logger.Error($"Payment/Callback Error => {ex}");
-                return View("Error");
+                return PaymentError($"Payment/Callback => {ex}", "Ödeme sonucu alınırken bir hata oluştu.");
             }
+        }
+
+        // Views/Payment/Error.cshtml mesajı ViewBag.ErrorMessage'dan okur
+        private IActionResult PaymentError(string logMessage, string userMessage)
+        {
+            Guid guid = Guid.NewGuid();
+            _logger.LogError($"Hata Kodu: {guid} {logMessage}");
+            ViewBag.ErrorMessage = $"{userMessage} Hata Kodu: {guid}";
+            return View("Error");
         }
     }
 }

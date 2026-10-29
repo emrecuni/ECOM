@@ -288,6 +288,20 @@ namespace ECOM.API.Data.SeedData
                     Score = 4.7f,
                     ImagePath = "products/tefalingenio.jpg",
                     CreatedAt = new DateTime(2024, 11, 2)
+                },
+                new Product
+                {
+                    ProductId = 21,
+                    BrandId = 2,
+                    SupCategoryId = 1,
+                    SubCategoryId = 2,
+                    SellerId = 1,
+                    Name = "Apple iPhone 18 Pro",
+                    Description = "Yeni nesil A serisi çip, gelişmiş Pro kamera sistemi ve dayanıklı gövdesiyle Apple'ın en yeni Pro modeli. Mavi renk seçeneği.",
+                    Price = 89999.99m,
+                    Score = 4.8f,
+                    ImagePath = "products/iphone18pro.jpg",
+                    CreatedAt = new DateTime(2026, 9, 18)
                 }
             );
         }

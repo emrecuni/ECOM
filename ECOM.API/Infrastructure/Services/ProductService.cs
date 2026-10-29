@@ -267,7 +267,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 // db'den 20 ürün çeker
                 var products = await _context.Products
-                    .Take(20)
+                    .Take(30)
                     .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
                     .ToListAsync();
 

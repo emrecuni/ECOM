@@ -1921,6 +1921,20 @@ namespace ECOM.API.Migrations
                             SellerId = 5,
                             SubCategoryId = 13,
                             SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 21,
+                            BrandId = 2,
+                            CreatedAt = new DateTime(2026, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yeni nesil A serisi çip, gelişmiş Pro kamera sistemi ve dayanıklı gövdesiyle Apple'ın en yeni Pro modeli. Mavi renk seçeneği.",
+                            ImagePath = "products/iphone18pro.jpg",
+                            Name = "Apple iPhone 18 Pro",
+                            Price = 89999.99m,
+                            Score = 4.8f,
+                            SellerId = 1,
+                            SubCategoryId = 2,
+                            SupCategoryId = 1
                         });
                 });
 

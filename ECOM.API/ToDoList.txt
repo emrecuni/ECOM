@@ -53,6 +53,10 @@ X Parola değiştirme için metod yaz X
 * Ürünler listelenirken skorlarını doğru göster
 X Sepette ürün görselleri gelmiyor X
 * Servis çağrılarını logda göster
+* Menülerin hover'ına alt kategorileri getir
+* Product service edit cart'taki yorum satırına bir bak
+* Lazy loading ekle
+* Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir
 
 payment/pay response'unda dönen içeriği şuraya yapıştır
 

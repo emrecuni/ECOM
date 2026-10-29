@@ -14,6 +14,7 @@ namespace ECOM.Shared.Data.Entities
         public int Piece { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Enable { get; set; }
+        public bool IsOrder { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 

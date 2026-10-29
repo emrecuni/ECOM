@@ -169,7 +169,7 @@ namespace ECOM.API.Infrastructure.Services
             {
                 // kullanıcın sepetteki bütün ürünleri çekilir
                 var cartItems = await _context.Carts
-                    .Where(c => c.CustomerId == customerId)
+                    .Where(c => c.CustomerId == customerId && c.IsOrder == false)
                     .Select(c => new ProductOfCartDto
                     {
                         Id = c.ProductId,

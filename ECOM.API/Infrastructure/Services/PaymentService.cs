@@ -275,13 +275,15 @@ namespace ECOM.API.Infrastructure.Services
                     {
                         var carts = await GetCart(session.CustomerId, isIncludeNavigation: false); // customerId'yi iyzicoResponse'dan alabiliriz, şimdilik 1 olarak sabitledim
 
+                        now = DateTime.Now;
+
                         carts.ForEach(async cart =>
                         {
                             cart.Enable = false;
+                            cart.IsOrder = true;
+                            cart.UpdatedAt = now;
                             _context.Carts.Update(cart);
                         });
-
-                        now = DateTime.Now;
 
                         var orderList = carts.Select(order => new OrderHistory
                         {

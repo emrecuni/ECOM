@@ -57,6 +57,7 @@ X Sepette ürün görselleri gelmiyor X
 * Product service edit cart'taki yorum satırına bir bak
 * Lazy loading ekle
 * Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir
+X Ödeme tamamlandığında cart tablosundan ilgili kayıtları bir daha getirtme X
 
 payment/pay response'unda dönen içeriği şuraya yapıştır
 

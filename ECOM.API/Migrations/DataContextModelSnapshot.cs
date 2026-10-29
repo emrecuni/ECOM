@@ -332,6 +332,9 @@ namespace ECOM.API.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("ENABLE");
 
+                    b.Property<bool>("IsOrder")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Piece")
                         .HasColumnType("int")
                         .HasColumnName("PIECE");
@@ -371,6 +374,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 1,
                             ProductId = 1,
                             SellerId = 1,
@@ -382,6 +386,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 1,
                             ProductId = 3,
                             SellerId = 3,
@@ -393,6 +398,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 2,
                             ProductId = 8,
                             SellerId = 2,
@@ -404,6 +410,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 1,
                             ProductId = 4,
                             SellerId = 1,
@@ -415,6 +422,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 3,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 1,
                             ProductId = 7,
                             SellerId = 1,
@@ -426,6 +434,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 3,
                             Enable = true,
+                            IsOrder = false,
                             Piece = 3,
                             ProductId = 9,
                             SellerId = 3,
@@ -437,6 +446,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 1,
                             Enable = false,
+                            IsOrder = false,
                             Piece = 1,
                             ProductId = 2,
                             SellerId = 2,
@@ -448,6 +458,7 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2024, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CustomerId = 2,
                             Enable = false,
+                            IsOrder = false,
                             Piece = 2,
                             ProductId = 10,
                             SellerId = 1,

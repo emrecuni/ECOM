@@ -55,6 +55,7 @@
                 <a asp-controller="Cart" asp-action="Index" class="cart-btn">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Sepetim</span>
+                    @await Component.InvokeAsync("CartBadge")
                 </a>
             </div>
         </div>

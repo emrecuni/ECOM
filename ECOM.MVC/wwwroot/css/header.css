@@ -264,14 +264,18 @@
     right: -6px;
     background: var(--dark);
     color: var(--white);
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    border-radius: 999px;
+    min-width: 20px; /* "9+" gibi iki karakterde daire yerine hap şekline genişler */
+    height: 20px;
+    padding: 0 5px;
+    border: 2px solid var(--white); /* turuncu buton üzerinde ayrışsın diye */
     font-size: 10px;
     font-weight: 700;
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
 }
 
 /* Categories Nav */

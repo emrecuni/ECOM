@@ -51,8 +51,8 @@ X Parola değiştirme için metod yaz X
 * Sepette ürün varsa ufak bir ikon ile kaç adet ürün olduğunu "Sepetim"de göster
 * Aramaya ürünü dahil et sadece kategori arıyor
 * Ürünler listelenirken skorlarını doğru göster
-* Sepette ürün görselleri gelmiyor
-* Servis çağrımlarını logda göster
+X Sepette ürün görselleri gelmiyor X
+* Servis çağrılarını logda göster
 
 payment/pay response'unda dönen içeriği şuraya yapıştır
 

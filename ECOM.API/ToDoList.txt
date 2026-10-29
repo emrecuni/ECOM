@@ -48,7 +48,11 @@ X Callback'teki cart'a giderken customerid'yi dinamik ver X
 * Register'da telefon uzunluğu 10'dan fazla olmasın
 * Forgot-password'daki script'leri external yap
 * Register'da required alanları belirt
-
+* Sepette ürün varsa ufak bir ikon ile kaç adet ürün olduğunu "Sepetim"de göster
+* Aramaya ürünü dahil et sadece kategori arıyor
+* Ürünler listelenirken skorlarını doğru göster
+* Sepette ürün görselleri gelmiyor
+* Servis çağrımlarını logda göster
 
 payment/pay response'unda dönen içeriği şuraya yapıştır
 

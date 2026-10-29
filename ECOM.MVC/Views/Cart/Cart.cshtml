@@ -9,7 +9,7 @@
     <hr />
     <div class="order-body">
         <input type="checkbox" name="order-is-active" class="order-is-active" @(Model.Enable ? "checked" : "") />
-        <img src="~/@Model.ImagePath" alt="Ürün" class="product-image" />
+        <img src="~/img/@Model.ImagePath" alt="Ürün" class="product-image" />
         <div class="order-info">
             <span class="order-name"><b><a asp-controller="Product" asp-action="Index" asp-route-id="@Model.Id">@Model.Name</a></b></span>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">

@@ -79,7 +79,7 @@ namespace ECOM.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("SearchProductsByWithName")]
+        [HttpPost("SearchProductsByWithName")]
         public async Task<IActionResult> SearchProductsByWithName([FromBody] SearchProductByNameRequestDto model)
         {
             if (!ModelState.IsValid || model is null)

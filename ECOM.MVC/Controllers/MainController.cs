@@ -82,7 +82,7 @@ namespace ECOM.Controllers
                 if (!categoryResult.IsSuccess || categoryResult.Data?.Status != Status.Success || categoryResult.Data.Result is null || categoryResult.Data.Result.Count == 0)
                     return RedirectToAction("Index");
 
-                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
+                var result = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
                     CategoryIds = categoryResult?.Data?.Result
@@ -116,7 +116,7 @@ namespace ECOM.Controllers
                 if (id == 0) // buradaki kontrolü geliştir
                     return View("Index");
 
-                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
+                var result = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
                 {
                     CategoryIds = new List<int> { id },
                     CustomerId = User.GetCustomerId()
@@ -143,37 +143,42 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> SearchProductByName(string category, CancellationToken ct)
+        public async Task<IActionResult> SearchProductByName(string searchText, CancellationToken ct)
         {
             try
             {
-                if (category is null)
+                if (searchText is null)
                     return View("Index");
 
-                var categoryResult = await _productService.GetCategoryIdsAsync(category, ct);
 
-                if (!categoryResult.IsSuccess || categoryResult.Data?.Status != Status.Success || categoryResult.Data.Result is null || categoryResult.Data.Result.Count == 0)
-                    return RedirectToAction("Index");
+                List<BasicProductResponseDto> result = new();
 
-                var result = await _productService.SearchProductsByWithCategory(new SearchProductByCategoryRequestDto
+                var categoryIdsResult = await _productService.GetCategoryIdsAsync(searchText, ct);
+
+                if (categoryIdsResult.IsSuccess && categoryIdsResult.Data is not null && categoryIdsResult.Data?.Status == Status.Success && categoryIdsResult.Data!.Result is not null)
+                {
+                    var categoryresult = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
+                    {
+                        CustomerId = User.GetCustomerId(),
+                        CategoryIds = categoryIdsResult?.Data?.Result
+                    }, ct);
+
+                    if (categoryresult.IsSuccess && categoryresult.Data?.Status == Status.Success)
+                        result.AddRange(categoryresult.Data.Result!);
+                }
+
+                var productResult = await _productService.SearchProductsByWithNameAsync(new SearchProductByNameRequestDto
                 {
                     CustomerId = User.GetCustomerId(),
-                    CategoryIds = categoryResult?.Data?.Result
+                    ProductName = searchText
                 }, ct);
 
-                if (result.IsSuccess && result.Data?.Status == Status.Success)
-                    return View("Index", result.Data.Result);
+                if (productResult.IsSuccess && productResult.Data?.Status == Status.Success)
+                    result.AddRange(productResult.Data.Result!);
                 else
-                {
-                    ErrorViewModel error = new()
-                    {
-                        RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                        Message = $"Message: {result.ErrorMessage}",
-                        Title = "Ürünler getirilirken bir hata oluştu."
-                    };
-                    _logger.LogError($"Main/SearchProductByName Error ");
-                    return View("Error", error);
-                }
+                    return RedirectToAction("Index");
+
+                return View("Index", result.DistinctBy(p => p.ProductId).ToList());
             }
             catch (Exception ex)
             {

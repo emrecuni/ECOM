@@ -378,10 +378,10 @@ namespace ECOM.API.Infrastructure.Services
             Response<List<BasicProductResponseDto>> response = new();
             try
             {
-                var searchTerm = model.ProductName.ToLower();
+                var searchTerm = model.ProductName.Trim();
                 // ürün adı veya açıklamayla sorgulat
                 var products = await _context.Products
-                    .Where(p => p.Name.ToUpper().Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm)))
+                    .Where(p => p.Name.Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm)) || (p.Brand.Name.Contains(searchTerm)))
                     .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
                     .ToListAsync();
 

@@ -52,15 +52,15 @@ namespace ECOM.MVC.Infrastructure.Services
             return await ToApiResultAsync<Response<DetailProductResponseDto>>(response, ct);
         }
 
-        public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithCategory(SearchProductByCategoryRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithCategoryAsync(SearchProductByCategoryRequestDto model, CancellationToken ct)
         {
             var response = await _httpClient.PostAsJsonAsync($"api/Product/SearchProductsByWithCategory", model, ct);
             return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
         }
 
-        public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithName(SearchProductByNameRequestDto model, CancellationToken ct)
+        public async Task<ApiResult<Response<List<BasicProductResponseDto>>>> SearchProductsByWithNameAsync(SearchProductByNameRequestDto model, CancellationToken ct)
         {
-            var response = await _httpClient.GetAsync($"api/Product/SearchProductsByWithName?name={model.ProductName}&customerId={model.CustomerId}", ct);
+            var response = await _httpClient.PostAsJsonAsync($"api/Product/SearchProductsByWithName",model, ct);
             return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
         }
 

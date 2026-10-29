@@ -70,6 +70,12 @@ namespace ECOM.MVC.Infrastructure.Services
             return await ToApiResultAsync<Response<List<int>>>(response, ct);
         }
 
+        public async Task<ApiResult<Response<List<CategoryMenuDto>>>> GetCategoryMenuAsync(CancellationToken ct)
+        {
+            var response = await _httpClient.GetAsync("api/Product/GetCategoryMenu", ct);
+            return await ToApiResultAsync<Response<List<CategoryMenuDto>>>(response, ct);
+        }
+
         private static async Task<ApiResult<T>> ToApiResultAsync<T>(HttpResponseMessage response, CancellationToken ct)
         {
             if (response.IsSuccessStatusCode)

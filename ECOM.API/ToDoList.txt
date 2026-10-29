@@ -54,7 +54,7 @@ X Aramaya markaları da dahil et X
 X Ürünler listelenirken skorlarını doğru göster X
 X Sepette ürün görselleri gelmiyor X
 * Servis çağrılarını logda göster
-* Menülerin hover'ına alt kategorileri getir
+X Menülerin hover'ına alt kategorileri getir X
 X Product service edit cart'taki yorum satırına bir bak X
 * Lazy loading ekle
 * Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir

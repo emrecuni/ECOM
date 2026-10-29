@@ -1,0 +1,44 @@
+@model List<ECOM.Shared.Data.DTOs.Product.CategoryMenuDto>
+
+@{
+    // header'da gösterilecek üst kategoriler ve ikonları; alt kategoriler api'den isimle eşleştirilir
+    var categories = new[]
+    {
+        (Name: "Elektronik", Label: "Elektronik", Icon: "fa-laptop"),
+        (Name: "Moda", Label: "Moda", Icon: "fa-tshirt"),
+        (Name: "Ev & Yaşam", Label: "Ev, Yaşam", Icon: "fa-home"),
+        (Name: "Oto, Bahçe", Label: "Oto, Bahçe", Icon: "fa-car"),
+        (Name: "Anne, Bebek", Label: "Anne, Bebek", Icon: "fa-baby"),
+        (Name: "Spor", Label: "Spor", Icon: "fa-running")
+    };
+}
+
+<div class="categories-inner">
+    @foreach (var category in categories)
+    {
+        var subCategories = Model.FirstOrDefault(c => c.Name == category.Name)?.SubCategories ?? [];
+
+        <div class="cat-item">
+            <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="@category.Name" class="cat-link">
+                <i class="fas @category.Icon"></i> @category.Label
+                @if (subCategories.Count > 0)
+                {
+                    <i class="fas fa-chevron-down cat-chevron"></i>
+                }
+            </a>
+
+            @if (subCategories.Count > 0)
+            {
+                <div class="cat-dropdown">
+                    <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="@category.Name" class="cat-dropdown-all">
+                        Tüm @category.Label Ürünleri
+                    </a>
+                    @foreach (var sub in subCategories)
+                    {
+                        <a asp-controller="Main" asp-action="ProductsByCategoryId" asp-route-id="@sub.CategoryId">@sub.Name</a>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

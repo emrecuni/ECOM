@@ -550,6 +550,51 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
+        public async Task<Response<List<CategoryMenuDto>>> GetCategoryMenu()
+        {
+            Response<List<CategoryMenuDto>> response = new();
+            try
+            {
+                // kategori tablosunda üst-alt ilişkisi tutulmadığı için ilişki ürünlerdeki üst/alt kategori çiftlerinden çıkarılır
+                var pairs = await _context.Products
+                    .AsNoTracking()
+                    .Select(p => new
+                    {
+                        SupId = p.SupCategoryId,
+                        SupName = p.SupCategory.Name,
+                        SubId = p.SubCategoryId,
+                        SubName = p.SubCategory.Name
+                    })
+                    .Distinct()
+                    .ToListAsync();
+
+                response.Result = pairs
+                    .GroupBy(p => new { p.SupId, p.SupName })
+                    .Select(g => new CategoryMenuDto
+                    {
+                        CategoryId = g.Key.SupId,
+                        Name = g.Key.SupName,
+                        SubCategories = g
+                            .Where(s => s.SubId != g.Key.SupId)
+                            .Select(s => new SubCategoryMenuDto { CategoryId = s.SubId, Name = s.SubName })
+                            .OrderBy(s => s.Name)
+                            .ToList()
+                    })
+                    .OrderBy(c => c.CategoryId)
+                    .ToList();
+
+                response.Status = Status.Success;
+                response.Message = "Kategori menüsü getirildi.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ProductService/GetCategoryMenu ==> Error: {ex}");
+                response.Status = Status.Error;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
         private async Task<Response<float?>> UpdateProductScore(int productId)
         {
             var response = new Response<float?>();

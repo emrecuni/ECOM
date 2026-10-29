@@ -64,26 +64,7 @@
     <!-- Categories Nav -->
     <div class="categories-nav">
         <div class="container">
-            <div class="categories-inner">
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Elektronik" class="cat-link">
-                    <i class="fas fa-laptop"></i> Elektronik
-                </a>
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Moda" class="cat-link">
-                    <i class="fas fa-tshirt"></i> Moda
-                </a>
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Ev & Yaşam" class="cat-link">
-                    <i class="fas fa-home"></i> Ev, Yaşam
-                </a>
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Oto, Bahçe" class="cat-link">
-                    <i class="fas fa-car"></i> Oto, Bahçe
-                </a>
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Anne, Bebek" class="cat-link">
-                    <i class="fas fa-baby"></i> Anne, Bebek
-                </a>
-                <a asp-controller="Main" asp-action="ProductsByCategoryName" asp-route-category="Spor" class="cat-link">
-                    <i class="fas fa-running"></i> Spor
-                </a>
-            </div>
+            @await Component.InvokeAsync("CategoryMenu")
         </div>
     </div>
 </nav>

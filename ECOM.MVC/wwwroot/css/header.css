@@ -328,3 +328,89 @@
 .cat-link i {
     font-size: 14px;
 }
+
+/* Category Dropdown (alt kategoriler) */
+.cat-item {
+    position: relative;
+}
+
+.cat-link .cat-chevron {
+    font-size: 9px;
+    color: var(--gray-500);
+    transition: var(--transition);
+}
+
+.cat-item:hover .cat-chevron {
+    transform: rotate(180deg);
+    color: var(--primary);
+}
+
+.cat-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    min-width: 200px;
+    z-index: 1000;
+    padding: 8px;
+    animation: dropdownFade 0.2s ease;
+}
+
+.cat-item:hover .cat-dropdown {
+    display: block;
+}
+
+/* link ile menü arasındaki 6px boşlukta hover kaybolmasın diye görünmez köprü */
+.cat-item:hover::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    width: 100%;
+    height: 6px;
+}
+
+.cat-dropdown a {
+    display: block;
+    padding: 9px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.cat-dropdown a:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+
+.cat-dropdown .cat-dropdown-all {
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    margin-bottom: 4px;
+}
+
+/* yatay kaydırma (overflow) açılır menüyü kestiği için geniş ekranda kaydırma kapatılır;
+   dar ekranda kaydırma korunur, dokunmatikte hover olmadığından menü gösterilmez */
+@media (min-width: 992px) {
+    .categories-inner {
+        overflow: visible;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cat-dropdown,
+    .cat-item:hover::after,
+    .cat-link .cat-chevron {
+        display: none !important;
+    }
+}

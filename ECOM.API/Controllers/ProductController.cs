@@ -110,5 +110,13 @@ namespace ECOM.API.Controllers
             var response = await _productService.GetCategoryIds(category);
             return Ok(response);
         }
+
+        [AllowAnonymous]
+        [HttpGet("GetCategoryMenu")]
+        public async Task<IActionResult> GetCategoryMenu()
+        {
+            var response = await _productService.GetCategoryMenu();
+            return Ok(response);
+        }
     }
 }

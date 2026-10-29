@@ -14,6 +14,7 @@ namespace ECOM.MVC.Infrastructure
                 throw new InvalidOperationException("EcomApi:BaseUrl configuration is missing.");
 
             services.AddHttpContextAccessor();
+            services.AddMemoryCache(); // header kategori menüsü önbelleği
             services.AddTransient<AuthTokenHandler>();
 
             services.AddEcomClient<IAuthApiClient, AuthApiClient>(baseUrl);

@@ -21,6 +21,16 @@
 
             <!-- Actions -->
             <div class="header-actions">
+                @if (User.Identity?.IsAuthenticated != true)
+                {
+                    <!-- Login Button: misafirde hesap menüsü yerine giriş; girişten sonra bulunulan sayfaya dönülür -->
+                    <a asp-controller="Login" asp-action="Index" asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)" class="account-btn">
+                        <div class="icon"><i class="fas fa-user"></i></div>
+                        <span>Giriş Yap</span>
+                    </a>
+                }
+                else
+                {
                 <!-- Account Dropdown -->
                 <div class="account-dropdown">
                     <div class="account-btn">
@@ -50,6 +60,7 @@
                         </a>
                     </div>
                 </div>
+                }
 
                 <!-- Cart Button -->
                 <a asp-controller="Cart" asp-action="Index" class="cart-btn">

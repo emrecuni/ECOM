@@ -18,7 +18,12 @@ $(document).on("click", ".favorite-btn", function (e) {
             button.toggleClass("favorite-product", result.isFavorite);
             button.find("i").toggleClass("text-danger", result.isFavorite);
         },
-        error: function () {
+        error: function (xhr) {
+            // giriş yapılmamışsa cookie auth ajax isteğine yönlendirme yerine 401 döner; girişten sonra bu sayfaya geri dönülür
+            if (xhr.status === 401) {
+                window.location.href = "/Login/Index?ReturnUrl=" + encodeURIComponent(window.location.pathname + window.location.search);
+                return;
+            }
             alert("Bir hata oluştu, lütfen tekrar deneyin.");
         }
     });

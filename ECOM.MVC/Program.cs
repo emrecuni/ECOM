@@ -23,8 +23,10 @@ builder.Services.AddEcomApiClient(builder.Configuration);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        // giriş gerektiren bir sayfaya gidilirse buraya ?ReturnUrl=... ile yönlendirilir;
+        // ajax isteklerinde (X-Requested-With: XMLHttpRequest) yönlendirme yerine 401 döner
         options.LoginPath = "/Login/Index";
-        options.LoginPath = "/Login/Logout";
+        options.LogoutPath = "/Login/Logout";
         options.AccessDeniedPath = "/Login/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
         options.SlidingExpiration = false;
@@ -54,7 +56,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}")
+    pattern: "{controller=Main}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

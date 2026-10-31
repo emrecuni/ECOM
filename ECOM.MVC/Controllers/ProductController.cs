@@ -34,7 +34,7 @@ namespace ECOM.Controllers
             {
                 var result = await _productService.GetProductDetailsAsync(new DetailProductRequestDto
                 {
-                    CustomerId = User.GetCustomerId(),
+                    CustomerId = User.GetCustomerIdOrDefault(),
                     ProductId = id
                 }, ct);
 
@@ -84,6 +84,10 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> SendComment(int id, int rate, string? review, string imagePath, CancellationToken ct)
         {
+            // [Authorize] yerine elle kontrol: post action'a geri dönülemeyeceği için girişten sonra ürün sayfasına dönülür
+            if (User.Identity?.IsAuthenticated != true)
+                return RedirectToLogin(id);
+
             if (rate < 1 || rate > 5)
                 return BadRequest("Geçersiz puan değeri.");
 
@@ -106,6 +110,9 @@ namespace ECOM.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCart(int productId, string productName, int sellerId, decimal price, CancellationToken ct) // seçilen ürünü sepete ekler
         {
+            if (User.Identity?.IsAuthenticated != true)
+                return RedirectToLogin(productId);
+
             var result = await _productService.AddCartAsync(new AddCartRequestDto
             {
                 CustomerId = User.GetCustomerId(),
@@ -120,6 +127,11 @@ namespace ECOM.Controllers
                 TempData["Error"] = result?.Data?.Message ?? result?.ErrorMessage ?? "Ürün sepete eklenirken bir hata oluştu.";
 
             return RedirectToAction("Index", new { id = productId });
+        }
+
+        private IActionResult RedirectToLogin(int productId)
+        {
+            return RedirectToAction("Index", "Login", new { ReturnUrl = Url.Action("Index", "Product", new { id = productId }) });
         }
 
         //[HttpPost]

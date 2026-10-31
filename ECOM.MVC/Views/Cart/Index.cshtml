@@ -151,7 +151,8 @@
 
                 const response = await fetch('/Cart/Update', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    // X-Requested-With: oturum düşmüşse cookie auth login html'i yerine 401 döner
+                    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                     body: JSON.stringify({
                         productId: parseInt(order.dataset.productId, 10),
                         sellerId: parseInt(order.dataset.sellerId, 10),
@@ -159,6 +160,11 @@
                         enable: checkbox.checked
                     })
                 });
+
+                if (response.status === 401) {
+                    window.location.href = '/Login/Index?ReturnUrl=' + encodeURIComponent('/Cart/Index');
+                    return;
+                }
 
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) {

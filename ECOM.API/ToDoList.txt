@@ -57,7 +57,7 @@ X Sepette ürün görselleri gelmiyor X
 X Menülerin hover'ına alt kategorileri getir X
 X Product service edit cart'taki yorum satırına bir bak X
 X Lazy loading ekle X
-* Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir
+X Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir X
 X Ödeme tamamlandığında cart tablosundan ilgili kayıtları bir daha getirtme X
 
 payment/pay response'unda dönen içeriği şuraya yapıştır

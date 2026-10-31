@@ -22,10 +22,15 @@ namespace ECOM.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             try
             {
+                // misafirin sepeti yoktur; login'e yönlendirmek yerine boş sepet gösterilir
+                if (User.Identity?.IsAuthenticated != true)
+                    return View(new CartViewModel());
+
                 var cartResult = await _productService.GetCartAsync(User.GetCustomerId(), ct);
 
                 // api sepet boşken de Status.Failed döner; bu yüzden sadece http hatası ve Status.Error gerçek hata sayılır

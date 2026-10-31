@@ -1,4 +1,4 @@
-@section Styles {
+﻿@section Styles {
     <link rel="stylesheet" href="~/css/login.css">
 }
 
@@ -15,6 +15,7 @@
         <p class="auth-subtitle">Hesabınıza giriş yapın</p>
 
         <form asp-action="Index" method="post">
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
             <!-- E-Mail -->
             <div class="auth-form-group">
                 <label class="auth-label" for="email">E-Posta Adresi</label>

@@ -36,14 +36,17 @@ namespace ECOM.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string? returnUrl)
         {
+            // giriş gerektiren bir sayfadan gelindiyse girişten sonra oraya dönülür (form'da hidden alan olarak taşınır)
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(LoginRequestDto model, CancellationToken ct)
+        public async Task<IActionResult> Index(LoginRequestDto model, string? returnUrl, CancellationToken ct)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             try
             {
                 if (!ModelState.IsValid)
@@ -77,6 +80,10 @@ namespace ECOM.MVC.Controllers
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             new ClaimsPrincipal(identity),
                             props);
+
+                        // open redirect açığına karşı sadece site içi adreslere dönülür
+                        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                            return LocalRedirect(returnUrl);
 
                         return RedirectToAction("Index", "Main");
                     }

@@ -31,10 +31,9 @@ namespace ECOM.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-            var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), null, ct);
+            var result = await _productService.GetAllProductsAsync(User.GetCustomerIdOrDefault(), null, ct);
 
             if (result is null)
             {
@@ -77,13 +76,12 @@ namespace ECOM.Controllers
             return View(page.Products);
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> LoadMore(int lastId, CancellationToken ct) // "daha fazla ürün gör" butonu; sadece ürün kartlarının html'ini döner
         {
             try
             {
-                var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), lastId, ct);
+                var result = await _productService.GetAllProductsAsync(User.GetCustomerIdOrDefault(), lastId, ct);
 
                 if (result is null || !result.IsSuccess || result.Data?.Status != Status.Success || result.Data.Result is null)
                     return StatusCode(StatusCodes.Status502BadGateway, new { message = result?.Data?.Message ?? result?.ErrorMessage ?? "Ürünler getirilemedi." });
@@ -102,7 +100,6 @@ namespace ECOM.Controllers
             }
         }
 
-        [Authorize]
         public async Task<IActionResult> ProductsByCategoryName(string category, CancellationToken ct)
         {
             try
@@ -114,7 +111,7 @@ namespace ECOM.Controllers
 
                 var result = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
                 {
-                    CustomerId = User.GetCustomerId(),
+                    CustomerId = User.GetCustomerIdOrDefault(),
                     CategoryIds = categoryResult?.Data?.Result
                 }, ct);
 
@@ -149,7 +146,7 @@ namespace ECOM.Controllers
                 var result = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
                 {
                     CategoryIds = new List<int> { id },
-                    CustomerId = User.GetCustomerId()
+                    CustomerId = User.GetCustomerIdOrDefault()
                 }, ct);
 
                 if (result.IsSuccess && result.Data?.Status == Status.Success)
@@ -189,7 +186,7 @@ namespace ECOM.Controllers
                 {
                     var categoryresult = await _productService.SearchProductsByWithCategoryAsync(new SearchProductByCategoryRequestDto
                     {
-                        CustomerId = User.GetCustomerId(),
+                        CustomerId = User.GetCustomerIdOrDefault(),
                         CategoryIds = categoryIdsResult?.Data?.Result
                     }, ct);
 
@@ -199,7 +196,7 @@ namespace ECOM.Controllers
 
                 var productResult = await _productService.SearchProductsByWithNameAsync(new SearchProductByNameRequestDto
                 {
-                    CustomerId = User.GetCustomerId(),
+                    CustomerId = User.GetCustomerIdOrDefault(),
                     ProductName = searchText
                 }, ct);
 
@@ -217,6 +214,7 @@ namespace ECOM.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Favorite(int id, CancellationToken ct)
         {

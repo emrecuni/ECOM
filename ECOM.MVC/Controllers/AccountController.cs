@@ -7,10 +7,12 @@ using ECOM.MVC.OldFiles.Services;
 using ECOM.Shared.Data.DTOs.Auth;
 using ECOM.Shared.Data.DTOs.Customer;
 using ECOM.Shared.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECOM.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ICustomerApiClient _customerService;

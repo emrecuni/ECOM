@@ -13,7 +13,8 @@ namespace ECOM.API.Data.SeedData
                 new Seller { SellerId = 2, Name = "ElektroMarket", CreatedAt = new DateTime(2023, 5, 5) },
                 new Seller { SellerId = 3, Name = "DigiShop", CreatedAt = new DateTime(2023, 5, 5) },
                 new Seller { SellerId = 4, Name = "ModaPlus", CreatedAt = new DateTime(2023, 5, 5) },
-                new Seller { SellerId = 5, Name = "EvDekor", CreatedAt = new DateTime(2023, 5, 5) }
+                new Seller { SellerId = 5, Name = "EvDekor", CreatedAt = new DateTime(2023, 5, 5) },
+                new Seller { SellerId = 6, Name = "SporMarket", CreatedAt = new DateTime(2023, 5, 5) }
             );
         }
     }

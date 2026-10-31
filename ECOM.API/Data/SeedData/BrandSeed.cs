@@ -20,7 +20,14 @@ namespace ECOM.API.Data.SeedData
                 new Brand { BrandId = 9, Name = "Zara", CreatedAt = new DateTime(2023, 5, 5) },
                 new Brand { BrandId = 10, Name = "IKEA", CreatedAt = new DateTime(2023, 5, 5) },
                 new Brand { BrandId = 11, Name = "Karaca", CreatedAt = new DateTime(2023, 5, 5) },
-                new Brand { BrandId = 12, Name = "Tefal", CreatedAt = new DateTime(2023, 5, 5) }
+                new Brand { BrandId = 12, Name = "Tefal", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 13, Name = "AMD", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 14, Name = "ASUS", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 15, Name = "MSI", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 16, Name = "Puma", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 17, Name = "Reusch", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 18, Name = "Team Group", CreatedAt = new DateTime(2023, 5, 5) },
+                new Brand { BrandId = 19, Name = "XFX", CreatedAt = new DateTime(2023, 5, 5) }
             );
         }
     }

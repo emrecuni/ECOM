@@ -21,7 +21,11 @@ namespace ECOM.API.Data.SeedData
                 new ProductCategories { CategoryId = 10, Name = "Ayakkabı", CreatedAt = new DateTime(2023, 5, 5) },          // SubCategory
                 new ProductCategories { CategoryId = 11, Name = "Ev & Yaşam", CreatedAt = new DateTime(2023, 5, 5) },        // SupCategory
                 new ProductCategories { CategoryId = 12, Name = "Mobilya", CreatedAt = new DateTime(2023, 5, 5) },           // SubCategory
-                new ProductCategories { CategoryId = 13, Name = "Mutfak Gereçleri", CreatedAt = new DateTime(2023, 5, 5) }   // SubCategory
+                new ProductCategories { CategoryId = 13, Name = "Mutfak Gereçleri", CreatedAt = new DateTime(2023, 5, 5) },  // SubCategory
+                new ProductCategories { CategoryId = 14, Name = "Spor", CreatedAt = new DateTime(2023, 5, 5) },              // SupCategory
+                new ProductCategories { CategoryId = 15, Name = "Futbol Ekipmanları", CreatedAt = new DateTime(2023, 5, 5) }, // SubCategory
+                new ProductCategories { CategoryId = 16, Name = "Bilgisayar Bileşenleri", CreatedAt = new DateTime(2023, 5, 5) }, // SubCategory
+                new ProductCategories { CategoryId = 17, Name = "Tablet", CreatedAt = new DateTime(2023, 5, 5) }             // SubCategory
             );
         }
     }

@@ -7,7 +7,7 @@ namespace ECOM.API.Infrastructure.Interfaces
 {
     public interface IProductService
     {
-        public Task<Response<List<BasicProductResponseDto>>> GetProducts(int customerId);
+        public Task<Response<PagedProductResponseDto>> GetProducts(int customerId, int? lastId, int pageSize);
         public Task<Response<DetailProductResponseDto>> GetProductDetails(DetailProductRequestDto model);  
         public Task<Response<string>> AddCart(AddCartRequestDto model);
         public Task<Response<string>> EditCart(EditCartRequestDto model);

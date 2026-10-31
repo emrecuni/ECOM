@@ -268,32 +268,53 @@ namespace ECOM.API.Infrastructure.Services
             return response;
         }
 
-        public async Task<Response<List<BasicProductResponseDto>>> GetProducts(int customerId)
+        public async Task<Response<PagedProductResponseDto>> GetProducts(int customerId, int? lastId, int pageSize)
         {
-            Response<List<BasicProductResponseDto>> response = new();
+            Response<PagedProductResponseDto> response = new();
             try
             {
-                // db'den 20 ürün çeker
+                pageSize = Math.Clamp(pageSize, 1, 50);
+
+                // keyset sayfalama: skip yerine son gösterilen id'den devam edilir, pk index'i sayesinde her sayfa aynı hızda gelir.
+                // "daha var mı" bilgisi için count sorgusu atmak yerine 1 fazla ürün çekilir
                 var products = await _context.Products
-                    .Take(30)
+                    .AsNoTracking()
+                    .Where(p => lastId == null || p.ProductId > lastId)
+                    .OrderBy(p => p.ProductId)
+                    .Take(pageSize + 1)
                     .Select(p => new { p.ProductId, p.Name, p.Price, p.Score, p.ImagePath })
                     .ToListAsync();
 
-                // db'den kullanıcın favorilere attığı ürünlerin id'lerini çeker
-                var favorites = await GetFavoritesIds(customerId, f => f.ProductId);
+                bool hasMore = products.Count > pageSize;
+                if (hasMore)
+                    products.RemoveAt(pageSize);
 
-                response.Result = [.. products.Select(p => new BasicProductResponseDto
+                // sadece bu sayfadaki ürünlerin favori bilgisi çekilir
+                var productIds = products.Select(p => p.ProductId).ToList();
+                var favorites = (await _context.Favorites
+                    .AsNoTracking()
+                    .Where(f => f.CustomerId == customerId && productIds.Contains(f.ProductId))
+                    .Select(f => f.ProductId)
+                    .ToListAsync()).ToHashSet();
+
+                response.Result = new PagedProductResponseDto
                 {
-                    ProductId = p.ProductId,
-                    Name = p.Name,
-                    Price = p.Price,
-                    Score = p.Score,
-                    ImagePath = p.ImagePath,
-                    IsFavorite = favorites.Contains(p.ProductId) // ürün favoriler arasında mı kontrolü
-                })];
+                    Products = [.. products.Select(p => new BasicProductResponseDto
+                    {
+                        ProductId = p.ProductId,
+                        Name = p.Name,
+                        Price = p.Price,
+                        Score = p.Score,
+                        ImagePath = p.ImagePath,
+                        IsFavorite = favorites.Contains(p.ProductId) // ürün favoriler arasında mı kontrolü
+                    })],
+                    HasMore = hasMore,
+                    LastId = products.Count > 0 ? products[^1].ProductId : lastId
+                };
 
-                response.Status = response.Result.Count > 0 ? Status.Success : Status.Failed;
-                response.Message = response.Result.Count > 0 ? "Ürünler başarıyla getirildi." : "Ürün bulunmadı.";
+                // boş liste hata değildir; sayfa boş durum mesajını gösterir
+                response.Status = Status.Success;
+                response.Message = products.Count > 0 ? "Ürünler başarıyla getirildi." : "Ürün bulunmadı.";
             }
             catch (Exception ex)
             {

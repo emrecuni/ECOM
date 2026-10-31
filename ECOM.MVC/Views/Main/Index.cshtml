@@ -1,5 +1,10 @@
 @model IEnumerable<ECOM.Shared.Data.DTOs.Product.BasicProductResponseDto>
 
+@{
+    bool hasMore = ViewBag.HasMore as bool? ?? false;
+    int? lastId = ViewBag.LastId as int?;
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/main.css">
 }
@@ -7,17 +12,24 @@
 <div class="container page-section">
     <div class="section-header">
         <h2 class="section-title">Tüm Ürünler</h2>
-        <span style="font-size:13px; color:var(--text-muted);">@(Model?.Count() ?? 0) ürün listeleniyor</span>
+        <span style="font-size:13px; color:var(--text-muted);"><span id="product-count">@(Model?.Count() ?? 0)</span> ürün listeleniyor</span>
     </div>
 
     @if (Model is not null && Model.Any())
     {
-        <div class="products-grid">
-            @foreach (var product in Model)
-            {
-                @await Html.PartialAsync("Product", product)
-            }
+        <div class="products-grid" id="products-grid">
+            @await Html.PartialAsync("_ProductList", Model)
         </div>
+
+        @if (hasMore && lastId is not null)
+        {
+            <div class="load-more-wrapper">
+                <button type="button" id="load-more-btn" class="btn-outline-custom load-more-btn" data-last-id="@lastId">
+                    <span class="load-more-text">Daha Fazla Ürün Gör</span>
+                    <i class="fas fa-spinner fa-spin load-more-spinner"></i>
+                </button>
+            </div>
+        }
     }
     else
     {
@@ -30,3 +42,43 @@
 </div>
 
 <script src="~/js/favorite.js"></script>
+<script>
+    (function () {
+        const button = document.getElementById('load-more-btn');
+        if (!button) return;
+
+        const grid = document.getElementById('products-grid');
+        const count = document.getElementById('product-count');
+
+        button.addEventListener('click', async () => {
+            if (button.disabled) return;
+            button.disabled = true; // istek bitmeden ikinci tıklama aynı sayfayı tekrar getirmesin
+            button.classList.add('loading');
+
+            try {
+                const response = await fetch(`/Main/LoadMore?lastId=${encodeURIComponent(button.dataset.lastId)}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    alert(data.message ?? 'Ürünler getirilemedi, lütfen tekrar deneyin.');
+                    return;
+                }
+
+                // kartlar sunucuda Product partial'ı ile üretilir; favori tıklaması favorite.js'te document'a bağlı olduğu için yeni kartlarda da çalışır
+                grid.insertAdjacentHTML('beforeend', await response.text());
+                count.textContent = grid.querySelectorAll('.product-card').length;
+
+                button.dataset.lastId = response.headers.get('X-Last-Id');
+                if (response.headers.get('X-Has-More') !== 'true')
+                    button.parentElement.remove();
+            } catch {
+                alert('Ürünler getirilemedi, lütfen tekrar deneyin.');
+            } finally {
+                button.disabled = false;
+                button.classList.remove('loading');
+            }
+        });
+    })();
+</script>

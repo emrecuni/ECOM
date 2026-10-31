@@ -6,7 +6,7 @@ namespace ECOM.MVC.Infrastructure.Interfaces
 {
     public interface IProductApiClient
     {
-        public Task<ApiResult<Response<List<BasicProductResponseDto>>>?> GetAllProductsAsync(int customerId, CancellationToken ct);
+        public Task<ApiResult<Response<PagedProductResponseDto>>?> GetAllProductsAsync(int customerId, int? lastId, CancellationToken ct);
         public Task<ApiResult<Response<DetailProductResponseDto>>?> GetProductDetailsAsync(DetailProductRequestDto model, CancellationToken ct);
         public Task<ApiResult<Response<CartResponseDto>>?> GetCartAsync(int customerId, CancellationToken ct);
         public Task<ApiResult<Response<string>>?> AddCartAsync(AddCartRequestDto model, CancellationToken ct);

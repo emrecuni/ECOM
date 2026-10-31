@@ -121,7 +121,7 @@ namespace ECOM.API.Infrastructure.Services
                         break;
                     default:
                         response.Status = Status.Error;
-                        response.Message= "Bir hata oluştu.";   
+                        response.Message = "Bir hata oluştu.";
                         _logger.LogError($"PaymentService/Pay ==> İyzico ödeme formu oluşturulamadı. Status: {iyzicoResponse.Status}, ErrorCode: {iyzicoResponse.ErrorCode}, ErrorMessage: {iyzicoResponse.ErrorMessage}");
                         break;
                 }
@@ -253,7 +253,7 @@ namespace ECOM.API.Infrastructure.Services
 
                 var iyzicoResponse = await CheckoutForm.Retrieve(request, _iyzico);
 
-                if (iyzicoResponse.Status == PaymentConstants.IyzicoResponseSuccessStatus) 
+                if (iyzicoResponse.Status == PaymentConstants.IyzicoResponseSuccessStatus)
                 {
                     // gönderilen tutar ile beklenen tutarı karşılaştır
                     if (!decimal.TryParse(iyzicoResponse.PaidPrice, NumberStyles.Number, CultureInfo.InvariantCulture, out var paidPrice))
@@ -277,7 +277,7 @@ namespace ECOM.API.Infrastructure.Services
 
                         now = DateTime.Now;
 
-                        carts.ForEach(async cart =>
+                        carts.ForEach(cart =>
                         {
                             cart.Enable = false;
                             cart.IsOrder = true;
@@ -293,6 +293,7 @@ namespace ECOM.API.Infrastructure.Services
                             CartId = order.CartId,
                             Piece = order.Piece,
                             TotalPrice = order.TotalPrice,
+                            //CardId = order.CardId
                             OrderDate = now
                         });
 

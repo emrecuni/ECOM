@@ -1,0 +1,7 @@
+@model IEnumerable<ECOM.Shared.Data.DTOs.Product.BasicProductResponseDto>
+
+@* hem ilk yüklemede hem "daha fazla ürün gör" isteğinde aynı kartlar üretilsin diye ortak liste *@
+@foreach (var product in Model)
+{
+    @await Html.PartialAsync("Product", product)
+}

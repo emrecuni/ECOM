@@ -198,3 +198,31 @@
     font-size: 14px;
     line-height: 1.6;
 }
+
+/* Load More ("daha fazla ürün gör") */
+.load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+.load-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 220px;
+    justify-content: center;
+}
+
+.load-more-btn .load-more-spinner {
+    display: none;
+}
+
+.load-more-btn.loading .load-more-spinner {
+    display: inline-block;
+}
+
+.load-more-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}

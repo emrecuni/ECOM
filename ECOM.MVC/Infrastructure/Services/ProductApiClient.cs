@@ -34,10 +34,14 @@ namespace ECOM.MVC.Infrastructure.Services
             return await ToApiResultAsync<Response<string>>(response, ct);
         }
 
-        public async Task<ApiResult<Response<List<BasicProductResponseDto>>>?> GetAllProductsAsync(int customerId, CancellationToken ct)
+        public async Task<ApiResult<Response<PagedProductResponseDto>>?> GetAllProductsAsync(int customerId, int? lastId, CancellationToken ct)
         {
-            var response = await _httpClient.GetAsync($"api/Product/GetProducts?customerId={customerId}", ct);
-            return await ToApiResultAsync<Response<List<BasicProductResponseDto>>>(response, ct);
+            var url = $"api/Product/GetProducts?customerId={customerId}";
+            if (lastId is not null)
+                url += $"&lastId={lastId}";
+
+            var response = await _httpClient.GetAsync(url, ct);
+            return await ToApiResultAsync<Response<PagedProductResponseDto>>(response, ct);
         }
 
         public async Task<ApiResult<Response<CartResponseDto>>?> GetCartAsync(int customerId, CancellationToken ct)

@@ -34,7 +34,7 @@ namespace ECOM.Controllers
         [Authorize]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-            var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), ct);
+            var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), null, ct);
 
             if (result is null)
             {
@@ -69,7 +69,37 @@ namespace ECOM.Controllers
                 _logger.LogError($"Main/Index Error ");
                 return View("Error", error);
             }
-            return View(result!.Data!.Result);
+            // "daha fazla ürün gör" butonu sadece bu sayfada gösterilir; kategori/arama sonuçlarında bu değerler set edilmez
+            var page = result!.Data!.Result!;
+            ViewBag.HasMore = page.HasMore;
+            ViewBag.LastId = page.LastId;
+
+            return View(page.Products);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> LoadMore(int lastId, CancellationToken ct) // "daha fazla ürün gör" butonu; sadece ürün kartlarının html'ini döner
+        {
+            try
+            {
+                var result = await _productService.GetAllProductsAsync(User.GetCustomerId(), lastId, ct);
+
+                if (result is null || !result.IsSuccess || result.Data?.Status != Status.Success || result.Data.Result is null)
+                    return StatusCode(StatusCodes.Status502BadGateway, new { message = result?.Data?.Message ?? result?.ErrorMessage ?? "Ürünler getirilemedi." });
+
+                // sayfalama bilgisi header'da gönderilir, gövde doğrudan grid'e eklenecek html'dir
+                Response.Headers["X-Has-More"] = result.Data.Result.HasMore ? "true" : "false";
+                Response.Headers["X-Last-Id"] = result.Data.Result.LastId?.ToString() ?? lastId.ToString();
+
+                return PartialView("_ProductList", result.Data.Result.Products);
+            }
+            catch (Exception ex)
+            {
+                Guid guid = Guid.NewGuid();
+                _logger.LogError($"Main/LoadMore Error Hata Kodu: {guid} => {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = $"Ürünler getirilirken bir hata oluştu. Hata Kodu: {guid}" });
+            }
         }
 
         [Authorize]

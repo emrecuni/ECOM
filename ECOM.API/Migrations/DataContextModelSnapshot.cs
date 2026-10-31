@@ -238,6 +238,48 @@ namespace ECOM.API.Migrations
                             BrandId = 12,
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Tefal"
+                        },
+                        new
+                        {
+                            BrandId = 13,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "AMD"
+                        },
+                        new
+                        {
+                            BrandId = 14,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "ASUS"
+                        },
+                        new
+                        {
+                            BrandId = 15,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "MSI"
+                        },
+                        new
+                        {
+                            BrandId = 16,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Puma"
+                        },
+                        new
+                        {
+                            BrandId = 17,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Reusch"
+                        },
+                        new
+                        {
+                            BrandId = 18,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Team Group"
+                        },
+                        new
+                        {
+                            BrandId = 19,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "XFX"
                         });
                 });
 
@@ -968,6 +1010,1077 @@ namespace ECOM.API.Migrations
                             CustomerId = 3,
                             ProductId = 3,
                             Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 5,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 2,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 6,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 2,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 7,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 2,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 8,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 3,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 9,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 3,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 10,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 4,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 11,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 4,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 12,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 4,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 13,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 5,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 14,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 5,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 15,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 6,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 16,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 6,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 17,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 6,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 18,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 7,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 19,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 7,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 20,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 8,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 21,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 8,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 22,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 8,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 23,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 9,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 24,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 9,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 25,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 9,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 26,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 10,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 27,
+                            Comment = "Ortalama bir ürün, idare eder.",
+                            CreatedAt = new DateTime(2026, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 10,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 28,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 11,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 29,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 11,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 30,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 11,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 31,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 12,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 32,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 12,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 33,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 12,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 34,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 13,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 35,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 13,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 36,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 14,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 37,
+                            Comment = "Fena değil ama daha iyisini beklerdim.",
+                            CreatedAt = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 14,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 38,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 14,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 39,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 15,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 40,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 15,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 41,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 15,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 42,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 16,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 43,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 16,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 44,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 16,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 45,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 17,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 46,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 17,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 47,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 18,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 48,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 18,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 49,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 18,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 50,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 19,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 51,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 19,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 52,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 19,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 53,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 20,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 54,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 20,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 55,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 20,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 56,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 21,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 57,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 21,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 58,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 22,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 59,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 22,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 60,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 22,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 61,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 23,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 62,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 23,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 63,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 23,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 64,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 24,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 65,
+                            Comment = "Fiyatı biraz yüksek, performansı orta.",
+                            CreatedAt = new DateTime(2026, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 24,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 66,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 24,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 67,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 25,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 68,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 25,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 69,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 26,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 70,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 26,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 71,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 26,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 72,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 27,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 73,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 27,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 74,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 27,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 75,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 28,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 76,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 28,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 77,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 29,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 78,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 29,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 79,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 29,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 80,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 30,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 81,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 30,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 82,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 30,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 83,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 31,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 84,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 31,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 85,
+                            Comment = "Fena değil ama daha iyisini beklerdim.",
+                            CreatedAt = new DateTime(2026, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 31,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 86,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 32,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 87,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 32,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 88,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 33,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 89,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 33,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 90,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 33,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 91,
+                            Comment = "Fiyatı biraz yüksek, performansı orta.",
+                            CreatedAt = new DateTime(2026, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 34,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 92,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 34,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 93,
+                            Comment = "Fena değil ama daha iyisini beklerdim.",
+                            CreatedAt = new DateTime(2026, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 34,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 94,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 35,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 95,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 35,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 96,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 35,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 97,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 36,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 98,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 36,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 99,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 36,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 100,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 37,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 101,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 37,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 102,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 38,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 103,
+                            Comment = "Fena değil ama daha iyisini beklerdim.",
+                            CreatedAt = new DateTime(2026, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 38,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 104,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 38,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 105,
+                            Comment = "Harika bir ürün, kesinlikle tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 39,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 106,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 39,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 107,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 39,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 108,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 40,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 109,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 40,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 110,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 41,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 111,
+                            Comment = "Fena değil ama daha iyisini beklerdim.",
+                            CreatedAt = new DateTime(2026, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 41,
+                            Score = 3
+                        },
+                        new
+                        {
+                            CommentId = 112,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 41,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 113,
+                            Comment = "Beklediğim gibi çıktı, sorun yaşamadım.",
+                            CreatedAt = new DateTime(2026, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 42,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 114,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 42,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 115,
+                            Comment = "Genel olarak memnunum, küçük eksikleri var.",
+                            CreatedAt = new DateTime(2026, 10, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 42,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 116,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 43,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 117,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 43,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 118,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 43,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 119,
+                            Comment = "Beklentimin çok üzerinde çıktı, çok memnunum.",
+                            CreatedAt = new DateTime(2026, 10, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 44,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 120,
+                            Comment = "İyi bir ürün, tavsiye ederim.",
+                            CreatedAt = new DateTime(2026, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 44,
+                            Score = 4
+                        },
+                        new
+                        {
+                            CommentId = 121,
+                            Comment = "Kalitesi ve performansı mükemmel.",
+                            CreatedAt = new DateTime(2026, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 1,
+                            ProductId = 45,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 122,
+                            Comment = "Kargo hızlıydı, ürün kusursuz geldi.",
+                            CreatedAt = new DateTime(2026, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 2,
+                            ProductId = 45,
+                            Score = 5
+                        },
+                        new
+                        {
+                            CommentId = 123,
+                            Comment = "Fiyatına göre gayet başarılı.",
+                            CreatedAt = new DateTime(2026, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CustomerId = 3,
+                            ProductId = 45,
+                            Score = 4
                         });
                 });
 
@@ -1662,7 +2775,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/iphone15pro.jpg",
                             Name = "Apple iPhone 15 Pro",
                             Price = 54999.99m,
-                            Score = 4.8f,
+                            Score = 4.3333335f,
                             SellerId = 1,
                             SubCategoryId = 2,
                             SupCategoryId = 1
@@ -1676,7 +2789,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/s24ultra.jpg",
                             Name = "Samsung Galaxy S24 Ultra",
                             Price = 49999.99m,
-                            Score = 4.7f,
+                            Score = 4.6666665f,
                             SellerId = 2,
                             SubCategoryId = 2,
                             SupCategoryId = 1
@@ -1690,7 +2803,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/xiaomi14tpro.jpg",
                             Name = "Xiaomi 14T Pro",
                             Price = 24999.99m,
-                            Score = 4.5f,
+                            Score = 4.3333335f,
                             SellerId = 3,
                             SubCategoryId = 2,
                             SupCategoryId = 1
@@ -1704,7 +2817,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/macbookairm3.jpg",
                             Name = "Apple MacBook Air M3",
                             Price = 44999.99m,
-                            Score = 4.9f,
+                            Score = 4.6666665f,
                             SellerId = 1,
                             SubCategoryId = 3,
                             SupCategoryId = 1
@@ -1718,7 +2831,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/galaxybook4pro.jpg",
                             Name = "Samsung Galaxy Book4 Pro",
                             Price = 38999.99m,
-                            Score = 4.4f,
+                            Score = 4f,
                             SellerId = 2,
                             SubCategoryId = 3,
                             SupCategoryId = 1
@@ -1732,7 +2845,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/samsungneqled65.jpg",
                             Name = "Samsung Neo QLED 4K 65\"",
                             Price = 34999.99m,
-                            Score = 4.6f,
+                            Score = 4.3333335f,
                             SellerId = 3,
                             SubCategoryId = 4,
                             SupCategoryId = 1
@@ -1746,7 +2859,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/lgoled c4.jpg",
                             Name = "LG OLED C4 55\"",
                             Price = 29999.99m,
-                            Score = 4.8f,
+                            Score = 5f,
                             SellerId = 1,
                             SubCategoryId = 4,
                             SupCategoryId = 1
@@ -1760,7 +2873,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/sonywh1000xm5.jpg",
                             Name = "Sony WH-1000XM5",
                             Price = 9999.99m,
-                            Score = 4.9f,
+                            Score = 4.6666665f,
                             SellerId = 2,
                             SubCategoryId = 5,
                             SupCategoryId = 1
@@ -1774,7 +2887,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/airpodspro2.jpg",
                             Name = "Apple AirPods Pro 2",
                             Price = 8499.99m,
-                            Score = 4.7f,
+                            Score = 4.3333335f,
                             SellerId = 3,
                             SubCategoryId = 5,
                             SupCategoryId = 1
@@ -1788,7 +2901,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/xiaomipurifier4pro.jpg",
                             Name = "Xiaomi Smart Air Purifier 4 Pro",
                             Price = 3499.99m,
-                            Score = 4.3f,
+                            Score = 3.5f,
                             SellerId = 1,
                             SubCategoryId = 6,
                             SupCategoryId = 1
@@ -1802,7 +2915,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/mavijakejean.jpg",
                             Name = "Mavi Jake Slim Fit Jean",
                             Price = 1799.99m,
-                            Score = 4.5f,
+                            Score = 4.3333335f,
                             SellerId = 4,
                             SubCategoryId = 8,
                             SupCategoryId = 7
@@ -1816,7 +2929,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/adidasessentialssweat.jpg",
                             Name = "Adidas Essentials 3-Stripes Sweatshirt",
                             Price = 1499.99m,
-                            Score = 4.4f,
+                            Score = 4.3333335f,
                             SellerId = 4,
                             SubCategoryId = 8,
                             SupCategoryId = 7
@@ -1830,7 +2943,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/zaratrenckot.jpg",
                             Name = "Zara Kuşaklı Trençkot",
                             Price = 3299.99m,
-                            Score = 4.6f,
+                            Score = 4.5f,
                             SellerId = 4,
                             SubCategoryId = 9,
                             SupCategoryId = 7
@@ -1844,7 +2957,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/maviserenayjean.jpg",
                             Name = "Mavi Serenay Yüksek Bel Jean",
                             Price = 1699.99m,
-                            Score = 4.3f,
+                            Score = 3.6666667f,
                             SellerId = 4,
                             SubCategoryId = 9,
                             SupCategoryId = 7
@@ -1858,7 +2971,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/nikeairforce1.jpg",
                             Name = "Nike Air Force 1 '07",
                             Price = 4299.99m,
-                            Score = 4.8f,
+                            Score = 5f,
                             SellerId = 4,
                             SubCategoryId = 10,
                             SupCategoryId = 7
@@ -1872,7 +2985,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/adidasultraboostlight.jpg",
                             Name = "Adidas Ultraboost Light",
                             Price = 6499.99m,
-                            Score = 4.7f,
+                            Score = 4.6666665f,
                             SellerId = 4,
                             SubCategoryId = 10,
                             SupCategoryId = 7
@@ -1886,7 +2999,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/ikeakallax.jpg",
                             Name = "IKEA KALLAX Raf Ünitesi",
                             Price = 4999.99m,
-                            Score = 4.6f,
+                            Score = 4.5f,
                             SellerId = 5,
                             SubCategoryId = 12,
                             SupCategoryId = 11
@@ -1900,7 +3013,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/ikeapoang.jpg",
                             Name = "IKEA POÄNG Koltuk",
                             Price = 5999.99m,
-                            Score = 4.5f,
+                            Score = 4.3333335f,
                             SellerId = 5,
                             SubCategoryId = 12,
                             SupCategoryId = 11
@@ -1914,7 +3027,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/karacahatir.jpg",
                             Name = "Karaca Hatır Türk Kahvesi Makinesi",
                             Price = 2499.99m,
-                            Score = 4.6f,
+                            Score = 4.6666665f,
                             SellerId = 5,
                             SubCategoryId = 13,
                             SupCategoryId = 11
@@ -1928,7 +3041,7 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/tefalingenio.jpg",
                             Name = "Tefal Ingenio 13 Parça Tencere Seti",
                             Price = 6999.99m,
-                            Score = 4.7f,
+                            Score = 4.6666665f,
                             SellerId = 5,
                             SubCategoryId = 13,
                             SupCategoryId = 11
@@ -1942,9 +3055,345 @@ namespace ECOM.API.Migrations
                             ImagePath = "products/iphone18pro.jpg",
                             Name = "Apple iPhone 18 Pro",
                             Price = 89999.99m,
-                            Score = 4.8f,
+                            Score = 5f,
                             SellerId = 1,
                             SubCategoryId = 2,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 22,
+                            BrandId = 13,
+                            CreatedAt = new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "6 çekirdek 12 izlek, 4.6 GHz boost hızı ve 65W TDP ile oyun ve günlük kullanım için verimli masaüstü işlemci.",
+                            ImagePath = "products/AMD Ryzen 5 5600X.jpg",
+                            Name = "AMD Ryzen 5 5600X",
+                            Price = 5499.99m,
+                            Score = 4.6666665f,
+                            SellerId = 3,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 23,
+                            BrandId = 14,
+                            CreatedAt = new DateTime(2025, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "AM4 soket, PCIe 4.0, Wi-Fi 6 ve 2.5Gb Ethernet desteğiyle dayanıklı mATX anakart.",
+                            ImagePath = "products/asus-tuf-gaming-b550m-e-wifi-1.png",
+                            Name = "ASUS TUF Gaming B550M-E WiFi Anakart",
+                            Price = 4299.99m,
+                            Score = 4.3333335f,
+                            SellerId = 1,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 24,
+                            BrandId = 15,
+                            CreatedAt = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "6GB GDDR5 bellek ve çift fanlı Ventus soğutmayla 1080p oyunlar için ekran kartı.",
+                            ImagePath = "products/gtx 1660.jpg",
+                            Name = "MSI GeForce GTX 1660 Ventus XS 6GB",
+                            Price = 8999.99m,
+                            Score = 3.6666667f,
+                            SellerId = 2,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 25,
+                            BrandId = 15,
+                            CreatedAt = new DateTime(2025, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Temperli cam yan panel, 2 adet ARGB fan ve geniş hava akışı sunan Mid-Tower oyuncu kasası.",
+                            ImagePath = "products/msi 100m.jpg",
+                            Name = "MSI MAG Forge 100M Kasa",
+                            Price = 2499.99m,
+                            Score = 4.5f,
+                            SellerId = 3,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 26,
+                            BrandId = 18,
+                            CreatedAt = new DateTime(2025, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "2x8GB kit, alüminyum soğutucu ve düşük gecikme değerleriyle masaüstü bellek.",
+                            ImagePath = "products/team t-force.jpg",
+                            Name = "Team Group T-Force Vulcan Z 16GB DDR4 3200MHz",
+                            Price = 1399.99m,
+                            Score = 4.3333335f,
+                            SellerId = 1,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 27,
+                            BrandId = 14,
+                            CreatedAt = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "165Hz yenileme hızı, 1ms MPRT ve FreeSync Premium destekli Full HD kavisli oyuncu monitörü.",
+                            ImagePath = "products/tuf vg24vqr.jpg",
+                            Name = "ASUS TUF Gaming VG24VQR 23.6\" Kavisli Monitör",
+                            Price = 5999.99m,
+                            Score = 4.6666665f,
+                            SellerId = 2,
+                            SubCategoryId = 3,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 28,
+                            BrandId = 19,
+                            CreatedAt = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "8GB GDDR6 bellek ve RDNA 2 mimarisiyle 1080p oyunlarda yüksek performans.",
+                            ImagePath = "products/xfx rx6600.jpg",
+                            Name = "XFX Speedster SWFT 210 Radeon RX 6600 8GB",
+                            Price = 9499.99m,
+                            Score = 4f,
+                            SellerId = 2,
+                            SubCategoryId = 16,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 29,
+                            BrandId = 5,
+                            CreatedAt = new DateTime(2025, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "11.2 inç 144Hz 3.2K ekran, Snapdragon 7+ Gen 3 işlemci ve 8850 mAh batarya.",
+                            ImagePath = "products/xiaomi-pad-7.jpg",
+                            Name = "Xiaomi Pad 7",
+                            Price = 15999.99m,
+                            Score = 4.3333335f,
+                            SellerId = 3,
+                            SubCategoryId = 17,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 30,
+                            BrandId = 6,
+                            CreatedAt = new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hafif üst yüzey ve çorap bilekli tasarımıyla hız odaklı profesyonel futbol kramponu.",
+                            ImagePath = "products/Nike Superfly.jpg",
+                            Name = "Nike Mercurial Superfly Krampon",
+                            Price = 7499.99m,
+                            Score = 4.6666665f,
+                            SellerId = 6,
+                            SubCategoryId = 15,
+                            SupCategoryId = 14
+                        },
+                        new
+                        {
+                            ProductId = 31,
+                            BrandId = 16,
+                            CreatedAt = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Ayarlanabilir FUZIONFIT+ bant sistemiyle ayağı saran, top kontrolü odaklı krampon.",
+                            ImagePath = "products/Puma Future.jpg",
+                            Name = "Puma Future Krampon",
+                            Price = 5299.99m,
+                            Score = 3.6666667f,
+                            SellerId = 6,
+                            SubCategoryId = 15,
+                            SupCategoryId = 14
+                        },
+                        new
+                        {
+                            ProductId = 32,
+                            BrandId = 16,
+                            CreatedAt = new DateTime(2025, 5, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Ultra hafif yapısı ve hızlı çıkış sağlayan tabanıyla süratli oyuncular için krampon.",
+                            ImagePath = "products/Puma Ultra.jpg",
+                            Name = "Puma Ultra Krampon",
+                            Price = 4799.99m,
+                            Score = 4.5f,
+                            SellerId = 6,
+                            SubCategoryId = 15,
+                            SupCategoryId = 14
+                        },
+                        new
+                        {
+                            ProductId = 33,
+                            BrandId = 17,
+                            CreatedAt = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yüksek tutuş sağlayan Grip lateks avuç içi ve esnek bilek bandıyla maç eldiveni.",
+                            ImagePath = "products/reusch.jpg",
+                            Name = "Reusch Attrakt Kaleci Eldiveni",
+                            Price = 2299.99m,
+                            Score = 4.3333335f,
+                            SellerId = 6,
+                            SubCategoryId = 15,
+                            SupCategoryId = 14
+                        },
+                        new
+                        {
+                            ProductId = 34,
+                            BrandId = 17,
+                            CreatedAt = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Parmak koruma çubuklu yapısı ve dayanıklı lateksiyle antrenman ve maç eldiveni.",
+                            ImagePath = "products/reusch(2).jpg",
+                            Name = "Reusch Argos Pro M1 Kaleci Eldiveni",
+                            Price = 1899.99m,
+                            Score = 3.3333333f,
+                            SellerId = 6,
+                            SubCategoryId = 15,
+                            SupCategoryId = 14
+                        },
+                        new
+                        {
+                            ProductId = 35,
+                            BrandId = 1,
+                            CreatedAt = new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "10.9 inç ekran, S Pen desteği ve IP68 suya dayanıklılık sunan tablet.",
+                            ImagePath = "products/galaxytabs9fe.jpg",
+                            Name = "Samsung Galaxy Tab S9 FE",
+                            Price = 12999.99m,
+                            Score = 4.3333335f,
+                            SellerId = 2,
+                            SubCategoryId = 17,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 36,
+                            BrandId = 2,
+                            CreatedAt = new DateTime(2025, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "M2 çip, 11 inç Liquid Retina ekran ve Apple Pencil Pro desteğiyle güçlü tablet.",
+                            ImagePath = "products/ipadairm2.jpg",
+                            Name = "Apple iPad Air M2",
+                            Price = 27999.99m,
+                            Score = 5f,
+                            SellerId = 1,
+                            SubCategoryId = 17,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 37,
+                            BrandId = 3,
+                            CreatedAt = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Mini LED aydınlatma, XR işlemci ve Google TV ile parlak ve canlı görüntü.",
+                            ImagePath = "products/sonybravia7.jpg",
+                            Name = "Sony Bravia 7 55\" Mini LED TV",
+                            Price = 44999.99m,
+                            Score = 4.5f,
+                            SellerId = 2,
+                            SubCategoryId = 4,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 38,
+                            BrandId = 4,
+                            CreatedAt = new DateTime(2025, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "IP67 dayanıklılık, 15 saat pil ömrü ve güçlü bas sunan taşınabilir hoparlör.",
+                            ImagePath = "products/lgxboomxg8t.jpg",
+                            Name = "LG XBOOM Go XG8T Bluetooth Hoparlör",
+                            Price = 6499.99m,
+                            Score = 3.6666667f,
+                            SellerId = 3,
+                            SubCategoryId = 5,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 39,
+                            BrandId = 5,
+                            CreatedAt = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Lazer navigasyon, 4000Pa emiş gücü ve paspas özelliğiyle akıllı robot süpürge.",
+                            ImagePath = "products/xiaomirobots10.jpg",
+                            Name = "Xiaomi Robot Vacuum S10",
+                            Price = 8999.99m,
+                            Score = 4.3333335f,
+                            SellerId = 3,
+                            SubCategoryId = 6,
+                            SupCategoryId = 1
+                        },
+                        new
+                        {
+                            ProductId = 40,
+                            BrandId = 6,
+                            CreatedAt = new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Teri hızla uzaklaştıran Dri-FIT kumaş ve hafif yapısıyla erkek koşu tişörtü.",
+                            ImagePath = "products/nikedrifittshirt.jpg",
+                            Name = "Nike Dri-FIT Koşu Tişörtü",
+                            Price = 1199.99m,
+                            Score = 4f,
+                            SellerId = 4,
+                            SubCategoryId = 8,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 41,
+                            BrandId = 9,
+                            CreatedAt = new DateTime(2025, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Akışkan saten kumaş, V yaka ve ince askılı midi boy kadın elbise.",
+                            ImagePath = "products/zarasatenelbise.jpg",
+                            Name = "Zara Saten Midi Elbise",
+                            Price = 1899.99m,
+                            Score = 4f,
+                            SellerId = 4,
+                            SubCategoryId = 9,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 42,
+                            BrandId = 8,
+                            CreatedAt = new DateTime(2025, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Yumuşak pamuklu içi şardonlu kumaş ve rahat kesimli kapüşonlu sweatshirt.",
+                            ImagePath = "products/mavikapusonlusweat.jpg",
+                            Name = "Mavi Kapüşonlu Kadın Sweatshirt",
+                            Price = 999.99m,
+                            Score = 4f,
+                            SellerId = 4,
+                            SubCategoryId = 9,
+                            SupCategoryId = 7
+                        },
+                        new
+                        {
+                            ProductId = 43,
+                            BrandId = 10,
+                            CreatedAt = new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Çekmeceli, sade tasarımlı ve kablo düzenleme bölmeli çalışma masası.",
+                            ImagePath = "products/ikeamalmmasa.jpg",
+                            Name = "IKEA MALM Çalışma Masası",
+                            Price = 4499.99m,
+                            Score = 4.3333335f,
+                            SellerId = 5,
+                            SubCategoryId = 12,
+                            SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 44,
+                            BrandId = 11,
+                            CreatedAt = new DateTime(2025, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Elmas katkılı yapışmaz kaplama ve tüm ocaklarla uyumlu tabanlı tava seti.",
+                            ImagePath = "products/karacabiodiamond.jpg",
+                            Name = "Karaca Bio Diamond 3'lü Tava Seti",
+                            Price = 2799.99m,
+                            Score = 4.5f,
+                            SellerId = 5,
+                            SubCategoryId = 13,
+                            SupCategoryId = 11
+                        },
+                        new
+                        {
+                            ProductId = 45,
+                            BrandId = 12,
+                            CreatedAt = new DateTime(2025, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "5.6 litre kapasite, 8 otomatik program ve yağsız pişirme sunan fritöz.",
+                            ImagePath = "products/tefaleasyfry.jpg",
+                            Name = "Tefal Easy Fry XXL Airfryer",
+                            Price = 4999.99m,
+                            Score = 4.6666665f,
+                            SellerId = 5,
+                            SubCategoryId = 6,
                             SupCategoryId = 1
                         });
                 });
@@ -2066,6 +3515,34 @@ namespace ECOM.API.Migrations
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Mutfak Gereçleri",
                             Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 14,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Spor",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 15,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Futbol Ekipmanları",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 16,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bilgisayar Bileşenleri",
+                            Type = false
+                        },
+                        new
+                        {
+                            CategoryId = 17,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tablet",
+                            Type = false
                         });
                 });
 
@@ -2154,6 +3631,12 @@ namespace ECOM.API.Migrations
                             SellerId = 5,
                             CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "EvDekor"
+                        },
+                        new
+                        {
+                            SellerId = 6,
+                            CreatedAt = new DateTime(2023, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "SporMarket"
                         });
                 });
 

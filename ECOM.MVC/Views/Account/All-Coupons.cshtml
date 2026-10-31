@@ -1,59 +1,19 @@
-@* All-Coupons.cshtml *@
+﻿@model IEnumerable<ECOM.Shared.Data.DTOs.Customer.CouponResponseDto>
+
 <div class="coupons-grid">
-    <!-- Active Coupon -->
-    <div class="modern-coupon-card active-coupon">
-        <div class="coupon-left">
-            <div class="coupon-amount"><b>50</b> <span>TL</span></div>
-            <div class="coupon-type">İndirim Kuponu</div>
+    @if (Model.Any())
+    {
+        foreach (var coupon in Model)
+        {
+            @await Html.PartialAsync("_CouponCard", coupon)
+        }
+    }
+    else
+    {
+        <div style="text-align:center; padding:40px; color:var(--text-muted); width:100%;">
+            <i class="fas fa-ticket-alt" style="font-size:36px; color:var(--gray-300); display:block; margin-bottom:12px;"></i>
+            <p style="font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Henüz kuponunuz yok</p>
+            <p style="font-size:13.5px;">Size tanımlanan kuponlar burada görünecek.</p>
         </div>
-        <div class="coupon-divider">
-            <div class="coupon-circle top"></div>
-            <div class="coupon-dashes"></div>
-            <div class="coupon-circle bottom"></div>
-        </div>
-        <div class="coupon-right">
-            <div class="coupon-status valid"><i class="fas fa-check-circle"></i> Aktif</div>
-            <div class="coupon-detail">Alt limit: 100 TL</div>
-            <div class="coupon-expiry"><i class="fas fa-calendar-alt"></i> 11.12.2025'e kadar geçerli</div>
-            <div class="coupon-desc">100 TL ve üzeri alışverişlerde geçerlidir.</div>
-        </div>
-    </div>
-
-    <!-- Expired Coupon -->
-    <div class="modern-coupon-card expired-coupon">
-        <div class="coupon-left">
-            <div class="coupon-amount"><b>25</b> <span>TL</span></div>
-            <div class="coupon-type">İndirim Kuponu</div>
-        </div>
-        <div class="coupon-divider">
-            <div class="coupon-circle top"></div>
-            <div class="coupon-dashes"></div>
-            <div class="coupon-circle bottom"></div>
-        </div>
-        <div class="coupon-right">
-            <div class="coupon-status expired"><i class="fas fa-times-circle"></i> Süresi Doldu</div>
-            <div class="coupon-detail">Alt limit: 0 TL</div>
-            <div class="coupon-expiry"><i class="fas fa-calendar-alt"></i> 19.07.2021'de sona erdi</div>
-            <div class="coupon-desc">Hediye çekiniz.</div>
-        </div>
-    </div>
-
-    <!-- Used Coupon -->
-    <div class="modern-coupon-card used-coupon">
-        <div class="coupon-left">
-            <div class="coupon-amount"><b>20</b> <span>TL</span></div>
-            <div class="coupon-type">İndirim Kuponu</div>
-        </div>
-        <div class="coupon-divider">
-            <div class="coupon-circle top"></div>
-            <div class="coupon-dashes"></div>
-            <div class="coupon-circle bottom"></div>
-        </div>
-        <div class="coupon-right">
-            <div class="coupon-status used"><i class="fas fa-check"></i> Kullanıldı</div>
-            <div class="coupon-detail">Alt limit: 100 TL</div>
-            <div class="coupon-expiry"><i class="fas fa-calendar-check"></i> 11.12.2024'te kullanıldı</div>
-            <div class="coupon-desc">100 TL ve üzeri alışverişlerde geçerlidir.</div>
-        </div>
-    </div>
+    }
 </div>

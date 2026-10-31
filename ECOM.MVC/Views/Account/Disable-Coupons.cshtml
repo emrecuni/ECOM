@@ -1,7 +1,19 @@
+﻿@model IEnumerable<ECOM.Shared.Data.DTOs.Customer.CouponResponseDto>
+
 <div class="coupons-grid">
-    <div style="text-align:center; padding:40px; color:var(--text-muted); width:100%;">
-        <i class="fas fa-ticket-alt" style="font-size:36px; color:var(--gray-300); display:block; margin-bottom:12px;"></i>
-        <p style="font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Geçmiş kupon yok</p>
-        <p style="font-size:13.5px;">Süresi dolmuş veya kullanılmış kuponlarınız burada görünecek.</p>
-    </div>
+    @if (Model.Any())
+    {
+        foreach (var coupon in Model)
+        {
+            @await Html.PartialAsync("_CouponCard", coupon)
+        }
+    }
+    else
+    {
+        <div style="text-align:center; padding:40px; color:var(--text-muted); width:100%;">
+            <i class="fas fa-ticket-alt" style="font-size:36px; color:var(--gray-300); display:block; margin-bottom:12px;"></i>
+            <p style="font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Geçmiş kupon yok</p>
+            <p style="font-size:13.5px;">Süresi dolmuş veya kullanılmış kuponlarınız burada görünecek.</p>
+        </div>
+    }
 </div>

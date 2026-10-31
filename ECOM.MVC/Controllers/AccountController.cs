@@ -29,19 +29,50 @@ namespace ECOM.Controllers
             try
             {
                 AccountViewModel accountViewModel = new();
-                var result = await _customerService.GetCustomerByIdAsync(User.GetCustomerId(), ct);
+                int customerId = User.GetCustomerId();
 
-                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
+                // sekmelerin verileri birbirinden bağımsız olduğu için api'ye aynı anda gidilir
+                var customerTask = _customerService.GetCustomerByIdAsync(customerId, ct);
+                var ordersTask = _customerService.GetOrdersAsync(customerId, ct);
+                var couponsTask = _customerService.GetCouponsAsync(customerId, ct);
+                var favoritesTask = _customerService.GetFavoritesAsync(customerId, ct);
+                await Task.WhenAll(customerTask, ordersTask, couponsTask, favoritesTask);
+
+                var result = customerTask.Result;
+                if (result is null || !result.IsSuccess || result.Data?.Status != Status.Success || result.Data.Result is null)
                 {
-                    var customer = result.Data?.Result;
-                    if (customer is null)
-                        return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı
-
-                    accountViewModel.Customers = customer;
-                    accountViewModel.Orders = [];
-                    accountViewModel.Coupons = [];
-                    accountViewModel.Favorites = [];
+                    Guid guid = Guid.NewGuid();
+                    _logger.LogError($"Account/Index Error Hata Kodu: {guid} => {result?.Data?.Message ?? result?.ErrorMessage}");
+                    return View("Error", new ErrorViewModel
+                    {
+                        Message = "Hesap bilgileri getirilirken bir hata oluştu.",
+                        RequestId = HttpContext.TraceIdentifier,
+                        Title = $"Hata Kodu: {guid}"
+                    });
                 }
+                accountViewModel.Customers = result.Data.Result;
+
+                // api kayıt yokken Status.Failed döner; bu boş liste demektir. diğer hatalarda sekme boş gösterilir ve loglanır
+                var orders = ordersTask.Result;
+                if (orders.IsSuccess && orders.Data?.Status == Status.Success)
+                    accountViewModel.Orders = [.. (orders.Data.Result?.Orders ?? []).OrderByDescending(o => o.OrderDate)];
+                else if (!orders.IsSuccess || orders.Data?.Status == Status.Error)
+                    _logger.LogError($"Account/Index Orders Error => {orders.Data?.Message ?? orders.ErrorMessage}");
+
+                var coupons = couponsTask.Result;
+                if (coupons.IsSuccess && coupons.Data?.Status == Status.Success)
+                    accountViewModel.Coupons = [.. (coupons.Data.Result?.Coupons ?? []).OrderByDescending(c => c.ValidityDate)];
+                else if (!coupons.IsSuccess || coupons.Data?.Status == Status.Error)
+                    _logger.LogError($"Account/Index Coupons Error => {coupons.Data?.Message ?? coupons.ErrorMessage}");
+
+                var favorites = favoritesTask.Result;
+                if (favorites.IsSuccess && favorites.Data?.Status == Status.Success)
+                {
+                    accountViewModel.Favorites = favorites.Data.Result ?? [];
+                    accountViewModel.Favorites.ForEach(f => f.IsFavorite = true); // kartlarda kalp dolu görünsün
+                }
+                else if (!favorites.IsSuccess || favorites.Data?.Status == Status.Error)
+                    _logger.LogError($"Account/Index Favorites Error => {favorites.Data?.Message ?? favorites.ErrorMessage}");
 
                 return View("Index", accountViewModel);
             }
@@ -59,44 +90,20 @@ namespace ECOM.Controllers
             }
         }
 
-        public async Task<IActionResult> Order(CancellationToken ct)
+        // header menüsündeki linkler; veriler Index'te yüklendiği için ilgili sekmeye yönlendirilir
+        public IActionResult Order()
         {
-            try
-            {
-                var result = await _customerService.GetOrdersAsync(User.GetCustomerId(), ct);
-
-                if (result is not null && result.IsSuccess && result.Data is not null && result.Data.Status == Status.Success)
-                {
-                    var orders = result.Data?.Result;
-                    if (orders is null)
-                        return RedirectToAction("Error", "Home"); // ya da uygun hata davranışı                    
-                    return View("Order", orders);
-                }
-                else
-                    return NotFound();
-            }
-            catch (Exception ex)
-            {
-                Guid guid = Guid.NewGuid();
-                ErrorViewModel error = new ErrorViewModel
-                {
-                    Message = "Hesap bilgileri getirilirken bir hata oluştu.",
-                    RequestId = HttpContext.TraceIdentifier,
-                    Title = $"Hata Kodu: {guid}"
-                };
-                _logger.LogError($"Account/Order Error Hata Kodu: {guid} => {ex}");
-                return View("Error", error);
-            }
+            return RedirectToAction("Index", "Account", null, "order");
         }
 
         public IActionResult Favorite()
         {
-            return View("Index");
+            return RedirectToAction("Index", "Account", null, "favorite");
         }
 
         public IActionResult Coupon()
         {
-            return View("Index");
+            return RedirectToAction("Index", "Account", null, "coupon");
         }
 
         public IActionResult Rating()

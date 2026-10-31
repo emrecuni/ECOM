@@ -1,0 +1,36 @@
+@model ECOM.Shared.Data.DTOs.Customer.CouponResponseDto
+
+@{
+    // Enable=false kupon kullanılmış demektir; kullanılmamış ama tarihi geçmişse süresi dolmuştur
+    bool used = !Model.Enable;
+    bool expired = !used && Model.ValidityDate is not null && Model.ValidityDate.Value.Date < DateTime.Today;
+
+    string cardClass = used ? "used-coupon" : expired ? "expired-coupon" : "active-coupon";
+    string statusClass = used ? "used" : expired ? "expired" : "valid";
+    string statusIcon = used ? "fas fa-check" : expired ? "fas fa-times-circle" : "fas fa-check-circle";
+    string statusText = used ? "Kullanıldı" : expired ? "Süresi Doldu" : "Aktif";
+    string date = Model.ValidityDate?.ToString("dd.MM.yyyy") ?? "";
+    string expiryText = Model.ValidityDate is null ? "Süresiz" : expired || used ? $"{date} son kullanım tarihi" : $"{date} tarihine kadar geçerli";
+    decimal lowerLimit = Model.LowerLimit ?? 0;
+}
+
+<div class="modern-coupon-card @cardClass">
+    <div class="coupon-left">
+        <div class="coupon-amount"><b>@((Model.Amount ?? 0).ToString("0.##"))</b> <span>TL</span></div>
+        <div class="coupon-type">İndirim Kuponu</div>
+    </div>
+    <div class="coupon-divider">
+        <div class="coupon-circle top"></div>
+        <div class="coupon-dashes"></div>
+        <div class="coupon-circle bottom"></div>
+    </div>
+    <div class="coupon-right">
+        <div class="coupon-status @statusClass"><i class="@statusIcon"></i> @statusText</div>
+        <div class="coupon-detail">Alt limit: @lowerLimit.ToString("0.##") TL</div>
+        <div class="coupon-expiry"><i class="fas fa-calendar-alt"></i> @expiryText</div>
+        <div class="coupon-desc">
+            @(lowerLimit > 0 ? $"{lowerLimit:0.##} TL ve üzeri alışverişlerde geçerlidir." : "Tüm alışverişlerde geçerlidir.")
+            <span style="display:block; margin-top:4px; font-weight:600;">Kod: @Model.Code</span>
+        </div>
+    </div>
+</div>

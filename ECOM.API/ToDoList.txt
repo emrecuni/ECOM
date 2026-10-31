@@ -56,7 +56,7 @@ X Sepette ürün görselleri gelmiyor X
 * Servis çağrılarını logda göster
 X Menülerin hover'ına alt kategorileri getir X
 X Product service edit cart'taki yorum satırına bir bak X
-* Lazy loading ekle
+X Lazy loading ekle X
 * Login olmayan kullanıcı ödeme - hesabım sayfalarına girmeye çalışırsa login ekranına yönlendir
 X Ödeme tamamlandığında cart tablosundan ilgili kayıtları bir daha getirtme X
 

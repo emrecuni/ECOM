@@ -468,6 +468,7 @@
 
 .status-delivered { background: #F0FDF4; color: var(--success); }
 .status-processing { background: #FFF8EC; color: #B45309; }
+.status-cancelled { background: #FEF2F2; color: var(--danger); }
 
 .order-filter-btn {
     padding: 7px 14px;

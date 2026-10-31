@@ -1,19 +1,19 @@
+﻿@model IEnumerable<ECOM.Shared.Data.DTOs.Customer.CouponResponseDto>
+
 <div class="coupons-grid">
-    <div class="modern-coupon-card active-coupon">
-        <div class="coupon-left">
-            <div class="coupon-amount"><b>20</b> <span>TL</span></div>
-            <div class="coupon-type">İndirim Kuponu</div>
+    @if (Model.Any())
+    {
+        foreach (var coupon in Model)
+        {
+            @await Html.PartialAsync("_CouponCard", coupon)
+        }
+    }
+    else
+    {
+        <div style="text-align:center; padding:40px; color:var(--text-muted); width:100%;">
+            <i class="fas fa-ticket-alt" style="font-size:36px; color:var(--gray-300); display:block; margin-bottom:12px;"></i>
+            <p style="font-weight:600; color:var(--text-secondary); margin-bottom:4px;">Aktif kupon yok</p>
+            <p style="font-size:13.5px;">Kullanılabilir kuponlarınız burada görünecek.</p>
         </div>
-        <div class="coupon-divider">
-            <div class="coupon-circle top"></div>
-            <div class="coupon-dashes"></div>
-            <div class="coupon-circle bottom"></div>
-        </div>
-        <div class="coupon-right">
-            <div class="coupon-status valid"><i class="fas fa-check-circle"></i> Aktif</div>
-            <div class="coupon-detail">Alt limit: 100 TL</div>
-            <div class="coupon-expiry"><i class="fas fa-calendar-alt"></i> 11.12.2025'e kadar geçerli</div>
-            <div class="coupon-desc">100 TL ve üzeri alışverişlerde geçerlidir.</div>
-        </div>
-    </div>
+    }
 </div>

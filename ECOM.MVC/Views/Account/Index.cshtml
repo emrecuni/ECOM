@@ -1,5 +1,11 @@
 @model ECOM.Models.AccountViewModel
 
+@{
+    // aktif: kullanılmamış ve tarihi geçmemiş; geçmiş: kullanılmış ya da süresi dolmuş
+    var activeCoupons = Model.Coupons.Where(c => c.Enable && (c.ValidityDate is null || c.ValidityDate.Value.Date >= DateTime.Today)).ToList();
+    var pastCoupons = Model.Coupons.Except(activeCoupons).ToList();
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/account.css">
     <link rel="stylesheet" href="~/css/main.css">
@@ -26,16 +32,24 @@
                 </a>
                 <a href="#order" class="account-nav-item" data-tab="order">
                     <i class="fas fa-box"></i> Siparişlerim
-                    @if (Model.Orders != null && Model.Orders.Any())
+                    @if (Model.Orders.Any())
                     {
-                        <span style="margin-left:auto; background:var(--primary); color:white; border-radius:99px; padding:1px 8px; font-size:11px; font-weight:700;">@Model.Orders.Count()</span>
+                        <span style="margin-left:auto; background:var(--primary); color:white; border-radius:99px; padding:1px 8px; font-size:11px; font-weight:700;">@Model.Orders.Count</span>
                     }
                 </a>
                 <a href="#coupon" class="account-nav-item" data-tab="coupon">
                     <i class="fas fa-gift"></i> Kuponlarım
+                    @if (activeCoupons.Any())
+                    {
+                        <span style="margin-left:auto; background:var(--primary); color:white; border-radius:99px; padding:1px 8px; font-size:11px; font-weight:700;">@activeCoupons.Count</span>
+                    }
                 </a>
                 <a href="#favorite" class="account-nav-item" data-tab="favorite">
                     <i class="fas fa-heart"></i> Beğendiklerim
+                    @if (Model.Favorites.Any())
+                    {
+                        <span id="favorite-count-badge" style="margin-left:auto; background:var(--primary); color:white; border-radius:99px; padding:1px 8px; font-size:11px; font-weight:700;">@Model.Favorites.Count</span>
+                    }
                 </a>
                 <div class="account-nav-divider"></div>
                 <a asp-controller="Login" asp-action="Logout" class="account-nav-item" style="color:var(--danger);">
@@ -81,6 +95,10 @@
                 <div class="account-content">
                     <h2 class="account-content-title">Siparişlerim</h2>
                     @await Html.PartialAsync("Order", Model.Orders)
+                    <div id="order-no-result" style="display:none; text-align:center; padding:32px; color:var(--text-muted);">
+                        <i class="fas fa-filter" style="font-size:28px; color:var(--gray-300); display:block; margin-bottom:10px;"></i>
+                        Seçilen filtrelere uygun sipariş bulunamadı.
+                    </div>
                 </div>
             </div>
 
@@ -96,13 +114,13 @@
                     </div>
 
                     <div class="sub-tab-pane active" id="subtab-all-coupons">
-                        @await Html.PartialAsync("All-Coupons")
+                        @await Html.PartialAsync("All-Coupons", Model.Coupons)
                     </div>
                     <div class="sub-tab-pane" id="subtab-enable-coupons">
-                        @await Html.PartialAsync("Enable-Coupons")
+                        @await Html.PartialAsync("Enable-Coupons", activeCoupons)
                     </div>
                     <div class="sub-tab-pane" id="subtab-disable-coupons">
-                        @await Html.PartialAsync("Disable-Coupons")
+                        @await Html.PartialAsync("Disable-Coupons", pastCoupons)
                     </div>
                 </div>
             </div>
@@ -111,15 +129,27 @@
             <div class="account-tab-content" id="tab-favorite">
                 <div class="account-content">
                     <h2 class="account-content-title">Beğendiklerim</h2>
-                    <form action="" method="post" style="display:flex; gap:10px; margin-bottom:24px;">
-                        <div style="flex:1; position:relative;">
-                            <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--gray-400); font-size:13px;"></i>
-                            <input type="text" name="search" class="form-control" placeholder="Beğendiklerimde ara..." style="padding-left:38px;">
+                    @if (Model.Favorites.Any())
+                    {
+                        @* liste zaten sayfada olduğu için arama sunucuya gitmeden kartlar üzerinde yapılır *@
+                        <form id="favoriteSearchForm" style="display:flex; gap:10px; margin-bottom:24px;">
+                            <div style="flex:1; position:relative;">
+                                <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--gray-400); font-size:13px;"></i>
+                                <input type="text" id="favoriteSearch" class="form-control" placeholder="Beğendiklerimde ara..." style="padding-left:38px;">
+                            </div>
+                            <button type="submit" class="btn-primary-custom">Ara</button>
+                        </form>
+                        <div class="products-grid" id="favorite-grid">
+                            @foreach (var product in Model.Favorites)
+                            {
+                                @await Html.PartialAsync("Product", product)
+                            }
                         </div>
-                        <button type="submit" class="btn-primary-custom">Ara</button>
-                    </form>
-                    <div class="products-grid">
-                        @* Favorite products will be rendered here *@
+                    }
+                    <div id="favorite-empty" style="@(Model.Favorites.Any() ? "display:none;" : "") text-align:center; padding:48px 24px; color:var(--text-muted);">
+                        <i class="fas fa-heart" style="font-size:40px; color:var(--gray-300); display:block; margin-bottom:16px;"></i>
+                        <p id="favorite-empty-title" style="font-size:15px; font-weight:600; color:var(--text-secondary); margin-bottom:6px;">Henüz beğendiğiniz ürün yok</p>
+                        <p style="font-size:13.5px;">Ürünlerdeki kalbe tıklayarak beğendiklerinize ekleyebilirsiniz.</p>
                     </div>
                 </div>
             </div>
@@ -136,14 +166,17 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
-<script src="~/lib/jquery/dist/bootstrap.bundle.min.js"></script>
+@* jquery ve bootstrap layout'ta yükleniyor; favorite.js jquery'den sonra çalışsın diye Scripts bölümünde *@
+@section Scripts {
+    <script src="~/js/favorite.js"></script>
+}
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     // ===== MAIN TAB SWITCHING =====
+    // header'daki Siparişlerim/Kuponlarım/Beğendiklerim linkleri Index#order gibi hash ile gelir
     const urlParts = window.location.pathname.split('/');
-    const defaultTab = urlParts[3] || "user";
+    const defaultTab = window.location.hash.substring(1) || urlParts[3] || "user";
 
     function showMainTab(tabId) {
         document.querySelectorAll(".account-tab-content").forEach(el => {
@@ -169,6 +202,93 @@ document.addEventListener("DOMContentLoaded", function () {
             showMainTab(tabId);
             history.pushState(null, '', '#' + tabId);
         });
+    });
+
+    // geri/ileri tuşuyla hash değişince sekme de değişsin
+    window.addEventListener("hashchange", function () {
+        showMainTab(window.location.hash.substring(1) || "user");
+    });
+
+    // ===== ORDER FILTERS =====
+    const orderCards = document.querySelectorAll("#tab-order .order-history-card");
+    const orderSearch = document.getElementById("orderSearch");
+    const orderPeriod = document.querySelector(".order-period-select");
+    let orderFilter = "all";
+
+    function applyOrderFilters() {
+        const term = (orderSearch?.value || "").trim().replace("#", "");
+        const days = parseInt(orderPeriod?.value || "0", 10);
+        const now = new Date();
+        let visible = 0;
+
+        orderCards.forEach(card => {
+            const date = card.dataset.date ? new Date(card.dataset.date) : null;
+            const age = date ? (now - date) / 86400000 : 0;
+
+            let ok = orderFilter === "all" || card.dataset.filter === orderFilter;
+            if (ok && term) ok = card.dataset.search.includes(term);
+            // 999: 1 yıldan eski siparişler, diğerleri: son N gün
+            if (ok && days === 999) ok = age > 365;
+            else if (ok && days > 0) ok = age <= days;
+
+            card.style.display = ok ? "" : "none";
+            if (ok) visible++;
+        });
+
+        const noResult = document.getElementById("order-no-result");
+        if (noResult) noResult.style.display = orderCards.length > 0 && visible === 0 ? "block" : "none";
+    }
+
+    document.querySelectorAll(".order-filter-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            document.querySelectorAll(".order-filter-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+            orderFilter = this.dataset.filter;
+            applyOrderFilters();
+        });
+    });
+    orderSearch?.addEventListener("input", applyOrderFilters);
+    orderPeriod?.addEventListener("change", applyOrderFilters);
+
+    // ===== FAVORITE SEARCH =====
+    const favoriteGrid = document.getElementById("favorite-grid");
+
+    function updateFavoriteEmpty(searching) {
+        const cards = favoriteGrid ? [...favoriteGrid.querySelectorAll(".col")] : [];
+        const visible = cards.filter(c => c.style.display !== "none").length;
+        const empty = document.getElementById("favorite-empty");
+        if (!empty) return;
+        empty.style.display = visible === 0 ? "block" : "none";
+        document.getElementById("favorite-empty-title").textContent =
+            searching && cards.length > 0 ? "Aramanıza uygun ürün bulunamadı" : "Henüz beğendiğiniz ürün yok";
+    }
+
+    function applyFavoriteSearch() {
+        const term = document.getElementById("favoriteSearch").value.trim().toLocaleLowerCase("tr-TR");
+        favoriteGrid.querySelectorAll(".col").forEach(card => {
+            const name = card.querySelector(".product-name")?.textContent.toLocaleLowerCase("tr-TR") || "";
+            card.style.display = name.includes(term) ? "" : "none";
+        });
+        updateFavoriteEmpty(term.length > 0);
+    }
+
+    document.getElementById("favoriteSearchForm")?.addEventListener("submit", function (e) {
+        e.preventDefault();
+        applyFavoriteSearch();
+    });
+    document.getElementById("favoriteSearch")?.addEventListener("input", applyFavoriteSearch);
+
+    // beğendiklerimde kalp kaldırılınca kart listeden düşer (istek favorite.js'te atılır)
+    $(document).ajaxSuccess(function (event, xhr, settings) {
+        if (settings.url !== "/Main/Favorite" || !favoriteGrid || xhr.responseJSON?.isFavorite !== false) return;
+        const id = new URLSearchParams(settings.data).get("id");
+        const btn = favoriteGrid.querySelector(`.favorite-btn[data-id="${id}"]`);
+        if (!btn) return;
+        btn.closest(".col").remove();
+        const remaining = favoriteGrid.querySelectorAll(".col").length;
+        const badge = document.getElementById("favorite-count-badge");
+        if (badge) remaining > 0 ? badge.textContent = remaining : badge.remove();
+        updateFavoriteEmpty(false);
     });
 
     // ===== SUB TAB SWITCHING =====
